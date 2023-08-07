@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33829.357
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TcgPocket", "TcgPocket.csproj", "{87EB1113-E5A7-4EB3-AC22-A53F28FDB580}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{87EB1113-E5A7-4EB3-AC22-A53F28FDB580}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87EB1113-E5A7-4EB3-AC22-A53F28FDB580}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87EB1113-E5A7-4EB3-AC22-A53F28FDB580}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87EB1113-E5A7-4EB3-AC22-A53F28FDB580}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {985DCB87-2444-4630-8AF5-C4859C48BD69}
+	EndGlobalSection
+EndGlobal
