@@ -1,0 +1,49 @@
+{
+  "name": "app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@mantine/carousel": "^6.0.18",
+    "@mantine/core": "^6.0.18",
+    "@mantine/dates": "^6.0.18",
+    "@mantine/dropzone": "^6.0.18",
+    "@mantine/form": "^6.0.18",
+    "@mantine/hooks": "^6.0.18",
+    "@mantine/modals": "^6.0.18",
+    "@mantine/notifications": "^6.0.18",
+    "@mantine/nprogress": "^6.0.18",
+    "@mantine/prism": "^6.0.18",
+    "@mantine/spotlight": "^6.0.18",
+    "@mantine/tiptap": "^6.0.18",
+    "@reduxjs/toolkit": "^1.9.5",
+    "@tabler/icons-react": "^2.30.0",
+    "@tiptap/extension-link": "^2.0.4",
+    "@tiptap/react": "^2.0.4",
+    "@tiptap/starter-kit": "^2.0.4",
+    "dayjs": "^1.11.9",
+    "embla-carousel-react": "^7.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-redux": "^8.1.2"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@vitejs/plugin-react": "^4.0.3",
+    "eslint": "^8.45.0",
+    "eslint-plugin-react-hooks": "^5.0.0-canary-ea17cc18f-20230807",
+    "eslint-plugin-react-refresh": "^0.4.3",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.5"
+  }
+}
