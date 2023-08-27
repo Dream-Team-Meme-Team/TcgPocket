@@ -12,8 +12,6 @@ public class Startup
 
     public Startup(WebApplicationBuilder builder)
     {
-        // builder;
-
         _configuration = builder.Configuration;
     }
 
