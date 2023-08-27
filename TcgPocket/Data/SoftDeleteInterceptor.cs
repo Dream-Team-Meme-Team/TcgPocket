@@ -8,10 +8,10 @@ public class SoftDeleteInterceptor : SaveChangesInterceptor
     {
         if (eventData.Context is null) return result;
 
-        foreach (var entry in eventData.Context.ChangeTracker.Entries())
-        {
-            // TODO: things and stuff maybe, idk this is just here for something
-        }
+        // foreach (var entry in eventData.Context.ChangeTracker.Entries())
+        // {
+                // TODO: add soft delete logic if required
+        // }
 
         return result;
     }

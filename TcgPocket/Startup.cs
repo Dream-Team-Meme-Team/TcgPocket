@@ -10,12 +10,11 @@ public class Startup
 {
     private IConfigurationRoot _configuration { get; }
 
-    public Startup()
+    public Startup(WebApplicationBuilder builder)
     {
-        var builder = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json");
+        // builder;
 
-        _configuration = builder.Build();
+        _configuration = builder.Configuration;
     }
 
     public void ConfigureServices(IServiceCollection services)
@@ -23,7 +22,7 @@ public class Startup
         services.AddSingleton(_configuration);
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Startup>());
         services.AddAutoMapper(typeof(IMapper));
-        services.AddValidatorsFromAssemblyContaining<IValidator>(ServiceLifetime.Scoped);
+        services.AddValidatorsFromAssemblyContaining<IValidator>();
         services.AddControllers();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
