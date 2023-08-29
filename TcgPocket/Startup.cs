@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using System.Reflection;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using TcgPocket.Data;
@@ -19,8 +19,8 @@ public class Startup
     {
         services.AddSingleton(_configuration);
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Startup>());
-        services.AddAutoMapper(typeof(IMapper));
-        services.AddValidatorsFromAssemblyContaining<IValidator>();
+        services.AddAutoMapper(Assembly.GetExecutingAssembly());
+        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddControllers();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
