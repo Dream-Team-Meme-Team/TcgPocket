@@ -1,12 +1,8 @@
-import { useRouteError } from "react-router-dom";
+import { useRouteError } from 'react-router-dom';
 
 export function ErrorPage(): React.ReactElement {
-    const error = useRouteError();
-    console.error(error);
+  const error = useRouteError();
+  console.error(error);
 
-    return (
-        <div>
-            An unexpected error has occurred
-        </div>
-    )
+  return <div>An unexpected error has occurred</div>;
 }

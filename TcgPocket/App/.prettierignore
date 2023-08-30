@@ -1,0 +1,9 @@
+# this is for files that we want prettier to ignore
+
+# we don't care to format these...
+node_modules
+dist
+
+# Ignore artifacts:
+build
+coverage
