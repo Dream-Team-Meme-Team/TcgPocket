@@ -29,13 +29,13 @@ public class GamesController : ControllerBase
     }
     
     [HttpPost]
-    public async Task<Response<GameDto>> CreateGame([FromBody] CreateGameCommand command)
+    public async Task<Response<GameGetDto>> CreateGame([FromBody] CreateGameCommand command)
     {
         return await _mediator.Send(command);
     }
     
     [HttpPut("{id:int}")]
-    public async Task<Response<GameDto>> UpdateGame( [FromRoute] int id,
+    public async Task<Response<GameGetDto>> UpdateGame( [FromRoute] int id,
         [FromBody] UpdateGameCommand command)
     {
         command.Id = id;

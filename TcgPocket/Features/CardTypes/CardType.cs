@@ -7,10 +7,14 @@ using TcgPocket.Features.Games;
 
 namespace TcgPocket.Features.CardTypes;
 
-public class CardType : CardTypeDto, IEntity
+public class CardType : CardTypeGetDto, IEntity
+{
+    public Game Game { get; set; }
+}
+
+public class CardTypeGetDto : CardTypeDto
 {
     public int Id { get; set; }
-    public Game Game { get; set; }
 }
 
 public class CardTypeDto
@@ -23,6 +27,7 @@ public class CardTypeMapper : Profile
 {
     public CardTypeMapper()
     {
+        CreateMap<CardType, CardTypeGetDto>();
         CreateMap<CardType, CardTypeDto>().ReverseMap();
     }
 }

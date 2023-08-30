@@ -6,11 +6,12 @@ using TcgPocket.Data;
 
 namespace TcgPocket.Features.Games;
 
-public class CreateGameCommand : GameDto, IRequest<Response<GameDto>>
+public class CreateGameCommand : IRequest<Response<GameGetDto>>
 {
+    public GameDto Game { get; set; }
 }
 
-public class CreateGameHandler : IRequestHandler<CreateGameCommand, Response<GameDto>>
+public class CreateGameHandler : IRequestHandler<CreateGameCommand, Response<GameGetDto>>
 {
     private readonly DataContext _dataContext;
     private readonly IMapper _mapper;
@@ -25,20 +26,20 @@ public class CreateGameHandler : IRequestHandler<CreateGameCommand, Response<Gam
         _validator = validator;
     }
     
-    public async Task<Response<GameDto>> Handle(CreateGameCommand request, CancellationToken cancellationToken)
+    public async Task<Response<GameGetDto>> Handle(CreateGameCommand request, CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+        var validationResult = await _validator.ValidateAsync(request.Game, cancellationToken);
         
         if (!validationResult.IsValid)
         {
             var errors = _mapper.Map<List<Error>>(validationResult.Errors);
-            return new Response<GameDto>{Errors = errors};
+            return new Response<GameGetDto>{Errors = errors};
         }
 
-        var game = _mapper.Map<Game>(request);
+        var game = _mapper.Map<Game>(request.Game);
         await _dataContext.Set<Game>().AddAsync(game, cancellationToken);
         await _dataContext.SaveChangesAsync(cancellationToken);
 
-        return _mapper.Map<GameDto>(game).AsResponse();
+        return _mapper.Map<GameGetDto>(game).AsResponse();
     }
 }

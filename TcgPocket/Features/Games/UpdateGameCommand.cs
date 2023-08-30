@@ -7,12 +7,13 @@ using TcgPocket.Data;
 
 namespace TcgPocket.Features.Games;
 
-public class UpdateGameCommand : GameDto, IRequest<Response<GameDto>>
+public class UpdateGameCommand : IRequest<Response<GameGetDto>>
 {
     public int Id { get; set; }
+    public GameDto Game { get; set; }
 }
 
-public class UpdateGameHandler : IRequestHandler<UpdateGameCommand, Response<GameDto>>
+public class UpdateGameHandler : IRequestHandler<UpdateGameCommand, Response<GameGetDto>>
 {
     private readonly DataContext _dataContext;
     private readonly IMapper _mapper;
@@ -27,24 +28,24 @@ public class UpdateGameHandler : IRequestHandler<UpdateGameCommand, Response<Gam
         _validator = validator;
     }
     
-    public async Task<Response<GameDto>> Handle(UpdateGameCommand request, CancellationToken cancellationToken)
+    public async Task<Response<GameGetDto>> Handle(UpdateGameCommand request, CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+        var validationResult = await _validator.ValidateAsync(request.Game, cancellationToken);
         
         if (!validationResult.IsValid)
         {
             var errors = _mapper.Map<List<Error>>(validationResult.Errors);
-            return new Response<GameDto>{Errors = errors};
+            return new Response<GameGetDto>{Errors = errors};
         }
 
         var game = await _dataContext.Set<Game>()
             .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
         
-        if (game is null) return Error.AsResponse<GameDto>("Game not found", "id");
+        if (game is null) return Error.AsResponse<GameGetDto>("Game not found", "id");
 
-        _mapper.Map(request, game);
+        _mapper.Map(request.Game, game);
         await _dataContext.SaveChangesAsync(cancellationToken);
 
-        return _mapper.Map<GameDto>(game).AsResponse();
+        return _mapper.Map<GameGetDto>(game).AsResponse();
     }
 }

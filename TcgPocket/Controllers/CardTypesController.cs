@@ -29,13 +29,13 @@ public class CardTypesController : ControllerBase
     }
     
     [HttpPost]
-    public async Task<Response<CardTypeDto>> CreateCardType([FromBody] CreateCardTypeCommand command)
+    public async Task<Response<CardTypeGetDto>> CreateCardType([FromBody] CreateCardTypeCommand command)
     {
         return await _mediator.Send(command);
     }
     
     [HttpPut("{id:int}")]
-    public async Task<Response<CardTypeDto>> UpdateCardType( [FromRoute] int id,
+    public async Task<Response<CardTypeGetDto>> UpdateCardType( [FromRoute] int id,
         [FromBody] UpdateCardTypeCommand command)
     {
         command.Id = id;

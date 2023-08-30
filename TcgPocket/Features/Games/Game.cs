@@ -6,7 +6,11 @@ using TcgPocket.Common;
 
 namespace TcgPocket.Features.Games;
 
-public class Game : GameDto, IEntity
+public class Game : GameGetDto, IEntity
+{
+}
+
+public class GameGetDto : GameDto
 {
     public int Id { get; set; }
 }
@@ -20,6 +24,7 @@ public class GameMapper : Profile
 {
     public GameMapper()
     {
+        CreateMap<Game, GameGetDto>();
         CreateMap<Game, GameDto>().ReverseMap();
         CreateMap<CreateGameCommand, Game>().ReverseMap();
     }

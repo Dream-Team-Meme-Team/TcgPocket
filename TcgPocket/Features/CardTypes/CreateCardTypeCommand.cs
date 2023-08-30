@@ -8,11 +8,12 @@ using TcgPocket.Features.Games;
 
 namespace TcgPocket.Features.CardTypes;
 
-public class CreateCardTypeCommand : CardTypeDto, IRequest<Response<CardTypeDto>>
+public class CreateCardTypeCommand : IRequest<Response<CardTypeGetDto>>
 {
+    public CardTypeDto CardType { get; set; }
 }
 
-public class CreateCardTypeHandler : IRequestHandler<CreateCardTypeCommand, Response<CardTypeDto>>
+public class CreateCardTypeHandler : IRequestHandler<CreateCardTypeCommand, Response<CardTypeGetDto>>
 {
     private readonly DataContext _dataContext;
     private readonly IMapper _mapper;
@@ -27,25 +28,25 @@ public class CreateCardTypeHandler : IRequestHandler<CreateCardTypeCommand, Resp
         _validator = validator;
     }
     
-    public async Task<Response<CardTypeDto>> Handle(CreateCardTypeCommand request, CancellationToken cancellationToken)
+    public async Task<Response<CardTypeGetDto>> Handle(CreateCardTypeCommand request, CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+        var validationResult = await _validator.ValidateAsync(request.CardType, cancellationToken);
         
         if (!validationResult.IsValid)
         {
             var errors = _mapper.Map<List<Error>>(validationResult.Errors);
-            return new Response<CardTypeDto>{Errors = errors};
+            return new Response<CardTypeGetDto>{Errors = errors};
         }
         
-        if (!await _dataContext.Set<Game>().AnyAsync(x => x.Id == request.GameId, cancellationToken))
+        if (!await _dataContext.Set<Game>().AnyAsync(x => x.Id == request.CardType.GameId, cancellationToken))
         {
-            return Error.AsResponse<CardTypeDto>("Game not found", "gameId");
+            return Error.AsResponse<CardTypeGetDto>("Game not found", "gameId");
         }
 
-        var cardType = _mapper.Map<CardType>(request);
+        var cardType = _mapper.Map<CardType>(request.CardType);
         await _dataContext.Set<CardType>().AddAsync(cardType, cancellationToken);
         await _dataContext.SaveChangesAsync(cancellationToken);
 
-        return _mapper.Map<CardTypeDto>(cardType).AsResponse();
+        return _mapper.Map<CardTypeGetDto>(cardType).AsResponse();
     }
 }
