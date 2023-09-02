@@ -1,0 +1,10 @@
+.registerModalBodyContainer {
+  display: grid;
+  gap: 8px;
+}
+
+.registerModalBottomBtnContainer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
