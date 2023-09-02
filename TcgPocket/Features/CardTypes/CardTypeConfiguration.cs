@@ -7,7 +7,9 @@ public class CardTypeConfiguration : IEntityTypeConfiguration<CardType>
 {
     public void Configure(EntityTypeBuilder<CardType> builder)
     {
-        builder.ToTable(schema: "dbo", name: "CardTypes");
+        builder.ToTable( "CardTypes",  "dbo");
+
+        builder.HasKey(x => x.Id);
 
         builder.HasOne(x => x.Game)
             .WithMany(x => x.CardTypes)

@@ -3,7 +3,7 @@ using TcgPocket.Features.CardTypes.Commands;
 
 namespace TcgPocket.Features.CardTypes.Validators;
 
-public class UpdateCardTypeRequestValidator : AbstractValidator<UpdateCardTypeRequest>
+public class UpdateCardTypeRequestValidator : AbstractValidator<UpdateCardTypeCommand>
 {
     public UpdateCardTypeRequestValidator(IValidator<CardTypeDto> baseValidator)
     {

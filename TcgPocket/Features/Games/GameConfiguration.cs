@@ -7,6 +7,7 @@ public class GameConfiguration : IEntityTypeConfiguration<Game>
 {
     public void Configure(EntityTypeBuilder<Game> builder)
     {
-        builder.ToTable(schema: "dbo", name: "Games");
+        builder.ToTable("Games", "dbo");
+        builder.HasKey(x => x.Id);
     }
 }
