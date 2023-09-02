@@ -18,17 +18,17 @@ public class GamesController : ControllerBase
     }
     
     [HttpGet]
-    public async Task<ActionResult<Response<List<GameDto>>>> GetAllGames([FromQuery] GetAllGamesRequest request)
+    public async Task<ActionResult<Response<List<GameGetDto>>>> GetAllGames([FromQuery] GetAllGamesQuery query)
     {
-        var response = await _mediator.Send(request);
+        var response = await _mediator.Send(query);
         
         return response.HasErrors ? BadRequest(response) : Ok(response);
     }
     
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<Response<GameDto>>> GetGameById([FromRoute] int id)
+    public async Task<ActionResult<Response<GameGetDto>>> GetGameById([FromRoute] int id)
     {
-        var response = await _mediator.Send(new GetGameByIdRequest{Id = id});
+        var response = await _mediator.Send(new GetGameByIdQuery{Id = id});
 
         return response.HasErrors ? NotFound(response) : Ok(response);
     }
@@ -36,16 +36,18 @@ public class GamesController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Response<GameGetDto>>> CreateGame([FromBody] GameDto data)
     {
-        var response = await _mediator.Send(new CreateGameRequest{Game = data});
+        var response = await _mediator.Send(new CreateGameCommand{Game = data});
         
-        return response.HasErrors ? BadRequest(response) : CreatedAtRoute(nameof(CreateGameRequest), response);
+        return response.HasErrors 
+            ? BadRequest(response)
+            : CreatedAtRoute(nameof(CreateGame), new {response.Data.Id}, response);
     }
     
     [HttpPut("{id:int}")]
     public async Task<ActionResult<Response<GameGetDto>>> UpdateGame( [FromRoute] int id,
         [FromBody] GameDto data)
     {
-        var response = await _mediator.Send(new UpdateGameRequest{Id = id, Game = data});
+        var response = await _mediator.Send(new UpdateGameCommand{Id = id, Game = data});
         
         return response.HasErrors ? BadRequest(response) : Ok(response);
     }
@@ -53,7 +55,7 @@ public class GamesController : ControllerBase
     [HttpDelete("{id:int}")]
     public async Task<ActionResult<Response>> DeleteGame([FromRoute] int id)
     {
-        var response = await _mediator.Send(new DeleteGameRequest{Id = id});
+        var response = await _mediator.Send(new DeleteGameCommand{Id = id});
         
         return response.HasErrors ? BadRequest(response) : Ok(response);
     }

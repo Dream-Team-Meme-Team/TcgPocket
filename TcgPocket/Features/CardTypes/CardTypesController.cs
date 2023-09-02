@@ -18,18 +18,18 @@ public class CardTypesController : ControllerBase
     }
     
     [HttpGet]
-    public async Task<ActionResult<Response<List<CardTypeDto>>>> GetAllCardTypes([FromQuery] GetAllCardTypesRequest request)
+    public async Task<ActionResult<Response<List<CardTypeGetDto>>>> GetAllCardTypes([FromQuery] GetAllCardTypesQuery query)
     {
-        var response = await _mediator.Send(request);
+        var response = await _mediator.Send(query);
         
         return response.HasErrors ? BadRequest(response) : Ok(response);
 
     }
     
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<Response<CardTypeDto>>> GetCardTypeById([FromRoute] int id)
+    public async Task<ActionResult<Response<CardTypeGetDto>>> GetCardTypeById([FromRoute] int id)
     {
-        var response = await _mediator.Send(new GetCardTypeByIdRequest{Id = id});
+        var response = await _mediator.Send(new GetCardTypeByIdQuery{Id = id});
         
         return response.HasErrors ? BadRequest(response) : Ok(response);
 
@@ -38,9 +38,11 @@ public class CardTypesController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Response<CardTypeGetDto>>> CreateCardType([FromBody] CardTypeDto data)
     {
-        var response = await _mediator.Send(new CreateCardTypeRequest{CardType = data});
+        var response = await _mediator.Send(new CreateCardTypeCommand{CardType = data});
         
-        return response.HasErrors ? BadRequest(response) : Ok(response);
+        return response.HasErrors 
+            ? BadRequest(response) 
+            : CreatedAtRoute(nameof(CreateCardType), new {response.Data.Id}, response);
 
     }
     
@@ -48,7 +50,7 @@ public class CardTypesController : ControllerBase
     public async Task<ActionResult<Response<CardTypeGetDto>>> UpdateCardType( [FromRoute] int id,
         [FromBody] CardTypeDto data)
     {
-        var response = await _mediator.Send(new UpdateCardTypeRequest{Id = id, CardType = data});
+        var response = await _mediator.Send(new UpdateCardTypeCommand{Id = id, CardType = data});
         
         return response.HasErrors ? BadRequest(response) : Ok(response);
 
@@ -57,7 +59,7 @@ public class CardTypesController : ControllerBase
     [HttpDelete("{id:int}")]
     public async Task<ActionResult<Response>> DeleteCardType([FromRoute] int id)
     {
-        var response = await _mediator.Send(new DeleteCardTypeRequest{Id = id});
+        var response = await _mediator.Send(new DeleteCardTypeCommand{Id = id});
         
         return response.HasErrors ? BadRequest(response) : Ok(response);
 
