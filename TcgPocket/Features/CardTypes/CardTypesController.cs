@@ -1,0 +1,65 @@
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using TcgPocket.Features.CardTypes.Commands;
+using TcgPocket.Features.CardTypes.Queries;
+using TcgPocket.Shared;
+
+namespace TcgPocket.Features.CardTypes;
+
+[ApiController]
+[Route("/card-types")]
+public class CardTypesController : ControllerBase
+{
+    private readonly IMediator _mediator;
+
+    public CardTypesController(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
+    
+    [HttpGet]
+    public async Task<ActionResult<Response<List<CardTypeDto>>>> GetAllCardTypes([FromQuery] GetAllCardTypesRequest request)
+    {
+        var response = await _mediator.Send(request);
+        
+        return response.HasErrors ? BadRequest(response) : Ok(response);
+
+    }
+    
+    [HttpGet("{id:int}")]
+    public async Task<ActionResult<Response<CardTypeDto>>> GetCardTypeById([FromRoute] int id)
+    {
+        var response = await _mediator.Send(new GetCardTypeByIdRequest{Id = id});
+        
+        return response.HasErrors ? BadRequest(response) : Ok(response);
+
+    }
+    
+    [HttpPost]
+    public async Task<ActionResult<Response<CardTypeGetDto>>> CreateCardType([FromBody] CardTypeDto data)
+    {
+        var response = await _mediator.Send(new CreateCardTypeRequest{CardType = data});
+        
+        return response.HasErrors ? BadRequest(response) : Ok(response);
+
+    }
+    
+    [HttpPut("{id:int}")]
+    public async Task<ActionResult<Response<CardTypeGetDto>>> UpdateCardType( [FromRoute] int id,
+        [FromBody] CardTypeDto data)
+    {
+        var response = await _mediator.Send(new UpdateCardTypeRequest{Id = id, CardType = data});
+        
+        return response.HasErrors ? BadRequest(response) : Ok(response);
+
+    }
+    
+    [HttpDelete("{id:int}")]
+    public async Task<ActionResult<Response>> DeleteCardType([FromRoute] int id)
+    {
+        var response = await _mediator.Send(new DeleteCardTypeRequest{Id = id});
+        
+        return response.HasErrors ? BadRequest(response) : Ok(response);
+
+    }
+}

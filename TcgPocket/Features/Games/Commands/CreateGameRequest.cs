@@ -1,24 +1,24 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using MediatR;
-using TcgPocket.Common;
 using TcgPocket.Data;
+using TcgPocket.Shared;
 
-namespace TcgPocket.Features.Games;
+namespace TcgPocket.Features.Games.Commands;
 
-public class CreateGameCommand : IRequest<Response<GameGetDto>>
+public class CreateGameRequest : IRequest<Response<GameGetDto>>
 {
     public GameDto Game { get; set; }
 }
 
-public class CreateGameHandler : IRequestHandler<CreateGameCommand, Response<GameGetDto>>
+public class CreateGameRequestHandler : IRequestHandler<CreateGameRequest, Response<GameGetDto>>
 {
     private readonly DataContext _dataContext;
     private readonly IMapper _mapper;
-    private readonly IValidator<GameDto> _validator;
+    private readonly IValidator<CreateGameRequest> _validator;
 
-    public CreateGameHandler(DataContext dataContext,
-        IValidator<GameDto> validator,
+    public CreateGameRequestHandler(DataContext dataContext,
+        IValidator<CreateGameRequest> validator,
         IMapper mapper)
     {
         _dataContext = dataContext;
@@ -26,9 +26,9 @@ public class CreateGameHandler : IRequestHandler<CreateGameCommand, Response<Gam
         _validator = validator;
     }
     
-    public async Task<Response<GameGetDto>> Handle(CreateGameCommand request, CancellationToken cancellationToken)
+    public async Task<Response<GameGetDto>> Handle(CreateGameRequest request, CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(request.Game, cancellationToken);
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
         
         if (!validationResult.IsValid)
         {

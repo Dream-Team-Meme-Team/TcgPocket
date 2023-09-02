@@ -2,7 +2,7 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using TcgPocket.Data;
-using TcgPocket.Features;
+using TcgPocket.Shared;
 
 namespace TcgPocket;
 

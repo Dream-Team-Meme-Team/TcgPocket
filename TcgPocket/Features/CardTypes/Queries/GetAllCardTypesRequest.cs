@@ -2,30 +2,30 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using TcgPocket.Common;
 using TcgPocket.Data;
+using TcgPocket.Shared;
 
-namespace TcgPocket.Features.CardTypes;
+namespace TcgPocket.Features.CardTypes.Queries;
 
-public class GetAllCardTypesQuery : IRequest<Response<List<CardTypeDto>>>
+public class GetAllCardTypesRequest : IRequest<Response<List<CardTypeDto>>>
 {
     public int Page { get; set; }
     public int PageSize { get; set; }
 }
 
-public class GetAllCardTypesHandler : IRequestHandler<GetAllCardTypesQuery, Response<List<CardTypeDto>>>
+public class GetAllCardTypesRequestHandler : IRequestHandler<GetAllCardTypesRequest, Response<List<CardTypeDto>>>
 {
     private readonly DataContext _dataContext;
     private readonly IMapper _mapper;
 
-    public GetAllCardTypesHandler(DataContext dataContext,
+    public GetAllCardTypesRequestHandler(DataContext dataContext,
         IMapper mapper)
     {
         _dataContext = dataContext;
         _mapper = mapper;
     }
     
-    public async Task<Response<List<CardTypeDto>>> Handle(GetAllCardTypesQuery request, CancellationToken cancellationToken)
+    public async Task<Response<List<CardTypeDto>>> Handle(GetAllCardTypesRequest request, CancellationToken cancellationToken)
     {
         var cardTypes = await _dataContext.Set<CardType>()
             .Skip((request.Page - 1) * request.PageSize)

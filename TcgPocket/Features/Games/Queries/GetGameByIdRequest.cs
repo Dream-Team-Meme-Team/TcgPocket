@@ -1,29 +1,29 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using TcgPocket.Common;
 using TcgPocket.Data;
+using TcgPocket.Shared;
 
-namespace TcgPocket.Features.Games;
+namespace TcgPocket.Features.Games.Queries;
 
-public class GetGameByIdQuery : IRequest<Response<GameDto>>
+public class GetGameByIdRequest : IRequest<Response<GameDto>>
 {
     public int Id { get; set; }
 }
 
-public class GetGameByIdHandler : IRequestHandler<GetGameByIdQuery, Response<GameDto>>
+public class GetGameByIdRequestHandler : IRequestHandler<GetGameByIdRequest, Response<GameDto>>
 {
     private readonly DataContext _dataContext;
     private readonly IMapper _mapper;
 
-    public GetGameByIdHandler(DataContext dataContext,
+    public GetGameByIdRequestHandler(DataContext dataContext,
         IMapper mapper)
     {
         _dataContext = dataContext;
         _mapper = mapper;
     }
     
-    public async Task<Response<GameDto>> Handle(GetGameByIdQuery request, CancellationToken cancellationToken)
+    public async Task<Response<GameDto>> Handle(GetGameByIdRequest request, CancellationToken cancellationToken)
     {
         var game = await _dataContext.Set<Game>()
             .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);

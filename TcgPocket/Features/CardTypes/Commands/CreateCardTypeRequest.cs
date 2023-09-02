@@ -2,26 +2,25 @@
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using TcgPocket.Common;
 using TcgPocket.Data;
 using TcgPocket.Features.Games;
+using TcgPocket.Shared;
 
-namespace TcgPocket.Features.CardTypes;
+namespace TcgPocket.Features.CardTypes.Commands;
 
-public class UpdateCardTypeCommand : IRequest<Response<CardTypeGetDto>>
+public class CreateCardTypeRequest : IRequest<Response<CardTypeGetDto>>
 {
-    public int Id { get; set; }
     public CardTypeDto CardType { get; set; }
 }
 
-public class UpdateCardTypeHandler : IRequestHandler<UpdateCardTypeCommand, Response<CardTypeGetDto>>
+public class CreateCardTypeRequestHandler : IRequestHandler<CreateCardTypeRequest, Response<CardTypeGetDto>>
 {
     private readonly DataContext _dataContext;
     private readonly IMapper _mapper;
-    private readonly IValidator<CardTypeDto> _validator;
+    private readonly IValidator<CreateCardTypeRequest> _validator;
 
-    public UpdateCardTypeHandler(DataContext dataContext,
-        IValidator<CardTypeDto> validator,
+    public CreateCardTypeRequestHandler(DataContext dataContext,
+        IValidator<CreateCardTypeRequest> validator,
         IMapper mapper)
     {
         _dataContext = dataContext;
@@ -29,9 +28,9 @@ public class UpdateCardTypeHandler : IRequestHandler<UpdateCardTypeCommand, Resp
         _validator = validator;
     }
     
-    public async Task<Response<CardTypeGetDto>> Handle(UpdateCardTypeCommand request, CancellationToken cancellationToken)
+    public async Task<Response<CardTypeGetDto>> Handle(CreateCardTypeRequest request, CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(request.CardType, cancellationToken);
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
         
         if (!validationResult.IsValid)
         {
@@ -44,14 +43,10 @@ public class UpdateCardTypeHandler : IRequestHandler<UpdateCardTypeCommand, Resp
             return Error.AsResponse<CardTypeGetDto>("Game not found", "gameId");
         }
 
-        var cardType = await _dataContext.Set<CardType>()
-            .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
-        
-        if (cardType is null) return Error.AsResponse<CardTypeGetDto>("Card Type not found", "id");
-
-        _mapper.Map(request.CardType, cardType);
+        var cardType = _mapper.Map<CardType>(request.CardType);
+        await _dataContext.Set<CardType>().AddAsync(cardType, cancellationToken);
         await _dataContext.SaveChangesAsync(cancellationToken);
-        
+
         return _mapper.Map<CardTypeGetDto>(cardType).AsResponse();
     }
 }

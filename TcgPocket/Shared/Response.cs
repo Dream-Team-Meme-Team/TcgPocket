@@ -1,4 +1,4 @@
-﻿namespace TcgPocket.Common;
+﻿namespace TcgPocket.Shared;
 
 public class Response
 {

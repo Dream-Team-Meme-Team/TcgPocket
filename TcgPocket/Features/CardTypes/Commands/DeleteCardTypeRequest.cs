@@ -1,24 +1,24 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using TcgPocket.Common;
 using TcgPocket.Data;
+using TcgPocket.Shared;
 
-namespace TcgPocket.Features.CardTypes;
+namespace TcgPocket.Features.CardTypes.Commands;
 
-public class DeleteCardTypeCommand : IRequest<Response>
+public class DeleteCardTypeRequest : IRequest<Response>
 {
     public int Id { get; set; }
 }
 
-public class DeleteCardTypeHandler : IRequestHandler<DeleteCardTypeCommand, Response>
+public class DeleteCardTypeRequestHandler : IRequestHandler<DeleteCardTypeRequest, Response>
 {
     private readonly DataContext _dataContext;
 
-    public DeleteCardTypeHandler(DataContext dataContext)
+    public DeleteCardTypeRequestHandler(DataContext dataContext)
     {
         _dataContext = dataContext;
     }
-    public async Task<Response> Handle(DeleteCardTypeCommand request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(DeleteCardTypeRequest request, CancellationToken cancellationToken)
     {
         var cardType = await _dataContext.Set<CardType>()
             .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);

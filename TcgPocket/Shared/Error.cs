@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using ValidationFailure = FluentValidation.Results.ValidationFailure;
 
-namespace TcgPocket.Common;
+namespace TcgPocket.Shared;
 
 public class Error
 {

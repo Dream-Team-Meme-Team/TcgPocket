@@ -1,13 +1,11 @@
-﻿using AutoMapper;
-using FluentValidation;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using TcgPocket.Common;
+﻿using TcgPocket.Features.CardTypes;
+using TcgPocket.Shared.Interfaces;
 
 namespace TcgPocket.Features.Games;
 
 public class Game : GameGetDto, IEntity
 {
+    public List<CardType> CardTypes { get; set; }
 }
 
 public class GameGetDto : GameDto
@@ -18,32 +16,4 @@ public class GameGetDto : GameDto
 public class GameDto
 {
     public string Name { get; set; }
-}
-
-public class GameMapper : Profile
-{
-    public GameMapper()
-    {
-        CreateMap<Game, GameGetDto>();
-        CreateMap<Game, GameDto>().ReverseMap();
-        CreateMap<CreateGameCommand, Game>().ReverseMap();
-    }
-}
-
-public class GameValidator : AbstractValidator<GameDto>
-{
-    public GameValidator()
-    {
-        RuleFor(x => x.Name)
-            .MaximumLength(25)
-            .NotEmpty();
-    }
-}
-
-public class GameConfiguration : IEntityTypeConfiguration<Game>
-{
-    public void Configure(EntityTypeBuilder<Game> builder)
-    {
-        builder.ToTable(schema: "dbo", name: "Games");
-    }
 }
