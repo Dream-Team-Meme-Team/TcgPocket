@@ -8,19 +8,19 @@ using TcgPocket.Shared;
 
 namespace TcgPocket.Features.Attributes.Commands;
 
-public class CreateAttributeRequest : IRequest<Response<AttributeGetDto>>
+public class CreateAttributeCommand : IRequest<Response<AttributeGetDto>>
 {
 	public AttributeDto Attribute { get; set; }
 }
 
-public class CreateAttributeRequestHandler : IRequestHandler<CreateAttributeRequest, Response<AttributeGetDto>>
+public class CreateAttributeCommandHandler : IRequestHandler<CreateAttributeCommand, Response<AttributeGetDto>>
 {
 	private readonly DataContext _dataContext;
 	private readonly IMapper _mapper;
-	private readonly IValidator<CreateAttributeRequest> _validator;
+	private readonly IValidator<CreateAttributeCommand> _validator;
 
-	public CreateAttributeRequestHandler(DataContext dataContext,
-		IValidator<CreateAttributeRequest> validator,
+	public CreateAttributeCommandHandler(DataContext dataContext,
+		IValidator<CreateAttributeCommand> validator,
 		IMapper mapper)
 	{
 		_dataContext = dataContext;
@@ -28,7 +28,7 @@ public class CreateAttributeRequestHandler : IRequestHandler<CreateAttributeRequ
 		_validator = validator;
 	}
 
-	public async Task<Response<AttributeGetDto>> Handle(CreateAttributeRequest request, CancellationToken cancellationToken)
+	public async Task<Response<AttributeGetDto>> Handle(CreateAttributeCommand request, CancellationToken cancellationToken)
 	{
 		var validationResult = await _validator.ValidateAsync(request, cancellationToken);
 

@@ -6,24 +6,24 @@ using TcgPocket.Shared;
 
 namespace TcgPocket.Features.Attributes.Queries;
 
-public class GetAttributeByIdRequest : IRequest<Response<AttributeDto>>
+public class GetAttributeByIdQuery : IRequest<Response<AttributeDto>>
 {
 	public int Id { get; set; }
 }
 
-public class GetAttributeByIdRequestHandler : IRequestHandler<GetAttributeByIdRequest, Response<AttributeDto>>
+public class GetAttributeByIdQueryHandler : IRequestHandler<GetAttributeByIdQuery, Response<AttributeDto>>
 {
 	private readonly DataContext _dataContext;
 	private readonly IMapper _mapper;
 
-	public GetAttributeByIdRequestHandler(DataContext dataContext,
+	public GetAttributeByIdQueryHandler(DataContext dataContext,
 		IMapper mapper)
 	{
 		_dataContext = dataContext;
 		_mapper = mapper;
 	}
 
-	public async Task<Response<AttributeDto>> Handle(GetAttributeByIdRequest request, CancellationToken cancellationToken)
+	public async Task<Response<AttributeDto>> Handle(GetAttributeByIdQuery request, CancellationToken cancellationToken)
 	{
 		var attribute = await _dataContext.Set<Attribute>()
 			.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);

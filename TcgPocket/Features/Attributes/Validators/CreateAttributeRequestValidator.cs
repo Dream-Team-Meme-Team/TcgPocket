@@ -3,7 +3,7 @@ using TcgPocket.Features.Attributes.Commands;
 
 namespace TcgPocket.Features.Attributes.Validators;
 
-public class CreateAttributeRequestValidator : AbstractValidator<CreateAttributeRequest>
+public class CreateAttributeRequestValidator : AbstractValidator<CreateAttributeCommand>
 {
 	public CreateAttributeRequestValidator(IValidator<AttributeDto> baseValidator)
 	{

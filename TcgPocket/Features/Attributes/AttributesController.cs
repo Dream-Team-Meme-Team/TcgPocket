@@ -18,7 +18,7 @@ public class AttributesController : ControllerBase
 	}
 
 	[HttpGet]
-	public async Task<ActionResult<Response<List<AttributeDto>>>> GetAllAttributes([FromQuery] GetAllAttributesRequest request)
+	public async Task<ActionResult<Response<List<AttributeDto>>>> GetAllAttributes([FromQuery] GetAllAttributesQuery request)
 	{
 		var response = await _mediator.Send(request);
 
@@ -26,9 +26,9 @@ public class AttributesController : ControllerBase
 	}
 
 	[HttpGet("{id:int}")]
-	public async Task<ActionResult<Response<AttributeGetDto>>> CreateAttribute([FromBody] AttributeDto data)
+	public async Task<ActionResult<Response<AttributeGetDto>>> GetAttributeById([FromBody] int id)
 	{
-		var response = await _mediator.Send(new GetAttributeByIdRequest{Id = id});
+		var response = await _mediator.Send(new GetAttributeByIdQuery{Id = id});
 
 		return response.HasErrors ? BadRequest(response) : Ok(response);
 	}
@@ -36,16 +36,18 @@ public class AttributesController : ControllerBase
 	[HttpPost]
 	public async Task<ActionResult<Response<AttributeGetDto>>> CreateAttribute([FromBody] AttributeDto data)
 	{
-		var response = await _mediator.Send(new CreateAttributeRequest{Attribute = data});
+		var response = await _mediator.Send(new CreateAttributeCommand{Attribute = data});
 
-		return response.HasErrors ? BadRequest(response) : Ok(response);
+		return response.HasErrors
+			? BadRequest(response)
+			: CreatedAtRoute(nameof(CreateAttribute), new { response.Data.Id}, response);
 	}
 
 	[HttpPut("{id:int}")]
 	public async Task<ActionResult<Response<AttributeGetDto>>> UpdateAttribute([FromRoute] int id,
 		[FromBody] AttributeDto data)
 	{
-		var response = await _mediator.Send(new UpdateAttributeRequest{Id = id, Attribute = data});
+		var response = await _mediator.Send(new UpdateAttributeCommand{Id = id, Attribute = data});
 
 		return response.HasErrors ? BadRequest(response) : Ok(response);
 	}
@@ -53,7 +55,7 @@ public class AttributesController : ControllerBase
 	[HttpDelete("{id:int}")]
 	public async Task<ActionResult<Response>> DeleteAttribute([FromRoute] int id)
 	{
-		var response = await _mediator.Send(new DeleteAttributeRequest{Id = id});
+		var response = await _mediator.Send(new DeleteAttributeCommand{Id = id});
 
 		return response.HasErrors ? BadRequest(response) : Ok(response);
 	}

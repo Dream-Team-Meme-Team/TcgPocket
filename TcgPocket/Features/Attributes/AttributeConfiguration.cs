@@ -7,7 +7,9 @@ public class AttributeConfiguration : IEntityTypeConfiguration<Attribute>
 {
 	public void Configure(EntityTypeBuilder<Attribute> builder)
 	{
-		builder.ToTable(schema: "dbo", name: "Attributes");
+		builder.ToTable("Attributes", "dbo");
+
+		builder.HasKey(x => x.Id);
 
 		builder.HasOne(x => x.Game)
 			.WithMany(x => x.Attributes)
