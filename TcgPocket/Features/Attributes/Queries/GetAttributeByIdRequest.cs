@@ -1,0 +1,35 @@
+﻿using AutoMapper;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using TcgPocket.Data;
+using TcgPocket.Shared;
+
+namespace TcgPocket.Features.Attributes.Queries;
+
+public class GetAttributeByIdRequest : IRequest<Response<AttributeDto>>
+{
+	public int Id { get; set; }
+}
+
+public class GetAttributeByIdRequestHandler : IRequestHandler<GetAttributeByIdRequest, Response<AttributeDto>>
+{
+	private readonly DataContext _dataContext;
+	private readonly IMapper _mapper;
+
+	public GetAttributeByIdRequestHandler(DataContext dataContext,
+		IMapper mapper)
+	{
+		_dataContext = dataContext;
+		_mapper = mapper;
+	}
+
+	public async Task<Response<AttributeDto>> Handle(GetAttributeByIdRequest request, CancellationToken cancellationToken)
+	{
+		var attribute = await _dataContext.Set<Attribute>()
+			.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
+
+		if (attribute is null) return Error.AsResponse<AttributeDto>("Attribute not found", "id");
+
+		return _mapper.Map<AttributeDto>(attribute).AsResponse();
+	}
+}
