@@ -27,7 +27,7 @@ public class GetAllSetsQueryHandler : IRequestHandler<GetAllSetsQuery, Response<
         var cardTypes = await _dataContext.Set<Set>()
             .ToListAsync(cancellationToken: cancellationToken);
 
-        if (cardTypes.IsNullOrEmpty()) return Error.AsResponse<List<SetGetDto>>("Card Types not found");
+        if (cardTypes.IsNullOrEmpty()) return Error.AsResponse<List<SetGetDto>>("Set not found");
 
         return _mapper.Map<List<SetGetDto>>(cardTypes).AsResponse();
     }

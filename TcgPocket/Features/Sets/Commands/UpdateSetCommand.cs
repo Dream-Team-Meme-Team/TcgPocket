@@ -47,7 +47,7 @@ public class UpdateSetCommandHandler : IRequestHandler<UpdateSetCommand, Respons
         var cardType = await _dataContext.Set<Set>()
             .FirstOrDefaultAsync(x => x.Id == command.Id, cancellationToken);
 
-        if (cardType is null) return Error.AsResponse<SetGetDto>("Card Type not found", "id");
+        if (cardType is null) return Error.AsResponse<SetGetDto>("Set not found", "id");
 
         _mapper.Map(command.Set, cardType);
         await _dataContext.SaveChangesAsync(cancellationToken);

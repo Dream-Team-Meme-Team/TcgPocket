@@ -40,7 +40,7 @@ public class GetSetByIdQueryHandler : IRequestHandler<GetSetByIdQuery, Response<
         var cardType = await _dataContext.Set<Set>()
             .FirstOrDefaultAsync(x => x.Id == query.Id, cancellationToken);
 
-        if (cardType is null) return Error.AsResponse<SetGetDto>("Card Type not found", "id");
+        if (cardType is null) return Error.AsResponse<SetGetDto>("Set not found", "id");
 
         return _mapper.Map<SetGetDto>(cardType).AsResponse();
     }
