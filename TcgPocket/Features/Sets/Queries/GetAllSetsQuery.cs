@@ -27,7 +27,7 @@ public class GetAllSetsQueryHandler : IRequestHandler<GetAllSetsQuery, Response<
         var set = await _dataContext.Set<Set>()
             .ToListAsync(cancellationToken: cancellationToken);
 
-        if (set.IsNullOrEmpty()) return Error.AsResponse<List<SetGetDto>>("Set not found");
+        if (set.IsNullOrEmpty()) return Error.AsResponse<List<SetGetDto>>("Sets not found");
 
         return _mapper.Map<List<SetGetDto>>(set).AsResponse();
     }
