@@ -8,14 +8,12 @@ public class DesignTimeDataContextFactory : IDesignTimeDbContextFactory<DataCont
 {
     public DataContext CreateDbContext(string[] args)
     {
-        string projectPath = AppDomain.CurrentDomain.BaseDirectory.Split(new String[] { @"bin\" }, StringSplitOptions.None)[0];
-        IConfigurationRoot configuration = new ConfigurationBuilder()
-            .SetBasePath(projectPath)
+        var configuration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json")
             .Build();
-        string connectionString = configuration.GetConnectionString(AppSettings.DefaultConnection);
+
         var optionsBuilder = new DbContextOptionsBuilder<DataContext>();
-        optionsBuilder.UseSqlServer(connectionString);
+        optionsBuilder.UseSqlServer(configuration.GetConnectionString(AppSettings.DefaultConnection));
         // optionsBuilder.AddInterceptors(new SoftDeleteInterceptor());
 
         return new DataContext(optionsBuilder.Options);
