@@ -30,7 +30,7 @@ export function PrimaryNavigation({
     <div>
       <Navbar height={100} sx={navbarSx}>
         <NavButton route={routes.home} sx={logoIconSx}>
-          <Image maw={85} src="./TcgPocketLogoNaked.svg" />
+          <Image maw={85} src="./TcgPocketLogo.svg" />
         </NavButton>
         <Flex align={'center'} gap={25}>
           <Flex gap={10}>
