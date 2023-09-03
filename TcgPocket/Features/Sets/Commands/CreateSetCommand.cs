@@ -3,7 +3,6 @@ using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using TcgPocket.Data;
-using TcgPocket.Features.CardTypes.Commands;
 using TcgPocket.Features.Games;
 using TcgPocket.Shared;
 
@@ -43,10 +42,10 @@ public class CreateSetCommandHandler : IRequestHandler<CreateSetCommand, Respons
             return Error.AsResponse<SetGetDto>("Game not found", "gameId");
         }
 
-        var cardType = _mapper.Map<Set>(command.Set);
-        await _dataContext.Set<Set>().AddAsync(cardType, cancellationToken);
+        var set = _mapper.Map<Set>(command.Set);
+        await _dataContext.Set<Set>().AddAsync(set, cancellationToken);
         await _dataContext.SaveChangesAsync(cancellationToken);
 
-        return _mapper.Map<SetGetDto>(cardType).AsResponse();
+        return _mapper.Map<SetGetDto>(set).AsResponse();
     }
 }

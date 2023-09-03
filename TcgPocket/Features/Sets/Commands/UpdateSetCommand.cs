@@ -44,14 +44,14 @@ public class UpdateSetCommandHandler : IRequestHandler<UpdateSetCommand, Respons
             return Error.AsResponse<SetGetDto>("Game not found", "gameId");
         }
 
-        var cardType = await _dataContext.Set<Set>()
+        var set = await _dataContext.Set<Set>()
             .FirstOrDefaultAsync(x => x.Id == command.Id, cancellationToken);
 
-        if (cardType is null) return Error.AsResponse<SetGetDto>("Set not found", "id");
+        if (set is null) return Error.AsResponse<SetGetDto>("Set not found", "id");
 
-        _mapper.Map(command.Set, cardType);
+        _mapper.Map(command.Set, set);
         await _dataContext.SaveChangesAsync(cancellationToken);
 
-        return _mapper.Map<SetGetDto>(cardType).AsResponse();
+        return _mapper.Map<SetGetDto>(set).AsResponse();
     }
 }

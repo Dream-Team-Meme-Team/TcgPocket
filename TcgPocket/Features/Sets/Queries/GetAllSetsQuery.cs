@@ -24,11 +24,11 @@ public class GetAllSetsQueryHandler : IRequestHandler<GetAllSetsQuery, Response<
 
     public async Task<Response<List<SetGetDto>>> Handle(GetAllSetsQuery query, CancellationToken cancellationToken)
     {
-        var cardTypes = await _dataContext.Set<Set>()
+        var set = await _dataContext.Set<Set>()
             .ToListAsync(cancellationToken: cancellationToken);
 
-        if (cardTypes.IsNullOrEmpty()) return Error.AsResponse<List<SetGetDto>>("Set not found");
+        if (set.IsNullOrEmpty()) return Error.AsResponse<List<SetGetDto>>("Set not found");
 
-        return _mapper.Map<List<SetGetDto>>(cardTypes).AsResponse();
+        return _mapper.Map<List<SetGetDto>>(set).AsResponse();
     }
 }

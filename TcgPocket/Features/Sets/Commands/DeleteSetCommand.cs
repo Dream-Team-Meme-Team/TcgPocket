@@ -36,12 +36,12 @@ public class DeleteSetCommandHandler : IRequestHandler<DeleteSetCommand, Respons
             return new Response { Errors = errors };
         }
 
-        var cardType = await _dataContext.Set<Set>()
+        var set = await _dataContext.Set<Set>()
             .FirstOrDefaultAsync(x => x.Id == command.Id, cancellationToken);
 
-        if (cardType is null) return Error.AsResponse("Card Type not found", "id");
+        if (set is null) return Error.AsResponse("Set not found", "id");
 
-        _dataContext.Set<Set>().Remove(cardType);
+        _dataContext.Set<Set>().Remove(set);
         await _dataContext.SaveChangesAsync(cancellationToken);
 
         return Response.Success;

@@ -37,11 +37,11 @@ public class GetSetByIdQueryHandler : IRequestHandler<GetSetByIdQuery, Response<
             return new Response<SetGetDto> { Errors = errors };
         }
 
-        var cardType = await _dataContext.Set<Set>()
+        var set = await _dataContext.Set<Set>()
             .FirstOrDefaultAsync(x => x.Id == query.Id, cancellationToken);
 
-        if (cardType is null) return Error.AsResponse<SetGetDto>("Set not found", "id");
+        if (set is null) return Error.AsResponse<SetGetDto>("Set not found", "id");
 
-        return _mapper.Map<SetGetDto>(cardType).AsResponse();
+        return _mapper.Map<SetGetDto>(set).AsResponse();
     }
 }
