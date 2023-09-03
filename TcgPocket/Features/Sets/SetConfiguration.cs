@@ -7,7 +7,7 @@ public class SetConfiguration : IEntityTypeConfiguration<Set>
 {
     public void Configure(EntityTypeBuilder<Set> builder)
     {
-        builder.ToTable(schema: "dbo", name: "Sets");
+        builder.ToTable("Sets", "dbo");
         builder.HasKey(x => x.Id);
         builder.HasOne(x => x.Game)
             .WithMany(x => x.Sets)
