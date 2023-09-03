@@ -1,5 +1,4 @@
 using AutoMapper;
-using TcgPocket.Features.Games.Commands;
 
 namespace TcgPocket.Features.Games;
 
