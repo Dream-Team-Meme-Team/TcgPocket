@@ -16,5 +16,5 @@ public class AttributeGetDto : AttributeDto
 public class AttributeDto
 {
 	public int GameId { get; set; }
-	public string Name { get; set; } = string.Empty;
+	public string Name { get; set; }
 }
