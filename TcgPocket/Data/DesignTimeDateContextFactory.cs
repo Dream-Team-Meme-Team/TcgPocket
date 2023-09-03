@@ -8,8 +8,12 @@ public class DesignTimeDataContextFactory : IDesignTimeDbContextFactory<DataCont
 {
     public DataContext CreateDbContext(string[] args)
     {
+        var configuration = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json")
+            .Build();
+
         var optionsBuilder = new DbContextOptionsBuilder<DataContext>();
-        optionsBuilder.UseSqlServer(AppSettings.DefaultConnection);
+        optionsBuilder.UseSqlServer(configuration.GetConnectionString(AppSettings.DefaultConnection));
         // optionsBuilder.AddInterceptors(new SoftDeleteInterceptor());
 
         return new DataContext(optionsBuilder.Options);
