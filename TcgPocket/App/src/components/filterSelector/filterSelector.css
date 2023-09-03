@@ -1,0 +1,7 @@
+.filterSelectorContainer {
+    display: grid;
+
+    border-width: 10rem;
+    border-style: solid;
+    border-color: aliceblue;
+}
