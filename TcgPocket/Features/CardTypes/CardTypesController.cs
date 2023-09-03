@@ -18,15 +18,15 @@ public class CardTypesController : ControllerBase
     }
     
     [HttpGet]
-    public async Task<ActionResult<Response<List<CardTypeGetDto>>>> GetAllCardTypes([FromQuery] GetAllCardTypesQuery query)
+    public async Task<ActionResult<Response<List<CardTypeGetDto>>>> GetAllCardTypes()
     {
-        var response = await _mediator.Send(query);
+        var response = await _mediator.Send(new GetAllCardTypesQuery());
         
         return response.HasErrors ? BadRequest(response) : Ok(response);
 
     }
     
-    [HttpGet("{id:int}")]
+    [HttpGet("{id:int}", Name = nameof(GetCardTypeById))]
     public async Task<ActionResult<Response<CardTypeGetDto>>> GetCardTypeById([FromRoute] int id)
     {
         var response = await _mediator.Send(new GetCardTypeByIdQuery{Id = id});
@@ -42,7 +42,7 @@ public class CardTypesController : ControllerBase
         
         return response.HasErrors 
             ? BadRequest(response) 
-            : CreatedAtRoute(nameof(CreateCardType), new {response.Data.Id}, response);
+            : CreatedAtRoute(nameof(GetCardTypeById), new { response.Data.Id },response);
 
     }
     
@@ -62,6 +62,5 @@ public class CardTypesController : ControllerBase
         var response = await _mediator.Send(new DeleteCardTypeCommand{Id = id});
         
         return response.HasErrors ? BadRequest(response) : Ok(response);
-
     }
 }
