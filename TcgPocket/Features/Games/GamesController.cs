@@ -18,14 +18,14 @@ public class GamesController : ControllerBase
     }
     
     [HttpGet]
-    public async Task<ActionResult<Response<List<GameGetDto>>>> GetAllGames([FromQuery] GetAllGamesQuery query)
+    public async Task<ActionResult<Response<List<GameGetDto>>>> GetAllGames()
     {
-        var response = await _mediator.Send(query);
+        var response = await _mediator.Send(new GetAllGamesQuery());
         
         return response.HasErrors ? BadRequest(response) : Ok(response);
     }
     
-    [HttpGet("{id:int}")]
+    [HttpGet("{id:int}", Name = nameof(GetGameById))]
     public async Task<ActionResult<Response<GameGetDto>>> GetGameById([FromRoute] int id)
     {
         var response = await _mediator.Send(new GetGameByIdQuery{Id = id});
@@ -40,7 +40,7 @@ public class GamesController : ControllerBase
         
         return response.HasErrors 
             ? BadRequest(response)
-            : CreatedAtRoute(nameof(CreateGame), new {response.Data.Id}, response);
+            : CreatedAtRoute(nameof(GetGameById), new { response.Data.Id }, response);
     }
     
     [HttpPut("{id:int}")]
