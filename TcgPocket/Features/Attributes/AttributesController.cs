@@ -18,14 +18,14 @@ public class AttributesController : ControllerBase
 	}
 
 	[HttpGet]
-	public async Task<ActionResult<Response<List<AttributeDto>>>> GetAllAttributes([FromQuery] GetAllAttributesQuery request)
+	public async Task<ActionResult<Response<List<AttributeGetDto>>>> GetAllAttributes()
 	{
-		var response = await _mediator.Send(request);
+		var response = await _mediator.Send(new GetAllAttributesQuery());
 
 		return response.HasErrors ? BadRequest(response) : Ok(response);
 	}
 
-	[HttpGet("{id:int}")]
+	[HttpGet("{id:int}", Name = nameof(GetAttributeById))]
 	public async Task<ActionResult<Response<AttributeGetDto>>> GetAttributeById([FromBody] int id)
 	{
 		var response = await _mediator.Send(new GetAttributeByIdQuery{Id = id});
@@ -40,7 +40,7 @@ public class AttributesController : ControllerBase
 
 		return response.HasErrors
 			? BadRequest(response)
-			: CreatedAtRoute(nameof(CreateAttribute), new { response.Data.Id}, response);
+			: CreatedAtRoute(nameof(GetAttributeById), new { response.Data.Id }, response);
 	}
 
 	[HttpPut("{id:int}")]
