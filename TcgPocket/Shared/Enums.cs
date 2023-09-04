@@ -1,4 +1,4 @@
-﻿namespace TcgPocket.Features;
+﻿namespace TcgPocket.Shared;
 
 public abstract class AppSettings
 {
