@@ -1,12 +1,11 @@
-import { MantineProvider } from '@mantine/core';
-import { RouterProvider } from 'react-router-dom';
-import { router } from './constants/router';
+import { PrimaryNavigation } from './components/Navigation/PrimaryNavigation';
+import { AppRoutes } from './routes/routes';
 
 function App() {
   return (
-    <MantineProvider withGlobalStyles withNormalizeCSS>
-      <RouterProvider router={router} />
-    </MantineProvider>
+    <PrimaryNavigation>
+      <AppRoutes />
+    </PrimaryNavigation>
   );
 }
 
