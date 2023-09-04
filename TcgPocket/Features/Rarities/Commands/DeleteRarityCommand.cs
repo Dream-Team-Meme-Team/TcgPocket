@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
-using Azure.Core;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using TcgPocket.Data;
 using TcgPocket.Shared;
 

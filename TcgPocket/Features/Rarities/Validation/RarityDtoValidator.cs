@@ -1,11 +1,10 @@
 ﻿using FluentValidation;
-using TcgPocket.Features.Rarities.Dtos.Requests;
 
 namespace TcgPocket.Features.Rarities.Validation
 {
-    public class CreateRarityDtoValidator : AbstractValidator<CreateRarityDto>
+    public class RarityDtoValidator : AbstractValidator<RarityDto>
     {
-        public CreateRarityDtoValidator()
+        public RarityDtoValidator()
         {
             RuleFor(x => x.Name)
                 .NotEmpty()

@@ -2,6 +2,8 @@
 using TcgPocket.Features.Attributes;
 using TcgPocket.Features.Sets;
 using TcgPocket.Shared.Interfaces;
+using System.Net;
+using TcgPocket.Features.Rarities;
 
 namespace TcgPocket.Features.Games;
 
@@ -10,6 +12,7 @@ public class Game : GameGetDto, IEntity
     public List<CardType> CardTypes { get; set; }
     public List<Attributes.Attribute> Attributes { get; set; }
     public List<Set> Sets { get; set; }
+    public List<Rarity> Rarities { get; set; }
 }
 
 public class GameGetDto : GameDto

@@ -1,7 +1,4 @@
 ﻿using AutoMapper;
-using System.Net.NetworkInformation;
-using TcgPocket.Features.Rarities.Dtos.Requests;
-using TcgPocket.Features.Rarities.Dtos.Responses;
 
 namespace TcgPocket.Features.Rarities
 {
@@ -9,12 +6,9 @@ namespace TcgPocket.Features.Rarities
     {
         public RaritiesMappingProfile() 
         {
-            CreateMap<Rarity, RarityResponseDto>();
+            CreateMap<Rarity, RarityGetDto>();
 
-            CreateMap<CreateRarityDto, Rarity>()
-                .ForMember(x => x.Id, y => y.Ignore());
-
-            CreateMap<UpdateRarityDto, Rarity>()
+            CreateMap<RarityDto, Rarity>()
                 .ForMember(x => x.Id, y => y.Ignore());
         }
     }

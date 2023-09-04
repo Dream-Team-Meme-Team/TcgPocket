@@ -5,17 +5,13 @@ namespace TcgPocket.Features.Rarities.Validation
 {
     public class UpdateRarityCommandValidator : AbstractValidator<UpdateRarityCommand>
     {
-        public UpdateRarityCommandValidator() 
+        public UpdateRarityCommandValidator(IValidator<RarityDto> baseValidator) 
         {
             RuleFor(x => x.Id)
                 .NotEmpty()
                 .GreaterThan(0);
-            RuleFor(x => x.UpdateRarityDto.Name)
-                .NotEmpty()
-                .MaximumLength(50);
-            RuleFor(x => x.UpdateRarityDto.GameId)
-                .NotEmpty()
-                .GreaterThan(0);
+            RuleFor(x => x.RarityDto)
+                .SetValidator(baseValidator);
         }
     }
 }

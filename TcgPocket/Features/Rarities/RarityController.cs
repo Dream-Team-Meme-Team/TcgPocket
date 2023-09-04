@@ -1,8 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TcgPocket.Features.Rarities.Commands;
-using TcgPocket.Features.Rarities.Dtos.Requests;
-using TcgPocket.Features.Rarities.Dtos.Responses;
 using TcgPocket.Features.Rarities.Queries;
 using TcgPocket.Shared;
 
@@ -20,48 +18,45 @@ namespace TcgPocket.Features.Rarities
         }
 
         [HttpPost]
-        public async Task<ActionResult<Response<RarityResponseDto>>> CreateRarity([FromBody]CreateRarityDto dto) 
+        public async Task<ActionResult<Response<RarityGetDto>>> CreateRarity([FromBody] RarityDto dto) 
         {
-            var rarity = await _mediator.Send(new CreateRarityCommand { CreateRarityDto = dto });
+            var response = await _mediator.Send(new CreateRarityCommand { RarityDto = dto });
 
-            return CreatedAtRoute(nameof(GetRarityById), new { id = rarity.Data.Id }, rarity.Data);
+            return response.HasErrors 
+                ? BadRequest(response) 
+                : CreatedAtRoute(nameof(GetRarityById), new { id = response.Data.Id }, response.Data);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Response<RarityResponseDto>>> UpdateRarity([FromRoute]int id, [FromBody]UpdateRarityDto dto)
+        public async Task<ActionResult<Response<RarityGetDto>>> UpdateRarity([FromRoute]int id, [FromBody] RarityDto dto)
         {
-            var rarity = await _mediator.Send(new UpdateRarityCommand { Id = id, UpdateRarityDto = dto });
+            var response = await _mediator.Send(new UpdateRarityCommand { Id = id, RarityDto = dto });
 
-            return Ok(rarity);
+            return response.HasErrors ? BadRequest(response) : Ok(response);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Response<RarityResponseDto>>> GetRarityById([FromRoute]int id)
+        public async Task<ActionResult<Response<RarityGetDto>>> GetRarityById([FromRoute]int id)
         {
-            var rarity = await _mediator.Send(new GetRarityByIdQuery { Id = id });
+            var response = await _mediator.Send(new GetRarityByIdQuery { Id = id });
 
-            return Ok(rarity);
+            return response.HasErrors ? BadRequest(response) : Ok(response);
         }
 
         [HttpGet]
-        public async Task<ActionResult<Response<RarityResponseDto>>> GetAllRarities()
+        public async Task<ActionResult<Response<RarityGetDto>>> GetAllRarities()
         {
-            var rarities = await _mediator.Send(new GetAllRaritiesQuery { });
+            var response = await _mediator.Send(new GetAllRaritiesQuery { });
 
-            return Ok(rarities);
+            return response.HasErrors ? BadRequest(response) : Ok(response);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Response<RarityResponseDto>>> DeleteRarity([FromRoute]int id)
+        public async Task<ActionResult<Response<RarityGetDto>>> DeleteRarity([FromRoute]int id)
         {
-            var result = await _mediator.Send(new DeleteRarityCommand { Id = id });
+            var response = await _mediator.Send(new DeleteRarityCommand { Id = id });
 
-            if (result.HasErrors)
-            {
-                return BadRequest(result);
-            }
-
-            return Ok(result);
+            return response.HasErrors ? BadRequest(response) : Ok(response);
         }
     }
 }

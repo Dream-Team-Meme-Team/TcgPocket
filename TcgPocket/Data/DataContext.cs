@@ -11,9 +11,6 @@ public class DataContext : DbContext
     {
     }
 
-    public DbSet<Game> Games { get; set; }
-    public DbSet<Rarity> Rarities { get; set; }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
