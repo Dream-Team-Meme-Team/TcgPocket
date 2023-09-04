@@ -7,11 +7,15 @@ import {
   Menu,
   Navbar,
 } from '@mantine/core';
+import { useViewportSize } from '@mantine/hooks';
 import { IconLogout, IconSettings, IconUser } from '@tabler/icons-react';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { routes } from '../../routes';
 import { NavButton } from './NavButton';
 import { useNavigate } from 'react-router-dom';
+
+const MIN_HEIGHT = 60;
+const MAX_HEIGHT = 120;
 
 type PrimaryNavigationProps = {
   children?: JSX.Element;
@@ -21,6 +25,21 @@ export function PrimaryNavigation({
   children,
 }: PrimaryNavigationProps): React.ReactElement {
   const navigate = useNavigate();
+  const { height } = useViewportSize();
+
+  const navbarHeight = useMemo(() => {
+    const absoluteHeight = height * 0.075;
+
+    if (absoluteHeight < MIN_HEIGHT) {
+      return MIN_HEIGHT;
+    }
+
+    if (absoluteHeight > MAX_HEIGHT) {
+      return MAX_HEIGHT;
+    }
+
+    return absoluteHeight;
+  }, [height]);
 
   const onLogoutClick = () => {
     console.log('log out');
@@ -28,9 +47,9 @@ export function PrimaryNavigation({
 
   return (
     <div>
-      <Navbar height={100} sx={navbarSx}>
+      <Navbar height={navbarHeight} sx={navbarSx}>
         <NavButton route={routes.home} sx={logoIconSx}>
-          <Image maw={85} src="./TcgPocketLogo.svg" />
+          <Image maw={navbarHeight - 16} src="./TcgPocketLogo.svg" />
         </NavButton>
         <Flex align={'center'} gap={25}>
           <Flex gap={10}>
