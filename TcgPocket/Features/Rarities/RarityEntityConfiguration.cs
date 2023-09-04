@@ -12,7 +12,7 @@ namespace TcgPocket.Features.Rarities
             entity.HasKey(x => x.Id);
 
             entity.HasOne(x => x.Game)
-                .WithMany()
+                .WithMany(y => y.Rarities)
                 .HasForeignKey(x => x.GameId)
                 .OnDelete(DeleteBehavior.ClientCascade);
         }

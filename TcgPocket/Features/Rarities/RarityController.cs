@@ -24,7 +24,7 @@ namespace TcgPocket.Features.Rarities
 
             return response.HasErrors 
                 ? BadRequest(response) 
-                : CreatedAtRoute(nameof(GetRarityById), new { id = response.Data.Id }, response.Data);
+                : CreatedAtRoute(nameof(GetRarityById), new { response.Data.Id }, response.Data);
         }
 
         [HttpPut("{id}")]
@@ -35,7 +35,7 @@ namespace TcgPocket.Features.Rarities
             return response.HasErrors ? BadRequest(response) : Ok(response);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = nameof(GetRarityById))]
         public async Task<ActionResult<Response<RarityGetDto>>> GetRarityById([FromRoute]int id)
         {
             var response = await _mediator.Send(new GetRarityByIdQuery { Id = id });
