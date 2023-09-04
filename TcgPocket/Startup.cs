@@ -1,14 +1,14 @@
-﻿using AutoMapper;
-using FluentValidation;
+﻿using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 using TcgPocket.Data;
-using TcgPocket.Features;
+using TcgPocket.Shared;
 
 namespace TcgPocket;
 
 public class Startup
 {
-    private IConfigurationRoot _configuration { get; }
+    private ConfigurationManager _configuration { get; }
 
     public Startup(WebApplicationBuilder builder)
     {
@@ -19,12 +19,12 @@ public class Startup
     {
         services.AddSingleton(_configuration);
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Startup>());
-        services.AddAutoMapper(typeof(IMapper));
-        services.AddValidatorsFromAssemblyContaining<IValidator>();
+        services.AddAutoMapper(Assembly.GetExecutingAssembly());
+        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddControllers();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
         services.AddDbContext<DataContext>(options =>
-            options.UseSqlServer(_configuration.GetConnectionString(AppSettings.DefaultConnection)));
+            options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
     }
 }
