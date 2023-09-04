@@ -14,9 +14,9 @@ namespace TcgPocket.Features.Rarities.Queries
 
     public class GetRarityByIdQueryHandler : IRequestHandler<GetRarityByIdQuery, Response<RarityGetDto>>
     {
-        public readonly DataContext _dataContext;
-        public readonly IMapper _mapper;
-        public readonly IValidator<GetRarityByIdQuery> _validator;
+        private readonly DataContext _dataContext;
+        private readonly IMapper _mapper;
+        private readonly IValidator<GetRarityByIdQuery> _validator;
 
         public GetRarityByIdQueryHandler(DataContext dataContext, IMapper mapper, IValidator<GetRarityByIdQuery> validator)
         {

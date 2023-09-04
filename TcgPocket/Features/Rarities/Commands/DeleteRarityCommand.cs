@@ -14,9 +14,9 @@ namespace TcgPocket.Features.Rarities.Commands
 
     public class DeleteRarityCommandHandler : IRequestHandler<DeleteRarityCommand, Response>
     {
-        public readonly DataContext _dataContext;
+        private readonly DataContext _dataContext;
         private readonly IMapper _mapper;
-        public readonly IValidator<DeleteRarityCommand> _validator;
+        private readonly IValidator<DeleteRarityCommand> _validator;
 
         public DeleteRarityCommandHandler(DataContext dataContext, IMapper mapper, IValidator<DeleteRarityCommand> validator)
         {

@@ -15,9 +15,9 @@ namespace TcgPocket.Features.Rarities.Commands
 
     public class CreateRarityCommandHandler : IRequestHandler<CreateRarityCommand, Response<RarityGetDto>>
     {
-        public readonly DataContext _dataContext;
-        public readonly IMapper _mapper;
-        public readonly IValidator<RarityDto> _validator;
+        private readonly DataContext _dataContext;
+        private readonly IMapper _mapper;
+        private readonly IValidator<RarityDto> _validator;
 
         public CreateRarityCommandHandler(DataContext dataContext, IMapper mapper, IValidator<RarityDto> validator)
         {

@@ -10,7 +10,7 @@ namespace TcgPocket.Features.Rarities
     [Route("/rarities")]
     public class RarityController : ControllerBase
     {
-        public readonly IMediator _mediator;
+        private readonly IMediator _mediator;
 
         public RarityController(IMediator mediator)
         {

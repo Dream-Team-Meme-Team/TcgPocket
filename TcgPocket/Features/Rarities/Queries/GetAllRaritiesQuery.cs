@@ -12,8 +12,8 @@ namespace TcgPocket.Features.Rarities.Queries
 
     public class GetAllRaritiesQueryHandler : IRequestHandler<GetAllRaritiesQuery, Response<List<RarityGetDto>>>
     {
-        public readonly DataContext _dataContext;
-        public readonly IMapper _mapper;
+        private readonly DataContext _dataContext;
+        private readonly IMapper _mapper;
 
         public GetAllRaritiesQueryHandler(DataContext dataContext, IMapper mapper)
         {
