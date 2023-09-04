@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System.Reflection;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using TcgPocket.Data;

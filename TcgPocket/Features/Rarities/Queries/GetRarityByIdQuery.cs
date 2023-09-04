@@ -3,7 +3,6 @@ using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using TcgPocket.Data;
-using TcgPocket.Features.Games.Dtos.Responses;
 using TcgPocket.Features.Rarities.Commands;
 using TcgPocket.Features.Rarities.Dtos.Requests;
 using TcgPocket.Features.Rarities.Dtos.Responses;
