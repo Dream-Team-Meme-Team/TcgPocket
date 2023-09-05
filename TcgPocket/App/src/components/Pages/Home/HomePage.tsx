@@ -6,18 +6,18 @@ const useStyles = createStyles((theme) => ({
   gradient: {
     background: theme.fn.linearGradient(
       180,
-      '#fdf3d3',
-      '#fdf3d3',
-      '#fdf3d3',
-      '#fdf3d3',
-      '#aacae2',
-      '#aacae2',
-      '#aacae2',
-      '#aacae2',
-      '#aacae2',
-      '#aacae2',
-      '#aacae2',
-      '#aacae2'
+      theme.colors.complimentaryColors[3],
+      theme.colors.complimentaryColors[3],
+      theme.colors.complimentaryColors[3],
+      theme.colors.complimentaryColors[3],
+      theme.colors.primaryColor[0],
+      theme.colors.primaryColor[0],
+      theme.colors.primaryColor[0],
+      theme.colors.primaryColor[0],
+      theme.colors.primaryColor[0],
+      theme.colors.primaryColor[0],
+      theme.colors.primaryColor[0],
+      theme.colors.primaryColor[0]
     ),
   },
 }));

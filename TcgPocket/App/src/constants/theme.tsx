@@ -5,9 +5,9 @@ export const appTheme: MantineThemeOverride = {
   colors: {
     // Add your color, replace default colors. . .
     primaryColor: ['#aacae2'],
-    complimentaryColors: ['#e2c2aa', '#55351D', '#E2C2AB'],
+    complimentaryColors: ['#e2c2aa', '#55351D', '#E2C2AB', '#fdf3d3'],
   },
-  white: '#ffffff',
+  white: '#ffffed',
   black: '#000000',
   shadows: {
     md: '1px 1px 3px rgba(0, 0, 0, .25)',

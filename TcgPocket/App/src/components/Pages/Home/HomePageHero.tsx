@@ -2,13 +2,17 @@ import {
   createStyles,
   Container,
   Text,
-  Button,
   Group,
   rem,
+  MantineTheme,
 } from '@mantine/core';
 import { IconClick, IconHandClick } from '@tabler/icons-react';
+import { useState } from 'react';
+import { LoginModal } from '../../loginOrRegisterModals/LoginModal';
+import { RegisterModal } from '../../loginOrRegisterModals/RegisterModal';
+import { PrimaryButton } from '../../mantineComponentsStyling/PrimaryButton';
 
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles((theme: MantineTheme) => ({
   wrapper: {
     position: 'relative',
     boxSizing: 'border-box',
@@ -77,48 +81,69 @@ const useStyles = createStyles((theme) => ({
 export function HeroTitle() {
   const { classes } = useStyles();
 
+  const [openLoginModal, setOpenLoginModal] = useState(false);
+  const [openRegisterModal, setOpenRegisterModal] = useState(false);
+
+  const handleLogin = () => {
+    setOpenLoginModal(true);
+  };
+
+  const handleRegister = () => {
+    setOpenRegisterModal(true);
+  };
+
   return (
-    <div className={classes.wrapper}>
-      <Container size={800} className={classes.inner} color="blue">
-        <h1 className={classes.title}>Welcome to </h1>
-        <h1 className={classes.title}>
-          <Text
-            component="span"
-            variant="gradient"
-            gradient={{ from: 'blue', to: '#aacae2' }}
-            inherit
-          >
-            TCG Pocket
-          </Text>{' '}
-        </h1>
+    <>
+      <div className={classes.wrapper}>
+        <Container size={800} className={classes.inner} color="blue">
+          <h1 className={classes.title}>Welcome to </h1>
+          <h1 className={classes.title}>
+            <Text
+              component="span"
+              variant="gradient"
+              gradient={{ from: 'blue', to: '#aacae2' }}
+              inherit
+            >
+              TCG Pocket
+            </Text>
+          </h1>
 
-        <Text className={classes.description} color="dimmed">
-          Presenting a trading card game inventory management system along with
-          a deck builder. Just upload images of your MTG, Yu-Gi-Oh!, and Pokémon
-          cards and allow our card scanner to add the cards to your inventory.
-          Sign up or log in to begin! (*^▽^*)
-        </Text>
+          <Text className={classes.description} color="dimmed">
+            Presenting a trading card game inventory management system along
+            with a deck builder. Just upload images of your MTG, Pokémon, and
+            Yu-Gi-Oh! cards and allow our card scanner to add the cards to your
+            inventory. Sign up or log in to begin! (*^▽^*)
+          </Text>
 
-        <Group className={classes.controls}>
-          <Button
-            size="xl"
-            className={classes.control}
-            variant="filled"
-            leftIcon={<IconHandClick />}
-          >
-            Sign Up
-          </Button>
+          <Group className={classes.controls}>
+            <PrimaryButton
+              size="xl"
+              className={classes.control}
+              variant="filled"
+              leftIcon={<IconHandClick />}
+              onClick={handleRegister}
+            >
+              Register
+            </PrimaryButton>
 
-          <Button
-            size="xl"
-            className={classes.control}
-            variant="filled"
-            leftIcon={<IconClick />}
-          >
-            Log in
-          </Button>
-        </Group>
-      </Container>
-    </div>
+            <PrimaryButton
+              size="xl"
+              className={classes.control}
+              variant="filled"
+              leftIcon={<IconClick />}
+              onClick={handleLogin}
+            >
+              Log in
+            </PrimaryButton>
+          </Group>
+        </Container>
+      </div>
+
+      <LoginModal openModal={openLoginModal} setOpenModal={setOpenLoginModal} />
+      <RegisterModal
+        openModal={openRegisterModal}
+        setOpenModal={setOpenRegisterModal}
+      />
+    </>
   );
 }

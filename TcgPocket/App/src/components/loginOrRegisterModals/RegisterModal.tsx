@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { TCGButton } from '../mantineComponentsStyling/TCGButton';
-import { TCGInput } from '../mantineComponentsStyling/TCGInput';
-import { TCGModal } from '../mantineComponentsStyling/TCGModal';
+import { PrimaryInput } from '../mantineComponentsStyling/PrimaryInput';
+import { PrimaryModal } from '../mantineComponentsStyling/PrimaryModal';
 import { useLoginOrRegisterStyles } from './loginOrRegisterStyling';
+import { PasswordInput } from '@mantine/core';
+import { PrimaryButton } from '../mantineComponentsStyling/PrimaryButton';
 
 interface RegisterModal {
   openModal: boolean;
@@ -19,12 +20,14 @@ export function RegisterModal({
   const [lastName, setLastName] = useState('');
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const resetInputs = () => {
     setFirstName('');
     setLastName('');
     setUserName('');
     setPassword('');
+    setConfirmPassword('');
   };
 
   const handleClose = () => {
@@ -39,50 +42,56 @@ export function RegisterModal({
 
   return (
     <>
-      <TCGModal
+      <PrimaryModal
         component={'div'}
         opened={openModal}
         onClose={handleClose}
         title="Register"
       >
         <div className={classes.bodyContainer}>
-          <TCGInput
+          <PrimaryInput
             placeholder="First Name"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
           />
-          <TCGInput
+          <PrimaryInput
             placeholder="Last Name"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
           />
-          <TCGInput
+          <PrimaryInput
             placeholder="Username"
             value={userName}
             onChange={(e) => setUserName(e.target.value)}
           />
-          <TCGInput
+          <PasswordInput
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+          <PasswordInput
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
 
           <div className={classes.bottomBtns}>
-            <TCGButton onClick={handleClose}>Cancel</TCGButton>
-            <TCGButton
+            <PrimaryButton onClick={handleClose}>Cancel</PrimaryButton>
+            <PrimaryButton
               onClick={handleRegister}
               disabled={
                 userName === '' ||
                 password === '' ||
+                confirmPassword === '' ||
                 firstName === '' ||
                 lastName === ''
               }
             >
               Register
-            </TCGButton>
+            </PrimaryButton>
           </div>
         </div>
-      </TCGModal>
+      </PrimaryModal>
     </>
   );
 }

@@ -67,7 +67,7 @@ const useStyles = createStyles((theme) => ({
     border: `${rem(1)} solid ${
       theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[1]
     }`,
-    backgroundColor: '#ffffed',
+    backgroundColor: theme.white,
     boxShadow: '0px 0px 50px 25px rgba(90, 150, 255, .5)',
   },
 

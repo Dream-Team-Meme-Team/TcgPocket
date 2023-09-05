@@ -1,7 +1,7 @@
 import { Modal, ModalProps, createPolymorphicComponent } from '@mantine/core';
 import { forwardRef } from 'react';
 
-const _TCGModal = forwardRef<HTMLDivElement, ModalProps>(
+const _PrimaryModal = forwardRef<HTMLDivElement, ModalProps>(
   ({ children, ...props }, _ref) => (
     <Modal
       {...props}
@@ -11,7 +11,7 @@ const _TCGModal = forwardRef<HTMLDivElement, ModalProps>(
       }}
       transitionProps={{
         transition: 'fade',
-        duration: 600,
+        duration: 150,
         timingFunction: 'linear',
       }}
     >
@@ -20,7 +20,7 @@ const _TCGModal = forwardRef<HTMLDivElement, ModalProps>(
   )
 );
 
-export const TCGModal = createPolymorphicComponent<
+export const PrimaryModal = createPolymorphicComponent<
   'HTMLDivElement',
   ModalProps
->(_TCGModal);
+>(_PrimaryModal);

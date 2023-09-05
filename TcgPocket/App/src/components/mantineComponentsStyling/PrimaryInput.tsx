@@ -5,21 +5,21 @@ import { forwardRef } from 'react';
 const inputStyling = (theme: MantineTheme): CSSObject => ({
   input: {
     background: theme.colorScheme,
-    borderColor: theme.colors.complimentaryColors,
+    borderColor: theme.colors.complimentaryColors[0],
     borderWidth: 2,
 
     ':focus': {
-      borderColor: theme.colors.primaryColor,
+      borderColor: theme.colors.primaryColor[0],
     },
   },
 });
 
-const _TCGInput = forwardRef<HTMLInputElement, InputProps>(
+const _PrimaryInput = forwardRef<HTMLInputElement, InputProps>(
   ({ ...props }, ref) => (
     <Input component="input" ref={ref} {...props} sx={inputStyling} />
   )
 );
 
-export const TCGInput = createPolymorphicComponent<'input', InputProps>(
-  _TCGInput
+export const PrimaryInput = createPolymorphicComponent<'input', InputProps>(
+  _PrimaryInput
 );

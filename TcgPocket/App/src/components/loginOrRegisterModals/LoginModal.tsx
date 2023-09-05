@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { TCGButton } from '../mantineComponentsStyling/TCGButton';
-import { TCGInput } from '../mantineComponentsStyling/TCGInput';
-import { TCGModal } from '../mantineComponentsStyling/TCGModal';
+import { PrimaryInput } from '../mantineComponentsStyling/PrimaryInput';
+import { PrimaryModal } from '../mantineComponentsStyling/PrimaryModal';
 import { useLoginOrRegisterStyles } from './loginOrRegisterStyling';
+import { PrimaryButton } from '../mantineComponentsStyling/PrimaryButton';
+import { PasswordInput } from '@mantine/core';
 
 interface LoginModalProps {
   openModal: boolean;
@@ -35,35 +36,35 @@ export function LoginModal({
 
   return (
     <>
-      <TCGModal
+      <PrimaryModal
         component={'div'}
         opened={openModal}
         onClose={handleClose}
         title="Login"
       >
         <div className={classes.bodyContainer}>
-          <TCGInput
+          <PrimaryInput
             placeholder="Username"
             value={userName}
             onChange={(e) => setUserName(e.target.value)}
           />
-          <TCGInput
+          <PasswordInput
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
 
           <div className={classes.bottomBtns}>
-            <TCGButton onClick={handleClose}>Cancel</TCGButton>
-            <TCGButton
+            <PrimaryButton onClick={handleClose}>Cancel</PrimaryButton>
+            <PrimaryButton
               onClick={handleLogin}
               disabled={userName === '' || password === ''}
             >
               Login
-            </TCGButton>
+            </PrimaryButton>
           </div>
         </div>
-      </TCGModal>
+      </PrimaryModal>
     </>
   );
 }
