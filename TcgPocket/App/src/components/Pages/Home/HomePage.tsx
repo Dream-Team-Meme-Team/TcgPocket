@@ -2,6 +2,17 @@ import { createStyles } from '@mantine/core';
 import { HeroTitle } from './HomePageHero';
 import { FeaturesCards } from './HomePageFeatures';
 
+export function HomePage(): React.ReactElement {
+  const { classes } = useStyles();
+
+  return (
+    <div className={classes.gradient}>
+      <HeroTitle />
+      <FeaturesCards />
+    </div>
+  );
+}
+
 const useStyles = createStyles((theme) => ({
   gradient: {
     background: theme.fn.linearGradient(
@@ -21,14 +32,3 @@ const useStyles = createStyles((theme) => ({
     ),
   },
 }));
-
-export function HomePage(): React.ReactElement {
-  const { classes } = useStyles();
-
-  return (
-    <div className={classes.gradient}>
-      <HeroTitle />
-      <FeaturesCards />
-    </div>
-  );
-}
