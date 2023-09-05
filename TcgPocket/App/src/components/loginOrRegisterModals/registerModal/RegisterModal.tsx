@@ -4,9 +4,15 @@ import { TCGInput } from '../../mantineComponentsStyling/TCGInput';
 import { TCGModal } from '../../mantineComponentsStyling/TCGModal';
 import './registerModal.css';
 
-export function RegisterModal(): React.ReactElement {
-  const [openModal, setOpenModal] = useState(false);
+interface RegisterModal {
+  openModal: boolean;
+  setOpenModal: (arg: boolean) => void;
+}
 
+export function RegisterModal({
+  openModal,
+  setOpenModal,
+}: RegisterModal): React.ReactElement {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [userName, setUserName] = useState('');
@@ -31,8 +37,6 @@ export function RegisterModal(): React.ReactElement {
 
   return (
     <>
-      <TCGButton onClick={() => setOpenModal(true)}>Register</TCGButton>
-
       <TCGModal
         component={'div'}
         opened={openModal}

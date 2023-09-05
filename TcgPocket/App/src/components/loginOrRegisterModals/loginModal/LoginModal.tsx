@@ -4,9 +4,15 @@ import { TCGInput } from '../../mantineComponentsStyling/TCGInput';
 import { TCGModal } from '../../mantineComponentsStyling/TCGModal';
 import './loginModal.css';
 
-export function LoginModal(): React.ReactElement {
-  const [openModal, setOpenModal] = useState(false);
+interface LoginModalProps {
+  openModal: boolean;
+  setOpenModal: (arg: boolean) => void;
+}
 
+export function LoginModal({
+  openModal,
+  setOpenModal,
+}: LoginModalProps): React.ReactElement {
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
 
@@ -27,8 +33,6 @@ export function LoginModal(): React.ReactElement {
 
   return (
     <>
-      <TCGButton onClick={() => setOpenModal(true)}>Login</TCGButton>
-
       <TCGModal
         component={'div'}
         opened={openModal}
