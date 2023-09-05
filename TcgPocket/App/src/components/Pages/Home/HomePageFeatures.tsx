@@ -116,7 +116,7 @@ export function FeaturesCards() {
           Three classic trading card games.
         </Title>
 
-        <Text c="dimmed" className={classes.description} ta="center" mt="md">
+        <Text c="dark" className={classes.description} ta="center" mt="md">
           Gather your inventory and create decks for some of your favorite cards
           games all in one convenient spot!
         </Text>

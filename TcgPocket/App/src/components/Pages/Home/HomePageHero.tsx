@@ -6,7 +6,7 @@ import {
   Group,
   rem,
 } from '@mantine/core';
-import { IconClick } from '@tabler/icons-react';
+import { IconClick, IconHandClick } from '@tabler/icons-react';
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -100,6 +100,15 @@ export function HeroTitle() {
         </Text>
 
         <Group className={classes.controls}>
+          <Button
+            size="xl"
+            className={classes.control}
+            variant="filled"
+            leftIcon={<IconHandClick />}
+          >
+            Sign Up
+          </Button>
+
           <Button
             size="xl"
             className={classes.control}
