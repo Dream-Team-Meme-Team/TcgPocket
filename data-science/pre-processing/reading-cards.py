@@ -1,9 +1,4 @@
 import json
-# import cv2
-# import requests
-# from PIL import Image
-# import urllib
-# import numpy as np
 from pokemontcgsdk import Card
 from pokemontcgsdk import RestClient
 
@@ -51,11 +46,3 @@ pkm_fw.write('card, label\n')
 for card in cards:
     pkm_fw.write(f'{card.images.large}, 2\n')
 pkm_fw.close()
-
-
-''' Show Cards '''
-# req = urllib.request.urlopen('https://cards.scryfall.io/normal/front/0/3/03f4341c-088b-4f35-b82b-3d98d8a93de4.jpg?1576382166')
-# arr = np.asarray(bytearray(req.read()), dtype=np.uint8)
-# img = cv2.imdecode(arr, -1) # 'Load it as it is'
-# cv2.imshow('card', img)
-# cv2.waitKey(0)
