@@ -7,7 +7,7 @@ using TcgPocket.Shared;
 namespace TcgPocket.Features.Users;
 
 [ApiController]
-[Route("/sets")]
+[Route("/users")]
 public class UsersController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -34,7 +34,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Response<UserGetDto>>> CreateUser([FromBody] UserDto data)
+    public async Task<ActionResult<Response<UserGetDto>>> CreateUser([FromBody] UserCreateUpdateDto data)
     {
         var response = await _mediator.Send(new CreateUserCommand { User = data });
 

@@ -3,7 +3,6 @@ using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using TcgPocket.Data;
-using TcgPocket.Features.Users;
 using TcgPocket.Shared;
 
 namespace TcgPocket.Features.Decks.Commands;
@@ -39,7 +38,7 @@ public class UpdateDeckCommandHandler : IRequestHandler<UpdateDeckCommand, Respo
             return new Response<DeckGetDto> { Errors = errors };
         }
 
-        if (!await _dataContext.Set<User>().AnyAsync(x => x.Id == command.Deck.UserId, cancellationToken))
+        if (!await _dataContext.Set<Users.User>().AnyAsync(x => x.Id == command.Deck.UserId, cancellationToken))
         {
             return Error.AsResponse<DeckGetDto>("User not found", "userId");
         }

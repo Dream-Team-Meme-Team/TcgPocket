@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using TcgPocket.Data;
 using TcgPocket.Shared;
 
@@ -16,14 +16,17 @@ public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Respo
 {
     private readonly DataContext _dataContext;
     private readonly IValidator<DeleteUserCommand> _validator;
+    private readonly UserManager<User> _userManager;
     private readonly IMapper _mapper;
 
     public DeleteUserCommandHandler(DataContext dataContext,
         IValidator<DeleteUserCommand> validator,
+        UserManager<User> userManager,
         IMapper mapper)
     {
         _dataContext = dataContext;
         _validator = validator;
+        _userManager = userManager;
         _mapper = mapper;
     }
     public async Task<Response> Handle(DeleteUserCommand command, CancellationToken cancellationToken)
@@ -36,12 +39,21 @@ public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Respo
             return new Response { Errors = errors };
         }
 
-        var user = await _dataContext.Set<User>()
-            .FirstOrDefaultAsync(x => x.Id == command.Id, cancellationToken);
+        var user = await _userManager.FindByIdAsync(command.Id.ToString());
 
-        if (user is null) return Error.AsResponse("User not found", "id");
+        if (user is null)
+        {
+            return Error.AsResponse("User not found");
+        }
 
-        _dataContext.Set<User>().Remove(user);
+        var result = await _userManager.DeleteAsync(user);
+
+        if (!result.Succeeded)
+        {
+            var errors = _mapper.Map<List<Error>>(result.Errors);
+            return new Response{Errors = errors};
+        }
+
         await _dataContext.SaveChangesAsync(cancellationToken);
 
         return Response.Success;

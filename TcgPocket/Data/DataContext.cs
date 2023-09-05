@@ -1,7 +1,5 @@
 #pragma warning disable CS8618
 using Microsoft.EntityFrameworkCore;
-using TcgPocket.Features.Games;
-using TcgPocket.Features.Rarities;
 
 namespace TcgPocket.Data;
 

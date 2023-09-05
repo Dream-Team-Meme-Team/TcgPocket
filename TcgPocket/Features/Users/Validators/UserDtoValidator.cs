@@ -6,11 +6,7 @@ public class UserDtoValidator : AbstractValidator<UserDto>
 {
     public UserDtoValidator()
     {
-        RuleFor(x => x.Username)
-            .MaximumLength(25)
-            .NotEmpty();
-
-        RuleFor(x => x.Password)
+        RuleFor(x => x.UserName)
             .MaximumLength(25)
             .NotEmpty();
     }

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using TcgPocket.Data;
 using TcgPocket.Shared;
 
@@ -18,14 +18,17 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Respo
     private readonly DataContext _dataContext;
     private readonly IMapper _mapper;
     private readonly IValidator<UpdateUserCommand> _validator;
+    private readonly UserManager<User> _userManager;
 
     public UpdateUserCommandHandler(DataContext dataContext,
         IValidator<UpdateUserCommand> validator,
+        UserManager<User> userManager,
         IMapper mapper)
     {
         _dataContext = dataContext;
         _mapper = mapper;
         _validator = validator;
+        _userManager = userManager;
     }
 
     public async Task<Response<UserGetDto>> Handle(UpdateUserCommand command, CancellationToken cancellationToken)
@@ -38,12 +41,22 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Respo
             return new Response<UserGetDto> { Errors = errors };
         }
 
-        var user = await _dataContext.Set<User>()
-            .FirstOrDefaultAsync(x => x.Id == command.Id, cancellationToken);
+        var user = await _userManager.FindByIdAsync(command.Id.ToString());
 
-        if (user is null) return Error.AsResponse<UserGetDto>("User not found", "id");
+        if (user is null)
+        {
+            return Error.AsResponse<UserGetDto>("User not found");
+        }
 
         _mapper.Map(command.User, user);
+        var result = await _userManager.UpdateAsync(user);
+
+        if (!result.Succeeded)
+        {
+            var errors = _mapper.Map<List<Error>>(result.Errors);
+            return new Response<UserGetDto>{Errors = errors};
+        }
+
         await _dataContext.SaveChangesAsync(cancellationToken);
 
         return _mapper.Map<UserGetDto>(user).AsResponse();

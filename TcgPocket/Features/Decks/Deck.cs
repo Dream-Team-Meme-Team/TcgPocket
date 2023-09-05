@@ -1,11 +1,10 @@
-﻿using TcgPocket.Features.Users;
-using TcgPocket.Shared.Interfaces;
+﻿using TcgPocket.Shared.Interfaces;
 
 namespace TcgPocket.Features.Decks;
 
 public class Deck : DeckGetDto, IEntity
 {
-    public User User { get; set; }
+    public Users.User User { get; set; }
 }
 
 public class DeckGetDto : DeckDto

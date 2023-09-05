@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using TcgPocket.Data;
+using Microsoft.AspNetCore.Identity;
 using TcgPocket.Shared;
 
 namespace TcgPocket.Features.Users.Queries;
@@ -14,15 +13,15 @@ public class GetUserByIdQuery : IRequest<Response<UserGetDto>>
 
 public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, Response<UserGetDto>>
 {
-    private readonly DataContext _dataContext;
+    private readonly UserManager<User> _userManager;
     private readonly IValidator<GetUserByIdQuery> _validator;
     private readonly IMapper _mapper;
 
-    public GetUserByIdQueryHandler(DataContext dataContext,
+    public GetUserByIdQueryHandler(UserManager<User> userManager,
         IValidator<GetUserByIdQuery> validator,
         IMapper mapper)
     {
-        _dataContext = dataContext;
+        _userManager = userManager;
         _validator = validator;
         _mapper = mapper;
     }
@@ -37,8 +36,7 @@ public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, Respons
             return new Response<UserGetDto> { Errors = errors };
         }
 
-        var user = await _dataContext.Set<User>()
-            .FirstOrDefaultAsync(x => x.Id == query.Id, cancellationToken);
+        var user = await _userManager.FindByIdAsync(query.Id.ToString());
 
         if (user is null) return Error.AsResponse<UserGetDto>("User not found", "id");
 
