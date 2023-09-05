@@ -38,7 +38,7 @@ function useNavButtonSx(route: string) {
       padding: '10px 20px',
       borderRadius: '4px',
       transition: 'ease-in .2s',
-      backgroundColor: `${isActivePath ? theme.colors.blue[0] : theme.white}`,
+      backgroundColor: `${isActivePath ? theme.colors.blue[0] : '#ffffed'}`,
       ':hover': {
         backgroundColor: theme.colors.blue[1],
       },
