@@ -1,9 +1,0 @@
-.inventoryPageContainer {
-    display: grid;
-    grid-template-columns: 20rem auto;
-}
-
-.uploadContainer {
-    display: flex;
-    height: 5rem;
-}

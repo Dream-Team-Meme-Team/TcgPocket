@@ -1,18 +1,20 @@
+import { createStyles } from '@mantine/core';
 import { FilterSelector } from '../../filterSelector/FilterSelector';
-import './inventoryPage.css';
 
 export function InventoryPage(): React.ReactElement {
+    const { classes } = useInventoryStyles();
+
     return (
-        <div className="inventoryPageContainer">
-            {/* Side Menu */}
-            <div>
-                <div className="uploadContainer">Upload Component</div>
-                <div>
-                    <FilterSelector />
-                </div>
-            </div>
-            {/* Main Image View */}
+        <div className={classes.pageContainer}>
+            <FilterSelector />
             <div>Uploaded Card Container</div>
         </div>
     );
 }
+
+const useInventoryStyles = createStyles(() => ({
+    pageContainer: {
+        display: 'grid',
+        gridTemplateColumns: '20rem auto',
+    },
+}));
