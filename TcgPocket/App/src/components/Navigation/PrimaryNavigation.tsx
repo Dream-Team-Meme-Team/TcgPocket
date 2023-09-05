@@ -96,6 +96,7 @@ function navbarSx(theme: MantineTheme): CSSObject {
     alignItems: 'center',
     padding: '0rem 2rem 0rem 1rem',
     overflow: 'hidden',
+    background: '#ffffed',
   };
 }
 
