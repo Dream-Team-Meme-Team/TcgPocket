@@ -25,7 +25,7 @@
   "@mantine/spotlight": "^6.0.18",
   "@mantine/tiptap": "^6.0.18",
   "@reduxjs/toolkit": "^1.9.5",
-  "@tabler/icons-react": "^2.30.0",
+  "@tabler/icons-react": "^2.32.0",
   "@tiptap/extension-link": "^2.0.4",
   "@tiptap/react": "^2.0.4",
   "@tiptap/starter-kit": "^2.0.4",
