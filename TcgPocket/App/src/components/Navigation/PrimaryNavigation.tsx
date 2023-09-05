@@ -12,8 +12,8 @@ import { IconLogin, IconRegistered, IconUser } from '@tabler/icons-react';
 import React, { useMemo, useState } from 'react';
 import { routes } from '../../routes';
 import { NavButton } from './NavButton';
-import { LoginModal } from '../loginOrRegisterModals/loginModal/LoginModal';
-import { RegisterModal } from '../loginOrRegisterModals/registerModal/RegisterModal';
+import { LoginModal } from '../loginOrRegisterModals/LoginModal';
+import { RegisterModal } from '../loginOrRegisterModals/RegisterModal';
 
 const MIN_HEIGHT = 60;
 const MAX_HEIGHT = 120;

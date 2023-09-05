@@ -6,6 +6,7 @@ const inputStyling = (theme: MantineTheme): CSSObject => ({
   input: {
     background: theme.colorScheme,
     borderColor: theme.colors.complimentaryColors,
+    borderWidth: 2,
 
     ':focus': {
       borderColor: theme.colors.primaryColor,

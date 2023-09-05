@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { TCGButton } from '../../mantineComponentsStyling/TCGButton';
-import { TCGInput } from '../../mantineComponentsStyling/TCGInput';
-import { TCGModal } from '../../mantineComponentsStyling/TCGModal';
-import './loginModal.css';
+import { TCGButton } from '../mantineComponentsStyling/TCGButton';
+import { TCGInput } from '../mantineComponentsStyling/TCGInput';
+import { TCGModal } from '../mantineComponentsStyling/TCGModal';
+import { useLoginOrRegisterStyles } from './loginOrRegisterStyling';
 
 interface LoginModalProps {
   openModal: boolean;
@@ -13,6 +13,8 @@ export function LoginModal({
   openModal,
   setOpenModal,
 }: LoginModalProps): React.ReactElement {
+  const { classes } = useLoginOrRegisterStyles();
+
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
 
@@ -39,7 +41,7 @@ export function LoginModal({
         onClose={handleClose}
         title="Login"
       >
-        <div className="loginModalBodyContainer">
+        <div className={classes.bodyContainer}>
           <TCGInput
             placeholder="Username"
             value={userName}
@@ -51,7 +53,7 @@ export function LoginModal({
             onChange={(e) => setPassword(e.target.value)}
           />
 
-          <div className="loginModalBottomBtnContainer">
+          <div className={classes.bottomBtns}>
             <TCGButton onClick={handleClose}>Cancel</TCGButton>
             <TCGButton
               onClick={handleLogin}
