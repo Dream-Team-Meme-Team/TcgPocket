@@ -33,7 +33,7 @@ import { forwardRef } from 'react';
 const buttonStyling = (theme: MantineTheme): CSSObject => ({
   backgroundColor: theme.colors.primaryColor,
   color: theme.colors.complimentaryColors[1],
-  paddding: `${theme.spacing.sm} ${theme.spacing.lg}`,
+
   ':hover': {
     backgroundColor: '#e2c2aa',
   },

@@ -4,9 +4,10 @@ import { forwardRef } from 'react';
 
 const inputStyling = (theme: MantineTheme): CSSObject => ({
   input: {
-    background: theme.colorScheme,
+    background: theme.white,
     borderColor: theme.colors.complimentaryColors[0],
     borderWidth: 2,
+    backgroundColor: 'white',
 
     ':focus': {
       borderColor: theme.colors.primaryColor[0],

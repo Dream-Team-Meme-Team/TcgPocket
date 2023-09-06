@@ -3,7 +3,6 @@ import { MantineThemeOverride } from '@mantine/core';
 export const appTheme: MantineThemeOverride = {
   colorScheme: 'light',
   colors: {
-    // Add your color, replace default colors. . .
     primaryColor: ['#aacae2'],
     complimentaryColors: ['#e2c2aa', '#55351D', '#E2C2AB', '#fdf3d3'],
   },

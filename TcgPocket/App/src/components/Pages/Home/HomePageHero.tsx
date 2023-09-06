@@ -32,12 +32,7 @@ export function HeroTitle() {
         <Container size={800} className={classes.inner} color="blue">
           <h1 className={classes.title}>Welcome to </h1>
           <h1 className={classes.title}>
-            <Text
-              component="span"
-              variant="gradient"
-              gradient={{ from: 'blue', to: '#aacae2' }}
-              inherit
-            >
+            <Text component="span" variant="gradient" color="blue" inherit>
               TCG Pocket
             </Text>
           </h1>
