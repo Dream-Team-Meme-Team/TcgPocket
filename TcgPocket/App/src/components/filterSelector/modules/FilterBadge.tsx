@@ -1,16 +1,29 @@
 import { ActionIcon, rem } from '@mantine/core';
 import { IconX } from '@tabler/icons-react';
 import { PrimaryBadge } from '../../mantineComponentsStyling/PrimaryBadge';
+import { useDispatch } from 'react-redux';
+import { toggleAppliedFilter } from '../../../store/inventorySlice';
+import { Games } from '../../../constants/fakeData/inventoryData';
 
 interface FilterBadgeProps {
-    filterName: string;
+    filter: Games;
 }
 
-export function FilterBadge({
-    filterName,
-}: FilterBadgeProps): React.ReactElement {
+export function FilterBadge({ filter }: FilterBadgeProps): React.ReactElement {
+    const dispatch = useDispatch();
+
+    const removeFilter = () => {
+        dispatch(toggleAppliedFilter(filter));
+    };
+
     return (
-        <PrimaryBadge leftSection={removeButton}> {filterName} </PrimaryBadge>
+        <PrimaryBadge
+            onClick={removeFilter}
+            leftSection={removeButton}
+            styles={{ root: { cursor: 'pointer' } }}
+        >
+            {filter.name}
+        </PrimaryBadge>
     );
 }
 

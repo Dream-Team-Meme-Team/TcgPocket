@@ -1,13 +1,14 @@
 import { useSelector } from 'react-redux';
 import { AppState } from '../../store/configureStore';
 import { RenderFilterOptions } from './modules/RenderFilterOption';
-import { MantineTheme, createStyles, Text } from '@mantine/core';
+import { MantineTheme, createStyles } from '@mantine/core';
 import { defaultGap, defaultPadding } from '../../constants/theme';
-import { FilterBadge } from './modules/FilterBadge';
+import { PrimarySelect } from '../mantineComponentsStyling/PrimarySelect';
 
 export function FilterSelector(): React.ReactElement {
     const { classes } = useFilterSelectorStyles();
 
+    // Data State
     const $games = useSelector((state: AppState) => state.data.games);
     const $cardTypes = useSelector((state: AppState) => state.data.cardTypes);
     const $sets = useSelector((state: AppState) => state.data.sets);
@@ -15,13 +16,14 @@ export function FilterSelector(): React.ReactElement {
 
     return (
         <div className={classes.container}>
-            <div className={classes.titleContainer}>
-                <Text>Applied Filters</Text>
-
-                <FilterBadge filterName="pokemon" />
+            <div className={classes.gameSelectContainer}>
+                <PrimarySelect
+                    clearable
+                    data={$games.map((game) => game.name)}
+                    label="Select Game:"
+                />
             </div>
             <div>
-                <RenderFilterOptions filterName="Game" filterOptions={$games} />
                 <RenderFilterOptions
                     filterName="Card Type"
                     filterOptions={$cardTypes}
@@ -45,22 +47,27 @@ const useFilterSelectorStyles = createStyles((theme: MantineTheme) => ({
         borderRightColor: theme.colors.primaryColor[0],
     },
 
-    titleContainer: {
+    gameSelectContainer: {
         display: 'grid',
         justifyContent: 'center',
 
         gap: defaultGap,
         padding: defaultPadding,
+    },
+
+    title: {
+        display: 'flex',
+        justifyContent: 'center',
 
         fontSize: 20,
         fontWeight: 'bold',
-
-        borderBottomWidth: 2,
-        borderBottomStyle: 'solid',
-        borderColor: theme.colors.primaryColor[0],
     },
 
-    filterOptionContainer: {
-        display: 'grid',
+    filterBadgeContainer: {
+        display: 'flex',
+        justifyContent: 'center',
+
+        gap: defaultGap,
+        flexWrap: 'wrap',
     },
 }));
