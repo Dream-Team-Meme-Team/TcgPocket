@@ -46,9 +46,9 @@ public class UpdatePasswordCommandHandler : IRequestHandler<UpdatePasswordComman
             return Error.AsResponse("User not found.", "id");
         }
 
-        var correctPassword = _userManager.CheckPasswordAsync(user, command.CurrentPassword).Result;
+        var correctPassword = await _userManager.CheckPasswordAsync(user, command.CurrentPassword);
 
-        if (correctPassword is false)
+        if (!correctPassword)
         {
             return Error.AsResponse("Current password is incorrect.", "current password");
         }
