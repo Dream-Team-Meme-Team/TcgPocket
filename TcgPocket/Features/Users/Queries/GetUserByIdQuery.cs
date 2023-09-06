@@ -36,9 +36,9 @@ public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, Respons
             return new Response<UserGetDto> { Errors = errors };
         }
 
-        var user = await _userManager.FindByIdAsync(query.Id.ToString());
+        var user = _userManager.Users.SingleOrDefault(x => x.Id ==query.Id);
 
-        if (user is null) return Error.AsResponse<UserGetDto>("User not found", "id");
+        if (user is null) return Error.AsResponse<UserGetDto>("User not found", "userId");
 
         return _mapper.Map<UserGetDto>(user).AsResponse();
     }

@@ -52,11 +52,11 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Respo
 
         await _dataContext.SaveChangesAsync(cancellationToken);
 
-        var returnedUser = await _userManager.FindByNameAsync(user.UserName);
+        var returnedUser = _userManager.Users.SingleOrDefault(x => x.Id == user.Id);
 
         if (returnedUser is null)
         {
-            return Error.AsResponse<UserGetDto>("we fucked up bro", "idk");
+            return Error.AsResponse<UserGetDto>("Something went wrong.", "user");
         }
 
         return _mapper.Map<UserGetDto>(returnedUser).AsResponse();

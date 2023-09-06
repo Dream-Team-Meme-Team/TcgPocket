@@ -41,11 +41,11 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Respo
             return new Response<UserGetDto> { Errors = errors };
         }
 
-        var user = await _userManager.FindByIdAsync(command.Id.ToString());
+        var user = _userManager.Users.SingleOrDefault(x => x.Id == command.Id);
 
         if (user is null)
         {
-            return Error.AsResponse<UserGetDto>("User not found");
+            return Error.AsResponse<UserGetDto>("User not found", "userId");
         }
 
         _mapper.Map(command.User, user);

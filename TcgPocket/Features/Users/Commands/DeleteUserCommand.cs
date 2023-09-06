@@ -39,11 +39,11 @@ public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Respo
             return new Response { Errors = errors };
         }
 
-        var user = await _userManager.FindByIdAsync(command.Id.ToString());
+        var user = _userManager.Users.SingleOrDefault(x => x.Id == command.Id);
 
         if (user is null)
         {
-            return Error.AsResponse("User not found");
+            return Error.AsResponse("User not found", "userId");
         }
 
         var result = await _userManager.DeleteAsync(user);

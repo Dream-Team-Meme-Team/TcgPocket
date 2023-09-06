@@ -52,6 +52,22 @@ public class UsersController : ControllerBase
         return response.HasErrors ? BadRequest(response) : Ok(response);
     }
 
+    [HttpPut("{id:int}/password-update", Name = nameof(UpdatePassword))]
+    public async Task<ActionResult<Response<UserGetDto>>> UpdatePassword([FromRoute] int id,
+        [FromBody] UpdatePasswordCommand data)
+    {
+        var response = await _mediator
+            .Send(new UpdatePasswordCommand 
+            { 
+                Id = id, 
+                CurrentPassword = data.CurrentPassword, 
+                NewPassword = data.NewPassword, 
+                NewPasswordConfirmation = data.NewPasswordConfirmation 
+            });
+
+        return response.HasErrors ? BadRequest(response) : Ok(response);
+    }
+
     [HttpDelete("{id:int}")]
     public async Task<ActionResult<Response>> DeleteUser([FromRoute] int id)
     {
