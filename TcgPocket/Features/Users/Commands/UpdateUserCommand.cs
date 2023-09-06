@@ -45,7 +45,7 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Respo
 
         if (user is null)
         {
-            return Error.AsResponse<UserGetDto>("User not found", "userId");
+            return Error.AsResponse<UserGetDto>("User not found", "id");
         }
 
         _mapper.Map(command.User, user);

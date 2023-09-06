@@ -38,7 +38,7 @@ public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, Respons
 
         var user = _userManager.Users.SingleOrDefault(x => x.Id ==query.Id);
 
-        if (user is null) return Error.AsResponse<UserGetDto>("User not found", "userId");
+        if (user is null) return Error.AsResponse<UserGetDto>("User not found", "id");
 
         return _mapper.Map<UserGetDto>(user).AsResponse();
     }

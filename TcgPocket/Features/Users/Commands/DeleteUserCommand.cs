@@ -43,7 +43,7 @@ public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Respo
 
         if (user is null)
         {
-            return Error.AsResponse("User not found", "userId");
+            return Error.AsResponse("User not found", "id");
         }
 
         var result = await _userManager.DeleteAsync(user);

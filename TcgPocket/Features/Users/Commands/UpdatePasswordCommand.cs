@@ -43,7 +43,7 @@ public class UpdatePasswordCommandHandler : IRequestHandler<UpdatePasswordComman
 
         if (user is null)
         {
-            return Error.AsResponse("User not found.", "userId");
+            return Error.AsResponse("User not found.", "id");
         }
 
         var correctPassword = _userManager.CheckPasswordAsync(user, command.CurrentPassword).Result;
