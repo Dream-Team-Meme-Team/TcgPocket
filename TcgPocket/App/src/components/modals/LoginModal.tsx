@@ -4,6 +4,7 @@ import { PrimaryButton } from '../buttons/PrimaryButton';
 import { useForm } from '@mantine/form';
 import { PrimaryTextInput } from '../inputs/PrimaryTextInput';
 import { SecondaryButton } from '../buttons/SecondaryButton';
+import { PasswordInput } from '@mantine/core';
 
 interface LoginModalProps {
   openModal: boolean;
@@ -49,8 +50,9 @@ export function LoginModal({
             label="Username"
             {...form.getInputProps('username')}
           />
-          <PrimaryTextInput
+          <PasswordInput
             withAsterisk
+            className={classes.passwordInput}
             label="Password"
             {...form.getInputProps('password')}
           />

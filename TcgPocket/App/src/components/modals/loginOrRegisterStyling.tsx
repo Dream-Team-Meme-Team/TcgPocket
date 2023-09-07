@@ -11,4 +11,10 @@ export const useLoginOrRegisterStyles = createStyles(() => ({
     justifyContent: 'flex-end',
     gap: 8,
   },
+
+  passwordInput: {
+    input: {
+      backgroundColor: 'white',
+    },
+  },
 }));
