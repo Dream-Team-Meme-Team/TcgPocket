@@ -1,21 +1,26 @@
 import {
   ActionIcon,
+  Box,
   CSSObject,
+  Center,
   Flex,
   Image,
   MantineTheme,
   Menu,
   Navbar,
 } from '@mantine/core';
-import { useViewportSize } from '@mantine/hooks';
 import { IconLogout, IconSettings, IconUser } from '@tabler/icons-react';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { routes } from '../../routes';
 import { NavButton } from './NavButton';
 import { useNavigate } from 'react-router-dom';
+import {
+  ScaleSizeFactor,
+  useScaledViewportSize,
+} from '../../hooks/use-scaled-viewport-size';
 
-const MIN_HEIGHT = 60;
-const MAX_HEIGHT = 120;
+const MIN_NAV_HEIGHT = 60 as const;
+const MAX_HEIGHT = 120 as const;
 
 type PrimaryNavigationProps = {
   children?: JSX.Element;
@@ -25,31 +30,24 @@ export function PrimaryNavigation({
   children,
 }: PrimaryNavigationProps): React.ReactElement {
   const navigate = useNavigate();
-  const { height } = useViewportSize();
 
-  const navbarHeight = useMemo(() => {
-    const absoluteHeight = height * 0.075;
+  const navbarScaleFactor: ScaleSizeFactor = {
+    scale: 0.075,
+    min: MIN_NAV_HEIGHT,
+    max: MAX_HEIGHT,
+  };
 
-    if (absoluteHeight < MIN_HEIGHT) {
-      return MIN_HEIGHT;
-    }
-
-    if (absoluteHeight > MAX_HEIGHT) {
-      return MAX_HEIGHT;
-    }
-
-    return absoluteHeight;
-  }, [height]);
+  const { scaledHeight } = useScaledViewportSize(navbarScaleFactor);
 
   const onLogoutClick = () => {
     console.log('log out');
   };
 
   return (
-    <div>
-      <Navbar height={navbarHeight} sx={navbarSx}>
+    <Box sx={containerSx}>
+      <Navbar height={scaledHeight} sx={navbarSx}>
         <NavButton route={routes.home} sx={logoIconSx}>
-          <Image maw={navbarHeight - 16} src="./TcgPocketLogo.svg" />
+          <Image maw={scaledHeight - 16} src="./TcgPocketLogo.svg" />
         </NavButton>
         <Flex align={'center'} gap={25}>
           <Flex gap={10}>
@@ -82,14 +80,16 @@ export function PrimaryNavigation({
           </Menu>
         </Flex>
       </Navbar>
-      {children}
-    </div>
+      <Box sx={childContainerSx}>{children}</Box>
+      <Center sx={footerSx}>(≖ᴗ≖✿)</Center>
+    </Box>
   );
 }
 
 function navbarSx(theme: MantineTheme): CSSObject {
   return {
-    borderBottom: `2px solid ${theme.colors.blue[3]}`,
+    borderBottom: `1px solid ${theme.colors.blue[3]}`,
+    boxShadow: `0px 0px 4px ${theme.colors.blue[5]}`,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -97,6 +97,8 @@ function navbarSx(theme: MantineTheme): CSSObject {
     padding: '0rem 2rem 0rem 1rem',
     overflow: 'hidden',
     background: '#ffffed',
+    position: 'sticky',
+    top: 0,
   };
 }
 
@@ -116,5 +118,30 @@ function logoIconSx(theme: MantineTheme): CSSObject {
     ':hover': {
       backgroundColor: theme.colors.blue[1],
     },
+  };
+}
+
+function footerSx(): CSSObject {
+  return {
+    height: '7.5rem',
+    background: '#ffffed',
+    position: 'fixed',
+    bottom: 0,
+    left: 0,
+    right: 0,
+  };
+}
+
+function containerSx(): CSSObject {
+  return {
+    paddingBottom: '7.5rem',
+  };
+}
+
+function childContainerSx(): CSSObject {
+  return {
+    zIndex: 1,
+    position: 'relative',
+    boxShadow: '0px 0px 10px black',
   };
 }
