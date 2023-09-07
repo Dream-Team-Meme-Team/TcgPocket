@@ -1,9 +1,8 @@
 import { Route, Routes } from 'react-router-dom';
-import { HomePage } from '../components/Pages/Home/HomePage';
 import { routes } from '.';
-import { ErrorPage } from '../components/Pages/Error/ErrorPage';
-import { NotFoundPage } from '../components/Pages/NotFound/NotFoundPage';
-import { InventoryPage } from '../components/Pages/Inventory/InventoryPage';
+import { ErrorPage } from '../pages/error/ErrorPage';
+import { NotFoundPage } from '../pages/notFound/NotFoundPage';
+import { HomePage } from '../pages/home/HomePage';
 
 export const AppRoutes = () => {
     return (

@@ -10,10 +10,10 @@ import {
 import { useViewportSize } from '@mantine/hooks';
 import { IconLogin, IconRegistered, IconUser } from '@tabler/icons-react';
 import React, { useMemo, useState } from 'react';
-import { routes } from '../../routes';
+import { routes } from '../routes';
 import { NavButton } from './NavButton';
-import { LoginModal } from '../loginOrRegisterModals/LoginModal';
-import { RegisterModal } from '../loginOrRegisterModals/RegisterModal';
+import { LoginModal } from '../components/modals/LoginModal';
+import { RegisterModal } from '../components/modals/RegisterModal';
 
 const MIN_HEIGHT = 60;
 const MAX_HEIGHT = 120;
