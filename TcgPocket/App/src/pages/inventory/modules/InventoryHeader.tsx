@@ -16,7 +16,7 @@ export function InventoryHeader(): React.ReactElement {
             <Text> Applied Filters: </Text>
 
             {$appliedFilters.map((filter) => (
-                <FilterBadge filter={filter} />
+                <FilterBadge key={filter.id} filter={filter} />
             ))}
         </div>
     );

@@ -2,8 +2,8 @@ import { ActionIcon, rem } from '@mantine/core';
 import { IconX } from '@tabler/icons-react';
 import { PrimaryBadge } from '../../badges/PrimaryBadge';
 import { useDispatch } from 'react-redux';
-import { toggleAppliedFilter } from '../../../store/inventorySlice';
 import { Games } from '../../../constants/fakeData/inventoryData';
+import { toggleAppliedFilterOnInventory } from '../../../store/inventorySlice';
 
 interface FilterBadgeProps {
     filter: Games;
@@ -13,7 +13,7 @@ export function FilterBadge({ filter }: FilterBadgeProps): React.ReactElement {
     const dispatch = useDispatch();
 
     const removeFilter = () => {
-        dispatch(toggleAppliedFilter(filter));
+        dispatch(toggleAppliedFilterOnInventory(filter));
     };
 
     return (
