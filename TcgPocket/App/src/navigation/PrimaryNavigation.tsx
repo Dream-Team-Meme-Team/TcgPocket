@@ -7,91 +7,66 @@ import {
   Menu,
   Navbar,
 } from '@mantine/core';
-import { useViewportSize } from '@mantine/hooks';
 import { IconLogin, IconRegistered, IconUser } from '@tabler/icons-react';
-import React, { useMemo, useState } from 'react';
+import React from 'react';
 import { routes } from '../routes';
 import { NavButton } from './NavButton';
 import { LoginModal } from '../components/modals/LoginModal';
 import { RegisterModal } from '../components/modals/RegisterModal';
+import {
+  ScaleSizeFactor,
+  useScaledViewportSize,
+} from '../hooks/use-scaled-viewport-size';
+import { useDisclosure } from '@mantine/hooks';
 
-const MIN_HEIGHT = 60;
-const MAX_HEIGHT = 120;
+const MIN_NAV_HEIGHT = 60 as const;
+const MAX_NAV_HEIGHT = 120 as const;
 
-type PrimaryNavigationProps = {
-  children?: JSX.Element;
-};
-
-export function PrimaryNavigation({
-  children,
-}: PrimaryNavigationProps): React.ReactElement {
+export function PrimaryNavigation(): React.ReactElement {
   // const navigate = useNavigate();
-  const { height } = useViewportSize();
+  const scaledHeight = useNavbarHeight();
 
-  const [openLoginModal, setOpenLoginModal] = useState(false);
-  const [openRegisterModal, setOpenRegisterModal] = useState(false);
-
-  const navbarHeight = useMemo(() => {
-    const absoluteHeight = height * 0.075;
-
-    if (absoluteHeight < MIN_HEIGHT) {
-      return MIN_HEIGHT;
-    }
-
-    if (absoluteHeight > MAX_HEIGHT) {
-      return MAX_HEIGHT;
-    }
-
-    return absoluteHeight;
-  }, [height]);
+  const [loginState, login] = useDisclosure(false);
+  const [registerState, register] = useDisclosure(false);
 
   // const onLogoutClick = () => {
   //   console.log('log out');
   // };
 
-  const handleLogin = () => {
-    setOpenLoginModal(true);
-  };
-
-  const handleRegister = () => {
-    setOpenRegisterModal(true);
-  };
-
   return (
     <>
-      <div>
-        <Navbar height={navbarHeight} sx={navbarSx}>
-          <NavButton route={routes.home} sx={logoIconSx}>
-            <Image maw={navbarHeight - 16} src="./TcgPocketLogo.svg" />
-          </NavButton>
-          <Flex align={'center'} gap={25}>
-            <Flex gap={10}>
-              <NavButton route={routes.inventory}>Inventory</NavButton>
-              <NavButton route={routes.cardUpload}>Upload Cards</NavButton>
-              <NavButton route={routes.deckBuilder}> Deck Builder</NavButton>
-            </Flex>
+      <Navbar height={scaledHeight} sx={navbarSx}>
+        <NavButton route={routes.home} sx={logoIconSx}>
+          <Image maw={scaledHeight - 16} src="./TcgPocketLogo.svg" />
+        </NavButton>
+        <Flex align={'center'} gap={25}>
+          <Flex gap={10}>
+            <NavButton route={routes.inventory}>Inventory</NavButton>
+            <NavButton route={routes.cardUpload}>Upload Cards</NavButton>
+            <NavButton route={routes.deckBuilder}> Deck Builder</NavButton>
+          </Flex>
 
-            <Menu>
-              <Menu.Target>
-                <ActionIcon size={40} sx={profileIconSx}>
-                  <IconUser size={30} />
-                </ActionIcon>
-              </Menu.Target>
+          <Menu>
+            <Menu.Target>
+              <ActionIcon size={40} sx={profileIconSx}>
+                <IconUser size={30} />
+              </ActionIcon>
+            </Menu.Target>
 
-              <Menu.Dropdown>
-                <Menu.Item icon={<IconLogin size={14} />} onClick={handleLogin}>
-                  Login
-                </Menu.Item>
-                <Menu.Item
-                  icon={<IconRegistered size={14} />}
-                  onClick={handleRegister}
-                >
-                  Register
-                </Menu.Item>
+            <Menu.Dropdown>
+              <Menu.Item icon={<IconLogin size={14} />} onClick={login.open}>
+                Login
+              </Menu.Item>
+              <Menu.Item
+                icon={<IconRegistered size={14} />}
+                onClick={register.open}
+              >
+                Register
+              </Menu.Item>
 
-                {/* when a user is logged in, these should be displayed */}
+              {/* when a user is logged in, these should be displayed */}
 
-                {/* <Menu.Item
+              {/* <Menu.Item
                 icon={<IconSettings size={14} />}
                 onClick={() => navigate(routes.settings)}
                 >
@@ -103,33 +78,41 @@ export function PrimaryNavigation({
                 >
                 Logout
               </Menu.Item> */}
-              </Menu.Dropdown>
-            </Menu>
-          </Flex>
-        </Navbar>
-        {children}
-      </div>
+            </Menu.Dropdown>
+          </Menu>
+        </Flex>
+      </Navbar>
 
-      <LoginModal openModal={openLoginModal} setOpenModal={setOpenLoginModal} />
-
-      <RegisterModal
-        openModal={openRegisterModal}
-        setOpenModal={setOpenRegisterModal}
-      />
+      <LoginModal openModal={loginState} setOpenModal={login.close} />
+      <RegisterModal openModal={registerState} setOpenModal={register.close} />
     </>
   );
 }
 
+export function useNavbarHeight() {
+  const navbarScaleFactor: ScaleSizeFactor = {
+    scale: 0.075,
+    min: MIN_NAV_HEIGHT,
+    max: MAX_NAV_HEIGHT,
+  };
+
+  const { scaledHeight } = useScaledViewportSize(navbarScaleFactor);
+  return scaledHeight;
+}
+
 function navbarSx(theme: MantineTheme): CSSObject {
   return {
-    borderBottom: `2px solid ${theme.colors.blue[3]}`,
+    borderBottom: `1px solid ${theme.colors.blue[3]}`,
+    boxShadow: `0px 0px 4px ${theme.colors.blue[5]}`,
+    position: 'sticky',
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: '0rem 2rem 0rem 1rem',
     overflow: 'hidden',
-    background: theme.white,
+    background: '#ffffed',
+    top: 0,
   };
 }
 

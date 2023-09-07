@@ -34,7 +34,7 @@ export function useScaledViewportSize(
   }, [height]);
 
   const scaledWidth = useMemo(() => {
-    const scaledWidth = width * widthFactor.scale;
+    let scaledWidth = width * widthFactor.scale;
 
     if (widthFactor.min && scaledWidth < widthFactor.min) {
       return widthFactor.min;
