@@ -3,7 +3,7 @@ import { AppState } from '../../store/configureStore';
 import { RenderFilterOptions } from './modules/RenderFilterOption';
 import { MantineTheme, createStyles } from '@mantine/core';
 import { defaultGap, defaultPadding } from '../../constants/theme';
-import { PrimarySelect } from '../mantineComponentsStyling/PrimarySelect';
+import { PrimarySelect } from '../inputs/PrimarySelect';
 
 export function FilterSelector(): React.ReactElement {
     const { classes } = useFilterSelectorStyles();

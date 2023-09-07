@@ -1,5 +1,5 @@
 import { createStyles } from '@mantine/core';
-import { FilterSelector } from '../../filterSelector/FilterSelector';
+import { FilterSelector } from '../../components/filterSelector/FilterSelector';
 import { InventoryHeader } from './modules/InventoryHeader';
 import { DisplayCards } from './modules/DisplayCards';
 

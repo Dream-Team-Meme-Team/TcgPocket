@@ -1,6 +1,6 @@
 import { ActionIcon, rem } from '@mantine/core';
 import { IconX } from '@tabler/icons-react';
-import { PrimaryBadge } from '../../mantineComponentsStyling/PrimaryBadge';
+import { PrimaryBadge } from '../../badges/PrimaryBadge';
 import { useDispatch } from 'react-redux';
 import { toggleAppliedFilter } from '../../../store/inventorySlice';
 import { Games } from '../../../constants/fakeData/inventoryData';

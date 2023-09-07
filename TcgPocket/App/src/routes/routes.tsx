@@ -3,6 +3,7 @@ import { routes } from '.';
 import { ErrorPage } from '../pages/error/ErrorPage';
 import { NotFoundPage } from '../pages/notFound/NotFoundPage';
 import { HomePage } from '../pages/home/HomePage';
+import { InventoryPage } from '../pages/inventory/InventoryPage';
 
 export const AppRoutes = () => {
     return (
