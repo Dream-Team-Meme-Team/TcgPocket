@@ -26,7 +26,7 @@ public class GetAllDecksQueryHandler : IRequestHandler<GetAllDecksQuery, Respons
     public async Task<Response<List<DeckGetDto>>> Handle(GetAllDecksQuery query, CancellationToken cancellationToken)
     {
         var decks = await _dataContext.Set<Deck>()
-            .ToListAsync(cancellationToken: cancellationToken);
+            .ToListAsync(cancellationToken);
 
         if (decks.IsNullOrEmpty()) return Error.AsResponse<List<DeckGetDto>>("Decks not found");
 
