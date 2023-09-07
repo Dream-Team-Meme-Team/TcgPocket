@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TcgPocket.Data;
 
@@ -10,9 +11,11 @@ using TcgPocket.Data;
 namespace TcgPocket.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230903232155_AddingAttributes")]
+    partial class AddingAttributes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -82,28 +85,6 @@ namespace TcgPocket.Migrations
                     b.ToTable("Games", "dbo");
                 });
 
-            modelBuilder.Entity("TcgPocket.Features.Rarities.Rarity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("GameId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GameId");
-
-                    b.ToTable("Rarities", "dbo");
-                });
-
             modelBuilder.Entity("TcgPocket.Features.Sets.Set", b =>
                 {
                     b.Property<int>("Id")
@@ -148,17 +129,6 @@ namespace TcgPocket.Migrations
                     b.Navigation("Game");
                 });
 
-            modelBuilder.Entity("TcgPocket.Features.Rarities.Rarity", b =>
-                {
-                    b.HasOne("TcgPocket.Features.Games.Game", "Game")
-                        .WithMany("Rarities")
-                        .HasForeignKey("GameId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
-
-                    b.Navigation("Game");
-                });
-
             modelBuilder.Entity("TcgPocket.Features.Sets.Set", b =>
                 {
                     b.HasOne("TcgPocket.Features.Games.Game", "Game")
@@ -175,8 +145,6 @@ namespace TcgPocket.Migrations
                     b.Navigation("Attributes");
 
                     b.Navigation("CardTypes");
-
-                    b.Navigation("Rarities");
 
                     b.Navigation("Sets");
                 });
