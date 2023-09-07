@@ -1,28 +1,38 @@
 import { Checkbox, Text, createStyles } from '@mantine/core';
 import { Games } from '../../../constants/fakeData/inventoryData';
 import { defaultGap, defaultPadding } from '../../../constants/theme';
-import { useDispatch, useSelector } from 'react-redux';
-import { toggleAppliedFilter } from '../../../store/inventorySlice';
-import { AppState } from '../../../store/configureStore';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import {
+    InventoryState,
+    removeAllFiltersOnInventory,
+    toggleAppliedFilterOnInventory,
+} from '../../../store/inventorySlice';
+import { FilterSelectorProps } from '../FilterSelector';
+import { useShallowEqualSelector } from '../../../models/RootState';
+import { AppState, dispatch } from '../../../store/configureStore';
 
-interface RenderFilterOptionsProps {
+type RenderFilterOptionsProps = FilterSelectorProps & {
     filterName: string;
     filterOptions: Games[];
-}
+};
 
 export function RenderFilterOptions({
     filterName,
     filterOptions,
-}: RenderFilterOptionsProps) {
+    slice,
+}: RenderFilterOptionsProps): React.ReactElement {
     const { classes } = useFilterOptionStyles();
-    const dispatch = useDispatch();
 
-    const $appliedFilters = useSelector(
-        (state: AppState) => state.inventory.appliedFilters
-    );
+    // const $appliedFilters = useSelector(
+    //     (state: AppState) => state.inventory.appliedFilters
+    // );
+
+    const $selectedSlice = useSelector((state: AppState) => state[slice]);
+
+    const $appliedFilters = ($selectedSlice as InventoryState).appliedFilters;
 
     const handleCheck = (option: Games) => {
-        dispatch(toggleAppliedFilter(option));
+        dispatch(toggleAppliedFilterOnInventory(option));
     };
 
     return (
@@ -34,7 +44,7 @@ export function RenderFilterOptions({
                     <Checkbox
                         key={option.id}
                         label={option.name}
-                        onClick={() => handleCheck(option)}
+                        onChange={() => handleCheck(option)}
                         checked={$appliedFilters.some(
                             (filter) => filter.id === option.id
                         )}

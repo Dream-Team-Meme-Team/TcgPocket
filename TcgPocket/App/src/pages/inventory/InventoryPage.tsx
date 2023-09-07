@@ -11,7 +11,7 @@ export function InventoryPage(): React.ReactElement {
             <InventoryHeader />
 
             <div className={classes.filterAndCardContainer}>
-                <FilterSelector />
+                <FilterSelector slice={'inventorySlice'} />
 
                 <DisplayCards />
             </div>

@@ -1,11 +1,7 @@
-import {
-    CSSObject,
-    MantineTheme,
-    Select,
-    SelectProps,
-    createPolymorphicComponent,
-} from '@mantine/core';
-import { forwardRef } from 'react';
+import { CSSObject, MantineTheme, Select, SelectProps } from '@mantine/core';
+import { InputHTMLAttributes } from 'react';
+
+type PrimarySelectProps = SelectProps & InputHTMLAttributes<HTMLInputElement>;
 
 const selectStyling = (theme: MantineTheme): CSSObject => ({
     input: {
@@ -21,10 +17,14 @@ const selectStyling = (theme: MantineTheme): CSSObject => ({
     },
 });
 
-const _PrimarySelect = forwardRef<HTMLInputElement, SelectProps>(
-    ({ ...props }, ref) => <Select ref={ref} {...props} sx={selectStyling} />
-);
-
-export const PrimarySelect = createPolymorphicComponent<'input', SelectProps>(
-    _PrimarySelect
-);
+export function PrimartSelect({
+    children,
+    sx,
+    ...props
+}: PrimarySelectProps): React.ReactElement {
+    return (
+        <Select sx={sx ?? selectStyling} {...props}>
+            {children}
+        </Select>
+    );
+}

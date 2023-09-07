@@ -1,12 +1,21 @@
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../../store/configureStore';
 import { RenderFilterOptions } from './modules/RenderFilterOption';
 import { MantineTheme, createStyles } from '@mantine/core';
 import { defaultGap, defaultPadding } from '../../constants/theme';
-import { PrimarySelect } from '../inputs/PrimarySelect';
+import { PrimartSelect } from '../inputs/PrimarySelect';
+import { RootSliceName } from '../../models/RootState';
+import { removeAllFiltersOnInventory } from '../../store/inventorySlice';
 
-export function FilterSelector(): React.ReactElement {
+export interface FilterSelectorProps {
+    slice: RootSliceName;
+}
+
+export function FilterSelector({
+    slice,
+}: FilterSelectorProps): React.ReactElement {
     const { classes } = useFilterSelectorStyles();
+    const dispatch = useDispatch();
 
     // Data State
     const $games = useSelector((state: AppState) => state.data.games);
@@ -14,22 +23,34 @@ export function FilterSelector(): React.ReactElement {
     const $sets = useSelector((state: AppState) => state.data.sets);
     const $rarities = useSelector((state: AppState) => state.data.rarities);
 
+    const handleSelectChange = () => {
+        dispatch(removeAllFiltersOnInventory());
+    };
+
     return (
         <div className={classes.container}>
             <div className={classes.gameSelectContainer}>
-                <PrimarySelect
+                <PrimartSelect
                     clearable
-                    data={$games.map((game) => game.name)}
                     label="Select Game:"
+                    data={$games.map((game) => game.name)}
+                    onChange={handleSelectChange}
                 />
             </div>
+
             <div>
                 <RenderFilterOptions
+                    slice={slice}
                     filterName="Card Type"
                     filterOptions={$cardTypes}
                 />
-                <RenderFilterOptions filterName="Set" filterOptions={$sets} />
                 <RenderFilterOptions
+                    slice={slice}
+                    filterName="Set"
+                    filterOptions={$sets}
+                />
+                <RenderFilterOptions
+                    slice={slice}
                     filterName="Rarity"
                     filterOptions={$rarities}
                 />

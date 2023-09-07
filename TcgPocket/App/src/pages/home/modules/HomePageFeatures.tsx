@@ -8,8 +8,8 @@ import {
     Container,
     rem,
     Image,
+    Badge,
 } from '@mantine/core';
-import { PrimaryBadge } from '../../../components/badges/PrimaryBadge';
 
 const cardData = [
     {
@@ -56,7 +56,9 @@ export function FeaturesCards() {
         <div className={classes.et}>
             <Container size="lg" py="xl">
                 <Group position="center">
-                    <PrimaryBadge size="xl">Trading Card Games</PrimaryBadge>
+                    <Badge variant="filled" size="xl">
+                        Trading Card Games
+                    </Badge>
                 </Group>
 
                 <Title order={2} className={classes.title} ta="center" mt="sm">

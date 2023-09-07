@@ -4,17 +4,19 @@ import { Games } from '../constants/fakeData/inventoryData';
 export interface InventoryState {
     /** the type will need to change */
     appliedFilters: Games[];
+    otherProperty: string;
 }
 
 const INITIAL_STATE: InventoryState = {
     appliedFilters: [],
+    otherProperty: '',
 };
 
 export const inventorySlice = createSlice({
     name: 'Inventory',
     initialState: INITIAL_STATE,
     reducers: {
-        toggleAppliedFilter(
+        toggleAppliedFilterOnInventory(
             state,
             { payload }: PayloadAction<InventoryState['appliedFilters'][number]>
         ) {
@@ -30,9 +32,13 @@ export const inventorySlice = createSlice({
                 state.appliedFilters.push(payload);
             }
         },
+        removeAllFiltersOnInventory(state) {
+            state.appliedFilters = [];
+        },
     },
 });
 
-export const { toggleAppliedFilter } = inventorySlice.actions;
+export const { toggleAppliedFilterOnInventory, removeAllFiltersOnInventory } =
+    inventorySlice.actions;
 
 export default inventorySlice.reducer;
