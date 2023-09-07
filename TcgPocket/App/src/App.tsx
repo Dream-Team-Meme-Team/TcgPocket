@@ -1,4 +1,4 @@
-import { PrimaryNavigation } from './components/Navigation/PrimaryNavigation';
+import { PrimaryNavigation } from './navigation/PrimaryNavigation';
 import { AppRoutes } from './routes/routes';
 
 function App() {
