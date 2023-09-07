@@ -8,9 +8,9 @@ import {
 } from '@mantine/core';
 import { IconClick, IconHandClick } from '@tabler/icons-react';
 import { useState } from 'react';
-import { LoginModal } from '../../loginOrRegisterModals/LoginModal';
-import { RegisterModal } from '../../loginOrRegisterModals/RegisterModal';
-import { PrimaryButton } from '../../mantineComponentsStyling/PrimaryButton';
+import { PrimaryButton } from '../../../components/buttons/PrimaryButton';
+import { LoginModal } from '../../../components/modals/LoginModal';
+import { RegisterModal } from '../../../components/modals/RegisterModal';
 
 export function HeroTitle() {
   const { classes } = useStyles();
