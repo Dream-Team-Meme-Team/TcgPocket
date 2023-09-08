@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using TcgPocket.Data;
 using TcgPocket.Features.Users;
+using TcgPocket.Features.Roles;
 
 namespace TcgPocket;
 
@@ -34,12 +35,12 @@ public class Startup
 
     private void ConfigureIdentity(IServiceCollection services)
     {
-        services.AddIdentity<User, IdentityRole<int>>()  
-            .AddRoles<IdentityRole<int>>()
-            .AddRoleManager<RoleManager<IdentityRole<int>>>()
+        services.AddIdentity<User, Role>()  
+            .AddRoles<Role>()
+            .AddRoleManager<RoleManager<Role>>()
             .AddUserManager<UserManager<User>>()
             .AddEntityFrameworkStores<DataContext>()
-             .AddDefaultTokenProviders();  
+            .AddDefaultTokenProviders();  
         
         services.Configure<IdentityOptions>(options =>
         {

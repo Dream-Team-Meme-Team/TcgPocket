@@ -9,7 +9,7 @@ namespace TcgPocket.Features.Users.Commands;
 
 public class CreateUserCommand : IRequest<Response<UserGetDto>>
 {
-    public UserCreateUpdateDto User { get; set; }
+    public UserCreateDto User { get; set; }
 }
 
 public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Response<UserGetDto>>

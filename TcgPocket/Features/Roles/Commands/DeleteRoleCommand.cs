@@ -7,51 +7,55 @@ using TcgPocket.Shared;
 
 namespace TcgPocket.Features.Roles.Commands;
 
-public class CreateRoleCommand : IRequest<Response<RoleGetDto>>
+public class DeleteRoleCommand : IRequest<Response>
 {
-    public RoleDto Role { get; set; }
+    public int Id { get; set; }
 }
 
-public class CreateRoleCommandHandler : IRequestHandler<CreateRoleCommand, Response<RoleGetDto>>
+public class DeleteRoleCommandHandler : IRequestHandler<DeleteRoleCommand, Response>
 {
     private readonly DataContext _dataContext;
-    private readonly IMapper _mapper;
-    private readonly IValidator<CreateRoleCommand> _validator;
+    private readonly IValidator<DeleteRoleCommand> _validator;
     private readonly RoleManager<Role> _roleManager;
+    private readonly IMapper _mapper;
 
-    public CreateRoleCommandHandler(DataContext dataContext,
-        IValidator<CreateRoleCommand> validator,
+    public DeleteRoleCommandHandler(DataContext dataContext,
+        IValidator<DeleteRoleCommand> validator,
         RoleManager<Role> roleManager,
         IMapper mapper)
     {
         _dataContext = dataContext;
-        _mapper = mapper;
         _validator = validator;
         _roleManager = roleManager;
+        _mapper = mapper;
     }
-
-    public async Task<Response<RoleGetDto>> Handle(CreateRoleCommand command, CancellationToken cancellationToken)
+    public async Task<Response> Handle(DeleteRoleCommand command, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(command, cancellationToken);
 
         if (!validationResult.IsValid)
         {
             var errors = _mapper.Map<List<Error>>(validationResult.Errors);
-            return new Response<RoleGetDto> { Errors = errors };
+            return new Response { Errors = errors };
         }
 
-        var role = _mapper.Map<Role>(command.Role);
+        var role = _roleManager.Roles.SingleOrDefault(x => x.Id == command.Id);
 
-        var result = await _roleManager.CreateAsync(role);
+        if (role is null)
+        {
+            return Error.AsResponse("Role not found", "id");
+        }
+
+        var result = await _roleManager.DeleteAsync(role);
 
         if (!result.Succeeded)
         {
             var errors = _mapper.Map<List<Error>>(result.Errors);
-            return new Response<RoleGetDto> { Errors = errors };
+            return new Response { Errors = errors };
         }
 
         await _dataContext.SaveChangesAsync(cancellationToken);
 
-        return _mapper.Map<RoleGetDto>(role).AsResponse();
+        return Response.Success;
     }
 }

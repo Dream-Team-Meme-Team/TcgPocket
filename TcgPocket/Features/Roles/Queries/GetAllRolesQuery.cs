@@ -7,28 +7,28 @@ using TcgPocket.Shared;
 
 namespace TcgPocket.Features.Roles.Queries;
 
-public class GetAllRolesQuery : IRequest<Response<List<IdentityRole<int>>>>
+public class GetAllRolesQuery : IRequest<Response<List<Role>>>
 {
 }
 
-public class GetAllRolesQueryHandler : IRequestHandler<GetAllRolesQuery, Response<List<IdentityRole<int>>>>
+public class GetAllRolesQueryHandler : IRequestHandler<GetAllRolesQuery, Response<List<Role>>>
 {
-    private readonly RoleManager<IdentityRole<int>> _userManager;
+    private readonly RoleManager<Role> _roleManager;
     private readonly IMapper _mapper;
 
-    public GetAllRolesQueryHandler(RoleManager<IdentityRole<int>> userManager,
+    public GetAllRolesQueryHandler(RoleManager<Role> roleManager,
         IMapper mapper)
     {
-        _userManager = userManager;
+        _roleManager = roleManager;
         _mapper = mapper;
     }
 
-    public async Task<Response<List<IdentityRole<int>>>> Handle(GetAllRolesQuery query, CancellationToken cancellationToken)
+    public async Task<Response<List<Role>>> Handle(GetAllRolesQuery query, CancellationToken cancellationToken)
     {
-        var users = await _userManager.Roles.ToListAsync(cancellationToken);
+        var roles = await _roleManager.Roles.ToListAsync(cancellationToken);
 
-        if (users.IsNullOrEmpty()) return Error.AsResponse<List<IdentityRole<int>>>("Roles not found");
+        if (roles.IsNullOrEmpty()) return Error.AsResponse<List<Role>>("Roles not found");
 
-        return _mapper.Map<List<IdentityRole<int>>>(users).AsResponse();
+        return _mapper.Map<List<Role>>(roles).AsResponse();
     }
 }

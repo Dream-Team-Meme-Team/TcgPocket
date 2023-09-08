@@ -2,11 +2,13 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using TcgPocket.Features.Roles;
+using TcgPocket.Features.UserRoles;
 using TcgPocket.Features.Users;
 
 namespace TcgPocket.Data;
 
-public class DataContext : IdentityDbContext<User, IdentityRole<int>, int> 
+public class DataContext : IdentityDbContext<User, Role, int, IdentityUserClaim<int>, UserRole, IdentityUserLogin<int>, IdentityRoleClaim<int>, IdentityUserToken<int>> 
 {
     public DataContext(DbContextOptions<DataContext> options) : base(options)
     {
@@ -16,32 +18,10 @@ public class DataContext : IdentityDbContext<User, IdentityRole<int>, int>
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<User>(b =>
-        {
-            // Each User can have many UserClaims
-            b.HasMany(e => e.Claims)
-                .WithOne()
-                .HasForeignKey(uc => uc.UserId)
-                .IsRequired();
-
-            // Each User can have many UserLogins
-            b.HasMany(e => e.Logins)
-                .WithOne()
-                .HasForeignKey(ul => ul.UserId)
-                .IsRequired();
-
-            // Each User can have many UserTokens
-            b.HasMany(e => e.Tokens)
-                .WithOne()
-                .HasForeignKey(ut => ut.UserId)
-                .IsRequired();
-
-            // Each User can have many entries in the UserRole join table
-            b.HasMany(e => e.UserRoles)
-                .WithOne()
-                .HasForeignKey(ur => ur.UserId)
-                .IsRequired();
-        });
+        modelBuilder.Entity<IdentityUserClaim<int>>().ToTable("AspNetUserClaims", "identity");
+        modelBuilder.Entity<IdentityUserLogin<int>>().ToTable("AspNetUserLogins", "identity");
+        modelBuilder.Entity<IdentityRoleClaim<int>>().ToTable("AspNetRoleClaims", "identity");
+        modelBuilder.Entity<IdentityUserToken<int>>().ToTable("AspNetUserTokens", "identity");
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(DataContext).Assembly);
     }

@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using TcgPocket.Features.Roles;
 using TcgPocket.Features.Users.Commands;
+using TcgPocket.Features.Users.Dtos;
 using TcgPocket.Features.Users.Queries;
 using TcgPocket.Shared;
 
@@ -33,10 +35,28 @@ public class UsersController : ControllerBase
         return response.HasErrors ? NotFound(response) : Ok(response);
     }
 
+    [HttpGet("{id:int}/roles", Name = nameof(GetAllRolesByUserId))]
+    public async Task<ActionResult<Response<List<RoleGetDto>>>> GetAllRolesByUserId([FromRoute] int id)
+    {
+        var response = await _mediator.Send(new GetAllRolesByUserIdQuery { UserId = id });
+
+        return response.HasErrors ? NotFound(response) : Ok(response);
+    }
+
     [HttpPost]
-    public async Task<ActionResult<Response<UserGetDto>>> CreateUser([FromBody] UserCreateUpdateDto data)
+    public async Task<ActionResult<Response<UserGetDto>>> CreateUser([FromBody] UserCreateDto data)
     {
         var response = await _mediator.Send(new CreateUserCommand { User = data });
+
+        return response.HasErrors
+            ? BadRequest(response)
+            : CreatedAtRoute(nameof(GetUserById), new { response.Data.Id }, response);
+    }
+
+    [HttpPost("{id:int}/roles")]
+    public async Task<ActionResult<Response<UserRoleDto>>> AddRoleToUser([FromBody] AddRoleToUserCommand data)
+    {
+        var response = await _mediator.Send(new AddRoleToUserCommand { UserId = data.UserId, RoleName = data.RoleName });
 
         return response.HasErrors
             ? BadRequest(response)

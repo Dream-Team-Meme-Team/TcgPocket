@@ -1,13 +1,13 @@
 ﻿using FluentValidation;
-using Microsoft.AspNetCore.Identity;
 using TcgPocket.Features.Roles.Commands;
 
 namespace TcgPocket.Features.Roles.Validators;
 
 public class CreateRoleRequestValidator : AbstractValidator<CreateRoleCommand>
 {
-    public CreateRoleRequestValidator()
+    public CreateRoleRequestValidator(IValidator<RoleDto> baseValidator)
     {
-        
+        RuleFor(x => x.Role)
+            .SetValidator(baseValidator);
     }
 }

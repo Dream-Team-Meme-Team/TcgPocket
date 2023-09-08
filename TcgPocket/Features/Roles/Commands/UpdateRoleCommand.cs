@@ -7,20 +7,21 @@ using TcgPocket.Shared;
 
 namespace TcgPocket.Features.Roles.Commands;
 
-public class CreateRoleCommand : IRequest<Response<RoleGetDto>>
+public class UpdateRoleCommand : IRequest<Response<RoleGetDto>>
 {
+    public int Id { get; set; }
     public RoleDto Role { get; set; }
 }
 
-public class CreateRoleCommandHandler : IRequestHandler<CreateRoleCommand, Response<RoleGetDto>>
+public class UpdateRoleCommandHandler : IRequestHandler<UpdateRoleCommand, Response<RoleGetDto>>
 {
     private readonly DataContext _dataContext;
     private readonly IMapper _mapper;
-    private readonly IValidator<CreateRoleCommand> _validator;
+    private readonly IValidator<UpdateRoleCommand> _validator;
     private readonly RoleManager<Role> _roleManager;
 
-    public CreateRoleCommandHandler(DataContext dataContext,
-        IValidator<CreateRoleCommand> validator,
+    public UpdateRoleCommandHandler(DataContext dataContext,
+        IValidator<UpdateRoleCommand> validator,
         RoleManager<Role> roleManager,
         IMapper mapper)
     {
@@ -30,7 +31,7 @@ public class CreateRoleCommandHandler : IRequestHandler<CreateRoleCommand, Respo
         _roleManager = roleManager;
     }
 
-    public async Task<Response<RoleGetDto>> Handle(CreateRoleCommand command, CancellationToken cancellationToken)
+    public async Task<Response<RoleGetDto>> Handle(UpdateRoleCommand command, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(command, cancellationToken);
 
@@ -40,9 +41,15 @@ public class CreateRoleCommandHandler : IRequestHandler<CreateRoleCommand, Respo
             return new Response<RoleGetDto> { Errors = errors };
         }
 
-        var role = _mapper.Map<Role>(command.Role);
+        var role = _roleManager.Roles.SingleOrDefault(x => x.Id == command.Id);
 
-        var result = await _roleManager.CreateAsync(role);
+        if (role is null)
+        {
+            return Error.AsResponse<RoleGetDto>("Role not found", "id");
+        }
+
+        _mapper.Map(command.Role, role);
+        var result = await _roleManager.UpdateAsync(role);
 
         if (!result.Succeeded)
         {
