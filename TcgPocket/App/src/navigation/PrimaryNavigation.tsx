@@ -35,7 +35,12 @@ export function PrimaryNavigation(): React.ReactElement {
 
   return (
     <>
-      <Navbar height={scaledHeight} sx={navbarSx}>
+      <Navbar
+        height={scaledHeight}
+        // fixed={false}
+        // position={{ top: 0 }}
+        sx={navbarSx}
+      >
         <NavButton route={routes.home} sx={logoIconSx}>
           <Image maw={scaledHeight - 16} src="./TcgPocketLogo.svg" />
         </NavButton>
@@ -104,15 +109,12 @@ function navbarSx(theme: MantineTheme): CSSObject {
   return {
     borderBottom: `1px solid ${theme.colors.blue[3]}`,
     boxShadow: `0px 0px 4px ${theme.colors.blue[5]}`,
-    position: 'sticky',
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: '0rem 2rem 0rem 1rem',
-    overflow: 'hidden',
     background: '#ffffed',
-    top: 0,
   };
 }
 
@@ -120,7 +122,6 @@ function profileIconSx(theme: MantineTheme): CSSObject {
   return {
     backgroundColor: `${theme.colors.blue[0]}`,
     borderRadius: '5em',
-    overflow: 'hidden',
   };
 }
 
