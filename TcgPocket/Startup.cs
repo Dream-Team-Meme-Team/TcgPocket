@@ -3,7 +3,6 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using TcgPocket.Data;
-using TcgPocket.Features.Roles;
 using TcgPocket.Features.Users;
 
 namespace TcgPocket;
@@ -35,10 +34,12 @@ public class Startup
 
     private void ConfigureIdentity(IServiceCollection services)
     {
-        services.AddIdentity<User, Role>()  
-            .AddRoles<Role>()
+        services.AddIdentity<User, IdentityRole<int>>()  
+            .AddRoles<IdentityRole<int>>()
+            .AddRoleManager<RoleManager<IdentityRole<int>>>()
             .AddUserManager<UserManager<User>>()
-            .AddEntityFrameworkStores<DataContext>();  
+            .AddEntityFrameworkStores<DataContext>()
+             .AddDefaultTokenProviders();  
         
         services.Configure<IdentityOptions>(options =>
         {
@@ -60,7 +61,6 @@ public class Startup
 
         services.ConfigureApplicationCookie(options =>
         {
-            // Cookie settings
             options.Cookie.HttpOnly = true;
             options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
 

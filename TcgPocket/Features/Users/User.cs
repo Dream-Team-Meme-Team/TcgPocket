@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using TcgPocket.Features.Decks;
-using TcgPocket.Features.UserRoles;
 using TcgPocket.Shared.Interfaces;
 
 namespace TcgPocket.Features.Users;
@@ -8,7 +7,10 @@ namespace TcgPocket.Features.Users;
 public class User : IdentityUser<int>, IIdentifiable
 {
     public List<Deck> Decks { get; set; }
-    public List<UserRole> UserRoles { get; set; }
+    public virtual ICollection<IdentityUserClaim<int>> Claims { get; set; }
+    public virtual ICollection<IdentityUserLogin<int>> Logins { get; set; }
+    public virtual ICollection<IdentityUserToken<int>> Tokens { get; set; }
+    public virtual ICollection<IdentityUserRole<int>> UserRoles { get; set; }
 }
 
 public class UserGetDto : UserDto
