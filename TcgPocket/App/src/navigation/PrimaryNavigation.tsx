@@ -13,18 +13,12 @@ import { routes } from '../routes';
 import { NavButton } from './NavButton';
 import { LoginModal } from '../components/modals/LoginModal';
 import { RegisterModal } from '../components/modals/RegisterModal';
-import {
-  ScaleSizeFactor,
-  useScaledViewportSize,
-} from '../hooks/use-scaled-viewport-size';
 import { useDisclosure } from '@mantine/hooks';
-
-const MIN_NAV_HEIGHT = 60 as const;
-const MAX_NAV_HEIGHT = 120 as const;
+import { useNavbarHeight } from '../hooks/use-navbar-height';
 
 export function PrimaryNavigation(): React.ReactElement {
   // const navigate = useNavigate();
-  const scaledHeight = useNavbarHeight();
+  const { navbarHeight } = useNavbarHeight();
 
   const [loginState, login] = useDisclosure(false);
   const [registerState, register] = useDisclosure(false);
@@ -36,13 +30,13 @@ export function PrimaryNavigation(): React.ReactElement {
   return (
     <>
       <Navbar
-        height={scaledHeight}
+        height={navbarHeight}
         // fixed={false}
         // position={{ top: 0 }}
         sx={navbarSx}
       >
         <NavButton route={routes.home} sx={logoIconSx}>
-          <Image maw={scaledHeight - 16} src="./TcgPocketLogo.svg" />
+          <Image maw={navbarHeight - 16} src="./TcgPocketLogo.svg" />
         </NavButton>
         <Flex align={'center'} gap={25}>
           <Flex gap={10}>
@@ -92,17 +86,6 @@ export function PrimaryNavigation(): React.ReactElement {
       <RegisterModal openModal={registerState} setOpenModal={register.close} />
     </>
   );
-}
-
-export function useNavbarHeight() {
-  const navbarScaleFactor: ScaleSizeFactor = {
-    scale: 0.075,
-    min: MIN_NAV_HEIGHT,
-    max: MAX_NAV_HEIGHT,
-  };
-
-  const { scaledHeight } = useScaledViewportSize(navbarScaleFactor);
-  return scaledHeight;
 }
 
 function navbarSx(theme: MantineTheme): CSSObject {

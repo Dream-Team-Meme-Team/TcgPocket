@@ -1,18 +1,21 @@
-import { AppShell, Box, CSSObject, Center } from '@mantine/core';
-import {
-  PrimaryNavigation,
-  useNavbarHeight,
-} from './navigation/PrimaryNavigation';
+import { AppShell, Box, CSSObject, Center, ScrollArea } from '@mantine/core';
+import { PrimaryNavigation } from './navigation/PrimaryNavigation';
 import { AppRoutes } from './routes/routes';
+import { useNavbarHeight } from './hooks/use-navbar-height';
 
 function App() {
+  const { navbarHeight, remainingHeight } = useNavbarHeight();
+  const scrollAreaSx = useScrollAreaSx(navbarHeight);
+
   return (
     <>
       <AppShell layout="alt" padding={0} header={<PrimaryNavigation />}>
-        <Box sx={childContainerSx}>
-          <AppRoutes />
-        </Box>
-        <Center sx={footerSx}>(≖ᴗ≖✿)</Center>
+        <ScrollArea h={remainingHeight} sx={scrollAreaSx}>
+          <Box sx={containerSx}>
+            <AppRoutes />
+          </Box>
+          <Center sx={footerSx}>(≖ᴗ≖✿)</Center>
+        </ScrollArea>
       </AppShell>
     </>
   );
@@ -32,13 +35,15 @@ function footerSx(): CSSObject {
   };
 }
 
-function childContainerSx(): CSSObject {
-  const navbarHeight = useNavbarHeight();
-
+function containerSx(): CSSObject {
   return {
-    height: `calc(100vh - ${navbarHeight}px)`,
-    paddingTop: navbarHeight,
     boxShadow: '0px 3px 8px black',
     position: 'relative',
+  };
+}
+
+function useScrollAreaSx(navbarHeight: number): CSSObject {
+  return {
+    top: navbarHeight,
   };
 }

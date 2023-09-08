@@ -10,6 +10,7 @@ export function PrimaryModal({
 }: PrimaryModalProps): React.ReactElement {
   return (
     <Modal
+      centered
       {...props}
       overlayProps={{ opacity: 0.55, blur: 3 }}
       transitionProps={{
