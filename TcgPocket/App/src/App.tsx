@@ -30,10 +30,10 @@ function App() {
 
 export default App;
 
-function footerSx(): CSSObject {
+function footerSx(theme: MantineTheme): CSSObject {
   return {
     height: '3.5rem',
-    background: '#ffffed',
+    background: theme.white,
     position: 'sticky',
     bottom: 0,
     left: 0,

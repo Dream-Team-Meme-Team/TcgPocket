@@ -29,12 +29,7 @@ export function PrimaryNavigation(): React.ReactElement {
 
   return (
     <>
-      <Navbar
-        height={navbarHeight}
-        // fixed={false}
-        // position={{ top: 0 }}
-        sx={navbarSx}
-      >
+      <Navbar height={navbarHeight} sx={navbarSx}>
         <NavButton route={routes.home} sx={logoIconSx}>
           <Image maw={navbarHeight - 16} src="./TcgPocketLogo.svg" />
         </NavButton>
@@ -97,7 +92,7 @@ function navbarSx(theme: MantineTheme): CSSObject {
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: '0rem 2rem 0rem 1rem',
-    background: '#ffffed',
+    background: theme.white,
   };
 }
 
