@@ -1,4 +1,11 @@
-import { AppShell, Box, CSSObject, Center, ScrollArea } from '@mantine/core';
+import {
+  AppShell,
+  Box,
+  CSSObject,
+  Center,
+  MantineTheme,
+  ScrollArea,
+} from '@mantine/core';
 import { PrimaryNavigation } from './navigation/PrimaryNavigation';
 import { AppRoutes } from './routes/routes';
 import { useNavbarHeight } from './hooks/use-navbar-height';
@@ -11,7 +18,7 @@ function App() {
     <>
       <AppShell layout="alt" padding={0} header={<PrimaryNavigation />}>
         <ScrollArea h={remainingHeight} sx={scrollAreaSx}>
-          <Box sx={containerSx}>
+          <Box sx={useContainerSx}>
             <AppRoutes />
           </Box>
           <Center sx={footerSx}>(≖ᴗ≖✿)</Center>
@@ -35,10 +42,13 @@ function footerSx(): CSSObject {
   };
 }
 
-function containerSx(): CSSObject {
+function useContainerSx(theme: MantineTheme): CSSObject {
+  const { remainingHeight } = useNavbarHeight();
   return {
     boxShadow: '0px 3px 8px black',
     position: 'relative',
+    minHeight: remainingHeight,
+    backgroundColor: theme.white,
   };
 }
 
