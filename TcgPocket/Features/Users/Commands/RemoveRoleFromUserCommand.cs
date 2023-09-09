@@ -1,14 +1,13 @@
-﻿using AutoMapper;
+﻿using System.Text.Json.Serialization;
+using AutoMapper;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using System.Text.Json.Serialization;
 using TcgPocket.Data;
 using TcgPocket.Features.Roles;
-using TcgPocket.Features.Users;
 using TcgPocket.Shared;
 
-namespace TcgPocket.Features.UserRoles.Commands;
+namespace TcgPocket.Features.Users.Commands;
 
 public class RemoveRoleFromUserCommand : IRequest<Response>
 {
