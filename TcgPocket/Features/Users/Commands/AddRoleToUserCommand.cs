@@ -3,6 +3,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 using TcgPocket.Data;
 using TcgPocket.Features.Roles;
 using TcgPocket.Features.Users.Dtos;
@@ -12,7 +13,8 @@ namespace TcgPocket.Features.Users.Commands;
 
 public class AddRoleToUserCommand : IRequest<Response<UserRoleDto>>
 {
-    public int UserId { get; set; }
+    [JsonIgnore]
+    public int Id { get; set; }
     public string RoleName { get; set; }
 }
 
@@ -50,7 +52,7 @@ public class AddRoleToUserCommandHandler : IRequestHandler<AddRoleToUserCommand,
         var user = _userManager.Users
             .Include(x => x.UserRoles)
             .ThenInclude(x => x.Role)
-            .SingleOrDefault(x => x.Id == command.UserId);
+            .SingleOrDefault(x => x.Id == command.Id);
 
         if (user is null)
         {

@@ -10,7 +10,7 @@ namespace TcgPocket.Features.Users.Commands;
 public class UpdatePasswordCommand : IRequest<Response>
 {
     [JsonIgnore]
-    public int Id { get; set; }
+    public string UserName { get; set; }
     public string CurrentPassword { get; set; }
     public string NewPassword { get; set; }
     public string NewPasswordConfirmation { get; set; }
@@ -39,18 +39,18 @@ public class UpdatePasswordCommandHandler : IRequestHandler<UpdatePasswordComman
             return new Response { Errors = errors };
         }
 
-        var user = _userManager.Users.SingleOrDefault(x => x.Id == command.Id);
+        var user = _userManager.Users.FirstOrDefault(x => x.UserName.Equals(command.UserName));
 
         if (user is null)
         {
-            return Error.AsResponse("User not found.", "id");
+            return Error.AsResponse("Something went wrong.");
         }
 
         var correctPassword = await _userManager.CheckPasswordAsync(user, command.CurrentPassword);
 
         if (!correctPassword)
         {
-            return Error.AsResponse("Current password is incorrect.", "current password");
+            return Error.AsResponse("Something went wrong.");
         }
 
         var result = await _userManager.ChangePasswordAsync(user, command.CurrentPassword, command.NewPassword);

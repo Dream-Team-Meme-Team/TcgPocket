@@ -7,8 +7,8 @@ public class UpdatePasswordRequestValidator : AbstractValidator<UpdatePasswordCo
 {
     public UpdatePasswordRequestValidator()
     {
-        RuleFor(x => x.Id)
-            .GreaterThan(0);
+        RuleFor(x => x.UserName)
+            .NotEmpty();
 
         RuleFor(x => x.NewPasswordConfirmation)
             .NotEmpty();

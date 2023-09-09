@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using TcgPocket.Features.Roles;
 using TcgPocket.Shared;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace TcgPocket.Features.Users.Queries;
 
@@ -26,14 +28,17 @@ public class GetAllRolesByUserIdQueryHandler : IRequestHandler<GetAllRolesByUser
 
     public async Task<Response<List<RoleGetDto>>> Handle(GetAllRolesByUserIdQuery query, CancellationToken cancellationToken)
     {
-        var user = _userManager.Users.SingleOrDefault(x => x.Id == query.UserId);
+        var user = _userManager.Users
+            .Include(x => x.UserRoles)
+            .ThenInclude(x => x.Role)
+            .SingleOrDefault(x => x.Id == query.UserId);
 
         if (user is null)
         {
             return Error.AsResponse<List<RoleGetDto>>("User not found", "id");
         }
 
-        var roles = await _userManager.GetRolesAsync(user);
+        var roles = user.UserRoles.Select(x => x.Role).ToList();
 
         if (roles.IsNullOrEmpty()) return Error.AsResponse<List<RoleGetDto>>("Roles not found");
 

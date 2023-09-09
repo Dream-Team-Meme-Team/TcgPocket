@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TcgPocket.Features.Roles;
+using TcgPocket.Features.UserRoles.Commands;
 using TcgPocket.Features.Users.Commands;
 using TcgPocket.Features.Users.Dtos;
 using TcgPocket.Features.Users.Queries;
@@ -54,9 +55,9 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost("{id:int}/roles")]
-    public async Task<ActionResult<Response<UserRoleDto>>> AddRoleToUser([FromBody] AddRoleToUserCommand data)
+    public async Task<ActionResult<Response<UserRoleDto>>> AddRoleToUser([FromRoute] int id, [FromBody] AddRoleToUserCommand data)
     {
-        var response = await _mediator.Send(new AddRoleToUserCommand { UserId = data.UserId, RoleName = data.RoleName });
+        var response = await _mediator.Send(new AddRoleToUserCommand { Id = id, RoleName = data.RoleName });
 
         return response.HasErrors
             ? BadRequest(response)
@@ -73,13 +74,13 @@ public class UsersController : ControllerBase
     }
 
     [HttpPut("{id:int}/password-update", Name = nameof(UpdatePassword))]
-    public async Task<ActionResult<Response<UserGetDto>>> UpdatePassword([FromRoute] int id,
+    public async Task<ActionResult<Response<UserGetDto>>> UpdatePassword(
         [FromBody] UpdatePasswordCommand data)
     {
         var response = await _mediator
             .Send(new UpdatePasswordCommand 
             { 
-                Id = id, 
+                UserName = data.UserName, 
                 CurrentPassword = data.CurrentPassword, 
                 NewPassword = data.NewPassword, 
                 NewPasswordConfirmation = data.NewPasswordConfirmation 
@@ -92,6 +93,14 @@ public class UsersController : ControllerBase
     public async Task<ActionResult<Response>> DeleteUser([FromRoute] int id)
     {
         var response = await _mediator.Send(new DeleteUserCommand { Id = id });
+
+        return response.HasErrors ? BadRequest(response) : Ok(response);
+    }
+
+    [HttpDelete("{id:int}/role")]
+    public async Task<ActionResult<Response>> RemoveRoleFromUser([FromRoute] int id, [FromBody] RemoveRoleFromUserCommand data)
+    {
+        var response = await _mediator.Send(new RemoveRoleFromUserCommand { UserId = id, RoleName = data.RoleName });
 
         return response.HasErrors ? BadRequest(response) : Ok(response);
     }

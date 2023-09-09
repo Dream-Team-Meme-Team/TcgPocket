@@ -7,7 +7,7 @@ namespace TcgPocket.Features.Users.Validators
     {
         public AddRoleToUserCommandValidator()
         {
-            RuleFor(x => x.UserId)
+            RuleFor(x => x.Id)
             .GreaterThan(0);
             RuleFor(x => x.RoleName)
                 .NotEmpty();
