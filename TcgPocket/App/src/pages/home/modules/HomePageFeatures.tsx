@@ -9,6 +9,7 @@ import {
     rem,
     Image,
     Badge,
+    MantineTheme,
 } from '@mantine/core';
 
 const cardData = [
@@ -88,7 +89,7 @@ export function FeaturesCards() {
     );
 }
 
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles((theme: MantineTheme) => ({
     title: {
         fontSize: rem(34),
         fontWeight: 900,
@@ -103,13 +104,9 @@ const useStyles = createStyles((theme) => ({
         paddingBottom: rem(100),
     },
 
-  card: {
-    border: `${rem(1)} solid ${
-      theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[1]
-    }`,
-    backgroundColor: theme.white,
-    boxShadow: `0px 0px 20px ${theme.colors.blue[5]}`,
-  },
+    description: {
+        maxWidth: 600,
+        margin: 'auto',
 
         '&::after': {
             content: '""',
@@ -130,7 +127,7 @@ const useStyles = createStyles((theme) => ({
                 : theme.colors.gray[1]
         }`,
         backgroundColor: theme.white,
-        boxShadow: '0px 0px 50px 25px rgba(90, 150, 255, .5)',
+        boxShadow: `0px 0px 20px ${theme.colors.blue[5]}`,
     },
 
     cardTitle: {
