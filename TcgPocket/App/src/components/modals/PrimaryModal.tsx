@@ -8,18 +8,19 @@ export function PrimaryModal({
     sx,
     ...props
 }: PrimaryModalProps): React.ReactElement {
-    return (
-        <Modal
-            {...props}
-            overlayProps={{ opacity: 0.55, blur: 3 }}
-            transitionProps={{
-                transition: 'fade',
-                duration: 150,
-                timingFunction: 'linear',
-            }}
-            sx={sx}
-        >
-            {children}
-        </Modal>
-    );
+  return (
+    <Modal
+      centered
+      {...props}
+      overlayProps={{ opacity: 0.55, blur: 3 }}
+      transitionProps={{
+        transition: 'fade',
+        duration: 150,
+        timingFunction: 'linear',
+      }}
+      sx={sx}
+    >
+      {children}
+    </Modal>
+  );
 }

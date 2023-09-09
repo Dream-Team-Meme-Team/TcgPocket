@@ -103,9 +103,13 @@ const useStyles = createStyles((theme) => ({
         paddingBottom: rem(100),
     },
 
-    description: {
-        maxWidth: 600,
-        margin: 'auto',
+  card: {
+    border: `${rem(1)} solid ${
+      theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[1]
+    }`,
+    backgroundColor: theme.white,
+    boxShadow: `0px 0px 20px ${theme.colors.blue[5]}`,
+  },
 
         '&::after': {
             content: '""',
