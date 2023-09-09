@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using TcgPocket.Features.Roles;
 using TcgPocket.Shared;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace TcgPocket.Features.Users.Queries;
 

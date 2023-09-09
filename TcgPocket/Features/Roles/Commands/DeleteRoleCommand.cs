@@ -29,6 +29,7 @@ public class DeleteRoleCommandHandler : IRequestHandler<DeleteRoleCommand, Respo
         _roleManager = roleManager;
         _mapper = mapper;
     }
+    
     public async Task<Response> Handle(DeleteRoleCommand command, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(command, cancellationToken);

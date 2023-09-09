@@ -24,7 +24,6 @@ public class CreateDeckCommandHandler : IRequestHandler<CreateDeckCommand, Respo
         _dataContext = dataContext;
         _mapper = mapper;
         _validator = validator;
-
     }
 
     public async Task<Response<DeckGetDto>> Handle(CreateDeckCommand command, CancellationToken cancellationToken)

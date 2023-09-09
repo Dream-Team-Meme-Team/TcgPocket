@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using TcgPocket.Features.UserRoles.Commands;
+using TcgPocket.Features.Users.Commands;
 
 namespace TcgPocket.Features.Users.Validators
 {

@@ -30,7 +30,6 @@ public class Startup
             options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
         
         ConfigureIdentity(services);
-
     }
 
     private void ConfigureIdentity(IServiceCollection services)
