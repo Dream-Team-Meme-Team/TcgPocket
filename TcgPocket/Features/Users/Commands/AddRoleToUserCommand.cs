@@ -3,7 +3,6 @@ using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json.Serialization;
 using TcgPocket.Data;
 using TcgPocket.Features.Roles;
 using TcgPocket.Features.Users.Dtos;
@@ -13,9 +12,8 @@ namespace TcgPocket.Features.Users.Commands;
 
 public class AddRoleToUserCommand : IRequest<Response<UserRoleDto>>
 {
-    [JsonIgnore]
     public int Id { get; set; }
-    public string RoleName { get; set; }
+    public RoleDto Role { get; set; }
 }
 
 public class AddRoleToUserCommandHandler : IRequestHandler<AddRoleToUserCommand, Response<UserRoleDto>>
@@ -59,14 +57,14 @@ public class AddRoleToUserCommandHandler : IRequestHandler<AddRoleToUserCommand,
             return Error.AsResponse<UserRoleDto>("User not found", "id");
         }
 
-        var roleExists = await _roleManager.RoleExistsAsync(command.RoleName);
+        var roleExists = await _roleManager.RoleExistsAsync(command.Role.Name);
 
         if (!roleExists)
         {
             return Error.AsResponse<UserRoleDto>("Role does not exist", "roleName");
         }
 
-        var result = await _userManager.AddToRoleAsync(user, command.RoleName);
+        var result = await _userManager.AddToRoleAsync(user, command.Role.Name);
 
         if (!result.Succeeded)
         {

@@ -9,7 +9,7 @@ namespace TcgPocket.Features.Users.Validators
         {
             RuleFor(x => x.Id)
             .GreaterThan(0);
-            RuleFor(x => x.RoleName)
+            RuleFor(x => x.Role.Name)
                 .NotEmpty();
         }
     }

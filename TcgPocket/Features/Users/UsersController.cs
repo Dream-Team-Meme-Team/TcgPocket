@@ -54,9 +54,9 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost("{id:int}/roles")]
-    public async Task<ActionResult<Response<UserRoleDto>>> AddRoleToUser([FromRoute] int id, [FromBody] AddRoleToUserCommand data)
+    public async Task<ActionResult<Response<UserRoleDto>>> AddRoleToUser([FromRoute] int id, [FromBody] RoleDto data)
     {
-        var response = await _mediator.Send(new AddRoleToUserCommand { Id = id, RoleName = data.RoleName });
+        var response = await _mediator.Send(new AddRoleToUserCommand { Id = id, Role = data });
 
         return response.HasErrors
             ? BadRequest(response)
@@ -72,18 +72,12 @@ public class UsersController : ControllerBase
         return response.HasErrors ? BadRequest(response) : Ok(response);
     }
 
-    [HttpPut("{id:int}/password-update", Name = nameof(UpdatePassword))]
+    [HttpPut("/password-update", Name = nameof(UpdatePassword))]
     public async Task<ActionResult<Response<UserGetDto>>> UpdatePassword(
         [FromBody] UpdatePasswordCommand data)
     {
         var response = await _mediator
-            .Send(new UpdatePasswordCommand 
-            { 
-                UserName = data.UserName, 
-                CurrentPassword = data.CurrentPassword, 
-                NewPassword = data.NewPassword, 
-                NewPasswordConfirmation = data.NewPasswordConfirmation 
-            });
+            .Send(data);
 
         return response.HasErrors ? BadRequest(response) : Ok(response);
     }
@@ -97,9 +91,9 @@ public class UsersController : ControllerBase
     }
 
     [HttpDelete("{id:int}/role")]
-    public async Task<ActionResult<Response>> RemoveRoleFromUser([FromRoute] int id, [FromBody] RemoveRoleFromUserCommand data)
+    public async Task<ActionResult<Response>> RemoveRoleFromUser([FromRoute] int id, [FromBody] RoleDto data )
     {
-        var response = await _mediator.Send(new RemoveRoleFromUserCommand { UserId = id, RoleName = data.RoleName });
+        var response = await _mediator.Send(new RemoveRoleFromUserCommand { UserId = id, Role = data });
 
         return response.HasErrors ? BadRequest(response) : Ok(response);
     }

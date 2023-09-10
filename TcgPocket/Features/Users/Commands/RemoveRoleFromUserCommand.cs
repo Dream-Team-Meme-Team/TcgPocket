@@ -1,5 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using AutoMapper;
+﻿using AutoMapper;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -11,9 +10,8 @@ namespace TcgPocket.Features.Users.Commands;
 
 public class RemoveRoleFromUserCommand : IRequest<Response>
 {
-    [JsonIgnore]
     public int UserId { get; set; }
-    public string RoleName { get; set; }
+    public RoleDto Role { get; set; }
 }
 
 public class RemoveRoleFromUserCommandHandler : IRequestHandler<RemoveRoleFromUserCommand, Response>
@@ -53,21 +51,21 @@ public class RemoveRoleFromUserCommandHandler : IRequestHandler<RemoveRoleFromUs
             return Error.AsResponse("User not found", "id");
         }
 
-        var roleExists = await _roleManager.RoleExistsAsync(command.RoleName);
+        var roleExists = await _roleManager.RoleExistsAsync(command.Role.Name);
 
         if (!roleExists)
         {
             return Error.AsResponse("Role does not exist", "roleName");
         }
 
-        var userInRole = await _userManager.IsInRoleAsync(user, command.RoleName);
+        var userInRole = await _userManager.IsInRoleAsync(user, command.Role.Name);
 
         if (!userInRole)
         {
             return Error.AsResponse("Role does not exist on user", "roleName, userId");
         }
 
-        var result = await _userManager.RemoveFromRoleAsync(user, command.RoleName);
+        var result = await _userManager.RemoveFromRoleAsync(user, command.Role.Name);
 
         if (!result.Succeeded)
         {

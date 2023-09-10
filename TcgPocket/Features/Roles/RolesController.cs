@@ -44,9 +44,9 @@ public class RolesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Response<RoleGetDto>>> CreateRole([FromBody] CreateRoleCommand data)
+    public async Task<ActionResult<Response<RoleGetDto>>> CreateRole([FromBody] RoleDto data)
     {
-        var response = await _mediator.Send(new CreateRoleCommand { Role = data.Role });
+        var response = await _mediator.Send(new CreateRoleCommand { Role = data });
 
         return response.HasErrors
             ? BadRequest(response)

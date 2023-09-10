@@ -7,7 +7,7 @@ public class UserDtoValidator : AbstractValidator<UserDto>
 {
     public UserDtoValidator()
     {
-        var phoneNumberFormat = new Regex("^(\\+\\d{1,2}?)?\\(?\\d{3}\\)?[-]\\d{3}[-]\\d{4}$");
+        var phoneNumberFormat = new Regex("^(\\+\\d{1,2}?)?\\d{10}$");
 
         RuleFor(x => x.UserName)
             .MaximumLength(25)
@@ -18,6 +18,6 @@ public class UserDtoValidator : AbstractValidator<UserDto>
 
         RuleFor(x => x.PhoneNumber)
             .Matches(phoneNumberFormat)
-            .WithMessage("Invalid phone number. Must be in the format: ###-###-####");
+            .WithMessage("Invalid phone number. Must be in the format: ########## May include '+#' for Country Code");
     }
 }

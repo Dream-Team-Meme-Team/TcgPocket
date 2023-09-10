@@ -14,6 +14,7 @@ public class UpdatePasswordRequestValidator : AbstractValidator<UpdatePasswordCo
             .NotEmpty();
 
         RuleFor(x => x.NewPassword)
+            .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .Equal(x => x.NewPasswordConfirmation)
             .WithMessage("New Password and New Password Confirmation do not match.");
