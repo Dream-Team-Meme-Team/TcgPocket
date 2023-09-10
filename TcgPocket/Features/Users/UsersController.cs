@@ -9,7 +9,7 @@ using TcgPocket.Shared;
 namespace TcgPocket.Features.Users;
 
 [ApiController]
-[Route("/users")]
+[Route("/api/users")]
 public class UsersController : ControllerBase
 {
     private readonly IMediator _mediator;

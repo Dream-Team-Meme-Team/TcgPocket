@@ -9,7 +9,7 @@ using TcgPocket.Shared;
 namespace TcgPocket.Features.Roles;
 
 [ApiController]
-[Route("/roles")]
+[Route("/api/roles")]
 public class RolesController : ControllerBase
 {
     private readonly IMediator _mediator;
