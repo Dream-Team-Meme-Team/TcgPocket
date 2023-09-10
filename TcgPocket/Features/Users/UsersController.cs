@@ -72,7 +72,7 @@ public class UsersController : ControllerBase
         return response.HasErrors ? BadRequest(response) : Ok(response);
     }
 
-    [HttpPut("/password-update", Name = nameof(UpdatePassword))]
+    [HttpPut("password-update", Name = nameof(UpdatePassword))]
     public async Task<ActionResult<Response<UserGetDto>>> UpdatePassword(
         [FromBody] UpdatePasswordCommand data)
     {
