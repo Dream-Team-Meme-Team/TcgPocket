@@ -1,9 +1,11 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { Games } from '../constants/fakeData/inventoryData';
+import { GameDTO } from '../models/Game';
+import { DataState } from './dataSlice';
+import { GameProperty } from '../models/GameProperty';
 
 export interface InventoryState {
     /** the type will need to change */
-    appliedFilters: Games[];
+    appliedFilters: GameDTO[];
     otherProperty: string;
 }
 
@@ -32,13 +34,26 @@ export const inventorySlice = createSlice({
                 state.appliedFilters.push(payload);
             }
         },
+        toggleAllFiltersOnInventory(
+            state,
+            { payload }: PayloadAction<GameProperty[]>
+        ) {
+            if (state.appliedFilters.length === 0) {
+                payload.forEach((propery) => {
+                    state.appliedFilters.push(propery);
+                });
+            } else state.appliedFilters = [];
+        },
         removeAllFiltersOnInventory(state) {
             state.appliedFilters = [];
         },
     },
 });
 
-export const { toggleAppliedFilterOnInventory, removeAllFiltersOnInventory } =
-    inventorySlice.actions;
+export const {
+    toggleAppliedFilterOnInventory,
+    toggleAllFiltersOnInventory,
+    removeAllFiltersOnInventory,
+} = inventorySlice.actions;
 
 export default inventorySlice.reducer;

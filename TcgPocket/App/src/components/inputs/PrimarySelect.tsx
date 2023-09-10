@@ -5,6 +5,7 @@ type PrimarySelectProps = SelectProps & InputHTMLAttributes<HTMLInputElement>;
 
 const selectStyling = (theme: MantineTheme): CSSObject => ({
     input: {
+        backgroundColor: 'white',
         borderColor: theme.colors.complimentaryColors[0],
         borderWidth: 2,
 
@@ -17,7 +18,7 @@ const selectStyling = (theme: MantineTheme): CSSObject => ({
     },
 });
 
-export function PrimartSelect({
+export function PrimarySelect({
     children,
     sx,
     ...props

@@ -2,7 +2,7 @@ import { MantineTheme, createStyles, Text } from '@mantine/core';
 import { defaultGap, defaultPadding } from '../../../constants/theme';
 import { useSelector } from 'react-redux';
 import { AppState } from '../../../store/configureStore';
-import { FilterBadge } from '../../../components/filterSelector/modules/FilterBadge';
+import { FilterBadge } from '../../../components/badges/FilterBadge';
 
 export function InventoryHeader(): React.ReactElement {
     const { classes } = useInventoryHeaderStyles();

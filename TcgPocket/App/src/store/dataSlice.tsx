@@ -1,12 +1,10 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import {
-    GameProperty,
-    Games,
-    fakeCardTypes,
-    fakeGames,
-    fakeRarities,
-    fakeSets,
-} from '../constants/fakeData/inventoryData';
+import { fakeGames } from '../constants/fakeData/fakeGames';
+import { GameProperty } from '../models/GameProperty';
+import { GameDTO } from '../models/Game';
+import { fakeCardTypes } from '../constants/fakeData/fakeCardTypes';
+import { fakeRarities } from '../constants/fakeData/fakeRarities';
+import { fakeSets } from '../constants/fakeData/fakeSets';
 
 /**
  *
@@ -17,7 +15,7 @@ import {
  */
 
 export interface DataState {
-    games: Games[];
+    games: GameDTO[];
     cardTypes: GameProperty[];
     sets: GameProperty[];
     rarities: GameProperty[];

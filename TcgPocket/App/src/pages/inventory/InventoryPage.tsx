@@ -1,17 +1,43 @@
 import { createStyles } from '@mantine/core';
-import { FilterSelector } from '../../components/filterSelector/FilterSelector';
-import { InventoryHeader } from './modules/InventoryHeader';
+import { FilterSideMenu } from '../../components/FilterSideMenu/FilterSideMenu';
 import { DisplayCards } from './modules/DisplayCards';
+import { useSelector } from 'react-redux';
+import { AppState, dispatch } from '../../store/configureStore';
+import {
+    toggleAllFiltersOnInventory,
+    toggleAppliedFilterOnInventory,
+} from '../../store/inventorySlice';
+import { GameDTO } from '../../models/Game';
+import { GameProperty } from '../../models/GameProperty';
 
 export function InventoryPage(): React.ReactElement {
-    const { classes } = useInventoryStyles();
+    const { classes } = useStyles();
+
+    const $appliedFilters = useSelector(
+        (state: AppState) => state.inventory.appliedFilters
+    );
+
+    const handleTogglingFilter = (option: GameDTO) => {
+        dispatch(toggleAppliedFilterOnInventory(option));
+    };
+
+    const handleSelectAll = (filterOptions: GameProperty[]) => {
+        void dispatch(toggleAllFiltersOnInventory(filterOptions));
+    };
+
+    const handleRemoveFilter = (filter: GameDTO) => {
+        dispatch(toggleAppliedFilterOnInventory(filter));
+    };
 
     return (
         <div className={classes.pageContainer}>
-            <InventoryHeader />
-
             <div className={classes.filterAndCardContainer}>
-                <FilterSelector slice={'inventorySlice'} />
+                <FilterSideMenu
+                    appliedFilters={$appliedFilters}
+                    handleTogglingFilter={handleTogglingFilter}
+                    handleSelectAllFilters={handleSelectAll}
+                    handleRemoveFilter={handleRemoveFilter}
+                />
 
                 <DisplayCards />
             </div>
@@ -19,7 +45,7 @@ export function InventoryPage(): React.ReactElement {
     );
 }
 
-const useInventoryStyles = createStyles(() => ({
+const useStyles = createStyles(() => ({
     pageContainer: {
         display: 'grid',
         gridTemplateRows: 'auto auto',
@@ -27,6 +53,6 @@ const useInventoryStyles = createStyles(() => ({
 
     filterAndCardContainer: {
         display: 'grid',
-        gridTemplateColumns: '20rem auto',
+        gridTemplateColumns: '15rem auto',
     },
 }));

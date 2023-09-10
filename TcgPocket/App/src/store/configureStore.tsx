@@ -2,7 +2,7 @@ import { Dispatch, configureStore } from '@reduxjs/toolkit';
 import dataSlice from './dataSlice';
 import deckBuilderSlice from './deckBuilderSlice';
 import inventorySlice from './inventorySlice';
-import { useDispatch } from 'react-redux';
+import thunkMiddleware from 'redux-thunk';
 
 export const store = configureStore({
     reducer: {
@@ -10,9 +10,9 @@ export const store = configureStore({
         inventory: inventorySlice,
         deckBuilder: deckBuilderSlice,
     },
+    middleware: [thunkMiddleware],
 });
 
 export type AppState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
 
 export const dispatch: Dispatch = store.dispatch;
