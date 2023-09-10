@@ -1,9 +1,7 @@
 ﻿using System.Reflection;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
 using TcgPocket.Data;
-using TcgPocket.Shared;
 
 namespace TcgPocket;
 
@@ -25,6 +23,7 @@ public class Startup
         services.AddControllers();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
+        services.AddCors();
         services.AddDbContext<DataContext>(options =>
             options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
     }

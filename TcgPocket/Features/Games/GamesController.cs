@@ -7,7 +7,7 @@ using TcgPocket.Shared;
 namespace TcgPocket.Features.Games;
 
 [ApiController]
-[Route("/games")]
+[Route("/api/games")]
 public class GamesController : ControllerBase
 {
     private readonly IMediator _mediator;
