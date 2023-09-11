@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using ValidationFailure = FluentValidation.Results.ValidationFailure;
 
 namespace TcgPocket.Shared;
@@ -26,5 +27,9 @@ public class ErrorMapper : Profile
         CreateMap<ValidationFailure, Error>()
             .ForMember(dest => dest.Property, opts => opts.MapFrom(src => src.PropertyName))
             .ForMember(dest => dest.Message, opts => opts.MapFrom(src => src.ErrorMessage));
+        
+        CreateMap<IdentityError, Error>()
+            .ForMember(dest => dest.Property, opts => opts.MapFrom(src => src.Code))
+            .ForMember(dest => dest.Message, opts => opts.MapFrom(src => src.Description));
     }
 }
