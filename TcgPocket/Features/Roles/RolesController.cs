@@ -20,7 +20,7 @@ public class RolesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<Response<List<Role>>>> GetAllRoles()
+    public async Task<ActionResult<Response<List<RoleGetDto>>>> GetAllRoles()
     {
         var response = await _mediator.Send(new GetAllRolesQuery());
 
@@ -28,7 +28,7 @@ public class RolesController : ControllerBase
     }
 
     [HttpGet("{id:int}", Name = nameof(GetRoleById))]
-    public async Task<ActionResult<Response<Role>>> GetRoleById([FromRoute] int id)
+    public async Task<ActionResult<Response<RoleGetDto>>> GetRoleById([FromRoute] int id)
     {
         var response = await _mediator.Send(new GetRoleByIdQuery { Id = id });
 
@@ -54,7 +54,7 @@ public class RolesController : ControllerBase
     }
 
     [HttpPut("{id:int}")]
-    public async Task<ActionResult<Response<Role>>> UpdateRole([FromRoute] int id,
+    public async Task<ActionResult<Response<RoleGetDto>>> UpdateRole([FromRoute] int id,
         [FromBody] RoleDto data)
     {
         var response = await _mediator.Send(new UpdateRoleCommand { Id = id, Role = data });

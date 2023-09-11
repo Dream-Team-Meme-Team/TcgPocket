@@ -7,11 +7,11 @@ using TcgPocket.Shared;
 
 namespace TcgPocket.Features.Roles.Queries;
 
-public class GetAllRolesQuery : IRequest<Response<List<Role>>>
+public class GetAllRolesQuery : IRequest<Response<List<RoleGetDto>>>
 {
 }
 
-public class GetAllRolesQueryHandler : IRequestHandler<GetAllRolesQuery, Response<List<Role>>>
+public class GetAllRolesQueryHandler : IRequestHandler<GetAllRolesQuery, Response<List<RoleGetDto>>>
 {
     private readonly RoleManager<Role> _roleManager;
     private readonly IMapper _mapper;
@@ -23,12 +23,12 @@ public class GetAllRolesQueryHandler : IRequestHandler<GetAllRolesQuery, Respons
         _mapper = mapper;
     }
 
-    public async Task<Response<List<Role>>> Handle(GetAllRolesQuery query, CancellationToken cancellationToken)
+    public async Task<Response<List<RoleGetDto>>> Handle(GetAllRolesQuery query, CancellationToken cancellationToken)
     {
         var roles = await _roleManager.Roles.ToListAsync(cancellationToken);
 
-        if (roles.IsNullOrEmpty()) return Error.AsResponse<List<Role>>("Roles not found");
+        if (roles.IsNullOrEmpty()) return Error.AsResponse<List<RoleGetDto>>("Roles not found");
 
-        return _mapper.Map<List<Role>>(roles).AsResponse();
+        return _mapper.Map<List<RoleGetDto>>(roles).AsResponse();
     }
 }
