@@ -2,17 +2,14 @@
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using System.Text.Json.Serialization;
+using TcgPocket.Features.Users.Dtos;
 using TcgPocket.Shared;
 
 namespace TcgPocket.Features.Users.Commands;
 
 public class UpdatePasswordCommand : IRequest<Response>
 {
-    public string UserName { get; set; }
-    public string CurrentPassword { get; set; }
-    public string NewPassword { get; set; }
-    public string NewPasswordConfirmation { get; set; }
+    public UserPasswordUpdateDto PasswordUpdateDto { get; set; }
 }
 
 public class UpdatePasswordCommandHandler : IRequestHandler<UpdatePasswordCommand, Response>
@@ -38,21 +35,21 @@ public class UpdatePasswordCommandHandler : IRequestHandler<UpdatePasswordComman
             return new Response { Errors = errors };
         }
 
-        var user = _userManager.Users.FirstOrDefault(x => x.UserName == command.UserName);
+        var user = _userManager.Users.FirstOrDefault(x => x.UserName == command.PasswordUpdateDto.UserName);
 
         if (user is null)
         {
             return Error.AsResponse("Username or password is incorrect.");
         }
 
-        var correctPassword = await _userManager.CheckPasswordAsync(user, command.CurrentPassword);
+        var correctPassword = await _userManager.CheckPasswordAsync(user, command.PasswordUpdateDto.CurrentPassword);
 
         if (!correctPassword)
         {
             return Error.AsResponse("Username or password is incorrect.");
         }
 
-        var result = await _userManager.ChangePasswordAsync(user, command.CurrentPassword, command.NewPassword);
+        var result = await _userManager.ChangePasswordAsync(user, command.PasswordUpdateDto.CurrentPassword, command.PasswordUpdateDto.NewPassword);
 
         if (!result.Succeeded)
         {

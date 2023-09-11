@@ -74,10 +74,9 @@ public class UsersController : ControllerBase
 
     [HttpPut("password-update", Name = nameof(UpdatePassword))]
     public async Task<ActionResult<Response<UserGetDto>>> UpdatePassword(
-        [FromBody] UpdatePasswordCommand data)
+        [FromBody] UserPasswordUpdateDto data)
     {
-        var response = await _mediator
-            .Send(data);
+        var response = await _mediator.Send(new UpdatePasswordCommand { PasswordUpdateDto = data });
 
         return response.HasErrors ? BadRequest(response) : Ok(response);
     }
