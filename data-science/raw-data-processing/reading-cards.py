@@ -1,3 +1,7 @@
+####################################
+''' FOR REFERENCE '''
+####################################
+
 import json
 from pokemontcgsdk import Card
 from pokemontcgsdk import RestClient
