@@ -119,7 +119,7 @@ const useStyles = createStyles((theme) => ({
       theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[1]
     }`,
     backgroundColor: theme.white,
-    boxShadow: '0px 0px 50px 25px rgba(90, 150, 255, .5)',
+    boxShadow: `0px 0px 20px ${theme.colors.blue[5]}`,
   },
 
   cardTitle: {
