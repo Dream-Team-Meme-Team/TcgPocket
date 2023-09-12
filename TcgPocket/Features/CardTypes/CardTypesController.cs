@@ -7,7 +7,7 @@ using TcgPocket.Shared;
 namespace TcgPocket.Features.CardTypes;
 
 [ApiController]
-[Route("/card-types")]
+[Route("/api/card-types")]
 public class CardTypesController : ControllerBase
 {
     private readonly IMediator _mediator;
