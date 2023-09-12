@@ -7,7 +7,7 @@ using TcgPocket.Shared;
 namespace TcgPocket.Features.Sets;
 
 [ApiController]
-[Route("/sets")]
+[Route("/api/sets")]
 public class SetsController : ControllerBase
 {
     private readonly IMediator _mediator;
