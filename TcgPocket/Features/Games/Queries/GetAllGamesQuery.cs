@@ -28,7 +28,7 @@ public class GetAllGamesQueryHandler : IRequestHandler<GetAllGamesQuery, Respons
         var games = await _dataContext.Set<Game>()
             .ToListAsync(cancellationToken: cancellationToken);
 
-        if (games.IsNullOrEmpty()) return Error.AsResponse<List<GameGetDto>>("Card Types not found");
+        if (games.IsNullOrEmpty()) return Error.AsResponse<List<GameGetDto>>("Games not found");
 
         return _mapper.Map<List<GameGetDto>>(games).AsResponse();
     }

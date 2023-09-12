@@ -7,7 +7,7 @@ using TcgPocket.Shared;
 namespace TcgPocket.Features.Rarities
 {
     [ApiController]
-    [Route("/rarities")]
+    [Route("/api/rarities")]
     public class RarityController : ControllerBase
     {
         private readonly IMediator _mediator;
