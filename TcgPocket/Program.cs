@@ -19,7 +19,7 @@ app.UseAuthorization();
 app.MapControllers();
 app.UseCors(policyBuilder =>
 {
-    policyBuilder.WithOrigins(builder.Configuration["CorsOrigins"])
+    policyBuilder.WithOrigins(builder.Configuration["CorsOrigins"].Split(","))
         .AllowAnyMethod()
         .AllowAnyHeader();
 });
