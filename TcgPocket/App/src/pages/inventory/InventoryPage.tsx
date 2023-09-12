@@ -1,5 +1,4 @@
 import { createStyles } from '@mantine/core';
-import { FilterSideMenu } from '../../components/FilterSideMenu/FilterSideMenu';
 import { DisplayCards } from './modules/DisplayCards';
 import { useSelector } from 'react-redux';
 import { AppState, dispatch } from '../../store/configureStore';
@@ -9,6 +8,7 @@ import {
 } from '../../store/inventorySlice';
 import { GameDTO } from '../../models/Game';
 import { GameProperty } from '../../models/GameProperty';
+import { FilterSideMenu } from '../../components/filterSideMenu/FilterSideMenu';
 
 export function InventoryPage(): React.ReactElement {
     const { classes } = useStyles();

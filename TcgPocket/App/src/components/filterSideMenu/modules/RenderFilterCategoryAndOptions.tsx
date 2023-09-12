@@ -20,7 +20,7 @@ type RenderFilterOptionsProps = Omit<
     filterOptions: GameProperty[];
 };
 
-export function RenderFilterOptions({
+export function RenderFilterCategoryAndOptions({
     filterName,
     filterOptions,
     appliedFilters,
@@ -48,15 +48,21 @@ export function RenderFilterOptions({
 
     return (
         <div className={classes.renderFilterOptionsContainer}>
-            <div className={classes.filterNameTextContainer}>
-                {!opened ? <IconArrowBadgeDown /> : <IconArrowBadgeUp />}
-                <Text className={classes.filterNameText} onClick={toggle}>
-                    {filterName}
-                    <PrimaryBadge> {numOfAppliedFilters} </PrimaryBadge>
-                </Text>
+            <div className={classes.filterCategoryContainer}>
+                <div
+                    className={classes.filterCategoryNameContainer}
+                    onClick={toggle}
+                >
+                    {opened ? <IconArrowBadgeUp /> : <IconArrowBadgeDown />}
+                    <Text>{filterName}</Text>
+                </div>
+                <PrimaryBadge> {numOfAppliedFilters} </PrimaryBadge>
             </div>
 
-            <Collapse in={opened} className={classes.filterCategoryContainer}>
+            <Collapse
+                in={opened}
+                className={classes.filterCategoryOptionsContainer}
+            >
                 <div className={classes.searchInputContainer}>
                     <PrimaryInput
                         className={classes.searchInput}
@@ -67,13 +73,19 @@ export function RenderFilterOptions({
                     />
                 </div>
 
-                <div className={classes.selectAllContainer}>
-                    <Checkbox
-                        label="Select All"
-                        onChange={() => handleSelectAllFilters(filterOptions)}
-                        checked={appliedFilters.length === filterOptions.length}
-                    />
-                </div>
+                {searchText === '' && (
+                    <div className={classes.selectAllContainer}>
+                        <Checkbox
+                            label="Select All"
+                            onChange={() =>
+                                handleSelectAllFilters(filterOptions)
+                            }
+                            checked={
+                                appliedFilters.length === filterOptions.length
+                            }
+                        />
+                    </div>
+                )}
 
                 <div className={classes.checkBoxContainer}>
                     {filteredFilterOptions.map((option) => (
@@ -97,13 +109,27 @@ const useStyles = createStyles(() => ({
         display: 'grid',
         gridTemplateRows: 'auto auto',
 
-        cursor: 'pointer',
-
         gap: defaultGap,
         paddingLeft: defaultPadding,
     },
 
     filterCategoryContainer: {
+        display: 'grid',
+        gridTemplateColumns: 'auto 50px',
+        alignItems: 'center',
+
+        paddingRight: defaultPadding,
+        paddingTop: defaultPadding,
+    },
+
+    filterCategoryNameContainer: {
+        display: 'flex',
+        fontWeight: 'bold',
+
+        cursor: 'pointer',
+    },
+
+    filterCategoryOptionsContainer: {
         display: 'grid',
 
         paddingBottom: defaultGap,
@@ -128,18 +154,5 @@ const useStyles = createStyles(() => ({
     checkBoxContainer: {
         display: 'grid',
         gap: defaultGap,
-    },
-
-    filterNameTextContainer: {
-        display: 'flex',
-    },
-
-    filterNameText: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-
-        paddingRight: defaultPadding,
-        fontWeight: 'bold',
     },
 }));
