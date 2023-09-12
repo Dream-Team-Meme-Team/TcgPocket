@@ -23,9 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Cards\Commands\" />
-    <Folder Include="Features\Cards\NewFolder\" />
-    <Folder Include="Features\Cards\Queries\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 
