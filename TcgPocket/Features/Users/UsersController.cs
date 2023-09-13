@@ -96,4 +96,20 @@ public class UsersController : ControllerBase
 
         return response.HasErrors ? BadRequest(response) : Ok(response);
     }
+
+    [HttpPost("sign-in")]
+    public async Task<ActionResult<Response<UserGetDto>>> SignInUser(SignInUserDto data)
+    {
+        var response = await _mediator.Send(new SignInUserCommand {Data = data});
+        
+        return response.HasErrors ? BadRequest(response) : Ok(response);
+    }
+    
+    [HttpPost("sign-out")]
+    public async Task<ActionResult<Response>> SignInUser()
+    {
+        var response = await _mediator.Send(new SignOutUserCommand());
+        
+        return response.HasErrors ? BadRequest(response) : Ok(response);
+    }
 }
