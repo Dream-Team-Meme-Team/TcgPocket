@@ -14,18 +14,22 @@ namespace TcgPocket.Features.Cards
             entity.HasOne(x => x.Game)
                 .WithMany(x => x.Cards)
                 .HasForeignKey(x => x.GameId)
+                .OnDelete(DeleteBehavior.ClientCascade)
                 .IsRequired();
             entity.HasOne(x => x.CardType)
                 .WithMany(x => x.Cards)
                 .HasForeignKey(x => x.CardTypeId)
+                .OnDelete(DeleteBehavior.ClientCascade)
                 .IsRequired();
             entity.HasOne(x => x.Rarity)
                 .WithMany(x => x.Cards)
                 .HasForeignKey(x => x.RarityId)
+                .OnDelete(DeleteBehavior.ClientCascade)
                 .IsRequired();
             entity.HasOne(x => x.Set)
                 .WithMany(x => x.Cards)
                 .HasForeignKey(x => x.SetId)
+                .OnDelete(DeleteBehavior.ClientCascade)
                 .IsRequired();
         }
     }
