@@ -25,7 +25,7 @@ namespace TcgPocket.Features.Cards
                 .IsRequired();
             entity.HasOne(x => x.Set)
                 .WithMany(x => x.Cards)
-                .HasForeignKey(x => x.CardTypeId)
+                .HasForeignKey(x => x.SetId)
                 .IsRequired();
         }
     }
