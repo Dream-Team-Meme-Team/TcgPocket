@@ -112,4 +112,12 @@ public class UsersController : ControllerBase
         
         return response.HasErrors ? BadRequest(response) : Ok(response);
     }
+    
+    [HttpGet("signed-in-user")]
+    public async Task<ActionResult<Response<List<UserDto>>>> GetSignedInUser()
+    {
+        var response = await _mediator.Send(new GetSignedInUserQuery());
+
+        return response.HasErrors ? BadRequest(response) : Ok(response);
+    }
 }
