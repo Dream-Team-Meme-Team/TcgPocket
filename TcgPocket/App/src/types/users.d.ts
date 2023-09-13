@@ -13,3 +13,8 @@ export type UserCreateDto = UserDto & { password: string };
 export type UserRoleDto = {
   roles: RoleGetDto[];
 };
+
+export type SignInUserDto = {
+  userName: string;
+  password: string;
+};

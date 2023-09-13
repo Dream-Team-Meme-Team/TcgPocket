@@ -6,12 +6,14 @@ import { store } from './store/configureStore.tsx';
 import { BrowserRouter } from 'react-router-dom';
 import { MantineProvider } from '@mantine/core';
 import { appTheme } from './constants/theme.tsx';
+import { Notifications } from '@mantine/notifications';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter>
       <Provider store={store}>
         <MantineProvider withGlobalStyles withNormalizeCSS theme={appTheme}>
+          <Notifications />
           <App />
         </MantineProvider>
       </Provider>

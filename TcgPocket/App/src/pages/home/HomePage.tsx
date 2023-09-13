@@ -1,9 +1,17 @@
 import { createStyles } from '@mantine/core';
 import { HeroTitle } from './modules/HomePageHero';
 import { FeaturesCards } from './modules/HomePageFeatures';
+import { useAuth } from '../../hooks/use-auth';
 
 export function HomePage(): React.ReactElement {
   const { classes } = useStyles();
+  const auth = useAuth();
+
+  const user = auth.getSignedInUser();
+
+  if (user !== null) {
+    console.log('user: ', user);
+  }
 
   return (
     <div className={classes.gradient}>

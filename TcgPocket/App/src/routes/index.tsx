@@ -43,6 +43,8 @@ export const apiRoutes = {
   users: {
     base: `${Env.viteApiBaseUrl}/api/users`,
     updatePassword: `${Env.viteApiBaseUrl}/api/users/password-update`,
+    signIn: `${Env.viteApiBaseUrl}/api/users/sign-in`,
+    signOut: `${Env.viteApiBaseUrl}/api/users/sign-out`,
     id: {
       base: `${Env.viteApiBaseUrl}/api/users/:id`,
       role: `${Env.viteApiBaseUrl}/api/users/:id/role`,
