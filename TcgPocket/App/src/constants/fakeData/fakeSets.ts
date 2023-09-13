@@ -1,6 +1,6 @@
-import { GameProperty } from '../../models/GameProperty';
+import { SetGetDto } from '../../types/sets';
 
-export const fakeSets: GameProperty[] = [
+export const fakeSets: SetGetDto[] = [
     {
         id: 7,
         name: 'XY-Roaring Skies',

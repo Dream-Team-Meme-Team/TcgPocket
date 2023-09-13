@@ -1,6 +1,6 @@
-import { GameProperty } from '../../models/GameProperty';
+import { CardTypeGetDto } from '../../types/card-types';
 
-export const fakeCardTypes: GameProperty[] = [
+export const fakeCardTypes: CardTypeGetDto[] = [
     {
         id: 4,
         name: 'Fairy',

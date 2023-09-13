@@ -1,11 +1,9 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { GameDTO } from '../models/Game';
-import { DataState } from './dataSlice';
-import { GameProperty } from '../models/GameProperty';
+import { GameGetDto } from '../types/games';
 
 export interface InventoryState {
     /** the type will need to change */
-    appliedFilters: GameDTO[];
+    appliedFilters: GameGetDto[];
     otherProperty: string;
 }
 
@@ -36,7 +34,7 @@ export const inventorySlice = createSlice({
         },
         toggleAllFiltersOnInventory(
             state,
-            { payload }: PayloadAction<GameProperty[]>
+            { payload }: PayloadAction<InventoryState['appliedFilters']>
         ) {
             if (state.appliedFilters.length === 0) {
                 payload.forEach((propery) => {

@@ -9,15 +9,15 @@ import {
     IconArrowBadgeUp,
     IconSearch,
 } from '@tabler/icons-react';
-import { GameProperty } from '../../../models/GameProperty';
 import { FilterSideMenuProps } from '../FilterSideMenu';
+import { GameGetDto } from '../../../types/games';
 
 type RenderFilterOptionsProps = Omit<
     FilterSideMenuProps,
     'handleRemoveFilter'
 > & {
     filterName: string;
-    filterOptions: GameProperty[];
+    filterOptions: GameGetDto[];
 };
 
 export function RenderFilterCategoryAndOptions({

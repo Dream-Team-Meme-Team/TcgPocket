@@ -1,6 +1,6 @@
-import { GameProperty } from '../../models/GameProperty';
+import { RarityGetDto } from '../../types/rarities';
 
-export const fakeRarities: GameProperty[] = [
+export const fakeRarities: RarityGetDto[] = [
     {
         id: 10,
         name: 'Common',

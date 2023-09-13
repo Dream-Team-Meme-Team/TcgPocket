@@ -1,6 +1,6 @@
-import { GameDTO } from './../../models/Game';
+import { GameGetDto } from '../../types/games';
 
-export const fakeGames: GameDTO[] = [
+export const fakeGames: GameGetDto[] = [
     {
         id: 1,
         name: 'Pokemon',

@@ -1,4 +1,4 @@
-import { Modal, ModalProps } from '@mantine/core';
+import { Modal, ModalProps, ScrollArea } from '@mantine/core';
 import { ModalRootProps } from '@mantine/core/lib/Modal/ModalRoot/ModalRoot';
 
 type PrimaryModalProps = ModalProps & ModalRootProps;
@@ -8,19 +8,20 @@ export function PrimaryModal({
     sx,
     ...props
 }: PrimaryModalProps): React.ReactElement {
-  return (
-    <Modal
-      centered
-      {...props}
-      overlayProps={{ opacity: 0.55, blur: 3 }}
-      transitionProps={{
-        transition: 'fade',
-        duration: 150,
-        timingFunction: 'linear',
-      }}
-      sx={sx}
-    >
-      {children}
-    </Modal>
-  );
+    return (
+        <Modal
+            centered
+            {...props}
+            overlayProps={{ opacity: 0.55, blur: 3 }}
+            transitionProps={{
+                transition: 'fade',
+                duration: 150,
+                timingFunction: 'linear',
+            }}
+            scrollAreaComponent={ScrollArea.Autosize}
+            sx={sx}
+        >
+            {children}
+        </Modal>
+    );
 }

@@ -6,9 +6,8 @@ import {
     toggleAllFiltersOnInventory,
     toggleAppliedFilterOnInventory,
 } from '../../store/inventorySlice';
-import { GameDTO } from '../../models/Game';
-import { GameProperty } from '../../models/GameProperty';
 import { FilterSideMenu } from '../../components/filterSideMenu/FilterSideMenu';
+import { GameGetDto } from '../../types/games';
 
 export function InventoryPage(): React.ReactElement {
     const { classes } = useStyles();
@@ -17,15 +16,15 @@ export function InventoryPage(): React.ReactElement {
         (state: AppState) => state.inventory.appliedFilters
     );
 
-    const handleTogglingFilter = (option: GameDTO) => {
+    const handleTogglingFilter = (option: GameGetDto) => {
         dispatch(toggleAppliedFilterOnInventory(option));
     };
 
-    const handleSelectAll = (filterOptions: GameProperty[]) => {
+    const handleSelectAll = (filterOptions: GameGetDto[]) => {
         void dispatch(toggleAllFiltersOnInventory(filterOptions));
     };
 
-    const handleRemoveFilter = (filter: GameDTO) => {
+    const handleRemoveFilter = (filter: GameGetDto) => {
         dispatch(toggleAppliedFilterOnInventory(filter));
     };
 

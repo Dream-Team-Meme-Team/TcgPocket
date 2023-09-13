@@ -4,17 +4,17 @@ import { MantineTheme, createStyles } from '@mantine/core';
 import { defaultGap, defaultPadding } from '../../constants/theme';
 import { PrimarySelect } from '../inputs/PrimarySelect';
 import { removeAllFiltersOnInventory } from '../../store/inventorySlice';
-import { useState } from 'react';
-import { GameDTO } from '../../models/Game';
-import { GameProperty } from '../../models/GameProperty';
+import { useEffect, useState } from 'react';
 import { ToggleShowAppliedFilters } from './modules/ToggleShowAppliedFilters';
 import { FilterCategories } from './modules/FilterCatergories';
+import { GameGetDto } from '../../types/games';
+import { getGames } from '../../store/dataSlice';
 
 export type FilterSideMenuProps = {
-    appliedFilters: GameDTO[];
-    handleTogglingFilter: (arg: GameDTO) => void;
-    handleSelectAllFilters: (arg: GameProperty[]) => void;
-    handleRemoveFilter: (arg: GameDTO) => void;
+    appliedFilters: GameGetDto[];
+    handleTogglingFilter: (arg: GameGetDto) => void;
+    handleSelectAllFilters: (arg: GameGetDto[]) => void;
+    handleRemoveFilter: (arg: GameGetDto) => void;
 };
 
 export function FilterSideMenu({
@@ -27,7 +27,7 @@ export function FilterSideMenu({
 
     const $games = useSelector((state: AppState) => state.data.games);
 
-    const [selectedGame, setSelectedGame] = useState<GameDTO>({
+    const [selectedGame, setSelectedGame] = useState<GameGetDto>({
         id: 0,
         name: '',
     });
@@ -42,6 +42,13 @@ export function FilterSideMenu({
             setSelectedGame({ id: 0, name: '' });
         } else setSelectedGame(foundGame);
     };
+
+    useEffect(() => {
+        // this is WRONG and im working on it
+        getGames();
+    }, []);
+
+    console.log($games);
 
     return (
         <div className={classes.filterSideMenuContainer}>

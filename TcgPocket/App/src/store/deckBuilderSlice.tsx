@@ -1,8 +1,8 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { Games } from '../constants/fakeData/inventoryData';
+import { GameGetDto } from '../types/games';
 
 export interface DeckBuilderState {
-    appliedFilters: Games[];
+    appliedFilters: GameGetDto[];
 }
 
 const INITIAL_STATE: DeckBuilderState = {

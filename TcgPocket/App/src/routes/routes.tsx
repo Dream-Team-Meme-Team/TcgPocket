@@ -4,6 +4,7 @@ import { ErrorPage } from '../pages/error/ErrorPage';
 import { NotFoundPage } from '../pages/notFound/NotFoundPage';
 import { HomePage } from '../pages/home/HomePage';
 import { InventoryPage } from '../pages/inventory/InventoryPage';
+import { DeckPage } from '../pages/deck/DeckPage';
 
 export const AppRoutes = () => {
     return (
@@ -16,6 +17,11 @@ export const AppRoutes = () => {
             <Route
                 path={routes.inventory}
                 element={<InventoryPage />}
+                errorElement={<ErrorPage />}
+            />
+            <Route
+                path={routes.deck}
+                element={<DeckPage />}
                 errorElement={<ErrorPage />}
             />
             <Route path="*" element={<NotFoundPage />} />
