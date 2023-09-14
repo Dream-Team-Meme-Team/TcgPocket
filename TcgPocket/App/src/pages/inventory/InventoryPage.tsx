@@ -8,6 +8,7 @@ import {
 } from '../../store/inventorySlice';
 import { FilterSideMenu } from '../../components/filterSideMenu/FilterSideMenu';
 import { GameGetDto } from '../../types/games';
+import React from 'react';
 
 export function InventoryPage(): React.ReactElement {
     const { classes } = useStyles();

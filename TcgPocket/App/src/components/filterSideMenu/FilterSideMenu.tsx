@@ -9,6 +9,7 @@ import { ToggleShowAppliedFilters } from './modules/ToggleShowAppliedFilters';
 import { FilterCategories } from './modules/FilterCatergories';
 import { GameGetDto } from '../../types/games';
 import { getGames } from '../../store/dataSlice';
+import React from 'react';
 
 export type FilterSideMenuProps = {
     appliedFilters: GameGetDto[];
