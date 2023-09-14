@@ -28,7 +28,6 @@ public class Startup
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
         services.AddCors();
-        services.AddScoped<CurrentUserManager>();
         services.AddDbContext<DataContext>(options =>
             options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
         

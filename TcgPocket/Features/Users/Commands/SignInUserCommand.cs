@@ -37,7 +37,7 @@ public class SignInUserCommandHandler : IRequestHandler<SignInUserCommand, Respo
         
         if (user is null) return Error.AsResponse<UserGetDto>("Username or password is incorrect");
 
-        var result = await _signInManager.PasswordSignInAsync(user, request.Data.Password, true, true);
+        var result = await _signInManager.PasswordSignInAsync(user, request.Data.Password, true, false);
         
         if (!result.Succeeded) return Error.AsResponse<UserGetDto>("Username or password is incorrect");
         if (result.IsNotAllowed)  return Error.AsResponse<UserGetDto>("User is not allowed to sign in");
