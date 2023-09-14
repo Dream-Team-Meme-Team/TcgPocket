@@ -19,11 +19,6 @@ public class UserGetDto : UserDto
     public int Id { get; set; }
 }
 
-public class UserCreateDto: UserDto
-{
-    public string Password { get; set; }
-}
-
 public class UserDto
 {
     public string UserName { get; set; }

@@ -9,5 +9,9 @@ public class CreateUserRequestValidator : AbstractValidator<CreateUserCommand>
     {
         RuleFor(x => x.User)
             .SetValidator(baseValidator);
+
+        RuleFor(x => x.User.Password)
+            .Must((com, prop) => com.User.ConfirmPassword == prop)
+            .WithMessage("Passwords do not match");
     }
 }

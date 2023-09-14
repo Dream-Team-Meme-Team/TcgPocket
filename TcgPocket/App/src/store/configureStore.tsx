@@ -1,18 +1,15 @@
-import { Dispatch, configureStore } from '@reduxjs/toolkit';
-import dataSlice from './dataSlice';
-import deckBuilderSlice from './deckBuilderSlice';
-import inventorySlice from './inventorySlice';
-import thunkMiddleware from 'redux-thunk';
+import { configureStore } from '@reduxjs/toolkit';
+import { userSlice } from './userSlice';
+import { TypedUseSelectorHook, useSelector } from 'react-redux';
 
-export const store = configureStore({
-    reducer: {
-        data: dataSlice,
-        inventory: inventorySlice,
-        deckBuilder: deckBuilderSlice,
-    },
-    middleware: [thunkMiddleware],
+export const appStore = configureStore({
+  reducer: {
+    user: userSlice.reducer,
+  },
 });
 
-export type AppState = ReturnType<typeof store.getState>;
+export type AppState = ReturnType<typeof appStore.getState>;
+export type AppDispatch = typeof appStore.dispatch;
 
-export const dispatch: Dispatch = store.dispatch;
+export const dispatch = appStore.dispatch;
+export const useAppSelector: TypedUseSelectorHook<AppState> = useSelector;
