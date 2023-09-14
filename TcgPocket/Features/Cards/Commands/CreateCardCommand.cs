@@ -9,30 +9,29 @@ using TcgPocket.Features.Rarities;
 using TcgPocket.Features.Sets;
 using TcgPocket.Shared;
 
-namespace TcgPocket.Features.Cards.TestFolder
+namespace TcgPocket.Features.Cards.Commands
 {
-    public class UpdateCardCommand : IRequest<Response<CardGetDto>>
+    public class CreateCardCommand : IRequest<Response<CardGetDto>>
     {
-        public int Id { get; set; }
         public CardDto CardDto { get; set; }
     }
 
-    public class UpdateCardCommandHandler : IRequestHandler<UpdateCardCommand, Response<CardGetDto>>
+    public class CreateCardCommandHandler : IRequestHandler<CreateCardCommand, Response<CardGetDto>>
     {
         private readonly DataContext _dataContext;
         private readonly IMapper _mapper;
-        private readonly IValidator<UpdateCardCommand> _validator;
+        private readonly IValidator<CardDto> _validator;
 
-        public UpdateCardCommandHandler(DataContext dataContext, IMapper mapper, IValidator<UpdateCardCommand> validator)
+        public CreateCardCommandHandler(DataContext dataContext, IMapper mapper, IValidator<CardDto> validator)
         {
             _dataContext = dataContext;
             _mapper = mapper;
             _validator = validator;
         }
 
-        public async Task<Response<CardGetDto>> Handle(UpdateCardCommand command, CancellationToken cancellationToken)
+        public async Task<Response<CardGetDto>> Handle(CreateCardCommand command, CancellationToken cancellationToken)
         {
-            var result = await _validator.ValidateAsync(command);
+            var result = await _validator.ValidateAsync(command.CardDto);
             var errors = new List<Error>();
 
             if (!result.IsValid)
@@ -60,11 +59,8 @@ namespace TcgPocket.Features.Cards.TestFolder
 
             if (errors.Any()) return new Response<CardGetDto> { Errors = errors };
 
-            var card = await _dataContext.Set<Card>().FirstOrDefaultAsync(x => x.Id == command.Id);
-
-            if (card is null) return Error.AsResponse<CardGetDto>("Card not found", "id");
-
-            _mapper.Map(command.CardDto, card);
+            var card = _mapper.Map<Card>(command.CardDto);
+            await _dataContext.Set<Card>().AddAsync(card);
             await _dataContext.SaveChangesAsync();
 
             return _mapper.Map<CardGetDto>(card).AsResponse();

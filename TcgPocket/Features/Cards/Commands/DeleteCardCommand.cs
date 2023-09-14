@@ -6,7 +6,7 @@ using TcgPocket.Data;
 using TcgPocket.Shared;
 using TcgPocket.Shared.Interfaces;
 
-namespace TcgPocket.Features.Cards.TestFolder
+namespace TcgPocket.Features.Cards.Commands
 {
     public class DeleteCardCommand : IIdentifiable, IRequest<Response>
     {

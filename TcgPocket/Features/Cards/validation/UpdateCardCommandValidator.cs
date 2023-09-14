@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using TcgPocket.Features.Cards.TestFolder;
+using TcgPocket.Features.Cards.Commands;
 using TcgPocket.Shared.Interfaces;
 
 namespace TcgPocket.Features.Cards.Validation
