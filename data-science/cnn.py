@@ -22,14 +22,23 @@ class CardClassifier(torch.nn.module):
     def __init__(self):
         super(CardClassifier, self).__init__()
 
-        self.conv1 = nn.Conv3d()        # activ
-        self.pool1 = nn.MaxPool3d()
+        self.layer1 = nn.Sequential(
+            nn.Conv3d(),
+            F.relu(),
+            nn.MaxPool3d()
+        )
+        
+        self.layer2 = nn.Sequential(
+            nn.conv3d(),
+            F.relu(),
+            nn.MaxPool3d(),
+            nn.Dropout3d()
+        )
 
-        self.conv2 = nn.Conv3d()        # activ
-        self.pool2 = nn.MaxPool3d()
-
-        self.dropout = nn.Dropout3d()       # flatten
-        self.fc = nn.Linear()       # softmax >> output
+        self.layer3 = nn.Sequential(
+            nn.Flatten(),
+            nn.Linear()     # softmax >> output
+        )
 
     #  def forward(self, x): 
 
