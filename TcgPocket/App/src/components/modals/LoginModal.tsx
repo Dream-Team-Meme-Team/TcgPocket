@@ -49,8 +49,8 @@ export function LoginModal({
 
   return (
     <PrimaryModal opened={openModal} onClose={handleClose} title="Login">
-      <div className={classes.bodyContainer}>
-        <form onSubmit={form.onSubmit(handleLogin)}>
+      <form onSubmit={form.onSubmit(handleLogin)}>
+        <div className={classes.bodyContainer}>
           <PrimaryTextInput
             withAsterisk
             label="Username"
@@ -70,8 +70,8 @@ export function LoginModal({
               Login
             </PrimaryButton>
           </div>
-        </form>
-      </div>
+        </div>
+      </form>
     </PrimaryModal>
   );
 }

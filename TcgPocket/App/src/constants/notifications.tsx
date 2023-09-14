@@ -5,4 +5,8 @@ export const tcgNotifications = {
     title: 'Sign-in successful!',
     autoClose: 5000,
   } as NotificationProps,
+  register: {
+    title: 'User registered!',
+    autoClose: 5000,
+  } as NotificationProps,
 };
