@@ -35,7 +35,7 @@ public class UsersController : ControllerBase
         return response.HasErrors ? NotFound(response) : Ok(response);
     }
 
-    [HttpGet("{id:int}/roles", Name = nameof(GetAllRolesByUserId))]
+    [HttpGet("roles/{id:int}", Name = nameof(GetAllRolesByUserId))]
     public async Task<ActionResult<Response<List<RoleGetDto>>>> GetAllRolesByUserId([FromRoute] int id)
     {
         var response = await _mediator.Send(new GetAllRolesByUserIdQuery { UserId = id });
@@ -53,7 +53,7 @@ public class UsersController : ControllerBase
             : CreatedAtRoute(nameof(GetUserById), new { response.Data.Id }, response);
     }
 
-    [HttpPost("{id:int}/roles")]
+    [HttpPost("roles/{id:int}")]
     public async Task<ActionResult<Response<UserRoleDto>>> AddRoleToUser([FromRoute] int id, [FromBody] RoleDto data)
     {
         var response = await _mediator.Send(new AddRoleToUserCommand { Id = id, Role = data });
@@ -89,7 +89,7 @@ public class UsersController : ControllerBase
         return response.HasErrors ? BadRequest(response) : Ok(response);
     }
 
-    [HttpDelete("{id:int}/role")]
+    [HttpDelete("role/{id:int}")]
     public async Task<ActionResult<Response>> RemoveRoleFromUser([FromRoute] int id, [FromBody] RoleDto data )
     {
         var response = await _mediator.Send(new RemoveRoleFromUserCommand { UserId = id, Role = data });

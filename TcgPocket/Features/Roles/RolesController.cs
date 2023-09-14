@@ -35,7 +35,7 @@ public class RolesController : ControllerBase
         return response.HasErrors ? NotFound(response) : Ok(response);
     }
 
-    [HttpGet("{id:int}/users", Name = nameof(GetAllUsersByRoleId))]
+    [HttpGet("users/{id:int}", Name = nameof(GetAllUsersByRoleId))]
     public async Task<ActionResult<Response<UserGetDto>>> GetAllUsersByRoleId([FromRoute] int id)
     {
         var response = await _mediator.Send(new GetAllUsersByRoleIdQuery { Id = id });

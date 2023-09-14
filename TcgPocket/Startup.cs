@@ -65,6 +65,7 @@ public class Startup
         services.ConfigureApplicationCookie(options =>
         {
             options.Cookie.HttpOnly = true;
+            options.Cookie.SameSite = SameSiteMode.None;
             options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
 
             options.LoginPath = "/Identity/Account/Login";

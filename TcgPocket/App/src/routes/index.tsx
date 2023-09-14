@@ -9,46 +9,23 @@ export const routes = {
 };
 
 export const apiRoutes = {
-  games: {
-    base: `${Env.viteApiBaseUrl}/api/games`,
-    id: `${Env.viteApiBaseUrl}/api/games/:id`,
-  },
-  sets: {
-    base: `${Env.viteApiBaseUrl}/api/sets`,
-    id: `${Env.viteApiBaseUrl}/api/sets/:id`,
-  },
-  rarities: {
-    base: `${Env.viteApiBaseUrl}/api/rarities`,
-    id: `${Env.viteApiBaseUrl}/api/rarities/:id`,
-  },
-  cardTypes: {
-    base: `${Env.viteApiBaseUrl}/api/card-types`,
-    id: `${Env.viteApiBaseUrl}/api/card-types/:id`,
-  },
-  attributes: {
-    base: `${Env.viteApiBaseUrl}/api/attributes`,
-    id: `${Env.viteApiBaseUrl}/api/attributes/:id`,
-  },
-  decks: {
-    base: `${Env.viteApiBaseUrl}/api/decks`,
-    id: `${Env.viteApiBaseUrl}/api/decks/:id`,
-  },
+  games: `${Env.viteApiBaseUrl}/api/games`,
+  sets: `${Env.viteApiBaseUrl}/api/sets`,
+  rarities: `${Env.viteApiBaseUrl}/api/rarities`,
+  cardTypes: `${Env.viteApiBaseUrl}/api/card-types`,
+  attributes: `${Env.viteApiBaseUrl}/api/attributes`,
+  decks: `${Env.viteApiBaseUrl}/api/decks`,
   roles: {
     base: `${Env.viteApiBaseUrl}/api/roles`,
-    id: {
-      base: `${Env.viteApiBaseUrl}/api/roles/:id`,
-      users: `${Env.viteApiBaseUrl}/api/roles/:id/users`,
-    },
+    users: `${Env.viteApiBaseUrl}/api/roles/users`,
   },
   users: {
     base: `${Env.viteApiBaseUrl}/api/users`,
     updatePassword: `${Env.viteApiBaseUrl}/api/users/password-update`,
     signIn: `${Env.viteApiBaseUrl}/api/users/sign-in`,
     signOut: `${Env.viteApiBaseUrl}/api/users/sign-out`,
-    id: {
-      base: `${Env.viteApiBaseUrl}/api/users/:id`,
-      role: `${Env.viteApiBaseUrl}/api/users/:id/role`,
-      roles: `${Env.viteApiBaseUrl}/api/users/:id/roles`,
-    },
+    signedInUser: `${Env.viteApiBaseUrl}/api/users/signed-in-user`,
+    role: `${Env.viteApiBaseUrl}/api/users/role`,
+    roles: `${Env.viteApiBaseUrl}/api/users/roles`,
   },
 };

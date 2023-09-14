@@ -3,11 +3,20 @@ import { apiRoutes } from '../routes';
 import { Response } from '../types/shared';
 import { SignInUserDto, UserGetDto } from '../types/users';
 import axios from 'axios';
+import { assignUser } from '../store/userSlice';
+import { useMemo } from 'react';
+import { useAppDispatch, useAppSelector } from '../store/configureStore';
+
+axios.defaults.withCredentials = true;
 
 export function useAuth() {
   const [value, setValue, removeValue] = useLocalStorage<UserGetDto>({
     key: 'user',
   });
+
+  const userFromContext = useAppSelector((state) => state.user);
+
+  const dispatch = useAppDispatch();
 
   const signIn = async (values: SignInUserDto) => {
     const { data: response } = await axios.post<Response<UserGetDto>>(
@@ -34,9 +43,23 @@ export function useAuth() {
     removeValue();
   };
 
-  const getSignedInUser = () => {
-    return value;
+  const getSignedInUser = async () => {
+    const { data: response } = await axios.get<Response<UserGetDto>>(
+      apiRoutes.users.signedInUser
+    );
+
+    if (response.hasErrors) {
+      dispatch(assignUser(undefined));
+    }
+
+    dispatch(assignUser(response.data));
+    setValue(response.data);
   };
 
-  return { signIn, signOut, getSignedInUser };
+  const signedInUser = useMemo(() => {
+    const user = userFromContext ?? value;
+    return user;
+  }, [userFromContext, value]);
+
+  return { signedInUser, signIn, signOut, getSignedInUser };
 }

@@ -21,7 +21,8 @@ app.UseCors(policyBuilder =>
 {
     policyBuilder.WithOrigins(builder.Configuration["CorsOrigins"].Split(","))
         .AllowAnyMethod()
-        .AllowAnyHeader();
+        .AllowAnyHeader()
+        .AllowCredentials();
 });
 
 app.Run();
