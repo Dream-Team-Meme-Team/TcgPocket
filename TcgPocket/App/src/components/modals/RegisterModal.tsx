@@ -12,6 +12,14 @@ import { tcgNotifications } from '../../constants/notifications';
 import { useMemo } from 'react';
 import { useAsyncFn } from 'react-use';
 
+const initialValues: UserCreateDto = {
+  userName: '',
+  email: '',
+  phoneNumber: '',
+  password: '',
+  confirmPassword: '',
+} as const;
+
 interface RegisterModal {
   openModal: boolean;
   setOpenModal: (arg: boolean) => void;
@@ -25,13 +33,7 @@ export function RegisterModal({
   const { classes } = useLoginOrRegisterStyles();
 
   const form = useForm({
-    initialValues: {
-      userName: '',
-      email: '',
-      phoneNumber: '',
-      password: '',
-      confirmPassword: '',
-    } as UserCreateDto,
+    initialValues: initialValues,
 
     validate: {
       userName: (value) => (value !== '' ? null : 'Invalid Username'),
@@ -41,6 +43,14 @@ export function RegisterModal({
       confirmPassword: (value) => (value !== '' ? null : 'Invalid Password'),
     },
   });
+
+  const [registerState, handleRegister] = useAsyncFn(
+    async (values: UserCreateDto) => {
+      await registerUser(values);
+      notifications.show(tcgNotifications.register);
+      handleClose();
+    }
+  );
 
   const disableRegister = useMemo(
     () =>
@@ -57,14 +67,6 @@ export function RegisterModal({
     setOpenModal(false);
     form.reset();
   };
-
-  const [registerState, handleRegister] = useAsyncFn(
-    async (values: UserCreateDto) => {
-      await registerUser(values);
-      notifications.show(tcgNotifications.register);
-      handleClose();
-    }
-  );
 
   return (
     <PrimaryModal opened={openModal} onClose={handleClose} title="Register">

@@ -12,6 +12,11 @@ import { notifications } from '@mantine/notifications';
 import { tcgNotifications } from '../../constants/notifications';
 import { useAsyncFn } from 'react-use';
 
+const initialValues: SignInUserDto = {
+  userName: '',
+  password: '',
+} as const;
+
 interface LoginModalProps {
   openModal: boolean;
   setOpenModal: (arg: boolean) => void;
@@ -25,10 +30,7 @@ export function LoginModal({
   const auth = useAuth();
 
   const form = useForm({
-    initialValues: {
-      userName: '',
-      password: '',
-    } as SignInUserDto,
+    initialValues: initialValues,
   });
 
   const handleClose = () => {
