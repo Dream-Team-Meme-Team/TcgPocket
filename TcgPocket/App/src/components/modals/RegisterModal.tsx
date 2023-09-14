@@ -5,6 +5,11 @@ import { SecondaryButton } from '../buttons/SecondaryButton';
 import { useForm } from '@mantine/form';
 import { PrimaryTextInput } from '../inputs/PrimaryTextInput';
 import { PasswordInput } from '@mantine/core';
+import { AppState, dispatch } from '../../store/configureStore';
+import { getAllUsers, registerUser } from '../../store/userSlice';
+import { UserCreateDto } from '../../types/users';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 interface RegisterModal {
   openModal: boolean;
@@ -17,18 +22,20 @@ export function RegisterModal({
 }: RegisterModal): React.ReactElement {
   const { classes } = useLoginOrRegisterStyles();
 
+  const $users = useSelector((state: AppState) => state.user.users);
+
   const form = useForm({
     initialValues: {
-      firstName: '',
-      lastName: '',
+      email: '',
+      phoneNumber: '',
       username: '',
       password: '',
       confirmPassword: '',
     },
 
     validate: {
-      firstName: (value) => (value === '' ? null : 'Invalid First Name'),
-      lastName: (value) => (value === '' ? null : 'Invalid Last Name'),
+      email: (value) => (value === '' ? null : 'Invalid Email'),
+      phoneNumber: (value) => (value === '' ? null : 'Invalid Phone Number'),
       username: (value) => (value === '' ? null : 'Invalid Username'),
       password: (value) => (value === '' ? null : 'Invalid Password'),
       confirmPassword: (value) => (value === '' ? null : 'Invalid Password'),
@@ -36,8 +43,8 @@ export function RegisterModal({
   });
 
   const disableRegister =
-    form.isValid('firstName') ||
-    form.isValid('lastName') ||
+    form.isValid('email') ||
+    form.isValid('phoneNumber') ||
     form.isValid('username') ||
     form.isValid('password') ||
     form.isValid('confirmPassword');
@@ -48,9 +55,22 @@ export function RegisterModal({
   };
 
   const handleRegister = () => {
-    console.log('registered');
+    const createUser: UserCreateDto = {
+      userName: form.values.username,
+      email: form.values.email,
+      password: form.values.password,
+      phoneNumber: form.values.phoneNumber,
+    };
+
+    void dispatch(registerUser(createUser));
     handleClose();
   };
+
+  useEffect(() => {
+    void dispatch(getAllUsers());
+  }, []);
+
+  console.log($users);
 
   return (
     <PrimaryModal opened={openModal} onClose={handleClose} title="Register">
@@ -58,13 +78,13 @@ export function RegisterModal({
         <form>
           <PrimaryTextInput
             withAsterisk
-            label="First Name"
-            {...form.getInputProps('firstName')}
+            label="Email"
+            {...form.getInputProps('email')}
           />
           <PrimaryTextInput
             withAsterisk
-            label="Last Name"
-            {...form.getInputProps('lastName')}
+            label="Phone Number"
+            {...form.getInputProps('phoneNumber')}
           />
           <PrimaryTextInput
             withAsterisk

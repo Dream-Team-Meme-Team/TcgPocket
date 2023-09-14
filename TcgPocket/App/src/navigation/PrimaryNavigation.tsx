@@ -7,7 +7,12 @@ import {
   Menu,
   Navbar,
 } from '@mantine/core';
-import { IconLogin, IconRegistered, IconUser } from '@tabler/icons-react';
+import {
+  IconLogin,
+  IconRegistered,
+  IconSettings,
+  IconUser,
+} from '@tabler/icons-react';
 import React from 'react';
 import { routes } from '../routes';
 import { NavButton } from './NavButton';
@@ -15,9 +20,10 @@ import { LoginModal } from '../components/modals/LoginModal';
 import { RegisterModal } from '../components/modals/RegisterModal';
 import { useDisclosure } from '@mantine/hooks';
 import { useNavbarHeight } from '../hooks/use-navbar-height';
+import { useNavigate } from 'react-router-dom';
 
 export function PrimaryNavigation(): React.ReactElement {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const { navbarHeight } = useNavbarHeight();
 
   const [loginState, login] = useDisclosure(false);
@@ -60,13 +66,13 @@ export function PrimaryNavigation(): React.ReactElement {
 
               {/* when a user is logged in, these should be displayed */}
 
-              {/* <Menu.Item
+              <Menu.Item
                 icon={<IconSettings size={14} />}
                 onClick={() => navigate(routes.settings)}
-                >
+              >
                 Settings
-                </Menu.Item>
-                <Menu.Item
+              </Menu.Item>
+              {/* <Menu.Item
                 icon={<IconLogout size={14} />}
                 onClick={onLogoutClick}
                 >
