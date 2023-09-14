@@ -1,13 +1,15 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import { userSlice } from './userSlice';
 import { TypedUseSelectorHook, useSelector } from 'react-redux';
 
-const rootReducer = combineReducers({
-  user: userSlice.reducer,
-});
+// const rootReducer = combineReducers({
+//   user: userSlice.reducer,
+// });
 
 export const appStore = configureStore({
-  reducer: rootReducer,
+  reducer: {
+    user: userSlice.reducer,
+  },
 });
 
 export type AppState = ReturnType<typeof appStore.getState>;

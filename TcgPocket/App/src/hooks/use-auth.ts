@@ -1,4 +1,3 @@
-import { useLocalStorage } from '@mantine/hooks';
 import { apiRoutes } from '../routes';
 import { Response } from '../types/shared';
 import { SignInUserDto, UserCreateDto, UserGetDto } from '../types/users';
@@ -10,10 +9,6 @@ import { dispatch, useAppSelector } from '../store/configureStore';
 axios.defaults.withCredentials = true;
 
 export function useAuth() {
-  const [value, setValue, removeValue] = useLocalStorage<UserGetDto>({
-    key: 'user',
-  });
-
   const userFromContext = useAppSelector((state) => state.user.user);
 
   const signIn = async (values: SignInUserDto) => {
@@ -25,8 +20,6 @@ export function useAuth() {
     if (response.hasErrors) {
       return;
     }
-
-    setValue(response.data);
   };
 
   const registerUser = async (values: UserCreateDto) => {
@@ -50,8 +43,6 @@ export function useAuth() {
     if (response.hasErrors) {
       return;
     }
-
-    removeValue();
   };
 
   const getSignedInUser = async () => {
@@ -64,13 +55,12 @@ export function useAuth() {
     }
 
     dispatch(assignUser(response.data));
-    setValue(response.data);
   };
 
   const signedInUser = useMemo(() => {
-    const user = userFromContext ?? value;
+    const user = userFromContext;
     return user;
-  }, [userFromContext, value]);
+  }, [userFromContext]);
 
   return { signedInUser, signIn, signOut, getSignedInUser, registerUser };
 }
