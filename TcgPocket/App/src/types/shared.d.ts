@@ -10,7 +10,7 @@ export type Response<T> = {
 };
 
 export type Response = {
-  data: any;
+  data;
   errors: Error[];
   hasErrors: boolean;
 };

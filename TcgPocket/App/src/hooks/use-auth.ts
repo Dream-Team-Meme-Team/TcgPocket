@@ -5,7 +5,7 @@ import { SignInUserDto, UserCreateDto, UserGetDto } from '../types/users';
 import axios from 'axios';
 import { assignUser } from '../store/userSlice';
 import { useMemo } from 'react';
-import { useAppDispatch, useAppSelector } from '../store/configureStore';
+import { dispatch, useAppSelector } from '../store/configureStore';
 
 axios.defaults.withCredentials = true;
 
@@ -14,9 +14,7 @@ export function useAuth() {
     key: 'user',
   });
 
-  const userFromContext = useAppSelector((state) => state.user);
-
-  const dispatch = useAppDispatch();
+  const userFromContext = useAppSelector((state) => state.user.user);
 
   const signIn = async (values: SignInUserDto) => {
     const { data: response } = await axios.post<Response<UserGetDto>>(
