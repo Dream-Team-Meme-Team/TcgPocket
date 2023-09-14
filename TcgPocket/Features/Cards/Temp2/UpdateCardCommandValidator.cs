@@ -2,11 +2,11 @@
 using TcgPocket.Features.Cards.Commands;
 using TcgPocket.Shared.Interfaces;
 
-namespace TcgPocket.Features.Cards.Validation
+namespace TcgPocket.Features.Cards.Temp2
 {
     public class UpdateCardCommandValidator : AbstractValidator<UpdateCardCommand>
     {
-        public UpdateCardCommandValidator(IValidator<CardDto> cardValidator) 
+        public UpdateCardCommandValidator(IValidator<CardDto> cardValidator)
         {
             RuleFor(x => x.Id)
                 .NotEmpty()

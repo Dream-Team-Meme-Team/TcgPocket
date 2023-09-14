@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace TcgPocket.Features.Cards.Validation
+namespace TcgPocket.Features.Cards.Temp2
 {
     public class CardDtoValidator : AbstractValidator<CardDto>
     {
-        public CardDtoValidator() 
+        public CardDtoValidator()
         {
             RuleFor(x => x.Name)
                 .NotEmpty()
