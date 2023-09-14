@@ -1,19 +1,13 @@
-import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { UserCreateDto, UserGetDto } from '../types/users';
-import axios from 'axios';
-import { apiRoutes } from '../routes';
-import { Response } from './../types/shared';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { UserGetDto } from '../types/users';
 
-interface UserState {
+type UserState = {
   user: UserGetDto | undefined;
-  users: UserGetDto[];
-}
 
+};
 const initialState: UserState = {
   user: undefined,
-  users: [],
 };
-
 export const registerUser = createAsyncThunk<UserGetDto, UserCreateDto>(
   'registerUsers',
   async (user) => {
@@ -37,23 +31,13 @@ export const getAllUsers = createAsyncThunk<UserGetDto[], void>(
 );
 
 export const userSlice = createSlice({
-  name: 'user',
   initialState,
+  name: 'user',
   reducers: {
-    setUser(state, { payload }: PayloadAction<UserState['user']>) {
+    assignUser(state, { payload }: PayloadAction<UserState['user']>) {
       state.user = payload;
     },
   },
-  extraReducers: (builder) => {
-    builder.addCase(registerUser.fulfilled, (state, { payload }) => {
-      state.user = payload;
-    });
-    builder.addCase(getAllUsers.fulfilled, (state, { payload }) => {
-      state.users = payload;
-    });
-  },
 });
 
-export const { setUser } = userSlice.actions;
-
-export default userSlice.reducer;
+export const { assignUser } = userSlice.actions;

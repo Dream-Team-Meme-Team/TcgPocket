@@ -5,6 +5,12 @@ import { useForm } from '@mantine/form';
 import { PrimaryTextInput } from '../inputs/PrimaryTextInput';
 import { SecondaryButton } from '../buttons/SecondaryButton';
 import { PasswordInput } from '@mantine/core';
+import { SignInUserDto } from '../../types/users';
+import { useMemo } from 'react';
+import { useAuth } from '../../hooks/use-auth';
+import { notifications } from '@mantine/notifications';
+import { tcgNotifications } from '../../constants/notifications';
+import { useAsyncFn } from 'react-use';
 
 interface LoginModalProps {
   openModal: boolean;
@@ -16,39 +22,45 @@ export function LoginModal({
   setOpenModal,
 }: LoginModalProps): React.ReactElement {
   const { classes } = useLoginOrRegisterStyles();
+  const auth = useAuth();
 
   const form = useForm({
     initialValues: {
-      username: '',
+      userName: '',
       password: '',
-    },
-
-    validate: {
-      username: (value) => (value === '' ? null : 'Invalid username'),
-      password: (value) => (value === '' ? null : 'Invalid Password'),
-    },
+    } as SignInUserDto,
   });
-
-  const disableLogin = form.isValid('username') || form.isValid('password');
 
   const handleClose = () => {
     setOpenModal(false);
     form.reset();
   };
 
-  const handleLogin = () => {
-    console.log('logged in');
-    handleClose();
-  };
+  const [loginState, handleLogin] = useAsyncFn(
+    async (values: SignInUserDto) => {
+      await auth.signIn(values);
+
+      notifications.show(tcgNotifications.signIn);
+      handleClose();
+    }
+  );
+
+  const disableLogin = useMemo(
+    () =>
+      form.values.userName === '' ||
+      form.values.password === '' ||
+      loginState.loading,
+    [form, loginState]
+  );
 
   return (
     <PrimaryModal opened={openModal} onClose={handleClose} title="Login">
-      <div className={classes.bodyContainer}>
-        <form>
+      <form onSubmit={form.onSubmit(handleLogin)}>
+        <div className={classes.bodyContainer}>
           <PrimaryTextInput
             withAsterisk
             label="Username"
-            {...form.getInputProps('username')}
+            {...form.getInputProps('userName')}
           />
           <PasswordInput
             withAsterisk
@@ -56,15 +68,16 @@ export function LoginModal({
             label="Password"
             {...form.getInputProps('password')}
           />
-        </form>
-
-        <div className={classes.bottomBtns}>
-          <SecondaryButton onClick={handleClose}>Close</SecondaryButton>
-          <PrimaryButton onClick={handleLogin} disabled={disableLogin}>
-            Login
-          </PrimaryButton>
+          <div className={classes.bottomBtns}>
+            <SecondaryButton type="button" onClick={handleClose}>
+              Close
+            </SecondaryButton>
+            <PrimaryButton type="submit" disabled={disableLogin}>
+              Login
+            </PrimaryButton>
+          </div>
         </div>
-      </div>
+      </form>
     </PrimaryModal>
   );
 }

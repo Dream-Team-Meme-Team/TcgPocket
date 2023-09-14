@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using TcgPocket.Data;
 using TcgPocket.Features.Users;
 using TcgPocket.Features.Roles;
+using TcgPocket.Shared;
 
 namespace TcgPocket;
 
@@ -39,6 +40,7 @@ public class Startup
             .AddRoles<Role>()
             .AddRoleManager<RoleManager<Role>>()
             .AddUserManager<UserManager<User>>()
+            .AddSignInManager<SignInManager<User>>()
             .AddEntityFrameworkStores<DataContext>()
             .AddDefaultTokenProviders();  
         
@@ -63,6 +65,7 @@ public class Startup
         services.ConfigureApplicationCookie(options =>
         {
             options.Cookie.HttpOnly = true;
+            options.Cookie.SameSite = SameSiteMode.None;
             options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
 
             options.LoginPath = "/Identity/Account/Login";
