@@ -7,7 +7,7 @@ export function HomePage(): React.ReactElement {
   const { classes } = useStyles();
   const auth = useAuth();
 
-  const user = auth.getSignedInUser();
+  const user = auth.signedInUser;
 
   if (user !== null) {
     console.log('user: ', user);
