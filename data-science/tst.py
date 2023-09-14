@@ -29,3 +29,10 @@ output = c(img_tens)
 to_PIL = trans.Compose([trans.ToPILImage()])
 img_cnv = to_PIL(output[30])
 img_cnv.show()
+
+c2 = torch.nn.Conv2d(in_channels=32, out_channels=16, kernel_size=(3,3), stride = 3, padding=0)
+output2 = c2(output)
+
+# to_PIL = trans.Compose([trans.ToPILImage()])
+img_cnv = to_PIL(output2[12])
+img_cnv.show()
