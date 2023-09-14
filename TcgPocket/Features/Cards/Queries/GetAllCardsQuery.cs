@@ -7,7 +7,7 @@ using TcgPocket.Data;
 using TcgPocket.Features.Games.Commands;
 using TcgPocket.Shared;
 
-namespace TcgPocket.Features.Cards.Temp1
+namespace TcgPocket.Features.Cards.Queries
 {
     public class GetAllCardsQuery : IRequest<Response<List<CardGetDto>>>
     {

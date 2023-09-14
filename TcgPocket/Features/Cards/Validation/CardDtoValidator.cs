@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace TcgPocket.Features.Cards.Temp2
+namespace TcgPocket.Features.Cards.Validation
 {
     public class CardDtoValidator : AbstractValidator<CardDto>
     {

@@ -6,7 +6,7 @@ using TcgPocket.Data;
 using TcgPocket.Shared;
 using TcgPocket.Shared.Interfaces;
 
-namespace TcgPocket.Features.Cards.Temp1
+namespace TcgPocket.Features.Cards.Queries
 {
     public class GetCardByIdQuery : IIdentifiable, IRequest<Response<CardGetDto>>
     {
