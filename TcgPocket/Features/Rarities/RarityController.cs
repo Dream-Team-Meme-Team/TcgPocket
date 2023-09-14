@@ -44,7 +44,7 @@ namespace TcgPocket.Features.Rarities
         }
 
         [HttpGet]
-        public async Task<ActionResult<Response<RarityGetDto>>> GetAllRarities()
+        public async Task<ActionResult<Response<List<RarityGetDto>>>> GetAllRarities()
         {
             var response = await _mediator.Send(new GetAllRaritiesQuery { });
 
@@ -52,7 +52,7 @@ namespace TcgPocket.Features.Rarities
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Response<RarityGetDto>>> DeleteRarity([FromRoute]int id)
+        public async Task<ActionResult<Response>> DeleteRarity([FromRoute]int id)
         {
             var response = await _mediator.Send(new DeleteRarityCommand { Id = id });
 
