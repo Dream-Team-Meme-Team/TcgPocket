@@ -3,18 +3,17 @@ using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using TcgPocket.Data;
-using TcgPocket.Features.Rarities.Commands;
 using TcgPocket.Shared;
 using TcgPocket.Shared.Interfaces;
 
-namespace TcgPocket.Features.Cards.Commands
+namespace TcgPocket.Features.Cards.TestFolder
 {
     public class DeleteCardCommand : IIdentifiable, IRequest<Response>
     {
         public int Id { get; set; }
     }
 
-    public class DeletCardCommandHandler : IRequestHandler<DeleteCardCommand, Response> 
+    public class DeletCardCommandHandler : IRequestHandler<DeleteCardCommand, Response>
     {
         private readonly DataContext _dataContext;
         private readonly IMapper _mapper;
