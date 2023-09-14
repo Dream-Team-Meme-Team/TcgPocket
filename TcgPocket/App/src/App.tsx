@@ -21,6 +21,8 @@ function App() {
     await auth.getSignedInUser();
   });
 
+  console.log('user: ', auth.signedInUser);
+
   return (
     <>
       <AppShell layout="alt" padding={0} header={<PrimaryNavigation />}>

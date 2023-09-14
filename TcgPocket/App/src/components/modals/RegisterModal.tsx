@@ -9,6 +9,8 @@ import { UserCreateDto } from '../../types/users';
 import { useAuth } from '../../hooks/use-auth';
 import { notifications } from '@mantine/notifications';
 import { tcgNotifications } from '../../constants/notifications';
+import { useMemo } from 'react';
+import { useAsyncFn } from 'react-use';
 
 interface RegisterModal {
   openModal: boolean;
@@ -40,23 +42,29 @@ export function RegisterModal({
     },
   });
 
-  const disableRegister =
-    form.values.userName === '' ||
-    form.values.email === '' ||
-    form.values.phoneNumber === '' ||
-    form.values.password === '' ||
-    form.values.confirmPassword === '';
+  const disableRegister = useMemo(
+    () =>
+      form.values.userName === '' ||
+      form.values.email === '' ||
+      form.values.phoneNumber === '' ||
+      form.values.password === '' ||
+      form.values.confirmPassword === '' ||
+      registerState.loading,
+    [form]
+  );
 
   const handleClose = () => {
     setOpenModal(false);
     form.reset();
   };
 
-  const handleRegister = (values: UserCreateDto) => {
-    registerUser(values);
-    notifications.show(tcgNotifications.register);
-    handleClose();
-  };
+  const [registerState, handleRegister] = useAsyncFn(
+    async (values: UserCreateDto) => {
+      await registerUser(values);
+      notifications.show(tcgNotifications.register);
+      handleClose();
+    }
+  );
 
   return (
     <PrimaryModal opened={openModal} onClose={handleClose} title="Register">

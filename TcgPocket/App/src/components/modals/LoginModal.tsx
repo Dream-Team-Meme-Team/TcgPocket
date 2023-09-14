@@ -10,6 +10,7 @@ import { useMemo } from 'react';
 import { useAuth } from '../../hooks/use-auth';
 import { notifications } from '@mantine/notifications';
 import { tcgNotifications } from '../../constants/notifications';
+import { useAsyncFn } from 'react-use';
 
 interface LoginModalProps {
   openModal: boolean;
@@ -30,22 +31,27 @@ export function LoginModal({
     } as SignInUserDto,
   });
 
-  const disableLogin = useMemo(
-    () => form.values.userName === '' || form.values.password === '',
-    [form]
-  );
-
   const handleClose = () => {
     setOpenModal(false);
     form.reset();
   };
 
-  const handleLogin = async (values: SignInUserDto) => {
-    await auth.signIn(values);
+  const [loginState, handleLogin] = useAsyncFn(
+    async (values: SignInUserDto) => {
+      await auth.signIn(values);
 
-    notifications.show(tcgNotifications.signIn);
-    handleClose();
-  };
+      notifications.show(tcgNotifications.signIn);
+      handleClose();
+    }
+  );
+
+  const disableLogin = useMemo(
+    () =>
+      form.values.userName === '' ||
+      form.values.password === '' ||
+      loginState.loading,
+    [form, loginState]
+  );
 
   return (
     <PrimaryModal opened={openModal} onClose={handleClose} title="Login">
