@@ -1,10 +1,8 @@
-﻿using Attribute = TcgPocket.Features.Attributes.Attribute;
-using TcgPocket.Features.CardTypes;
+﻿using TcgPocket.Features.CardTypes;
 using TcgPocket.Features.Games;
 using TcgPocket.Features.Rarities;
 using TcgPocket.Features.Sets;
 using TcgPocket.Shared.Interfaces;
-using TcgPocket.Features.Attributes;
 
 namespace TcgPocket.Features.Cards
 {

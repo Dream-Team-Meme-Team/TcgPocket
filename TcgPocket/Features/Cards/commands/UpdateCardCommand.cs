@@ -8,7 +8,6 @@ using TcgPocket.Features.Games;
 using TcgPocket.Features.Rarities;
 using TcgPocket.Features.Sets;
 using TcgPocket.Shared;
-using TcgPocket.Shared.Interfaces;
 
 namespace TcgPocket.Features.Cards.Commands
 {
@@ -34,29 +33,32 @@ namespace TcgPocket.Features.Cards.Commands
         public async Task<Response<CardGetDto>> Handle(UpdateCardCommand command, CancellationToken cancellationToken)
         {
             var result = await _validator.ValidateAsync(command);
+            var errors = new List<Error>();
 
             if (!result.IsValid)
             {
-                var errors = _mapper.Map<List<Error>>(result.Errors);
+                errors = _mapper.Map<List<Error>>(result.Errors);
                 return new Response<CardGetDto>{ Errors = errors };
             }
 
             if (!await _dataContext.Set<Set>().AnyAsync(x => x.Id == command.CardDto.SetId))
             {
-                return Error.AsResponse<CardGetDto>("Set not found", "setId");
+                errors.Add(new Error { Message = "Set not found", Property = "setId" });
             }
             if (!await _dataContext.Set<Rarity>().AnyAsync(x => x.Id == command.CardDto.RarityId))
             {
-                return Error.AsResponse<CardGetDto>("Rarity not found", "rarityId");
+                errors.Add(new Error { Message = "Rarity not found", Property = "rarityId" });
             }
             if (!await _dataContext.Set<Game>().AnyAsync(x => x.Id == command.CardDto.GameId))
             {
-                return Error.AsResponse<CardGetDto>("Game not found", "gameId");
+                errors.Add(new Error { Message = "Game not found", Property = "gameId" });
             }
             if (!await _dataContext.Set<CardType>().AnyAsync(x => x.Id == command.CardDto.CardTypeId))
             {
-                return Error.AsResponse<CardGetDto>("Card Type not found", "cardTypeId");
+                errors.Add(new Error { Message = "Card Type not found", Property = "cardTypeId" });
             }
+
+            if (errors.Any()) return new Response<CardGetDto> { Errors = errors };
 
             var card = await _dataContext.Set<Card>().FirstOrDefaultAsync(x => x.Id == command.Id);
 

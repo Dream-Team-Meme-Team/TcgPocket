@@ -1,7 +1,12 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using TcgPocket.Data;
+using TcgPocket.Features.CardTypes;
+using TcgPocket.Features.Games;
+using TcgPocket.Features.Rarities;
+using TcgPocket.Features.Sets;
 using TcgPocket.Shared;
 
 namespace TcgPocket.Features.Cards.Commands
@@ -27,12 +32,32 @@ namespace TcgPocket.Features.Cards.Commands
         public async Task<Response<CardGetDto>> Handle(CreateCardCommand command, CancellationToken cancellationToken)
         {
             var result = await _validator.ValidateAsync(command.CardDto);
+            var errors = new List<Error>();
 
             if (!result.IsValid)
             {
-                var errors = _mapper.Map<List<Error>>(result.Errors);
+                errors = _mapper.Map<List<Error>>(result.Errors);
                 return new Response<CardGetDto> { Errors = errors };
             }
+
+            if (!await _dataContext.Set<Set>().AnyAsync(x => x.Id == command.CardDto.SetId))
+            {
+                errors.Add(new Error { Message = "Set not found", Property = "setId" });
+            }
+            if (!await _dataContext.Set<Rarity>().AnyAsync(x => x.Id == command.CardDto.RarityId))
+            {
+                errors.Add(new Error { Message = "Rarity not found", Property = "rarityId" });
+            }
+            if (!await _dataContext.Set<Game>().AnyAsync(x => x.Id == command.CardDto.GameId))
+            {
+                errors.Add(new Error { Message = "Game not found", Property = "gameId" });
+            }
+            if (!await _dataContext.Set<CardType>().AnyAsync(x => x.Id == command.CardDto.CardTypeId))
+            {
+                errors.Add(new Error { Message = "Card Type not found", Property = "cardTypeId" });
+            }
+
+            if (errors.Any()) return new Response<CardGetDto> { Errors = errors };
 
             var card = _mapper.Map<Card>(command.CardDto);
             await _dataContext.Set<Card>().AddAsync(card);
