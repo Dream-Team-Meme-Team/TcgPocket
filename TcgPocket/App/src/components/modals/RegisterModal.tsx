@@ -7,7 +7,7 @@ import { PrimaryTextInput } from '../inputs/PrimaryTextInput';
 import { PasswordInput } from '@mantine/core';
 import { UserCreateDto } from '../../types/users';
 import { useMemo } from 'react';
-import { dispatch } from '../../store/configureStore';
+import { dispatch, useAppSelector } from '../../store/configureStore';
 import { registerUser } from '../../services/UserServices';
 
 interface RegisterModal {
@@ -22,6 +22,8 @@ export function RegisterModal({
   // const { registerUser } = useAuth();
   const { classes } = useLoginOrRegisterStyles();
 
+  const $isLoading = useAppSelector((state) => state.user.isLoading);
+
   const form = useForm({
     initialValues: {
       userName: '',
@@ -30,14 +32,6 @@ export function RegisterModal({
       password: '',
       confirmPassword: '',
     } as UserCreateDto,
-
-    validate: {
-      userName: (value) => (value !== '' ? null : 'Invalid Username'),
-      email: (value) => (value !== '' ? null : 'Invalid Email'),
-      phoneNumber: (value) => (value !== '' ? null : 'Invalid Phone number'),
-      password: (value) => (value !== '' ? null : 'Invalid Password'),
-      confirmPassword: (value) => (value !== '' ? null : 'Invalid Password'),
-    },
   });
 
   const disableRegister = useMemo(
@@ -46,8 +40,9 @@ export function RegisterModal({
       form.values.email === '' ||
       form.values.phoneNumber === '' ||
       form.values.password === '' ||
-      form.values.confirmPassword === '',
-    [form]
+      form.values.confirmPassword === '' ||
+      $isLoading,
+    [form, $isLoading]
   );
 
   const handleClose = () => {
@@ -66,6 +61,7 @@ export function RegisterModal({
     const values: UserCreateDto = form.values;
     dispatch(registerUser(values));
     setOpenModal(false);
+    form.reset();
   };
 
   return (

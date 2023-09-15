@@ -29,7 +29,7 @@ export function PrimaryNavigation(): React.ReactElement {
   const navigate = useNavigate();
   const { navbarHeight } = useNavbarHeight();
 
-  const $signInOut = useAppSelector((state) => state.user.signInUser);
+  const $signedInUser = useAppSelector((state) => state.user.signInUser);
 
   const [loginState, login] = useDisclosure(false);
   const [registerState, register] = useDisclosure(false);
@@ -39,8 +39,8 @@ export function PrimaryNavigation(): React.ReactElement {
   };
 
   const determineUserState = useMemo(() => {
-    return $signInOut === undefined ? false : true;
-  }, [$signInOut]);
+    return $signedInUser === undefined || $signedInUser === null ? false : true;
+  }, [$signedInUser]);
 
   return (
     <>
@@ -64,41 +64,36 @@ export function PrimaryNavigation(): React.ReactElement {
               </ActionIcon>
             </Menu.Target>
 
-            <Menu.Dropdown>
-              {determineUserState && (
-                <>
-                  <Menu.Item
-                    icon={<IconLogin size={14} />}
-                    onClick={login.open}
-                  >
-                    Login
-                  </Menu.Item>
-                  <Menu.Item
-                    icon={<IconRegistered size={14} />}
-                    onClick={register.open}
-                  >
-                    Register
-                  </Menu.Item>
-                </>
-              )}
+            {!determineUserState && (
+              <Menu.Dropdown>
+                <Menu.Item icon={<IconLogin size={14} />} onClick={login.open}>
+                  Login
+                </Menu.Item>
+                <Menu.Item
+                  icon={<IconRegistered size={14} />}
+                  onClick={register.open}
+                >
+                  Register
+                </Menu.Item>
+              </Menu.Dropdown>
+            )}
 
-              {determineUserState && (
-                <>
-                  <Menu.Item
-                    icon={<IconSettings size={14} />}
-                    onClick={() => navigate(routes.settings)}
-                  >
-                    Settings
-                  </Menu.Item>
-                  <Menu.Item
-                    icon={<IconLogout size={14} />}
-                    onClick={handleSignOut}
-                  >
-                    Logout
-                  </Menu.Item>
-                </>
-              )}
-            </Menu.Dropdown>
+            {determineUserState && (
+              <Menu.Dropdown>
+                <Menu.Item
+                  icon={<IconSettings size={14} />}
+                  onClick={() => navigate(routes.settings)}
+                >
+                  Settings
+                </Menu.Item>
+                <Menu.Item
+                  icon={<IconLogout size={14} />}
+                  onClick={handleSignOut}
+                >
+                  Logout
+                </Menu.Item>
+              </Menu.Dropdown>
+            )}
           </Menu>
         </Flex>
       </Navbar>

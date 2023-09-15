@@ -7,7 +7,7 @@ import { SecondaryButton } from '../buttons/SecondaryButton';
 import { PasswordInput } from '@mantine/core';
 import { SignInUserDto } from '../../types/users';
 import { useMemo } from 'react';
-import { dispatch } from '../../store/configureStore';
+import { dispatch, useAppSelector } from '../../store/configureStore';
 import { signInUser } from '../../services/UserServices';
 
 interface LoginModalProps {
@@ -20,6 +20,8 @@ export function LoginModal({
   setOpenModal,
 }: LoginModalProps): React.ReactElement {
   const { classes } = useLoginOrRegisterStyles();
+
+  const $isLoading = useAppSelector((state) => state.user.isLoading);
 
   const form = useForm({
     initialValues: {
@@ -46,11 +48,13 @@ export function LoginModal({
     const values: SignInUserDto = form.values;
     dispatch(signInUser(values));
     setOpenModal(false);
+    form.reset();
   };
 
   const disableLogin = useMemo(
-    () => form.values.userName === '' || form.values.password === '',
-    [form]
+    () =>
+      form.values.userName === '' || form.values.password === '' || $isLoading,
+    [form, $isLoading]
   );
 
   return (
