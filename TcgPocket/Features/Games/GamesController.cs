@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using TcgPocket.Features.Games.Commands;
 using TcgPocket.Features.Games.Queries;
+using TcgPocket.Features.UserCards.Queries;
+using TcgPocket.Features.UserCards;
 using TcgPocket.Shared;
 
 namespace TcgPocket.Features.Games;
@@ -32,7 +34,15 @@ public class GamesController : ControllerBase
 
         return response.HasErrors ? NotFound(response) : Ok(response);
     }
-    
+
+    [HttpGet("user-cards/{id:int}")]
+    public async Task<ActionResult<Response<List<UserCardDto>>>> GetAllUserCardsByGameId()
+    {
+        var response = await _mediator.Send(new GetAllUserCardsByGameIdQuery());
+
+        return response.HasErrors ? BadRequest(response) : Ok(response);
+    }
+
     [HttpPost]
     public async Task<ActionResult<Response<GameGetDto>>> CreateGame([FromBody] GameDto data)
     {
