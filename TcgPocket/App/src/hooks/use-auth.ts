@@ -5,35 +5,34 @@ import axios from 'axios';
 import { assignUser } from '../store/userSlice';
 import { useMemo } from 'react';
 import { dispatch, useAppSelector } from '../store/configureStore';
+import { createAxiosCall } from '../constants/createAxiosCall';
 
 axios.defaults.withCredentials = true;
 
 export function useAuth() {
   const userFromContext = useAppSelector((state) => state.user.user);
 
-  const signIn = async (values: SignInUserDto) => {
-    const { data: response } = await axios.post<Response<UserGetDto>>(
-      apiRoutes.users.signIn,
-      values
-    );
+  // const signIn = async (values: SignInUserDto) => {
+  //   const { data } = await createAxiosCall(
+  //     'POST',
+  //     `${apiRoutes.users.signIn}`,
+  //     values
+  //   );
+  //   return data;
+  // };
 
-    if (response.hasErrors) {
-      return;
-    }
-  };
+  // const registerUser = async (values: UserCreateDto) => {
+  //   const { data: response } = await axios.post<Response<UserGetDto>>(
+  //     apiRoutes.users.base,
+  //     values
+  //   );
 
-  const registerUser = async (values: UserCreateDto) => {
-    const { data: response } = await axios.post<Response<UserGetDto>>(
-      apiRoutes.users.base,
-      values
-    );
+  //   if (response.hasErrors) {
+  //     return;
+  //   }
 
-    if (response.hasErrors) {
-      return;
-    }
-
-    return response.data;
-  };
+  //   return response.data;
+  // };
 
   const signOut = async () => {
     const { data: response } = await axios.post<Response<UserGetDto>>(
@@ -43,6 +42,8 @@ export function useAuth() {
     if (response.hasErrors) {
       return;
     }
+
+    return response.data;
   };
 
   const getSignedInUser = async () => {
@@ -62,5 +63,5 @@ export function useAuth() {
     return user;
   }, [userFromContext]);
 
-  return { signedInUser, signIn, signOut, getSignedInUser, registerUser };
+  return { signedInUser, signOut, getSignedInUser };
 }

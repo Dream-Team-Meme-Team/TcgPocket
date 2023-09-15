@@ -9,11 +9,12 @@ import {
 } from '@mantine/core';
 import {
   IconLogin,
+  IconLogout,
   IconRegistered,
   IconSettings,
   IconUser,
 } from '@tabler/icons-react';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { routes } from '../routes';
 import { NavButton } from './NavButton';
 import { LoginModal } from '../components/modals/LoginModal';
@@ -21,17 +22,25 @@ import { RegisterModal } from '../components/modals/RegisterModal';
 import { useDisclosure } from '@mantine/hooks';
 import { useNavbarHeight } from '../hooks/use-navbar-height';
 import { useNavigate } from 'react-router-dom';
+import { signOutUser } from '../services/UserServices';
+import { dispatch, useAppSelector } from '../store/configureStore';
 
 export function PrimaryNavigation(): React.ReactElement {
   const navigate = useNavigate();
   const { navbarHeight } = useNavbarHeight();
 
+  const $signInOut = useAppSelector((state) => state.user.signInUser);
+
   const [loginState, login] = useDisclosure(false);
   const [registerState, register] = useDisclosure(false);
 
-  // const onLogoutClick = () => {
-  //   console.log('log out');
-  // };
+  const handleSignOut = () => {
+    dispatch(signOutUser());
+  };
+
+  const determineUserState = useMemo(() => {
+    return $signInOut === undefined ? false : true;
+  }, [$signInOut]);
 
   return (
     <>
@@ -40,11 +49,13 @@ export function PrimaryNavigation(): React.ReactElement {
           <Image maw={navbarHeight - 16} src="./TcgPocketLogo.svg" />
         </NavButton>
         <Flex align={'center'} gap={25}>
-          <Flex gap={10}>
-            <NavButton route={routes.inventory}>Inventory</NavButton>
-            <NavButton route={routes.cardUpload}>Upload Cards</NavButton>
-            <NavButton route={routes.deckBuilder}> Deck Builder</NavButton>
-          </Flex>
+          {determineUserState && (
+            <Flex gap={10}>
+              <NavButton route={routes.inventory}>Inventory</NavButton>
+              <NavButton route={routes.cardUpload}>Upload Cards</NavButton>
+              <NavButton route={routes.deckBuilder}> Deck Builder</NavButton>
+            </Flex>
+          )}
 
           <Menu>
             <Menu.Target>
@@ -54,30 +65,39 @@ export function PrimaryNavigation(): React.ReactElement {
             </Menu.Target>
 
             <Menu.Dropdown>
-              <Menu.Item icon={<IconLogin size={14} />} onClick={login.open}>
-                Login
-              </Menu.Item>
-              <Menu.Item
-                icon={<IconRegistered size={14} />}
-                onClick={register.open}
-              >
-                Register
-              </Menu.Item>
+              {determineUserState && (
+                <>
+                  <Menu.Item
+                    icon={<IconLogin size={14} />}
+                    onClick={login.open}
+                  >
+                    Login
+                  </Menu.Item>
+                  <Menu.Item
+                    icon={<IconRegistered size={14} />}
+                    onClick={register.open}
+                  >
+                    Register
+                  </Menu.Item>
+                </>
+              )}
 
-              {/* when a user is logged in, these should be displayed */}
-
-              <Menu.Item
-                icon={<IconSettings size={14} />}
-                onClick={() => navigate(routes.settings)}
-              >
-                Settings
-              </Menu.Item>
-              {/* <Menu.Item
-                icon={<IconLogout size={14} />}
-                onClick={onLogoutClick}
-                >
-                Logout
-              </Menu.Item> */}
+              {determineUserState && (
+                <>
+                  <Menu.Item
+                    icon={<IconSettings size={14} />}
+                    onClick={() => navigate(routes.settings)}
+                  >
+                    Settings
+                  </Menu.Item>
+                  <Menu.Item
+                    icon={<IconLogout size={14} />}
+                    onClick={handleSignOut}
+                  >
+                    Logout
+                  </Menu.Item>
+                </>
+              )}
             </Menu.Dropdown>
           </Menu>
         </Flex>

@@ -7,10 +7,8 @@ import { SecondaryButton } from '../buttons/SecondaryButton';
 import { PasswordInput } from '@mantine/core';
 import { SignInUserDto } from '../../types/users';
 import { useMemo } from 'react';
-import { useAuth } from '../../hooks/use-auth';
-import { notifications } from '@mantine/notifications';
-import { tcgNotifications } from '../../constants/notifications';
-import { useAsyncFn } from 'react-use';
+import { dispatch } from '../../store/configureStore';
+import { signInUser } from '../../services/UserServices';
 
 interface LoginModalProps {
   openModal: boolean;
@@ -22,7 +20,6 @@ export function LoginModal({
   setOpenModal,
 }: LoginModalProps): React.ReactElement {
   const { classes } = useLoginOrRegisterStyles();
-  const auth = useAuth();
 
   const form = useForm({
     initialValues: {
@@ -36,26 +33,29 @@ export function LoginModal({
     form.reset();
   };
 
-  const [loginState, handleLogin] = useAsyncFn(
-    async (values: SignInUserDto) => {
-      await auth.signIn(values);
+  // const [loginState, handleLogin] = useAsyncFn(
+  //   async (values: SignInUserDto) => {
+  //     // await auth.signIn(values);
+  //     dispatch(signInUser(values));
 
-      notifications.show(tcgNotifications.signIn);
-      handleClose();
-    }
-  );
+  //     handleClose();
+  //   }
+  // );
+
+  const handleSignIn = () => {
+    const values: SignInUserDto = form.values;
+    dispatch(signInUser(values));
+    setOpenModal(false);
+  };
 
   const disableLogin = useMemo(
-    () =>
-      form.values.userName === '' ||
-      form.values.password === '' ||
-      loginState.loading,
-    [form, loginState]
+    () => form.values.userName === '' || form.values.password === '',
+    [form]
   );
 
   return (
     <PrimaryModal opened={openModal} onClose={handleClose} title="Login">
-      <form onSubmit={form.onSubmit(handleLogin)}>
+      <form onSubmit={form.onSubmit(handleSignIn)}>
         <div className={classes.bodyContainer}>
           <PrimaryTextInput
             withAsterisk
