@@ -29,7 +29,7 @@ export function PrimaryNavigation(): React.ReactElement {
   const navigate = useNavigate();
   const { navbarHeight } = useNavbarHeight();
 
-  const $signedInUser = useAppSelector((state) => state.user.signInUser);
+  const signedInUser = useAppSelector((state) => state.user.signInUser);
 
   const [loginState, login] = useDisclosure(false);
   const [registerState, register] = useDisclosure(false);
@@ -39,8 +39,8 @@ export function PrimaryNavigation(): React.ReactElement {
   };
 
   const determineUserState = useMemo(() => {
-    return $signedInUser === undefined || $signedInUser === null ? false : true;
-  }, [$signedInUser]);
+    return signedInUser === undefined || signedInUser === null ? false : true;
+  }, [signedInUser]);
 
   return (
     <>

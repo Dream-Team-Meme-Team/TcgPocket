@@ -22,7 +22,7 @@ export function RegisterModal({
   // const { registerUser } = useAuth();
   const { classes } = useLoginOrRegisterStyles();
 
-  const $isLoading = useAppSelector((state) => state.user.isLoading);
+  const isLoading = useAppSelector((state) => state.user.isLoading);
 
   const form = useForm({
     initialValues: {
@@ -41,8 +41,8 @@ export function RegisterModal({
       form.values.phoneNumber === '' ||
       form.values.password === '' ||
       form.values.confirmPassword === '' ||
-      $isLoading,
-    [form, $isLoading]
+      isLoading,
+    [form, isLoading]
   );
 
   const handleClose = () => {

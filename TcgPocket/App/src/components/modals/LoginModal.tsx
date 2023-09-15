@@ -21,7 +21,7 @@ export function LoginModal({
 }: LoginModalProps): React.ReactElement {
   const { classes } = useLoginOrRegisterStyles();
 
-  const $isLoading = useAppSelector((state) => state.user.isLoading);
+  const isLoading = useAppSelector((state) => state.user.isLoading);
 
   const form = useForm({
     initialValues: {
@@ -53,8 +53,8 @@ export function LoginModal({
 
   const disableLogin = useMemo(
     () =>
-      form.values.userName === '' || form.values.password === '' || $isLoading,
-    [form, $isLoading]
+      form.values.userName === '' || form.values.password === '' || isLoading,
+    [form, isLoading]
   );
 
   return (
