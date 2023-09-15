@@ -19,15 +19,17 @@ export function SettingsPage(): React.ReactElement {
       className={classes.settingsPageContainer}
     >
       <Tabs.List>
-        {tabs.map((tab) => (
-          <Tabs.Tab value={tab.label} icon={tab.icon}>
+        {tabs.map((tab, index) => (
+          <Tabs.Tab key={index} value={tab.label} icon={tab.icon}>
             {tab.label}
           </Tabs.Tab>
         ))}
       </Tabs.List>
 
-      {tabs.map((tab) => (
-        <Tabs.Panel value={tab.label}> {tab.element} </Tabs.Panel>
+      {tabs.map((tab, index) => (
+        <Tabs.Panel key={index} value={tab.label}>
+          {tab.element}
+        </Tabs.Panel>
       ))}
     </Tabs>
   );

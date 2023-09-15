@@ -6,11 +6,9 @@ import { useForm } from '@mantine/form';
 import { PrimaryTextInput } from '../inputs/PrimaryTextInput';
 import { PasswordInput } from '@mantine/core';
 import { UserCreateDto } from '../../types/users';
-import { useAuth } from '../../hooks/use-auth';
-import { notifications } from '@mantine/notifications';
-import { tcgNotifications } from '../../constants/notifications';
 import { useMemo } from 'react';
-import { useAsyncFn } from 'react-use';
+import { dispatch } from '../../store/configureStore';
+import { registerUser } from '../../services/UserServices';
 
 interface RegisterModal {
   openModal: boolean;
@@ -21,10 +19,8 @@ export function RegisterModal({
   openModal,
   setOpenModal,
 }: RegisterModal): React.ReactElement {
-  const { registerUser } = useAuth();
+  // const { registerUser } = useAuth();
   const { classes } = useLoginOrRegisterStyles();
-
-  const $users = useSelector((state: AppState) => state.user.users);
 
   const form = useForm({
     initialValues: {
@@ -50,8 +46,7 @@ export function RegisterModal({
       form.values.email === '' ||
       form.values.phoneNumber === '' ||
       form.values.password === '' ||
-      form.values.confirmPassword === '' ||
-      registerState.loading,
+      form.values.confirmPassword === '',
     [form]
   );
 
@@ -60,23 +55,22 @@ export function RegisterModal({
     form.reset();
   };
 
-  const [registerState, handleRegister] = useAsyncFn(
-    async (values: UserCreateDto) => {
-      await registerUser(values);
-      notifications.show(tcgNotifications.register);
-      handleClose();
-    }
-  );
+  // const [registerState, handleRegister] = useAsyncFn(
+  //   async (values: UserCreateDto) => {
+  //     dispatch(registerUser(values));
+  //     handleClose();
+  //   }
+  // );
 
-  useEffect(() => {
-    void dispatch(getAllUsers());
-  }, []);
-
-  console.log($users);
+  const handleRegisterUser = () => {
+    const values: UserCreateDto = form.values;
+    dispatch(registerUser(values));
+    setOpenModal(false);
+  };
 
   return (
     <PrimaryModal opened={openModal} onClose={handleClose} title="Register">
-      <form onSubmit={form.onSubmit(handleRegister)}>
+      <form onSubmit={form.onSubmit(handleRegisterUser)}>
         <div className={classes.bodyContainer}>
           <PrimaryTextInput
             withAsterisk
