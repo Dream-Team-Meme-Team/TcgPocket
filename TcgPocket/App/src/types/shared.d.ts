@@ -18,3 +18,5 @@ export type Response = {
 export type Id = {
   id: number;
 };
+
+export type Fn<TValue = void, TResult = void> = (values: TValue) => TResult;

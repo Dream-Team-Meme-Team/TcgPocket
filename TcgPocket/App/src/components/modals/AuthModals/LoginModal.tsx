@@ -10,6 +10,7 @@ import { useMemo } from 'react';
 import { dispatch, useAppSelector } from '../../../store/configureStore';
 import { signInUser } from '../../../services/AuthServices';
 import { useFormValidation } from '../../../helpers/useFormValidation';
+import { error, success } from '../../../services/notification';
 
 type LoginModalProps = {
   openModal: boolean;
@@ -36,8 +37,6 @@ export function LoginModal({
     validate: {
       userName: (value) =>
         validateTextInput(value) ? 'Invalid Username' : null,
-      password: (value) =>
-        validateTextInput(value) ? 'Invalid Password' : null,
     },
   });
 
@@ -46,16 +45,24 @@ export function LoginModal({
     form.reset();
   };
 
-  const handleSignIn = () => {
-    dispatch(signInUser(form.values));
+  const handleSignIn = async (values: SignInUserDto) => {
+    const { payload } = await dispatch(signInUser(values));
+
+    if (!payload) {
+      return;
+    }
+
+    if (payload.hasErrors) {
+      payload.errors.forEach((err) => error(err.message));
+      return;
+    }
+
+    success('Signed In!');
     handleClose();
   };
 
   const disableLogin = useMemo(
-    () =>
-      validateTextInput(form.values.userName) ||
-      validateTextInput(form.values.password) ||
-      isLoading,
+    () => validateTextInput(form.values.userName) || isLoading,
     [form, isLoading]
   );
 

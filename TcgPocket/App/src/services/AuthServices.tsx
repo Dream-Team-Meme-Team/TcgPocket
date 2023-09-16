@@ -1,50 +1,37 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { SignInUserDto, UserCreateDto, UserGetDto } from '../types/users';
-import { createAxiosCall } from './createAxiosCall';
+import { apiCall } from './api';
 import { apiRoutes } from '../routes';
+import { Response } from '../types/shared';
 
-export const registerUser = createAsyncThunk<UserCreateDto, UserCreateDto>(
-  'registerUser',
-  async (user) => {
-    const { data } = await createAxiosCall<UserCreateDto>(
-      'POST',
-      `${apiRoutes.users.base}`,
-      user
-    );
-    return data;
-  }
-);
+export const registerUser = createAsyncThunk<
+  Response<UserGetDto>,
+  UserCreateDto,
+  { rejectValue: Response<UserGetDto> }
+>('registerUser', async (user) => {
+  return await apiCall<UserGetDto>('POST', apiRoutes.users.base, user);
+});
 
-export const signInUser = createAsyncThunk<SignInUserDto, SignInUserDto>(
-  'signInUser',
-  async (user) => {
-    const { data } = await createAxiosCall<SignInUserDto>(
-      'POST',
-      `${apiRoutes.users.signIn}`,
-      user
-    );
-    return data;
-  }
-);
+export const signInUser = createAsyncThunk<
+  Response<UserGetDto>,
+  SignInUserDto,
+  { rejectValue: Response<UserGetDto> }
+>('signInUser', async (user) => {
+  return await apiCall<UserGetDto>('POST', apiRoutes.users.signIn, user);
+});
 
-export const getSignedInUser = createAsyncThunk<UserGetDto, void>(
-  'getSignedInUser',
-  async () => {
-    const { data } = await createAxiosCall<UserGetDto>(
-      'GET',
-      `${apiRoutes.users.signedInUser}`
-    );
-    return data;
-  }
-);
+export const getSignedInUser = createAsyncThunk<
+  Response<UserGetDto>,
+  void,
+  { rejectValue: Response<UserGetDto> }
+>('getSignedInUser', async () => {
+  return await apiCall<UserGetDto>('GET', apiRoutes.users.signedInUser);
+});
 
-export const signOutUser = createAsyncThunk<UserGetDto, void>(
-  'signOutUser',
-  async () => {
-    const { data } = await createAxiosCall<UserGetDto>(
-      'POST',
-      `${apiRoutes.users.signOut}`
-    );
-    return data;
-  }
-);
+export const signOutUser = createAsyncThunk<
+  Response<UserGetDto>,
+  void,
+  { rejectValue: Response<UserGetDto> }
+>('signOutUser', async () => {
+  return await apiCall<UserGetDto>('POST', apiRoutes.users.signOut);
+});

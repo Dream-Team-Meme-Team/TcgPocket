@@ -10,6 +10,7 @@ import { useMemo } from 'react';
 import { dispatch, useAppSelector } from '../../../store/configureStore';
 import { registerUser } from '../../../services/AuthServices';
 import { useFormValidation } from '../../../helpers/useFormValidation';
+import { error, success } from '../../../services/notification';
 
 type RegisterModal = {
   openModal: boolean;
@@ -43,8 +44,6 @@ export function RegisterModal({
       email: (value) => (validateEmail(value) ? 'Invalid Email' : null),
       phoneNumber: (value) =>
         validatePhoneNumer(value) ? 'Invalid Phone Number' : null,
-      password: (value) =>
-        validateTextInput(value) ? 'Invalid Password' : null,
       confirmPassword: (value, values) =>
         value !== values.password ? 'Passwords do not match' : null,
     },
@@ -66,8 +65,19 @@ export function RegisterModal({
     form.reset();
   };
 
-  const handleRegisterUser = () => {
-    dispatch(registerUser(form.values));
+  const handleRegisterUser = async (values: UserCreateDto) => {
+    const { payload } = await dispatch(registerUser(values));
+
+    if (!payload) {
+      return;
+    }
+
+    if (payload.hasErrors) {
+      payload.errors.forEach((err) => error(err.message));
+      return;
+    }
+
+    success('User registered');
     handleClose();
   };
 
