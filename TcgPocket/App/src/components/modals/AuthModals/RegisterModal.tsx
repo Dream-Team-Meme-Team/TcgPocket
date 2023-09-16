@@ -1,46 +1,62 @@
-import { PrimaryModal } from './PrimaryModal';
+import { PrimaryModal } from '../PrimaryModal';
 import { useLoginOrRegisterStyles } from './loginOrRegisterStyling';
-import { PrimaryButton } from '../buttons/PrimaryButton';
-import { SecondaryButton } from '../buttons/SecondaryButton';
+import { PrimaryButton } from '../../buttons/PrimaryButton';
+import { SecondaryButton } from '../../buttons/SecondaryButton';
 import { useForm } from '@mantine/form';
-import { PrimaryTextInput } from '../inputs/PrimaryTextInput';
+import { PrimaryTextInput } from '../../inputs/PrimaryTextInput';
 import { PasswordInput } from '@mantine/core';
-import { UserCreateDto } from '../../types/users';
+import { UserCreateDto } from '../../../types/users';
 import { useMemo } from 'react';
-import { dispatch, useAppSelector } from '../../store/configureStore';
-import { registerUser } from '../../services/UserServices';
+import { dispatch, useAppSelector } from '../../../store/configureStore';
+import { registerUser } from '../../../services/AuthServices';
+import { useFormValidation } from '../../../helpers/useFormValidation';
 
-interface RegisterModal {
+type RegisterModal = {
   openModal: boolean;
   setOpenModal: (arg: boolean) => void;
-}
+};
+
+const initialValues: UserCreateDto = {
+  userName: '',
+  email: '',
+  phoneNumber: '',
+  password: '',
+  confirmPassword: '',
+} as const;
 
 export function RegisterModal({
   openModal,
   setOpenModal,
 }: RegisterModal): React.ReactElement {
-  // const { registerUser } = useAuth();
   const { classes } = useLoginOrRegisterStyles();
+  const { validateTextInput, validateEmail, validatePhoneNumer } =
+    useFormValidation();
 
   const isLoading = useAppSelector((state) => state.user.isLoading);
 
   const form = useForm({
-    initialValues: {
-      userName: '',
-      email: '',
-      phoneNumber: '',
-      password: '',
-      confirmPassword: '',
-    } as UserCreateDto,
+    initialValues: initialValues,
+    validateInputOnChange: true,
+    validate: {
+      userName: (value) =>
+        validateTextInput(value) ? 'Invalid Username' : null,
+      email: (value) => (validateEmail(value) ? 'Invalid Email' : null),
+      phoneNumber: (value) =>
+        validatePhoneNumer(value) ? 'Invalid Phone Number' : null,
+      password: (value) =>
+        validateTextInput(value) ? 'Invalid Password' : null,
+      confirmPassword: (value, values) =>
+        value !== values.password ? 'Passwords do not match' : null,
+    },
   });
 
   const disableRegister = useMemo(
     () =>
-      form.values.userName === '' ||
-      form.values.email === '' ||
-      form.values.phoneNumber === '' ||
-      form.values.password === '' ||
-      form.values.confirmPassword === '' ||
+      validateTextInput(form.values.userName) ||
+      validateEmail(form.values.email) ||
+      validatePhoneNumer(form.values.phoneNumber) ||
+      validateTextInput(form.values.password) ||
+      form.values.confirmPassword !== form.values.password ||
       isLoading,
     [form, isLoading]
   );
@@ -50,18 +66,9 @@ export function RegisterModal({
     form.reset();
   };
 
-  // const [registerState, handleRegister] = useAsyncFn(
-  //   async (values: UserCreateDto) => {
-  //     dispatch(registerUser(values));
-  //     handleClose();
-  //   }
-  // );
-
   const handleRegisterUser = () => {
-    const values: UserCreateDto = form.values;
-    dispatch(registerUser(values));
-    setOpenModal(false);
-    form.reset();
+    dispatch(registerUser(form.values));
+    handleClose();
   };
 
   return (

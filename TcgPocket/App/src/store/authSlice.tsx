@@ -5,96 +5,74 @@ import {
   registerUser,
   signInUser,
   signOutUser,
-} from '../services/UserServices';
-import {
-  errorGetSignedInUser,
-  errorRegisterUser,
-  errorSignInUser,
-  errorSignOutUser,
-} from '../constants/errorNotifications';
-import {
-  successGetSignedInUser,
-  successRegisterUser,
-  successSignInUser,
-  successSignOutUser,
-} from '../constants/successNotifications';
+} from '../services/AuthServices';
+import { notification } from '../services/notification';
 
-type UserState = {
+const { error, success } = notification();
+
+type AuthState = {
   user: UserGetDto | undefined;
   signInUser: SignInUserDto | undefined;
   isLoading: boolean;
 };
 
-const initialState: UserState = {
+const initialState: AuthState = {
   user: undefined,
   signInUser: undefined,
   isLoading: false,
 };
 
-export const userSlice = createSlice({
+export const authSlice = createSlice({
   initialState,
-  name: 'user',
+  name: 'auth',
   reducers: {
-    assignUser(state, { payload }: PayloadAction<UserState['user']>) {
+    assignUser(state, { payload }: PayloadAction<AuthState['user']>) {
       state.user = payload;
     },
-    setIsLoading(state, { payload }: PayloadAction<UserState['isLoading']>) {
+    setIsLoading(state, { payload }: PayloadAction<AuthState['isLoading']>) {
       state.isLoading = payload;
     },
   },
   extraReducers: (builder) => {
-    /**
-     * SIGN IN
-     */
     builder.addCase(signInUser.fulfilled, (state, { payload }) => {
       state.signInUser = payload;
       state.isLoading = false;
-      successSignInUser();
+      success('Successfully logged in.');
     });
     builder.addCase(signInUser.rejected, (state) => {
       state.isLoading = false;
-      errorSignOutUser();
+      error('Error signing in.');
     });
     builder.addCase(signInUser.pending, (state) => {
       state.isLoading = true;
     });
-    /**
-     * SIGN OUT
-     */
     builder.addCase(signOutUser.fulfilled, (state) => {
       state.signInUser = undefined;
-      successSignOutUser();
+      success('Successfully signed out.');
     });
     builder.addCase(signOutUser.rejected, () => {
-      errorSignOutUser();
+      error('Error signing out.');
     });
-    /**
-     * REGISTER
-     */
     builder.addCase(registerUser.fulfilled, (state, { payload }) => {
       state.signInUser = payload;
       state.isLoading = false;
-      successRegisterUser();
+      success('Successfully registered.');
     });
     builder.addCase(registerUser.rejected, (state) => {
       state.isLoading = false;
-      errorRegisterUser();
+      error('Error registering.');
     });
     builder.addCase(registerUser.pending, (state) => {
       state.isLoading = true;
     });
-    /**
-     * GET SIGNED IN USER
-     */
     builder.addCase(getSignedInUser.fulfilled, (state, { payload }) => {
       state.user = payload;
-      successGetSignedInUser();
+      success('Successfully signed in.');
     });
     builder.addCase(getSignedInUser.rejected, () => {
-      errorSignInUser();
-      errorGetSignedInUser();
+      error('Error signing in.');
     });
   },
 });
 
-export const { assignUser, setIsLoading } = userSlice.actions;
+export const { assignUser, setIsLoading } = authSlice.actions;

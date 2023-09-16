@@ -9,8 +9,8 @@ import {
 import { IconClick, IconHandClick } from '@tabler/icons-react';
 import { useState } from 'react';
 import { PrimaryButton } from '../../../components/buttons/PrimaryButton';
-import { LoginModal } from '../../../components/modals/LoginModal';
-import { RegisterModal } from '../../../components/modals/RegisterModal';
+import { LoginModal } from '../../../components/modals/AuthModals/LoginModal';
+import { RegisterModal } from '../../../components/modals/AuthModals/RegisterModal';
 
 export function HeroTitle() {
   const { classes } = useStyles();

@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { SignInUserDto, UserCreateDto, UserGetDto } from '../types/users';
-import { createAxiosCall } from '../constants/createAxiosCall';
+import { createAxiosCall } from './createAxiosCall';
 import { apiRoutes } from '../routes';
 
 export const registerUser = createAsyncThunk<UserCreateDto, UserCreateDto>(
