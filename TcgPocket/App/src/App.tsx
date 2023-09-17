@@ -9,15 +9,17 @@ import {
 import { PrimaryNavigation } from './navigation/PrimaryNavigation';
 import { AppRoutes } from './routes/routes';
 import { useNavbarHeight } from './hooks/use-navbar-height';
+import { dispatch } from './store/configureStore';
+import { getSignedInUser } from './services/AuthServices';
+import { useAsync } from 'react-use';
 
 function App() {
   const { navbarHeight, remainingHeight } = useNavbarHeight();
   const scrollAreaSx = useScrollAreaSx(navbarHeight);
-  // const auth = useAuth();
 
-  // useAsync(async () => {
-  //   await auth.getSignedInUser();
-  // });
+  useAsync(async () => {
+    await dispatch(getSignedInUser());
+  }, []);
 
   return (
     <>

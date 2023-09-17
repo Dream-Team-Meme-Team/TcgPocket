@@ -10,6 +10,7 @@ import { useMemo } from 'react';
 import { dispatch, useAppSelector } from '../../../store/configureStore';
 import { registerUser } from '../../../services/AuthServices';
 import { useFormValidation } from '../../../helpers/useFormValidation';
+import { error, success } from '../../../services/notification';
 
 type RegisterModal = {
   openModal: boolean;
@@ -70,8 +71,19 @@ export function RegisterModal({
     form.reset();
   };
 
-  const handleRegisterUser = () => {
-    dispatch(registerUser(form.values));
+  const handleRegisterUser = async (values: UserCreateDto) => {
+    const { payload } = await dispatch(registerUser(values));
+
+    if (!payload) {
+      return;
+    }
+
+    if (payload.hasErrors) {
+      payload.errors.forEach((err) => error(err.message));
+      return;
+    }
+
+    success('User registered');
     handleClose();
   };
 

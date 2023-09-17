@@ -1,15 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, { AxiosError } from 'axios';
 import { Response } from '../types/shared';
+axios.defaults.withCredentials = true;
 
 export type HttpMethod = 'GET' | 'POST' | 'DELETE' | 'PUT' | 'PATCH';
 
-export async function createAxiosCall<TResponse>(
+export async function apiCall<TResult>(
   method: HttpMethod,
   endpoint: string,
   data?: any
 ) {
-  const response = axios<Response<TResponse>>({
+  const response = axios<Response<TResult>>({
     method: method,
     url: endpoint,
     data: data,
@@ -17,8 +18,7 @@ export async function createAxiosCall<TResponse>(
 
   return response
     .then((axiosResponse) => axiosResponse.data)
-    .catch((error: AxiosError<Response<TResponse>>) => {
-      console.error(error.message, error.name, error.request);
-      return error.response?.data as Response<TResponse>;
+    .catch((axiosError: AxiosError<Response<TResult>>) => {
+      return axiosError.response?.data as Response<TResult>;
     });
 }
