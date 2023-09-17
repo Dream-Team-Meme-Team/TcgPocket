@@ -38,6 +38,7 @@ export function LoginModal({
       userName: (value) =>
         validateTextInput(value) ? 'Invalid Username' : null,
       password: (value) =>
+        validatePassword(value) ? 'Invalid Password' : null,
     },
   });
 
