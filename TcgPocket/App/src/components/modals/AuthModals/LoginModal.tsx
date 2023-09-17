@@ -26,7 +26,7 @@ export function LoginModal({
   setOpenModal,
 }: LoginModalProps): React.ReactElement {
   const { classes } = useLoginOrRegisterStyles();
-  const { validateTextInput } = useFormValidation();
+  const { validateTextInput, validatePassword } = useFormValidation();
 
   const isLoading = useAppSelector((state) => state.user.isLoading);
 
@@ -37,7 +37,7 @@ export function LoginModal({
       userName: (value) =>
         validateTextInput(value) ? 'Invalid Username' : null,
       password: (value) =>
-        validateTextInput(value) ? 'Invalid Password' : null,
+        validatePassword(value) ? 'Invalid Password' : null,
     },
   });
 
@@ -54,7 +54,7 @@ export function LoginModal({
   const disableLogin = useMemo(
     () =>
       validateTextInput(form.values.userName) ||
-      validateTextInput(form.values.password) ||
+      validatePassword(form.values.password) ||
       isLoading,
     [form, isLoading]
   );

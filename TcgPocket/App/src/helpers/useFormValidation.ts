@@ -1,4 +1,6 @@
 export const alphaNumRegex = /^[a-z0-9]+$/i;
+export const passwordRegex =
+  /^(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]+$/;
 export const phoneNumberRegex = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
 export const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 
@@ -15,5 +17,14 @@ export function useFormValidation() {
     return !phoneNumberRegex.test(phoneNumber);
   };
 
-  return { validateTextInput, validateEmail, validatePhoneNumer };
+  const validatePassword = (password: string) => {
+    return !passwordRegex.test(password);
+  };
+
+  return {
+    validateTextInput,
+    validateEmail,
+    validatePhoneNumer,
+    validatePassword,
+  };
 }

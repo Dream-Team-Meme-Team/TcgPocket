@@ -1,6 +1,7 @@
 import { Paper, PasswordInput, createStyles } from '@mantine/core';
 import { PrimaryTextInput } from '../../../components/inputs/PrimaryTextInput';
 import { useForm } from '@mantine/form';
+import { useFormValidation } from '../../../helpers/useFormValidation';
 
 const initialValues = {
   userName: '',
@@ -12,8 +13,28 @@ const initialValues = {
 
 export function AccountTab(): React.ReactElement {
   const { classes } = useStyles();
+  const {
+    validateTextInput,
+    validateEmail,
+    validatePhoneNumer,
+    validatePassword,
+  } = useFormValidation();
 
-  const form = useForm({ initialValues: initialValues });
+  const form = useForm({
+    initialValues: initialValues,
+    validateInputOnChange: true,
+    validate: {
+      userName: (value) =>
+        validateTextInput(value) ? 'Invalid Username' : null,
+      email: (value) => (validateEmail(value) ? 'Invalid Email' : null),
+      phoneNumber: (value) =>
+        validatePhoneNumer(value) ? 'Invalid Phone Number' : null,
+      password: (value) =>
+        validatePassword(value) ? 'Invalid Password' : null,
+      confirmPassword: (value, values) =>
+        value !== values.password ? 'Passwords do not match' : null,
+    },
+  });
 
   return (
     <div className={classes.accountTabContainer}>
@@ -23,7 +44,7 @@ export function AccountTab(): React.ReactElement {
             <label> Username </label>
             <PrimaryTextInput
               // label="Username"
-              {...form.getInputProps('username')}
+              {...form.getInputProps('userName')}
             />
           </div>
 

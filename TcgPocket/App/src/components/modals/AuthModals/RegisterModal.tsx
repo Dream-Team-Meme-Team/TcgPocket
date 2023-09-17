@@ -29,8 +29,12 @@ export function RegisterModal({
   setOpenModal,
 }: RegisterModal): React.ReactElement {
   const { classes } = useLoginOrRegisterStyles();
-  const { validateTextInput, validateEmail, validatePhoneNumer } =
-    useFormValidation();
+  const {
+    validateTextInput,
+    validateEmail,
+    validatePhoneNumer,
+    validatePassword,
+  } = useFormValidation();
 
   const isLoading = useAppSelector((state) => state.user.isLoading);
 
@@ -44,7 +48,7 @@ export function RegisterModal({
       phoneNumber: (value) =>
         validatePhoneNumer(value) ? 'Invalid Phone Number' : null,
       password: (value) =>
-        validateTextInput(value) ? 'Invalid Password' : null,
+        validatePassword(value) ? 'Invalid Password' : null,
       confirmPassword: (value, values) =>
         value !== values.password ? 'Passwords do not match' : null,
     },
@@ -55,7 +59,7 @@ export function RegisterModal({
       validateTextInput(form.values.userName) ||
       validateEmail(form.values.email) ||
       validatePhoneNumer(form.values.phoneNumber) ||
-      validateTextInput(form.values.password) ||
+      validatePassword(form.values.password) ||
       form.values.confirmPassword !== form.values.password ||
       isLoading,
     [form, isLoading]
