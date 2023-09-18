@@ -5,6 +5,7 @@ import {
   registerUser,
   signInUser,
   signOutUser,
+  updateUserInformation,
 } from '../services/AuthServices';
 
 type AuthState = {
@@ -46,6 +47,9 @@ export const authSlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(getSignedInUser.fulfilled, (state, { payload }) => {
+      state.user = payload.data;
+    });
+    builder.addCase(updateUserInformation.fulfilled, (state, { payload }) => {
       state.user = payload.data;
     });
   },

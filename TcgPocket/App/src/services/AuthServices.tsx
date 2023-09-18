@@ -35,3 +35,15 @@ export const signOutUser = createAsyncThunk<
 >('signOutUser', async () => {
   return await apiCall<UserGetDto>('POST', apiRoutes.users.signOut);
 });
+
+export const updateUserInformation = createAsyncThunk<
+  Response<UserGetDto>,
+  UserGetDto,
+  { rejectValue: Response<UserGetDto> }
+>('updateUserInformation', async (user) => {
+  return await apiCall<UserGetDto>(
+    'PUT',
+    `${apiRoutes.users.base}/${user.id}`,
+    user
+  );
+});

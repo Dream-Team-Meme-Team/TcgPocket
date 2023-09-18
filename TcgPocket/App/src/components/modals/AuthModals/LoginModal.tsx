@@ -9,7 +9,6 @@ import { SignInUserDto } from '../../../types/users';
 import { useMemo } from 'react';
 import { dispatch, useAppSelector } from '../../../store/configureStore';
 import { signInUser } from '../../../services/AuthServices';
-import { useFormValidation } from '../../../helpers/useFormValidation';
 import { error, success } from '../../../services/notification';
 
 type LoginModalProps = {
@@ -27,19 +26,11 @@ export function LoginModal({
   setOpenModal,
 }: LoginModalProps): React.ReactElement {
   const { classes } = useLoginOrRegisterStyles();
-  const { validateTextInput, validatePassword } = useFormValidation();
 
   const isLoading = useAppSelector((state) => state.user.isLoading);
 
   const form = useForm({
     initialValues: initialValues,
-    validateInputOnChange: true,
-    validate: {
-      userName: (value) =>
-        validateTextInput(value) ? 'Invalid Username' : null,
-      password: (value) =>
-        validatePassword(value) ? 'Invalid Password' : null,
-    },
   });
 
   const handleClose = () => {
@@ -65,9 +56,7 @@ export function LoginModal({
 
   const disableLogin = useMemo(
     () =>
-      validateTextInput(form.values.userName) ||
-      validatePassword(form.values.password) ||
-      isLoading,
+      form.values.password === '' || form.values.userName === '' || isLoading,
     [form, isLoading]
   );
 
