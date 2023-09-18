@@ -3,9 +3,9 @@ using TcgPocket.Features.Decks.Commands;
 
 namespace TcgPocket.Features.Decks.Validators;
 
-public class CreateDeckRequestValidator : AbstractValidator<CreateDeckCommand>
+public class CreateDeckCommandValidator : AbstractValidator<CreateDeckCommand>
 {
-    public CreateDeckRequestValidator(IValidator<DeckDto> baseValidator)
+    public CreateDeckCommandValidator(IValidator<DeckDto> baseValidator)
     {
         RuleFor(x => x.Deck)
             .SetValidator(baseValidator);
