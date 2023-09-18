@@ -8,11 +8,11 @@ namespace TcgPocket.Features.Cards
 {
     [ApiController]
     [Route("/api/cards")]
-    public class CardController : ControllerBase
+    public class CardsController : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public CardController(IMediator mediator)
+        public CardsController(IMediator mediator)
         {
             _mediator = mediator;
         }
@@ -45,6 +45,14 @@ namespace TcgPocket.Features.Cards
 
         [HttpGet]
         public async Task<ActionResult<Response<List<CardGetDto>>>> GetAllCards()
+        {
+            var response = await _mediator.Send(new GetAllCardsQuery { });
+
+            return response.HasErrors ? BadRequest(response) : Ok(response);
+        }
+
+        [HttpGet("{page}")]
+        public async Task<ActionResult<Response<List<CardGetDto>>>> GetAllCards(int page)
         {
             var response = await _mediator.Send(new GetAllCardsQuery { });
 
