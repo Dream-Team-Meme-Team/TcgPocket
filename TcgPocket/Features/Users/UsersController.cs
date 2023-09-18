@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using TcgPocket.Features.Cards;
 using TcgPocket.Features.Roles;
+using TcgPocket.Features.UserCards;
 using TcgPocket.Features.Users.Commands;
 using TcgPocket.Features.Users.Dtos;
 using TcgPocket.Features.Users.Queries;
@@ -41,6 +43,31 @@ public class UsersController : ControllerBase
         var response = await _mediator.Send(new GetAllRolesByUserIdQuery { UserId = id });
 
         return response.HasErrors ? NotFound(response) : Ok(response);
+    }
+
+    [HttpGet("{id:int}/cards")]
+    public async Task<ActionResult<Response<List<CardGetDto>>>> GetAllCardsByUserIdQuery([FromRoute] int id)
+    {
+        var response = await _mediator
+            .Send(new GetAllCardsByUserIdQuery { Id = id });
+
+        return response.HasErrors ? BadRequest(response) : Ok(response);
+    }
+
+    [HttpGet("{id:int}/games/{gameId:int}")]
+    public async Task<ActionResult<Response<List<CardGetDto>>>> GetAllCardsByGameIdAndUserIdQuery(int gameId, int id)
+    {
+        var response = await _mediator
+            .Send(new GetAllCardsByGameIdAndUserIdQuery
+            {
+                UserCardQueryByGameAndUser = new UserCardQueryByGameAndUserDto
+                {
+                    GameId = gameId,
+                    UserId = id
+                }
+            });
+
+        return response.HasErrors ? BadRequest(response) : Ok(response);
     }
 
     [HttpPost]

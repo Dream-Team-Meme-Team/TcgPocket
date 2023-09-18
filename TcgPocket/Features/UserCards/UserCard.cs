@@ -20,3 +20,9 @@ public class UserCardDto
     public int UserId { get; set; }
     public int CardId { get; set; }
 }
+
+public class UserCardQueryByGameAndUserDto
+{
+    public int UserId { get; set; }
+    public int GameId { get; set; }
+}

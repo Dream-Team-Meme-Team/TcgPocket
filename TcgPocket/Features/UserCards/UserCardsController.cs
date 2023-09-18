@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using TcgPocket.Features.Games.Queries;
 using TcgPocket.Features.UserCards.Commands;
 using TcgPocket.Features.UserCards.Queries;
 using TcgPocket.Shared;
