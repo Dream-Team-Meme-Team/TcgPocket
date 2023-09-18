@@ -5,6 +5,14 @@
 # %% IMPORTS
 import pandas as pd
 import copy
+import requests
+from PIL import Image
+from io import BytesIO
+
+import torch
+import torchvision.transforms as trans
+
+import numpy as np
 
 # %% DF INIT
 mgc_df = pd.read_csv('C:/Users/abbyo/Documents/PROJECTS/TcgPocket/data-science/data/raw-data/mgc.csv').sample(frac=1).reset_index(drop=True)

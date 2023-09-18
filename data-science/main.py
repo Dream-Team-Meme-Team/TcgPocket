@@ -1,32 +1,122 @@
-# IMPORTS
-import cv2
+# %% IMPORTS
 import requests
-import numpy as np
+from PIL import Image
+from io import BytesIO
 import pandas as pd
+import cv2
+import numpy as np
 
+import torch
+import torchvision.transforms as transform
+
+
+# %% IMPORTANT VARS FOR TRAINING
+batch_size = 40
+num_classes = 3 # 0 mgc, 1 ygo, 2 pkm
+learning_rate = 0.001
+num_epochs = 10
+
+# %% GET TRN CARD IMGS
+train_df = pd.read_csv('C:/Users/abbyo/Documents/PROJECTS/TcgPocket/data-science/data/train/data.txt')
+display(train_df)
+
+from_PIL = transform.Compose([transform.PILToTensor()])     # converts PIL Image to Tensor
+
+print("Train Card Images Loading... (0/1)")
+train_data = []
+for indx in range(6000):
+    try:
+        # get and load up card from URL
+        resp = requests.get(train_df.iloc[indx, 0], headers = {'X-Api-Key': '7ccb4c32-6299-4533-bf47-36f4d2a95117', 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'})
+        img = np.array(Image.open(BytesIO(resp.content)))
+        
+        # rearrange color channels >>> RGBA to BGR, RGB to BGR, etc...
+        if img.shape[2] == 4:
+            img = cv2.resize(cv2.cvtColor(img, cv2.COLOR_BGRA2BGR), [421, 614])
+        else:
+            img = cv2.resize(cv2.cvtColor(img, cv2.COLOR_RGB2BGR), [421, 614])
+        
+        # convert to pytorch tensor (via PIL Image) and normalize
+        tensor = from_PIL(Image.fromarray(np.uint8(img))).to(torch.float32)
+        train_data.append([(tensor / torch.max(tensor)), train_df.iloc[indx, 1]])
+    except:
+        pass
+print("Train Card Images Loaded. (1/1)")
+
+# %% GET TST CARD IMGS
+test_df = pd.read_csv('C:/Users/abbyo/Documents/PROJECTS/TcgPocket/data-science/data/train/data.txt')
+display(test_df)
+
+from_PIL = transform.Compose([transform.PILToTensor()])     # converts PIL Image to Tensor
+
+print("Test Card Images Loading... (0/1)")
+test_data = []
+for indx in range(6000):
+    # get and load up card from URL
+    resp = requests.get(test_df.iloc[indx, 0], headers = {'X-Api-Key': '7ccb4c32-6299-4533-bf47-36f4d2a95117', 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'})
+    img = np.array(Image.open(BytesIO(resp.content)))
+
+    # rearrange color channels >>> RGBA to BGR, RGB to BGR, etc...
+    if img.shape[2] == 4:
+        img = cv2.resize(cv2.cvtColor(img, cv2.COLOR_BGRA2BGR), [421, 614])
+    else:
+        img = cv2.resize(cv2.cvtColor(img, cv2.COLOR_RGB2BGR), [421, 614])
+    
+    # convert to pytorch tensor (via PIL Image) and normalize
+    tensor = from_PIL(Image.fromarray(np.uint8(img))).to(torch.float32)
+    test_data.append([(tensor / torch.max(tensor)), test_df.iloc[indx, 1]])
+print("Test Card Images Loaded. (1/1)")
+
+
+# %% LOAD DATA SETS
+# trainloader = torch.utils.data.DataLoader(train_data, shuffle=True, batch_size=100)
+# i1, l1 = next(iter(trainloader))
+# print(i1.shape)
+
+# %% INIT MODEL, LOSS FN, OPTIMIZER
+
+# %% TRAIN
+
+# %% TEST
+
+
+
+
+
+
+# %%
 ''' JUST IN CASE '''
 # req = urllib.request.Request(url = 'https://images.pokemontcg.io/mcd18/5_hires.png', headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'})
 # resp = urllib.request.urlopen(req)
 
-# LOAD IN TRAINING DATA
-train_data = pd.read_csv('C:/Users/abbyo/Documents/PROJECTS/TcgPocket/data-science/data/train/data.txt')
-print(train_data)
+# # LOAD IN TRAINING DATA
+# old_train_data = pd.read_csv('C:/Users/abbyo/Documents/PROJECTS/TcgPocket/data-science/data/train_old/data.txt')
+# print(old_train_data)
 
-# GET IMGS
-data = []
-for indx, item in train_data.iterrows():
-    print(item.card)
-    resp = requests.get(item.card, headers = {'X-Api-Key': '7ccb4c32-6299-4533-bf47-36f4d2a95117', 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'})
-    arr = np.asarray(bytearray(resp.content), dtype=np.uint8)
-    img = cv2.imdecode(arr, -1)
-    data.append(img)
-print(len(data))
+# labels = old_train_data.iloc[:, 1].values
 
-# DISPLAY A FEW
-cv2.imshow('card', data[3])
-cv2.waitKey(0)
+# # GET IMGS
+# print("Card Images Loading... (0/1)")
+# data = []
+# for indx, item in old_train_data.iterrows():
+#     # print(item.card)
+#     resp = requests.get(item.card, headers = {'X-Api-Key': '7ccb4c32-6299-4533-bf47-36f4d2a95117', 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'})
+#     img = Image.open(BytesIO(resp.content))
+#     data.append(img)
+# print("Card Images Loaded. (1/1)")
 
-# RESIZE
-img_rsz = cv2.resize(data[3], [421,614])      # smallest card (ygo) size 
-cv2.imshow('card', img_rsz)
-cv2.waitKey(0)
+# # TRANSFORMING IMGS
+# preprocess_img = transform.Compose([transform.Resize((421,614)), 
+#                                     transform.PILToTensor(), 
+#                                     transform.Normalize()])
+
+# # DISPLAY A FEW
+# cv2.imshow('card', data[3])
+# cv2.waitKey(0)
+
+# # RESIZE
+# img_rsz = cv2.resize(data[3], [421,614])      # smallest card (ygo) size 
+# cv2.imshow('card', img_rsz)
+# cv2.waitKey(0)
+
+
