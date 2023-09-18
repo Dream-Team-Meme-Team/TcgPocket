@@ -24,12 +24,12 @@ from_PIL = transform.Compose([transform.PILToTensor()])     # converts PIL Image
 
 print("Train Card Images Loading... (0/1)")
 train_data = []
-for indx in range(6000):
+for indx in range(120):
     try:
         # get and load up card from URL
         resp = requests.get(train_df.iloc[indx, 0], headers = {'X-Api-Key': '7ccb4c32-6299-4533-bf47-36f4d2a95117', 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'})
         img = np.array(Image.open(BytesIO(resp.content)))
-        
+
         # rearrange color channels >>> RGBA to BGR, RGB to BGR, etc...
         if img.shape[2] == 4:
             img = cv2.resize(cv2.cvtColor(img, cv2.COLOR_BGRA2BGR), [421, 614])
@@ -39,6 +39,7 @@ for indx in range(6000):
         # convert to pytorch tensor (via PIL Image) and normalize
         tensor = from_PIL(Image.fromarray(np.uint8(img))).to(torch.float32)
         train_data.append([(tensor / torch.max(tensor)), train_df.iloc[indx, 1]])
+        
     except:
         pass
 print("Train Card Images Loaded. (1/1)")
@@ -52,19 +53,23 @@ from_PIL = transform.Compose([transform.PILToTensor()])     # converts PIL Image
 print("Test Card Images Loading... (0/1)")
 test_data = []
 for indx in range(6000):
-    # get and load up card from URL
-    resp = requests.get(test_df.iloc[indx, 0], headers = {'X-Api-Key': '7ccb4c32-6299-4533-bf47-36f4d2a95117', 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'})
-    img = np.array(Image.open(BytesIO(resp.content)))
+    try: 
+        # get and load up card from URL
+        resp = requests.get(test_df.iloc[indx, 0], headers = {'X-Api-Key': '7ccb4c32-6299-4533-bf47-36f4d2a95117', 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'})
+        img = np.array(Image.open(BytesIO(resp.content)))
 
-    # rearrange color channels >>> RGBA to BGR, RGB to BGR, etc...
-    if img.shape[2] == 4:
-        img = cv2.resize(cv2.cvtColor(img, cv2.COLOR_BGRA2BGR), [421, 614])
-    else:
-        img = cv2.resize(cv2.cvtColor(img, cv2.COLOR_RGB2BGR), [421, 614])
-    
-    # convert to pytorch tensor (via PIL Image) and normalize
-    tensor = from_PIL(Image.fromarray(np.uint8(img))).to(torch.float32)
-    test_data.append([(tensor / torch.max(tensor)), test_df.iloc[indx, 1]])
+        # rearrange color channels >>> RGBA to BGR, RGB to BGR, etc...
+        if img.shape[2] == 4:
+            img = cv2.resize(cv2.cvtColor(img, cv2.COLOR_BGRA2BGR), [421, 614])
+        else:
+            img = cv2.resize(cv2.cvtColor(img, cv2.COLOR_RGB2BGR), [421, 614])
+        
+        # convert to pytorch tensor (via PIL Image) and normalize
+        tensor = from_PIL(Image.fromarray(np.uint8(img))).to(torch.float32)
+        test_data.append([(tensor / torch.max(tensor)), test_df.iloc[indx, 1]])
+
+    except:
+        pass
 print("Test Card Images Loaded. (1/1)")
 
 
