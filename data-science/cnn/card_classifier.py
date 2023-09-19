@@ -23,13 +23,13 @@ class CardClassifier(nn.Module):
 
         self.conv1 = nn.Sequential(
             nn.Conv2d(in_channels=3, out_channels=32, kernel_size=(3,3), stride = 3, padding=0),
-            F.relu(),
+            nn.ReLU(),
             nn.MaxPool2d((3,3), stride = 3) # may want to get rid of
         )
         
         self.conv2 = nn.Sequential(
             nn.Conv2d(in_channels=32, out_channels=16, kernel_size=(3,3), stride = 3, padding=0),
-            F.relu(),
+            nn.ReLU(),
             nn.MaxPool2d((3,3), stride = 3)
         )
 

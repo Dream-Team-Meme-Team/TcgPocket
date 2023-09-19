@@ -28,7 +28,7 @@ class CardDataSet(Dataset):
     #
 
     def __getitem__(self, indx):
-
+        
         try:
             # get and load up card from URL
             resp = requests.get(self.df.iloc[indx, 0], headers = {'X-Api-Key': '7ccb4c32-6299-4533-bf47-36f4d2a95117', 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'})
