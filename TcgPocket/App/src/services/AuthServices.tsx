@@ -64,3 +64,11 @@ export const updateUserPassword = createAsyncThunk<
     user
   );
 });
+
+export const deleteUserAccount = createAsyncThunk<
+  Response<void>,
+  number,
+  { rejectValue: Response<void> }
+>('deleteUserAccount', async (id) => {
+  return await apiCall('DELETE', `${apiRoutes.users.base}/${id}`);
+});

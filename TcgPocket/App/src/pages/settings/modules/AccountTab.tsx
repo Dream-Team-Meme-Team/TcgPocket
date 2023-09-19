@@ -5,6 +5,7 @@ import { PasswordForm } from './PasswordForm';
 import { SignInUserDto } from '../../../types/users';
 import { signInUser } from '../../../services/AuthServices';
 import { error, success } from '../../../services/notification';
+import { DeleteAccount } from './DeleteAccount';
 
 export function AccountTab(): React.ReactElement {
   const { classes } = useStyles();
@@ -34,6 +35,8 @@ export function AccountTab(): React.ReactElement {
               user={user}
               loginUserAfterUpdate={loginUserAfterUpdate}
             />
+
+            <DeleteAccount user={user} />
           </div>
         </Paper>
       )}
@@ -51,7 +54,7 @@ const useStyles = createStyles(() => {
     },
 
     accountPaperContainer: {
-      width: '60%',
+      width: '75%',
       height: '75%',
 
       backgroundColor: 'white',
@@ -64,6 +67,7 @@ const useStyles = createStyles(() => {
       alignItems: 'center',
 
       height: '100%',
+      width: '100%',
     },
   };
 });
