@@ -22,10 +22,13 @@ print(f'Using {device} device')
 train_dataset = CardDataSet(csv_file='data-science/data/train/data.txt')
 train_dataset_ld = DataLoader(train_dataset, shuffle=False, batch_size=batch_size)
 
-it = iter(train_dataset_ld)
+test_dataset = CardDataSet(csv_file='data-science/data/test/data.txt')
+test_dataset_ld = DataLoader(test_dataset, shuffle=False, batch_size=batch_size)
 
-train_d1, train_l1 = next(it)
-print(train_d1, train_l1, '\n\n\n')
+# it = iter(train_dataset_ld)
 
-train_d2, train_l2 = next(it)
-print(train_d2, train_l2)
+# train_d1, train_l1 = next(it)
+# print(train_d1, train_l1, '\n\n\n')
+
+# train_d2, train_l2 = next(it)
+# print(train_d2, train_l2)
