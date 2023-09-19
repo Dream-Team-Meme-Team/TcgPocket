@@ -37,8 +37,12 @@ export function PasswordForm({
     validateInputOnBlur: true,
     validate: {
       currentPassword: (value) => (value === '' ? 'Cannot be Empty' : null),
-      newPassword: (value) =>
-        validatePassword(value) ? 'Invalid Password' : null,
+      newPassword: (value, values) =>
+        value === values.currentPassword
+          ? 'Must be different than current password.'
+          : validatePassword(value)
+          ? 'Invalid Password'
+          : null,
       newPasswordConfirmation: (value, values) =>
         value !== values.newPassword ? 'Passwords do not match' : null,
     },
@@ -75,27 +79,27 @@ export function PasswordForm({
     form.reset();
   };
 
-  const determineDisabled =
-    form.values.currentPassword === '' ||
-    form.values.newPassword === '' ||
-    form.values.newPasswordConfirmation === '';
+  const determineDisabled = !form.isValid();
 
   return (
     <form onSubmit={form.onSubmit(handleSubmit)} onReset={handleReset}>
       <header> Password </header>
 
       <PasswordInput
+        className={classes.passwordInput}
         label="Old Password"
         {...form.getInputProps('currentPassword')}
       />
 
       <div className={classes.newPasswordContainer}>
         <PasswordInput
+          className={classes.passwordInput}
           label="New Password"
           {...form.getInputProps('newPassword')}
         />
 
         <PasswordInput
+          className={classes.passwordInput}
           label="Confirm Password"
           {...form.getInputProps('newPasswordConfirmation')}
         />
@@ -117,6 +121,12 @@ const useStyles = createStyles(() => {
       display: 'grid',
       gridTemplateColumns: 'auto auto',
       gap: '8px',
+    },
+
+    passwordInput: {
+      input: {
+        backgroundColor: 'white',
+      },
     },
   };
 });

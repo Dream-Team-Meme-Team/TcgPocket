@@ -1,4 +1,4 @@
-import { Flex, Paper, createStyles } from '@mantine/core';
+import { Flex, createStyles } from '@mantine/core';
 import { dispatch, useAppSelector } from '../../../store/configureStore';
 import { PersonalInformationForm } from './PersonalInformationForm';
 import { PasswordForm } from './PasswordForm';
@@ -25,10 +25,12 @@ export function AccountTab(): React.ReactElement {
   };
 
   return (
-    <Flex className={classes.accountTabContainer}>
+    <Flex justify={'center'} sx={{ height: '100%' }}>
       {user && (
-        <Paper shadow="md" className={classes.accountPaperContainer}>
-          <div className={classes.formContainer}>
+        <div className={classes.accountInfoContainer}>
+          <div className={classes.titleText}>Update Account Information</div>
+
+          <div className={classes.contentContainer}>
             <PersonalInformationForm user={user} />
 
             <PasswordForm
@@ -38,7 +40,7 @@ export function AccountTab(): React.ReactElement {
 
             <DeleteAccount user={user} />
           </div>
-        </Paper>
+        </div>
       )}
     </Flex>
   );
@@ -46,28 +48,26 @@ export function AccountTab(): React.ReactElement {
 
 const useStyles = createStyles(() => {
   return {
-    accountTabContainer: {
-      justifyContent: 'center',
-      alignItems: 'center',
-
-      height: '100%',
-    },
-
-    accountPaperContainer: {
-      width: '75%',
-      height: '75%',
-
-      backgroundColor: 'white',
-    },
-
-    formContainer: {
+    accountInfoContainer: {
       display: 'grid',
-      gridTemplateRows: 'auto auto auto',
-      justifyContent: 'center',
+      gridTemplateRows: '15% auto',
+
       alignItems: 'center',
+    },
+
+    titleText: {
+      display: 'flex',
+      justifyContent: 'center',
+
+      fontSize: '20px',
+      fontWeight: 'bold',
+    },
+
+    contentContainer: {
+      display: 'grid',
+      justifyContent: 'center',
 
       height: '100%',
-      width: '100%',
     },
   };
 });

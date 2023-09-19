@@ -25,6 +25,7 @@ export function PersonalInformationForm({
       phoneNumber: user.phoneNumber,
       email: user.email,
     },
+    validateInputOnBlur: true,
     validate: {
       userName: (value) =>
         validateTextInput(value) ? 'Invalid Username' : null,
@@ -59,9 +60,10 @@ export function PersonalInformationForm({
   };
 
   const determineDisabled =
-    form.values.userName === user.userName &&
-    form.values.phoneNumber === user.phoneNumber &&
-    form.values.email === user.email;
+    (form.values.userName === user.userName &&
+      form.values.phoneNumber === user.phoneNumber &&
+      form.values.email === user.email) ||
+    !form.isValid();
 
   return (
     <form onSubmit={form.onSubmit(handleSubmit)} onReset={handleReset}>

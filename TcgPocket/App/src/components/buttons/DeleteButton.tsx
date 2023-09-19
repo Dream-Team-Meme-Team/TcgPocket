@@ -6,6 +6,10 @@ type DeleteButtonProps = ButtonProps & ButtonHTMLAttributes<HTMLButtonElement>;
 const buttonStyling = (theme: MantineTheme): CSSObject => ({
   backgroundColor: theme.colors.red,
   color: theme.white,
+
+  '&:hover': {
+    backgroundColor: 'darkred',
+  },
 });
 
 export function DeleteButton({ children, sx, ...props }: DeleteButtonProps) {
