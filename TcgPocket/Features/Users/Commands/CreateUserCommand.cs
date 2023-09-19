@@ -3,6 +3,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using TcgPocket.Data;
+using TcgPocket.Features.Users.Dtos;
 using TcgPocket.Shared;
 
 namespace TcgPocket.Features.Users.Commands;
