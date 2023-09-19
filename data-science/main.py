@@ -3,6 +3,7 @@ import cv2
 import requests
 import numpy as np
 import pandas as pd
+from apiKeys import IDK_API_KEY
 
 ''' JUST IN CASE '''
 # req = urllib.request.Request(url = 'https://images.pokemontcg.io/mcd18/5_hires.png', headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'})
@@ -16,7 +17,7 @@ print(train_data)
 data = []
 for indx, item in train_data.iterrows():
     print(item.card)
-    resp = requests.get(item.card, headers = {'X-Api-Key': '7ccb4c32-6299-4533-bf47-36f4d2a95117', 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'})
+    resp = requests.get(item.card, headers = {'X-Api-Key': IDK_API_KEY, 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'})
     arr = np.asarray(bytearray(resp.content), dtype=np.uint8)
     img = cv2.imdecode(arr, -1)
     data.append(img)
