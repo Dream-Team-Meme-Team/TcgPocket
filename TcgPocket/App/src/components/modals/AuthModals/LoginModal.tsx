@@ -43,15 +43,13 @@ export function LoginModal({
 
     if (!payload) {
       return;
-    }
-
-    if (payload.hasErrors) {
+    } else if (payload.hasErrors) {
       payload.errors.forEach((err) => error(err.message));
       return;
+    } else {
+      success('Signed In!');
+      handleClose();
     }
-
-    success('Signed In!');
-    handleClose();
   };
 
   const disableLogin = useMemo(

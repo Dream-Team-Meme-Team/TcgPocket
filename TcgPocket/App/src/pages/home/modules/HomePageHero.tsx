@@ -11,9 +11,12 @@ import { useState } from 'react';
 import { PrimaryButton } from '../../../components/buttons/PrimaryButton';
 import { LoginModal } from '../../../components/modals/AuthModals/LoginModal';
 import { RegisterModal } from '../../../components/modals/AuthModals/RegisterModal';
+import { useAppSelector } from '../../../store/configureStore';
 
 export function HeroTitle() {
   const { classes } = useStyles();
+
+  const user = useAppSelector((state) => state.user.user);
 
   const [openLoginModal, setOpenLoginModal] = useState(false);
   const [openRegisterModal, setOpenRegisterModal] = useState(false);
@@ -41,30 +44,32 @@ export function HeroTitle() {
             Presenting a trading card game inventory management system along
             with a deck builder. Just upload images of your MTG, Pokémon, and
             Yu-Gi-Oh! cards and allow our card scanner to add the cards to your
-            inventory. Sign up or log in to begin! (*^▽^*)
+            inventory. {!user && 'Sign up or log in to begin! (*^▽^*)'}
           </Text>
 
-          <Group className={classes.controls}>
-            <PrimaryButton
-              size="xl"
-              className={classes.control}
-              variant="filled"
-              leftIcon={<IconHandClick />}
-              onClick={handleRegister}
-            >
-              Register
-            </PrimaryButton>
+          {!user && (
+            <Group className={classes.controls}>
+              <PrimaryButton
+                size="xl"
+                className={classes.control}
+                variant="filled"
+                leftIcon={<IconHandClick />}
+                onClick={handleRegister}
+              >
+                Register
+              </PrimaryButton>
 
-            <PrimaryButton
-              size="xl"
-              className={classes.control}
-              variant="filled"
-              leftIcon={<IconClick />}
-              onClick={handleLogin}
-            >
-              Log in
-            </PrimaryButton>
-          </Group>
+              <PrimaryButton
+                size="xl"
+                className={classes.control}
+                variant="filled"
+                leftIcon={<IconClick />}
+                onClick={handleLogin}
+              >
+                Log in
+              </PrimaryButton>
+            </Group>
+          )}
         </Container>
       </div>
 

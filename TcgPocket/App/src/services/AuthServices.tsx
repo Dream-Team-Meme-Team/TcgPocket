@@ -1,5 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { SignInUserDto, UserCreateDto, UserGetDto } from '../types/users';
+import {
+  SignInUserDto,
+  UserCreateDto,
+  UserGetDto,
+  UserPasswordUpdateDto,
+} from '../types/users';
 import { apiCall } from './api';
 import { apiRoutes } from '../routes';
 import { Response } from '../types/shared';
@@ -44,6 +49,18 @@ export const updateUserInformation = createAsyncThunk<
   return await apiCall<UserGetDto>(
     'PUT',
     `${apiRoutes.users.base}/${user.id}`,
+    user
+  );
+});
+
+export const updateUserPassword = createAsyncThunk<
+  Response<UserGetDto>,
+  UserPasswordUpdateDto,
+  { rejectValue: Response<UserGetDto> }
+>('updateUserPassword', async (user) => {
+  return await apiCall<UserGetDto>(
+    'PUT',
+    `${apiRoutes.users.updatePassword}`,
     user
   );
 });

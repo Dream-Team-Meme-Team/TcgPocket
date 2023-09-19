@@ -6,6 +6,7 @@ import {
   signInUser,
   signOutUser,
   updateUserInformation,
+  updateUserPassword,
 } from '../services/AuthServices';
 
 type AuthState = {
@@ -22,9 +23,6 @@ export const authSlice = createSlice({
   initialState,
   name: 'auth',
   reducers: {
-    assignUser(state, { payload }: PayloadAction<AuthState['user']>) {
-      state.user = payload;
-    },
     setIsLoading(state, { payload }: PayloadAction<AuthState['isLoading']>) {
       state.isLoading = payload;
     },
@@ -52,7 +50,10 @@ export const authSlice = createSlice({
     builder.addCase(updateUserInformation.fulfilled, (state, { payload }) => {
       state.user = payload.data;
     });
+    builder.addCase(updateUserPassword.fulfilled, (state, { payload }) => {
+      state.user = payload.data;
+    });
   },
 });
 
-export const { assignUser, setIsLoading } = authSlice.actions;
+export const { setIsLoading } = authSlice.actions;

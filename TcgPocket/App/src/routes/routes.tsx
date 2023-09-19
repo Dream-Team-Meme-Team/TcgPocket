@@ -4,8 +4,11 @@ import { ErrorPage } from '../pages/error/ErrorPage';
 import { NotFoundPage } from '../pages/notFound/NotFoundPage';
 import { HomePage } from '../pages/home/HomePage';
 import { SettingsPage } from '../pages/settings/SettingsPage';
+import { useAppSelector } from '../store/configureStore';
 
 export const AppRoutes = () => {
+  const user = useAppSelector((state) => state.user.user);
+
   return (
     <Routes>
       <Route
@@ -13,11 +16,13 @@ export const AppRoutes = () => {
         element={<HomePage />}
         errorElement={<ErrorPage />}
       />
-      <Route
-        path={routes.settings}
-        element={<SettingsPage />}
-        errorElement={<ErrorPage />}
-      />
+      {user && (
+        <Route
+          path={routes.settings}
+          element={<SettingsPage />}
+          errorElement={<ErrorPage />}
+        />
+      )}
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );

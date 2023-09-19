@@ -1,12 +1,10 @@
 import { Tabs, createStyles } from '@mantine/core';
-import { IconMoon, IconUser } from '@tabler/icons-react';
+import { IconUser } from '@tabler/icons-react';
 import { AccountTab } from './modules/AccountTab';
-import { AppearanceTab } from './modules/AppearanceTab';
 import { useNavbarHeight } from '../../hooks/use-navbar-height';
 
 const tabs = [
   { label: 'Account', icon: <IconUser />, element: <AccountTab /> },
-  { label: 'Appearance', icon: <IconMoon />, element: <AppearanceTab /> },
 ];
 
 export function SettingsPage(): React.ReactElement {
