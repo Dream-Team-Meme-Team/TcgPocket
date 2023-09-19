@@ -1,5 +1,6 @@
 ﻿using TcgPocket.Features.Cards;
 using TcgPocket.Features.Users;
+using TcgPocket.Shared.Dtos;
 using TcgPocket.Shared.Interfaces;
 
 namespace TcgPocket.Features.UserCards;
@@ -19,10 +20,4 @@ public class UserCardDto
 {
     public int UserId { get; set; }
     public int CardId { get; set; }
-}
-
-public class UserCardQueryByGameAndUserDto
-{
-    public int UserId { get; set; }
-    public int GameId { get; set; }
 }

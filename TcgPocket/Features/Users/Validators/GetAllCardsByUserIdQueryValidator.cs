@@ -6,7 +6,7 @@ namespace TcgPocket.Features.Users.Validators;
 
 public class GetAllCardsByUserIdQueryValidator : AbstractValidator<GetAllCardsByUserIdQuery>
 {
-    public GetAllCardsByUserIdQueryValidator(IValidator<UserCardQueryByGameAndUserDto> baseValidator)
+    public GetAllCardsByUserIdQueryValidator()
     {
         RuleFor(x => x.Id)
             .GreaterThan(0);

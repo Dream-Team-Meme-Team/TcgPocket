@@ -2,11 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using TcgPocket.Features.Cards;
 using TcgPocket.Features.Roles;
-using TcgPocket.Features.UserCards;
 using TcgPocket.Features.Users.Commands;
 using TcgPocket.Features.Users.Dtos;
 using TcgPocket.Features.Users.Queries;
 using TcgPocket.Shared;
+using TcgPocket.Shared.Dtos;
+using static TcgPocket.Shared.Queries.PagedResultClass;
 
 namespace TcgPocket.Features.Users;
 
@@ -55,15 +56,17 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet("{id:int}/games/{gameId:int}")]
-    public async Task<ActionResult<Response<List<CardGetDto>>>> GetAllCardsByGameIdAndUserIdQuery(int gameId, int id)
+    public async Task<ActionResult<Response<PagedResult<CardGetDto>>>> GetAllCardsByGameIdAndUserIdQuery(int gameId, int id, [FromQuery] PageDto data)
     {
         var response = await _mediator
             .Send(new GetAllCardsByGameIdAndUserIdQuery
             {
-                UserCardQueryByGameAndUser = new UserCardQueryByGameAndUserDto
+                UserCardGame = new UserCardGameDto
                 {
                     GameId = gameId,
-                    UserId = id
+                    UserId = id,
+                    CurrentPage = data.CurrentPage,
+                    PageSize = data.PageSize,
                 }
             });
 

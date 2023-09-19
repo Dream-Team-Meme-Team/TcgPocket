@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using TcgPocket.Shared.Dtos;
+using TcgPocket.Shared.Interfaces;
 
 namespace TcgPocket.Shared.Queries;
 
@@ -13,14 +15,14 @@ public static class PagedResultClass
         {
             CurrentPage = page,
             PageSize = pageSize,
-            RowCount = query.Count()
+            ItemCount = query.Count()
         };
 
-        var pageCount = (double)result.RowCount / pageSize;
+        var pageCount = (double)result.ItemCount / pageSize;
         result.PageCount = (int)Math.Ceiling(pageCount);
 
         var skip = (page - 1) * pageSize;
-        result.Results = query.Skip(skip).Take(pageSize).ToList();
+        result.Items = query.Skip(skip).Take(pageSize).ToList();
 
         return result;
     }
@@ -31,14 +33,14 @@ public static class PagedResultClass
         {
             CurrentPage = page,
             PageSize = pageSize,
-            RowCount = await query.CountAsync()
+            ItemCount = await query.CountAsync()
         };
 
-        var pageCount = (double)result.RowCount / pageSize;
+        var pageCount = (double)result.ItemCount / pageSize;
         result.PageCount = (int)Math.Ceiling(pageCount);
 
         var skip = (page - 1) * pageSize;
-        result.Results = await query.Skip(skip).Take(pageSize).ToListAsync();
+        result.Items = await query.Skip(skip).Take(pageSize).ToListAsync();
 
         return result;
     }
@@ -48,13 +50,13 @@ public static class PagedResultClass
         var result = new PagedResult<U>();
         result.CurrentPage = page;
         result.PageSize = pageSize;
-        result.RowCount = query.Count();
+        result.ItemCount = query.Count();
 
-        var pageCount = (double)result.RowCount / pageSize;
+        var pageCount = (double)result.ItemCount / pageSize;
         result.PageCount = (int)Math.Ceiling(pageCount);
 
         var skip = (page - 1) * pageSize;
-        result.Results = query.Skip(skip)
+        result.Items = query.Skip(skip)
                               .Take(pageSize)
                               .ProjectTo<U>(mapper.ConfigurationProvider)
                               .ToList();
@@ -66,49 +68,40 @@ public static class PagedResultClass
         var result = new PagedResult<U>();
         result.CurrentPage = page;
         result.PageSize = pageSize;
-        result.RowCount = await query.CountAsync();
+        result.ItemCount = await query.CountAsync();
 
-        var pageCount = (double)result.RowCount / pageSize;
+        var pageCount = (double)result.ItemCount / pageSize;
         result.PageCount = (int)Math.Ceiling(pageCount);
 
         var skip = (page - 1) * pageSize;
-        result.Results = await query.Skip(skip)
+        result.Items = await query.Skip(skip)
                                     .Take(pageSize)
                                     .ProjectTo<U>(mapper.ConfigurationProvider)
                                     .ToListAsync();
+
         return result;
     }
 
     public class PagedResult<T> : PagedResultBase
     {
-        public IList<T> Results { get; set; }
-
+        public IList<T> Items { get; set; }
         public PagedResult()
         {
-            Results = new List<T>();
+            Items = new List<T>();
         }
     }
 }
 
-public abstract class PagedResultBase
+public abstract class PagedResultBase : PageDto
 {
-    public int CurrentPage { get; set; }
-
     public int PageCount { get; set; }
-
-    public int PageSize { get; set; }
-
-    public int RowCount { get; set; }
-    public string LinkTemplate { get; set; }
-
+    public int ItemCount { get; set; }
     public int FirstRowOnPage
     {
-
         get { return (CurrentPage - 1) * PageSize + 1; }
     }
-
     public int LastRowOnPage
     {
-        get { return Math.Min(CurrentPage * PageSize, RowCount); }
+        get { return Math.Min(CurrentPage * PageSize, ItemCount); }
     }
 }

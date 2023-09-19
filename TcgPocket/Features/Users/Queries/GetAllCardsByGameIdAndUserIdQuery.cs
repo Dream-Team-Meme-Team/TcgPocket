@@ -6,17 +6,19 @@ using Microsoft.IdentityModel.Tokens;
 using TcgPocket.Data;
 using TcgPocket.Features.Cards;
 using TcgPocket.Features.UserCards;
+using TcgPocket.Features.Users.Dtos;
 using TcgPocket.Shared;
 using TcgPocket.Shared.Queries;
+using static TcgPocket.Shared.Queries.PagedResultClass;
 
 namespace TcgPocket.Features.Users.Queries;
 
-public class GetAllCardsByGameIdAndUserIdQuery : IRequest<Response<List<CardGetDto>>>
+public class GetAllCardsByGameIdAndUserIdQuery : IRequest<Response<PagedResult<CardGetDto>>>
 {
-    public UserCardQueryByGameAndUserDto UserCardQueryByGameAndUser { get; set; }
+    public UserCardGameDto UserCardGame { get; set; }
 }
 
-public class GetAllUserCardsByGameIdQueryHandler : IRequestHandler<GetAllCardsByGameIdAndUserIdQuery, Response<List<CardGetDto>>>
+public class GetAllUserCardsByGameIdQueryHandler : IRequestHandler<GetAllCardsByGameIdAndUserIdQuery, Response<PagedResult<CardGetDto>>>
 {
     private readonly DataContext _dataContext;
     private readonly IMapper _mapper;
@@ -29,32 +31,27 @@ public class GetAllUserCardsByGameIdQueryHandler : IRequestHandler<GetAllCardsBy
         _validator = validator;
     }
 
-    public async Task<Response<List<CardGetDto>>> Handle(GetAllCardsByGameIdAndUserIdQuery query, CancellationToken cancellationToken)
+    public async Task<Response<PagedResult<CardGetDto>>> Handle(GetAllCardsByGameIdAndUserIdQuery query, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(query, cancellationToken);
 
         if (!validationResult.IsValid)
         {
             var errors = _mapper.Map<List<Error>>(validationResult.Errors);
-            return new Response<List<CardGetDto>> { Errors = errors };
+            return new Response<PagedResult<CardGetDto>> { Errors = errors };
         }
 
         var cards = await _dataContext.Set<UserCard>()
             .Include(x => x.User)
             .Include(x => x.Card)
-            .Where(x => x.UserId == query.UserCardQueryByGameAndUser.UserId
-                && x.Card.GameId == query.UserCardQueryByGameAndUser.GameId)
+            .Where(x => x.UserId == query.UserCardGame.UserId
+                && x.Card.GameId == query.UserCardGame.GameId)
             .Select(x => x.Card)
-            .ToListAsync(cancellationToken);
-
-        var pagedData = await _dataContext.Set<Card>()
             .OrderByDescending(x => x.Id)
-            .GetPagedAsync(1, 2);
+            .GetPagedAsync(query.UserCardGame.CurrentPage, query.UserCardGame.PageSize);
 
-        var mappedResults = _mapper.Map<List<CardGetDto>>(pagedData.Results);
+        if (cards.Items.IsNullOrEmpty()) return Error.AsResponse<PagedResult<CardGetDto>>("Cards not found", "gameId and userId");
 
-        if (cards.IsNullOrEmpty()) return Error.AsResponse<List<CardGetDto>>("Cards not found", "gameId and userId");
-
-        return _mapper.Map<List<CardGetDto>>(cards).AsResponse();
+        return _mapper.Map<PagedResult<CardGetDto>>(cards).AsResponse();
     }
 }

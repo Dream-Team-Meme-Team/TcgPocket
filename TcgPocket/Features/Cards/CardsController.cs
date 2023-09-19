@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using TcgPocket.Features.Cards.Commands;
 using TcgPocket.Features.Cards.Queries;
 using TcgPocket.Shared;
+using TcgPocket.Shared.Dtos;
+using static TcgPocket.Shared.Queries.PagedResultClass;
 
 namespace TcgPocket.Features.Cards
 {
@@ -51,10 +53,11 @@ namespace TcgPocket.Features.Cards
             return response.HasErrors ? BadRequest(response) : Ok(response);
         }
 
-        [HttpGet("{page}")]
-        public async Task<ActionResult<Response<List<CardGetDto>>>> GetAllCards(int page)
+        [HttpGet("pages")]
+        public async Task<ActionResult<Response<PagedResult<CardGetDto>>>> GetAllCardsPaginatedQuery([FromQuery]PageDto data)
         {
-            var response = await _mediator.Send(new GetAllCardsQuery { });
+            var response = await _mediator
+                .Send(new GetAllCardsPaginatedQuery { PageDto = data });
 
             return response.HasErrors ? BadRequest(response) : Ok(response);
         }
