@@ -1,4 +1,4 @@
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import Dataset
 import pandas as pd
 import torch
 import requests
@@ -7,6 +7,7 @@ from PIL import Image
 import cv2 
 from io import BytesIO
 import torchvision.transforms as transform
+from apiKeys import IDK_API_KEY
 
 from_PIL = transform.Compose([transform.PILToTensor()]) 
 
@@ -31,7 +32,7 @@ class CardDataSet(Dataset):
         
         try:
             # get and load up card from URL
-            resp = requests.get(self.df.iloc[indx, 0], headers = {'X-Api-Key': '7ccb4c32-6299-4533-bf47-36f4d2a95117', 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'})
+            resp = requests.get(self.df.iloc[indx, 0], headers = {'X-Api-Key': IDK_API_KEY, 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'})
             img = np.array(Image.open(BytesIO(resp.content)))
 
             # rearrange color channels >>> RGBA to BGR, RGB to BGR, etc...
