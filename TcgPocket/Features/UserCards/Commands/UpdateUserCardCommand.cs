@@ -41,12 +41,12 @@ public class UpdateUserCardCommandHandler : IRequestHandler<UpdateUserCardComman
             return new Response<UserCardGetDto> { Errors = errors };
         }
 
-        if(!await _dataContext.Set<User>().AnyAsync(x => x.Id == command.Id, cancellationToken))
+        if(!await _dataContext.Set<User>().AnyAsync(x => x.Id == command.UserCard.UserId, cancellationToken))
         {
             errors.Add(new Error { Message = "User not found", Property = "userId" });
         }
 
-        if (!await _dataContext.Set<Card>().AnyAsync(x => x.Id == command.Id, cancellationToken))
+        if (!await _dataContext.Set<Card>().AnyAsync(x => x.Id == command.UserCard.CardId, cancellationToken))
         {
             errors.Add(new Error { Message = "Card not found", Property = "cardId" });
         }
@@ -64,7 +64,7 @@ public class UpdateUserCardCommandHandler : IRequestHandler<UpdateUserCardComman
         _mapper.Map(command.UserCard, userCard);
         await _dataContext.SaveChangesAsync(cancellationToken);
 
-        return _mapper.Map<UserCardGetDto>(command).AsResponse();
+        return _mapper.Map<UserCardGetDto>(userCard).AsResponse();
     }
 
 }

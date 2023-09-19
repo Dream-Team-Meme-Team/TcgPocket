@@ -48,7 +48,7 @@ public class GetAllUserCardsByGameIdQueryHandler : IRequestHandler<GetAllCardsBy
                 && x.Card.GameId == query.UserCardGame.GameId)
             .Select(x => x.Card)
             .OrderByDescending(x => x.Id)
-            .GetPagedAsync(query.UserCardGame.CurrentPage, query.UserCardGame.PageSize);
+            .GetPagedAsync(query.UserCardGame.CurrentPage, query.UserCardGame.PageSize, cancellationToken);
 
         if (cards.Items.IsNullOrEmpty()) return Error.AsResponse<PagedResult<CardGetDto>>("Cards not found", "gameId and userId");
 

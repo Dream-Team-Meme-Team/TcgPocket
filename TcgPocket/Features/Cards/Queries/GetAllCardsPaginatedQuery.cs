@@ -30,7 +30,7 @@ public class GetAllCardsPaginatedQueryHandler : IRequestHandler<GetAllCardsPagin
     {
         var cards = await _dataContext.Set<Card>()
             .OrderByDescending(x => x.Id)
-            .GetPagedAsync(query.PageDto.CurrentPage, query.PageDto.PageSize);
+            .GetPagedAsync(query.PageDto.CurrentPage, query.PageDto.PageSize, cancellationToken);
 
         if (cards.Items.IsNullOrEmpty()) return Error.AsResponse<PagedResult<CardGetDto>>("Cards not found");
 

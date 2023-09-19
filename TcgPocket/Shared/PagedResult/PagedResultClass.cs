@@ -26,20 +26,20 @@ public static class PagedResultClass
         return result;
     }
 
-    public static async Task<PagedResult<T>> GetPagedAsync<T>(this IQueryable<T> query, int page, int pageSize)
+    public static async Task<PagedResult<T>> GetPagedAsync<T>(this IQueryable<T> query, int page, int pageSize, CancellationToken cancellationToken)
     {
         var result = new PagedResult<T>
         {
             CurrentPage = page,
             PageSize = pageSize,
-            ItemCount = await query.CountAsync()
+            ItemCount = await query.CountAsync(cancellationToken)
         };
 
         var pageCount = (double)result.ItemCount / pageSize;
         result.PageCount = (int)Math.Ceiling(pageCount);
 
         var skip = (page - 1) * pageSize;
-        result.Items = await query.Skip(skip).Take(pageSize).ToListAsync();
+        result.Items = await query.Skip(skip).Take(pageSize).ToListAsync(cancellationToken);
 
         return result;
     }
@@ -62,12 +62,12 @@ public static class PagedResultClass
         return result;
     }
 
-    public static async Task<PagedResult<U>> GetPagedAsync<T, U>(this IQueryable<T> query, int page, int pageSize) where U : class
+    public static async Task<PagedResult<U>> GetPagedAsync<T, U>(this IQueryable<T> query, int page, int pageSize, CancellationToken cancellationToken) where U : class
     {
         var result = new PagedResult<U>();
         result.CurrentPage = page;
         result.PageSize = pageSize;
-        result.ItemCount = await query.CountAsync();
+        result.ItemCount = await query.CountAsync(cancellationToken);
 
         var pageCount = (double)result.ItemCount / pageSize;
         result.PageCount = (int)Math.Ceiling(pageCount);
@@ -76,7 +76,7 @@ public static class PagedResultClass
         result.Items = await query.Skip(skip)
                                     .Take(pageSize)
                                     .ProjectTo<U>(mapper.ConfigurationProvider)
-                                    .ToListAsync();
+                                    .ToListAsync(cancellationToken);
 
         return result;
     }
