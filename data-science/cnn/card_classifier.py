@@ -7,7 +7,7 @@ POOLING
 CONV + ACTIV (ReLU)
 POOLING
 
-DROPOUT + FLATTEN
+FLATTEN
 FC
 
 OUTPUT (SOFTMAX)
@@ -16,7 +16,7 @@ OUTPUT (SOFTMAX)
 import torch.nn as nn
 import torch.nn.functional as F
 
-class CardClassifier(nn.module):
+class CardClassifier(nn.Module):
 
     def __init__(self):
         super(CardClassifier, self).__init__()
@@ -37,11 +37,12 @@ class CardClassifier(nn.module):
             nn.Flatten(),
             nn.Linear(in_features=16*5*7, out_features=3)     # softmax >> output
         )
+    #
 
     def forward(self, x): 
         x = self.conv1(x)
         x = self.conv2(x)
         x = self.fc1(x)
         return x
-
-
+    #
+#
