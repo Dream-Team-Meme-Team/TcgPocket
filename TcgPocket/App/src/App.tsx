@@ -16,6 +16,13 @@ import { useAsync } from 'react-use';
 function App() {
   const { navbarHeight, remainingHeight } = useNavbarHeight();
   const scrollAreaSx = useScrollAreaSx(navbarHeight);
+  const auth = useAuth();
+
+  useAsync(async () => {
+    await auth.getSignedInUser();
+  });
+
+  console.log('user: ', auth.signedInUser);
 
   useAsync(async () => {
     await dispatch(getSignedInUser());
