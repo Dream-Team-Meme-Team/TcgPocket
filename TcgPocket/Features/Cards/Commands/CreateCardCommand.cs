@@ -3,6 +3,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using TcgPocket.Data;
+using Attribute = TcgPocket.Features.Attributes.Attribute;
 using TcgPocket.Features.CardTypes;
 using TcgPocket.Features.Games;
 using TcgPocket.Features.Rarities;
@@ -55,6 +56,17 @@ namespace TcgPocket.Features.Cards.Commands
             if (!await _dataContext.Set<CardType>().AnyAsync(x => x.Id == command.CardDto.CardTypeId))
             {
                 errors.Add(new Error { Message = "Card Type not found", Property = "cardTypeId" });
+            }
+            foreach (var attribute in command.CardDto.Attributes)
+            {
+                if (attribute.GameId != command.CardDto.GameId)
+                {
+                    errors.Add(new Error { Message = "Attribute not assignable to this card game", Property = "attributeId" });
+                }
+                if (!await _dataContext.Set<Attribute>().AnyAsync(x => x.Id == attribute.Id)) 
+                {
+                    errors.Add(new Error { Message = "Attribute not found", Property = "attributeId" });
+                }
             }
 
             if (errors.Any()) return new Response<CardGetDto> { Errors = errors };
