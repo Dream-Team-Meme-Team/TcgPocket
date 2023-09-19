@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using TcgPocket.Features.Cards;
-using static TcgPocket.Shared.PagedResult.PagedResultClass;
+using static TcgPocket.Shared.PagedResult.QueryableExtensions;
 
 namespace TcgPocket.Shared.PagedResult;
 

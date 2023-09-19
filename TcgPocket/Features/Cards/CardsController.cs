@@ -4,7 +4,7 @@ using TcgPocket.Features.Cards.Commands;
 using TcgPocket.Features.Cards.Queries;
 using TcgPocket.Shared;
 using TcgPocket.Shared.Dtos;
-using static TcgPocket.Shared.PagedResult.PagedResultClass;
+using static TcgPocket.Shared.PagedResult.QueryableExtensions;
 
 namespace TcgPocket.Features.Cards
 {

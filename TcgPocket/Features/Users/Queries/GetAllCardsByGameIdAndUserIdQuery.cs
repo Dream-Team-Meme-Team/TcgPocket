@@ -9,7 +9,7 @@ using TcgPocket.Features.UserCards;
 using TcgPocket.Features.Users.Dtos;
 using TcgPocket.Shared;
 using TcgPocket.Shared.PagedResult;
-using static TcgPocket.Shared.PagedResult.PagedResultClass;
+using static TcgPocket.Shared.PagedResult.QueryableExtensions;
 
 namespace TcgPocket.Features.Users.Queries;
 
