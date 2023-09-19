@@ -87,7 +87,7 @@ export function PasswordForm({
 
       <PasswordInput
         className={classes.passwordInput}
-        label="Old Password"
+        label="Current Password"
         {...form.getInputProps('currentPassword')}
       />
 

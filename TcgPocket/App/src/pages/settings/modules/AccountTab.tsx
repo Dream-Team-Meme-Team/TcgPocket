@@ -20,7 +20,7 @@ export function AccountTab(): React.ReactElement {
     } else if (payload.hasErrors) {
       payload.errors.forEach((err) => error(err.message));
     } else {
-      success('SignedIn');
+      success('Signed In!');
     }
   };
 

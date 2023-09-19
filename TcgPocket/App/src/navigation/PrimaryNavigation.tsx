@@ -36,6 +36,7 @@ export function PrimaryNavigation(): React.ReactElement {
 
   const handleSignOut = () => {
     dispatch(signOutUser());
+    navigate(routes.home);
   };
 
   const determineUserState = useMemo(() => {
