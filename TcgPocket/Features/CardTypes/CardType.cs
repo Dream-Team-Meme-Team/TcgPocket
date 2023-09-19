@@ -1,4 +1,5 @@
-﻿using TcgPocket.Features.Games;
+﻿using TcgPocket.Features.Cards;
+using TcgPocket.Features.Games;
 using TcgPocket.Shared.Interfaces;
 
 namespace TcgPocket.Features.CardTypes;
@@ -6,6 +7,7 @@ namespace TcgPocket.Features.CardTypes;
 public class CardType : CardTypeGetDto, IEntity
 {
     public Game Game { get; set; }
+    public List<Card> Cards { get; set; }
 }
 
 public class CardTypeGetDto : CardTypeDto

@@ -154,6 +154,55 @@ namespace TcgPocket.Migrations
                     b.ToTable("CardTypes", "dbo");
                 });
 
+            modelBuilder.Entity("TcgPocket.Features.Cards.Card", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CardNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CardTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("GameId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RarityId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SetId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CardTypeId");
+
+                    b.HasIndex("GameId");
+
+                    b.HasIndex("RarityId");
+
+                    b.HasIndex("SetId");
+
+                    b.ToTable("Cards", "dbo");
+                });
+
             modelBuilder.Entity("TcgPocket.Features.Decks.Deck", b =>
                 {
                     b.Property<int>("Id")
@@ -408,6 +457,41 @@ namespace TcgPocket.Migrations
                     b.Navigation("Game");
                 });
 
+            modelBuilder.Entity("TcgPocket.Features.Cards.Card", b =>
+                {
+                    b.HasOne("TcgPocket.Features.CardTypes.CardType", "CardType")
+                        .WithMany("Cards")
+                        .HasForeignKey("CardTypeId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.HasOne("TcgPocket.Features.Games.Game", "Game")
+                        .WithMany("Cards")
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.HasOne("TcgPocket.Features.Rarities.Rarity", "Rarity")
+                        .WithMany("Cards")
+                        .HasForeignKey("RarityId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.HasOne("TcgPocket.Features.Sets.Set", "Set")
+                        .WithMany("Cards")
+                        .HasForeignKey("SetId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.Navigation("CardType");
+
+                    b.Navigation("Game");
+
+                    b.Navigation("Rarity");
+
+                    b.Navigation("Set");
+                });
+
             modelBuilder.Entity("TcgPocket.Features.Decks.Deck", b =>
                 {
                     b.HasOne("TcgPocket.Features.Users.User", "User")
@@ -460,20 +544,37 @@ namespace TcgPocket.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("TcgPocket.Features.CardTypes.CardType", b =>
+                {
+                    b.Navigation("Cards");
+                });
+
             modelBuilder.Entity("TcgPocket.Features.Games.Game", b =>
                 {
                     b.Navigation("Attributes");
 
                     b.Navigation("CardTypes");
 
+                    b.Navigation("Cards");
+
                     b.Navigation("Rarities");
 
                     b.Navigation("Sets");
                 });
 
+            modelBuilder.Entity("TcgPocket.Features.Rarities.Rarity", b =>
+                {
+                    b.Navigation("Cards");
+                });
+
             modelBuilder.Entity("TcgPocket.Features.Roles.Role", b =>
                 {
                     b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("TcgPocket.Features.Sets.Set", b =>
+                {
+                    b.Navigation("Cards");
                 });
 
             modelBuilder.Entity("TcgPocket.Features.Users.User", b =>
