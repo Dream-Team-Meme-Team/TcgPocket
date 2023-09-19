@@ -4,8 +4,8 @@ using Microsoft.IdentityModel.Tokens;
 using TcgPocket.Data;
 using TcgPocket.Shared;
 using TcgPocket.Shared.Dtos;
-using TcgPocket.Shared.Queries;
-using static TcgPocket.Shared.Queries.PagedResultClass;
+using TcgPocket.Shared.PagedResult;
+using static TcgPocket.Shared.PagedResult.PagedResultClass;
 
 namespace TcgPocket.Features.Cards.Queries;
 

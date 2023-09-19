@@ -8,8 +8,8 @@ using TcgPocket.Features.Cards;
 using TcgPocket.Features.UserCards;
 using TcgPocket.Features.Users.Dtos;
 using TcgPocket.Shared;
-using TcgPocket.Shared.Queries;
-using static TcgPocket.Shared.Queries.PagedResultClass;
+using TcgPocket.Shared.PagedResult;
+using static TcgPocket.Shared.PagedResult.PagedResultClass;
 
 namespace TcgPocket.Features.Users.Queries;
 

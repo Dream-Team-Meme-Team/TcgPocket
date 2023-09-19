@@ -18,3 +18,8 @@ export type Response = {
 export type Id = {
   id: number;
 };
+
+export type PageDto = {
+  currentPage: number;
+  pageSize: number;
+};

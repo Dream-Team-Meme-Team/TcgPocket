@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using TcgPocket.Features.Cards;
-using static TcgPocket.Shared.Queries.PagedResultClass;
+using static TcgPocket.Shared.PagedResult.PagedResultClass;
 
-namespace TcgPocket.Features.Games;
+namespace TcgPocket.Shared.PagedResult;
 
 public class PagedResultMapper : Profile
 {

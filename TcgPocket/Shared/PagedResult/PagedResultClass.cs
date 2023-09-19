@@ -2,9 +2,8 @@
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using TcgPocket.Shared.Dtos;
-using TcgPocket.Shared.Interfaces;
 
-namespace TcgPocket.Shared.Queries;
+namespace TcgPocket.Shared.PagedResult;
 
 public static class PagedResultClass
 {
