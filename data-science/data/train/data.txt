@@ -116,7 +116,6 @@ https://cards.scryfall.io/normal/front/b/6/b6e3d6e6-ac17-4d73-acac-089442de4af6.
 https://images.ygoprodeck.com/images/cards/37812118.jpg,1
 https://images.pokemontcg.io/ex2/93_hires.png,2
 https://images.ygoprodeck.com/images/cards/26237713.jpg,1
-https://images.pokemontcg.io/mcd18/5_hires.png,2
 https://cards.scryfall.io/normal/front/3/e/3e612763-6611-40e7-ab47-3161f8275b9d.jpg?1626102607,0
 https://cards.scryfall.io/normal/front/b/6/b60b4f2e-ff47-4762-a803-30e81b665c09.jpg?1686970272,0
 https://cards.scryfall.io/normal/front/4/a/4ae26205-e572-49a5-a9d6-c4e2acd47748.jpg?1682598864,0
@@ -767,7 +766,6 @@ https://images.ygoprodeck.com/images/cards/31320433.jpg,1
 https://images.ygoprodeck.com/images/cards/19980975.jpg,1
 https://cards.scryfall.io/normal/front/5/5/5515eb7b-d42b-4a3d-880d-d4dec99db4b2.jpg?1681412645,0
 https://images.ygoprodeck.com/images/cards/68087897.jpg,1
-https://images.pokemontcg.io/mcd17/4_hires.png,2
 https://images.ygoprodeck.com/images/cards/900787.jpg,1
 https://images.pokemontcg.io/xy4/94_hires.png,2
 https://images.pokemontcg.io/gym1/12_hires.png,2
@@ -826,7 +824,6 @@ https://images.pokemontcg.io/xy3/75_hires.png,2
 https://cards.scryfall.io/normal/front/a/0/a03c738c-88d9-4cf6-a650-20ce6e5565bc.jpg?1637630249,0
 https://cards.scryfall.io/normal/front/4/c/4cf1918f-ad58-4f62-bd8c-649919de0e75.jpg?1675199726,0
 https://images.ygoprodeck.com/images/cards/53154400.jpg,1
-https://images.pokemontcg.io/mcd18/11_hires.png,2
 https://cards.scryfall.io/normal/front/a/3/a392b557-e809-4371-92d7-6e93caed4f1b.jpg?1562201445,0
 https://cards.scryfall.io/normal/front/4/c/4c81df5a-0829-4117-a94c-f634f338cfad.jpg?1592714578,0
 https://images.ygoprodeck.com/images/cards/77092311.jpg,1
@@ -1190,7 +1187,6 @@ https://images.pokemontcg.io/swsh5/68_hires.png,2
 https://images.ygoprodeck.com/images/cards/38057522.jpg,1
 https://images.pokemontcg.io/sm12/176_hires.png,2
 https://cards.scryfall.io/normal/front/9/f/9f970f79-3051-4ba1-badb-697ef321cbb3.jpg?1584831429,0
-https://images.pokemontcg.io/xyp/XY68_hires.png,2
 https://cards.scryfall.io/normal/front/6/5/651d249f-6771-41ed-8ccf-c8fa85419a75.jpg?1640979984,0
 https://cards.scryfall.io/normal/front/4/6/4611fd39-a212-4d04-8c9e-d5d9c2bf3c7d.jpg?1684342341,0
 https://images.pokemontcg.io/swshp/SWSH190_hires.png,2
@@ -1831,7 +1827,6 @@ https://images.pokemontcg.io/sm12/263_hires.png,2
 https://images.pokemontcg.io/pl3/56_hires.png,2
 https://images.ygoprodeck.com/images/cards/30325729.jpg,1
 https://images.pokemontcg.io/base4/120_hires.png,2
-https://images.pokemontcg.io/mcd14/4_hires.png,2
 https://images.ygoprodeck.com/images/cards/49003308.jpg,1
 https://cards.scryfall.io/normal/front/0/1/01848946-b0b3-41ad-8753-98a606e25238.jpg?1562271998,0
 https://images.pokemontcg.io/hgss2/41_hires.png,2
@@ -4398,7 +4393,6 @@ https://images.pokemontcg.io/col1/7_hires.png,2
 https://images.ygoprodeck.com/images/cards/55144522.jpg,1
 https://images.ygoprodeck.com/images/cards/38411870.jpg,1
 https://images.ygoprodeck.com/images/cards/38679204.jpg,1
-https://images.pokemontcg.io/mcd15/6_hires.png,2
 https://images.pokemontcg.io/sv3/199_hires.png,2
 https://images.ygoprodeck.com/images/cards/15684835.jpg,1
 https://cards.scryfall.io/normal/front/1/3/133e27fe-b8b2-4941-962f-63ccde21be21.jpg?1673161450,0
@@ -5802,7 +5796,6 @@ https://images.pokemontcg.io/pl1/4_hires.png,2
 https://cards.scryfall.io/normal/front/a/d/ad6a0916-c077-427f-983d-c595e8256507.jpg?1675830478,0
 https://images.pokemontcg.io/dp6/58_hires.png,2
 https://images.pokemontcg.io/xy5/158_hires.png,2
-https://images.pokemontcg.io/mcd17/2_hires.png,2
 https://images.pokemontcg.io/basep/17_hires.png,2
 https://images.ygoprodeck.com/images/cards/15092394.jpg,1
 https://cards.scryfall.io/normal/front/7/4/74830e41-4e59-4683-a08d-13b9f693c00b.jpg?1689143193,0
@@ -6395,7 +6388,6 @@ https://cards.scryfall.io/normal/front/f/3/f3df2707-e262-470a-a91e-7e588da90ce6.
 https://cards.scryfall.io/normal/front/0/d/0d6b189b-c4db-4606-8f90-7807ed66be99.jpg?1557640713,0
 https://images.pokemontcg.io/gym1/60_hires.png,2
 https://images.ygoprodeck.com/images/cards/27564031.jpg,1
-https://images.pokemontcg.io/mcd14/10_hires.png,2
 https://images.ygoprodeck.com/images/cards/55063751.jpg,1
 https://images.pokemontcg.io/dp4/92_hires.png,2
 https://images.pokemontcg.io/ex8/105_hires.png,2
@@ -6783,7 +6775,6 @@ https://cards.scryfall.io/normal/front/b/2/b2ff592c-bd35-4947-ba17-8b6170d5388e.
 https://cards.scryfall.io/normal/front/0/c/0c9ac08c-11ce-4e8a-8ea8-c18cfc745ac7.jpg?1674138301,0
 https://images.ygoprodeck.com/images/cards/25607552.jpg,1
 https://images.pokemontcg.io/bw4/37_hires.png,2
-https://images.pokemontcg.io/mcd17/12_hires.png,2
 https://cards.scryfall.io/normal/front/f/d/fdbe5a6f-82a2-4c6b-a69d-3a07917e15c9.jpg?1604782343,0
 https://cards.scryfall.io/normal/front/0/2/02962013-fc5a-46be-9021-8fd40ab3027c.jpg?1562005030,0
 https://images.ygoprodeck.com/images/cards/91422370.jpg,1
@@ -7814,7 +7805,6 @@ https://images.pokemontcg.io/bw10/103_hires.png,2
 https://images.ygoprodeck.com/images/cards/70366448.jpg,1
 https://images.ygoprodeck.com/images/cards/73216412.jpg,1
 https://cards.scryfall.io/normal/front/5/9/59d6e5dd-1243-4135-b6a7-adb9e3a847c9.jpg?1573513819,0
-https://images.pokemontcg.io/mcd18/9_hires.png,2
 https://cards.scryfall.io/normal/front/3/0/3095d590-f105-4338-b96c-4fc2972912ca.jpg?1559593109,0
 https://images.ygoprodeck.com/images/cards/58406094.jpg,1
 https://images.pokemontcg.io/ex6/47_hires.png,2
@@ -8191,7 +8181,6 @@ https://images.pokemontcg.io/ex9/42_hires.png,2
 https://cards.scryfall.io/normal/front/5/2/5218dc75-da9e-497f-a797-a11457cdbf48.jpg?1673484754,0
 https://images.ygoprodeck.com/images/cards/9012916.jpg,1
 https://cards.scryfall.io/normal/front/2/4/24584ffa-8ed1-4930-b6d8-ac1d02738ed0.jpg?1559591931,0
-https://images.pokemontcg.io/mcd18/4_hires.png,2
 https://images.ygoprodeck.com/images/cards/68191756.jpg,1
 https://images.pokemontcg.io/sm1/60_hires.png,2
 https://cards.scryfall.io/normal/front/7/f/7fa71e27-cd3a-40af-82ed-1bd716106be5.jpg?1562920742,0
@@ -9248,7 +9237,6 @@ https://images.pokemontcg.io/bp/4_hires.png,2
 https://images.pokemontcg.io/g1/53_hires.png,2
 https://images.ygoprodeck.com/images/cards/52352005.jpg,1
 https://cards.scryfall.io/normal/front/4/2/42d8d2ae-d1d8-4ddb-bf3c-4ea48667b200.jpg?1592765708,0
-https://images.pokemontcg.io/mcd14/3_hires.png,2
 https://cards.scryfall.io/normal/front/f/9/f9307a91-5d9b-4f42-8481-180d96ac41e9.jpg?1562432230,0
 https://images.ygoprodeck.com/images/cards/82140600.jpg,1
 https://images.pokemontcg.io/pl4/43_hires.png,2
@@ -9684,7 +9672,6 @@ https://images.ygoprodeck.com/images/cards/48276469.jpg,1
 https://images.ygoprodeck.com/images/cards/59392529.jpg,1
 https://images.ygoprodeck.com/images/cards/13685271.jpg,1
 https://cards.scryfall.io/normal/front/f/2/f2f13470-78c5-48e5-8ad2-23bf20843ebe.jpg?1675829110,0
-https://images.pokemontcg.io/mcd18/12_hires.png,2
 https://cards.scryfall.io/normal/front/8/0/80b73c66-3b26-4067-bc44-b74fe0f6547e.jpg?1592714326,0
 https://images.pokemontcg.io/dp7/60_hires.png,2
 https://images.ygoprodeck.com/images/cards/95362816.jpg,1
@@ -10541,7 +10528,6 @@ https://images.pokemontcg.io/sm6/40_hires.png,2
 https://images.ygoprodeck.com/images/cards/65737274.jpg,1
 https://images.pokemontcg.io/xy1/141_hires.png,2
 https://images.ygoprodeck.com/images/cards/38342335.jpg,1
-https://images.pokemontcg.io/sv2/12_hires.png,2
 https://images.ygoprodeck.com/images/cards/19814508.jpg,1
 https://images.pokemontcg.io/xy8/7_hires.png,2
 https://images.pokemontcg.io/sm11/198_hires.png,2
@@ -10809,7 +10795,6 @@ https://images.pokemontcg.io/sm10/182_hires.png,2
 https://images.ygoprodeck.com/images/cards/4483989.jpg,1
 https://cards.scryfall.io/normal/front/f/6/f6e467da-d428-4895-8917-30de48a8b9b0.jpg?1680999814,0
 https://images.pokemontcg.io/sm12/8_hires.png,2
-https://images.pokemontcg.io/mcd14/1_hires.png,2
 https://images.pokemontcg.io/sv2/279_hires.png,2
 https://images.pokemontcg.io/base1/70_hires.png,2
 https://images.ygoprodeck.com/images/cards/14558127.jpg,1
@@ -11376,7 +11361,6 @@ https://images.pokemontcg.io/dp7/82_hires.png,2
 https://cards.scryfall.io/normal/front/3/8/3878d4c7-5fda-4cea-bfa0-f9af102156fa.jpg?1677507780,0
 https://images.pokemontcg.io/xy12/66_hires.png,2
 https://images.pokemontcg.io/xyp/XY61_hires.png,2
-https://images.pokemontcg.io/mcd15/8_hires.png,2
 https://images.pokemontcg.io/swsh5/144_hires.png,2
 https://cards.scryfall.io/normal/front/0/5/0598a6d7-135e-464d-aa0e-5e2ece9e658f.jpg?1687887700,0
 https://images.ygoprodeck.com/images/cards/41302052.jpg,1
@@ -11415,7 +11399,6 @@ https://images.pokemontcg.io/sm6/15_hires.png,2
 https://images.pokemontcg.io/swsh12/164_hires.png,2
 https://images.ygoprodeck.com/images/cards/75901113.jpg,1
 https://cards.scryfall.io/normal/front/e/7/e7ff8345-227c-43b4-bed5-af3a34c0a990.jpg?1591230261,0
-https://images.pokemontcg.io/mcd14/9_hires.png,2
 https://images.ygoprodeck.com/images/cards/27979109.jpg,1
 https://images.ygoprodeck.com/images/cards/22073844.jpg,1
 https://images.ygoprodeck.com/images/cards/15510988.jpg,1
@@ -11758,7 +11741,6 @@ https://cards.scryfall.io/normal/front/4/0/40830022-4e9d-4195-bf52-d4ed2eb58b3f.
 https://images.pokemontcg.io/swsh3/64_hires.png,2
 https://cards.scryfall.io/normal/front/1/b/1b0d75ad-82a9-4145-ba3c-df4a86bd91d7.jpg?1682691009,0
 https://cards.scryfall.io/normal/front/5/b/5bb5923b-f2c1-47c4-af1f-af24ac7cb56b.jpg?1562735776,0
-https://images.pokemontcg.io/mcd17/6_hires.png,2
 https://images.ygoprodeck.com/images/cards/23168060.jpg,1
 https://cards.scryfall.io/normal/front/f/4/f42f5188-6e8b-492f-8357-e1d1c654c58b.jpg?1562255396,0
 https://images.ygoprodeck.com/images/cards/37457534.jpg,1
@@ -12326,7 +12308,6 @@ https://images.pokemontcg.io/ex14/83_hires.png,2
 https://images.ygoprodeck.com/images/cards/7576264.jpg,1
 https://images.ygoprodeck.com/images/cards/64450427.jpg,1
 https://images.pokemontcg.io/gym2/60_hires.png,2
-https://images.pokemontcg.io/mcd18/7_hires.png,2
 https://cards.scryfall.io/normal/front/4/c/4c00aa95-3ef3-4639-bda2-6593515f68ae.jpg?1562547322,0
 https://cards.scryfall.io/normal/front/5/2/52c2de5f-e486-4cfe-9fb6-be0078ce5f93.jpg?1581479717,0
 https://images.pokemontcg.io/ex15/7_hires.png,2
@@ -13154,7 +13135,6 @@ https://cards.scryfall.io/normal/front/9/d/9d93aef6-daea-4010-adec-9f081fab4d6b.
 https://images.pokemontcg.io/ex15/9_hires.png,2
 https://cards.scryfall.io/normal/front/1/9/193c119e-92e2-406d-8ffb-5269dc23b044.jpg?1681080407,0
 https://images.pokemontcg.io/swsh7/107_hires.png,2
-https://images.pokemontcg.io/mcd15/10_hires.png,2
 https://images.pokemontcg.io/ex10/82_hires.png,2
 https://images.pokemontcg.io/swsh5/84_hires.png,2
 https://images.pokemontcg.io/bw4/42_hires.png,2
@@ -13728,7 +13708,6 @@ https://images.ygoprodeck.com/images/cards/66150724.jpg,1
 https://cards.scryfall.io/normal/front/a/a/aaa835b6-58dc-4785-93c1-2b864dbc4541.jpg?1562076559,0
 https://images.ygoprodeck.com/images/cards/96383838.jpg,1
 https://cards.scryfall.io/normal/front/9/b/9b715fc0-9c36-4619-8d65-6d1064ed8a32.jpg?1562931626,0
-https://images.pokemontcg.io/mcd15/5_hires.png,2
 https://images.pokemontcg.io/sm2/77_hires.png,2
 https://images.pokemontcg.io/ex12/30_hires.png,2
 https://images.ygoprodeck.com/images/cards/47163170.jpg,1
@@ -14527,7 +14506,6 @@ https://images.ygoprodeck.com/images/cards/39004808.jpg,1
 https://cards.scryfall.io/normal/front/3/4/34301efe-7085-476b-90e6-7ecd778b2970.jpg?1686963785,0
 https://images.pokemontcg.io/swsh7/113_hires.png,2
 https://images.pokemontcg.io/bw4/44_hires.png,2
-https://images.pokemontcg.io/mcd15/12_hires.png,2
 https://images.pokemontcg.io/swsh5/28_hires.png,2
 https://cards.scryfall.io/normal/front/9/c/9c6988b6-ade0-4cd5-b27c-146e5e7ae91f.jpg?1674421438,0
 https://images.ygoprodeck.com/images/cards/85840608.jpg,1
@@ -14980,7 +14958,6 @@ https://images.pokemontcg.io/pl1/67_hires.png,2
 https://cards.scryfall.io/normal/front/9/8/98f99c3e-dddc-492f-aab6-1d899346a385.jpg?1587911503,0
 https://images.ygoprodeck.com/images/cards/96363153.jpg,1
 https://cards.scryfall.io/normal/front/a/f/af3af5c4-0960-44a2-976e-abdf7803c436.jpg?1582178876,0
-https://images.pokemontcg.io/xyp/XY39_hires.png,2
 https://images.pokemontcg.io/swsh3/134_hires.png,2
 https://images.pokemontcg.io/xy10/88_hires.png,2
 https://cards.scryfall.io/normal/front/9/c/9c75b084-8077-4576-b2f3-3ce47545f899.jpg?1681159230,0
@@ -15187,7 +15164,6 @@ https://cards.scryfall.io/normal/front/6/8/68064995-c1e4-4ea7-b6b7-246ce49e2cf4.
 https://images.ygoprodeck.com/images/cards/90050480.jpg,1
 https://cards.scryfall.io/normal/front/f/2/f220afb1-8638-4b54-b6af-0043b4cc1cef.jpg?1562561799,0
 https://images.ygoprodeck.com/images/cards/62188962.jpg,1
-https://images.pokemontcg.io/mcd15/2_hires.png,2
 https://images.ygoprodeck.com/images/cards/75375465.jpg,1
 https://images.ygoprodeck.com/images/cards/7291576.jpg,1
 https://cards.scryfall.io/normal/front/f/0/f0459667-b7da-43bd-b981-0e515432d147.jpg?1562279110,0
@@ -16398,7 +16374,6 @@ https://cards.scryfall.io/normal/front/0/7/07392a36-e63a-4648-b8df-1172403922eb.
 https://images.ygoprodeck.com/images/cards/18478530.jpg,1
 https://cards.scryfall.io/normal/front/3/2/324037df-faa7-412f-8423-91417fed1af3.jpg?1562063136,0
 https://cards.scryfall.io/normal/front/4/1/4171a904-e7aa-450d-a6b8-b85038dcb48f.jpg?1675619050,0
-https://images.pokemontcg.io/mcd17/7_hires.png,2
 https://cards.scryfall.io/normal/front/8/c/8ccfbcc4-9255-4727-a627-1b8778c0e587.jpg?1573506475,0
 https://images.ygoprodeck.com/images/cards/28601770.jpg,1
 https://images.pokemontcg.io/swsh11/66_hires.png,2
@@ -17478,7 +17453,6 @@ https://images.pokemontcg.io/bw5/46_hires.png,2
 https://cards.scryfall.io/normal/front/f/5/f5e982c4-19ef-40d6-a807-fd16c31e63db.jpg?1608911462,0
 https://images.ygoprodeck.com/images/cards/76263644.jpg,1
 https://images.pokemontcg.io/xy1/103_hires.png,2
-https://images.pokemontcg.io/mcd15/9_hires.png,2
 https://images.pokemontcg.io/bw3/3_hires.png,2
 https://images.ygoprodeck.com/images/cards/13890468.jpg,1
 https://cards.scryfall.io/normal/front/f/2/f21075e0-5d83-48a0-bcad-91eff72c79bf.jpg?1632145225,0
@@ -17704,7 +17678,6 @@ https://cards.scryfall.io/normal/front/1/b/1b06b670-7238-4732-85fd-ac6abebea57f.
 https://images.ygoprodeck.com/images/cards/53025096.jpg,1
 https://images.ygoprodeck.com/images/cards/11109820.jpg,1
 https://cards.scryfall.io/normal/front/c/e/ce4a3e80-6e95-4346-8ab8-eecc1a09ca24.jpg?1592708220,0
-https://images.pokemontcg.io/mcd18/2_hires.png,2
 https://images.ygoprodeck.com/images/cards/87473172.jpg,1
 https://cards.scryfall.io/normal/front/4/6/46e5ec3e-8cc1-4e23-a7ac-e9afa1be8f1f.jpg?1562544437,0
 https://cards.scryfall.io/normal/front/7/2/72b886c3-234c-49ce-9a11-456c1e8f092f.jpg?1581480945,0
