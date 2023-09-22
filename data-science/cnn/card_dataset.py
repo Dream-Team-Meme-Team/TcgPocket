@@ -21,7 +21,7 @@ class CardDataSet(Dataset):
             root_dir (string): Directory with the data
             transform (callable, optional): Optional transform to be applied on a sample.
         """
-        self.df = pd.read_csv(csv_file)
+        self.df = pd.read_csv(csv_file)[:3000]
     #
 
     def __len__(self):
@@ -30,7 +30,6 @@ class CardDataSet(Dataset):
 
     def __getitem__(self, indx):
         
-        # try:
         # get and load up card from URL
         resp = requests.get(self.df.iloc[indx, 0], headers = {'X-Api-Key': IDK_API_KEY, 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'})
         img = np.array(Image.open(BytesIO(resp.content)))
@@ -44,10 +43,6 @@ class CardDataSet(Dataset):
         # convert to pytorch tensor (via PIL Image) and normalize
         tensor = from_PIL(Image.fromarray(np.uint8(img))).to(torch.float32)
         data = [(tensor / torch.max(tensor)), self.df.iloc[indx, 1]]
-        #
-        # except:
-        #     pass
-        # #
 
         return data
     #
