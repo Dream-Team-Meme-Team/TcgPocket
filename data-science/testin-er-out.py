@@ -10,17 +10,17 @@ from cnn.card_classifier import CardClassifier
 from torch.utils.data import DataLoader
 
 card_classify = CardClassifier()
-card_classify.load_state_dict(torch.load('data-science/cnn/model_v2.pt'))
+card_classify.load_state_dict(torch.load('data-science/cnn/model_a_v1.pt'))
 card_classify.eval()
 
 from_PIL = transform.Compose([transform.PILToTensor()]) 
 
-# get and load up card from URL
-resp = requests.get('https://images.ygoprodeck.com/images/cards/64867422.jpg', headers = {'X-Api-Key': IDK_API_KEY, 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'})
-img = np.array(Image.open(BytesIO(resp.content)))
+# # get and load up card from URL
+# resp = requests.get('https://images.ygoprodeck.com/images/cards/88204302.jpg', headers = {'X-Api-Key': IDK_API_KEY, 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'})
+# img = np.array(Image.open(BytesIO(resp.content)))
 
-# # get and load up card from file
-# img = np.array(Image.open('data-science/data/card3.jpg'))
+# get and load up card from file
+img = np.array(Image.open('data-science/data/card.jpg'))
 
 # rearrange color channels >>> RGBA to BGR, RGB to BGR, etc...
 if img.shape[2] == 4:
@@ -34,4 +34,4 @@ card = tensor / torch.max(tensor)
 card = card.unsqueeze(0)
 print(card.shape)
 
-print(torch.argmax(card_classify(card)))
+print(torch.argmax(card_classify(card))) # may need to change with model_e

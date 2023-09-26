@@ -2,11 +2,11 @@
 import torch
 from torch.utils.data import DataLoader
 from cnn.card_dataset import CardDataSet
-from cnn.card_classifier import CardClassifier
+from cnn.card_classifier_a import CardClassifier
 import torch.nn as nn
 
 # IMPORTANT VARS FOR TRAINING
-batch_size = 20
+batch_size = 15
 learning_rate = 0.001
 num_epochs = 10
 
@@ -29,7 +29,7 @@ test_dataloader = DataLoader(test_dataset, shuffle=False, batch_size=batch_size)
 # HYPER PARAMS
 model = CardClassifier().to(device)     # cnn
 loss_fn = nn.CrossEntropyLoss()     # loss function
-optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
+optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate) # adam optimizer
 
 # TRAIN & TEST FUNCTION
 def train(dataloader, model, loss_fn, optimizer):
@@ -77,11 +77,11 @@ for e in range(num_epochs):
     print(f'Epoch {e+1} ----------------------------------------------------------')
     train(train_dataloader, model, loss_fn, optimizer)
     test(test_dataloader, model, loss_fn)
-    torch.save(model.state_dict(), 'data-science/cnn/model_v3.pt')
+    torch.save(model.state_dict(), 'data-science/cnn/model_a_v1.pt')
     print("Saved Tenative PyTorch Model State")
 
 print('All Done, you can cry over the accuracy now 	。゜゜(´Ｏ`) ゜゜。')
 
 # SAVE MODEL
-torch.save(model.state_dict(), 'data-science/cnn/model_v3.pt')
+torch.save(model.state_dict(), 'data-science/cnn/model_a_v1.pt')
 print("Saved Final PyTorch Model State")

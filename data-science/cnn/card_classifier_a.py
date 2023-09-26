@@ -35,7 +35,8 @@ class CardClassifier(nn.Module):
 
         self.fc1 = nn.Sequential(
             nn.Flatten(),
-            nn.Linear(in_features=16*5*7, out_features=3)       # softmax >> output
+            nn.Linear(in_features=16*5*7, out_features=3),
+            nn.Softmax(dim=1)
         )
     #
 

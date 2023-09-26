@@ -21,7 +21,7 @@ class CardDataSet(Dataset):
             root_dir (string): Directory with the data
             transform (callable, optional): Optional transform to be applied on a sample.
         """
-        self.df = pd.read_csv(csv_file)[:9000]
+        self.df = pd.read_csv(csv_file)[:6000]
     #
 
     def __len__(self):
