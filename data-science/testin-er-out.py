@@ -5,12 +5,12 @@ import numpy as np
 import cv2
 from io import BytesIO
 import torchvision.transforms as transform
-from apiKeys import IDK_API_KEY
-from cnn.card_classifier import CardClassifier
+from cnn.apiKeys import IDK_API_KEY
+from cnn.model_av.card_classifier_a import CardClassifier
 from torch.utils.data import DataLoader
 
 card_classify = CardClassifier()
-card_classify.load_state_dict(torch.load('data-science/cnn/model_a_v1.pt'))
+card_classify.load_state_dict(torch.load('data-science/cnn/model_av/model_a_v2.pt'))
 card_classify.eval()
 
 from_PIL = transform.Compose([transform.PILToTensor()]) 
@@ -20,7 +20,7 @@ from_PIL = transform.Compose([transform.PILToTensor()])
 # img = np.array(Image.open(BytesIO(resp.content)))
 
 # get and load up card from file
-img = np.array(Image.open('data-science/data/collected/card.jpg'))
+img = np.array(Image.open('data-science/data/collected/card4.jpg'))
 
 # rearrange color channels >>> RGBA to BGR, RGB to BGR, etc...
 if img.shape[2] == 4:
@@ -32,6 +32,6 @@ else:
 tensor = from_PIL(Image.fromarray(np.uint8(img))).to(torch.float32)
 card = tensor / torch.max(tensor)
 card = card.unsqueeze(0)
-print(card.shape)
+# print(card.shape)
 
 print(torch.argmax(card_classify(card))) # may need to change with model_e

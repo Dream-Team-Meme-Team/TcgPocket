@@ -1,8 +1,8 @@
 # IMPORTS
 import torch
 from torch.utils.data import DataLoader
-from cnn.card_dataset import CardDataSet
-from cnn.model_av.card_classifier_a import CardClassifier
+from card_dataset import CardDataSet
+from model_av.card_classifier_a import CardClassifier
 import torch.nn as nn
 
 # IMPORTANT VARS FOR TRAINING
