@@ -2,7 +2,7 @@
 import torch
 from torch.utils.data import DataLoader
 from cnn.card_dataset import CardDataSet
-from cnn.card_classifier_a import CardClassifier
+from cnn.model_av.card_classifier_a import CardClassifier
 import torch.nn as nn
 
 # IMPORTANT VARS FOR TRAINING
@@ -29,7 +29,7 @@ test_dataloader = DataLoader(test_dataset, shuffle=False, batch_size=batch_size)
 # HYPER PARAMS
 model = CardClassifier().to(device)     # cnn
 loss_fn = nn.CrossEntropyLoss()     # loss function
-optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate) # adam optimizer
+optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate) # adam for model_av vs SGD for model 0
 
 # TRAIN & TEST FUNCTION
 def train(dataloader, model, loss_fn, optimizer):
