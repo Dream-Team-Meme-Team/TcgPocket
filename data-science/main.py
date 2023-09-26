@@ -8,7 +8,7 @@ import torch.nn as nn
 # IMPORTANT VARS FOR TRAINING
 batch_size = 15
 learning_rate = 0.001
-num_epochs = 10
+num_epochs = 5      # 5 for model_av vs 10 for model 0
 
 device = (
     "cuda"
@@ -29,7 +29,7 @@ test_dataloader = DataLoader(test_dataset, shuffle=False, batch_size=batch_size)
 # HYPER PARAMS
 model = CardClassifier().to(device)     # cnn
 loss_fn = nn.CrossEntropyLoss()     # loss function
-optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate) # adam for model_av vs SGD for model 0
+optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)      # adam for model_av vs SGD for model 0
 
 # TRAIN & TEST FUNCTION
 def train(dataloader, model, loss_fn, optimizer):
