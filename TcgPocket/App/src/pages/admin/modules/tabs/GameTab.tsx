@@ -1,10 +1,10 @@
 import { useEffectOnce } from 'react-use';
 import { dispatch, useAppSelector } from '../../../../store/configureStore';
 import {
-  getAllGames,
   deleteGame,
   editGame,
-} from '../../../../services/DataServices';
+  getAllGames,
+} from '../../../../services/dataServices/GameServices';
 import { responseWrapper } from '../../../../services/responseWrapper';
 import { ActionIcon, MantineTheme, createStyles } from '@mantine/core';
 import { useMemo } from 'react';

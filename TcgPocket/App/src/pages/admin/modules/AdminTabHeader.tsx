@@ -2,7 +2,7 @@ import { PrimaryTextInput } from '../../../components/inputs/PrimaryTextInput';
 import { IconSearch } from '@tabler/icons-react';
 import { dispatch, useAppSelector } from '../../../store/configureStore';
 import { setAdminSearchTerm } from '../../../store/dataSlice';
-import { createStyles } from '@mantine/core';
+import { Select, createStyles } from '@mantine/core';
 
 type AdminTabHeaderProps = {
   tabTitle: string;
@@ -16,6 +16,7 @@ export function AdminTabHeader({
   const { classes } = useStyles();
 
   const searchTerm = useAppSelector((state) => state.data.searchTerm);
+  const games = useAppSelector((state) => state.data.games);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setAdminSearchTerm(e.target.value));
@@ -33,6 +34,13 @@ export function AdminTabHeader({
           value={searchTerm}
           onChange={handleInputChange}
         />
+
+        {tabTitle !== 'Games' && (
+          <Select
+            data={games.map((game) => game.name)}
+            placeholder="Select Game"
+          />
+        )}
 
         {addModal}
       </div>

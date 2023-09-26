@@ -5,7 +5,10 @@ import { PrimaryModal } from '../../../../components/modals/PrimaryModal';
 import { useForm } from '@mantine/form';
 import { PrimaryTextInput } from '../../../../components/inputs/PrimaryTextInput';
 import { GameDto } from '../../../../types/games';
-import { createGame, getAllGames } from '../../../../services/DataServices';
+import {
+  createGame,
+  getAllGames,
+} from '../../../../services/dataServices/GameServices';
 import { responseWrapper } from '../../../../services/responseWrapper';
 import { dispatch } from '../../../../store/configureStore';
 import { SecondaryButton } from '../../../../components/buttons/SecondaryButton';

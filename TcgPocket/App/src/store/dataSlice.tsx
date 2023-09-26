@@ -4,11 +4,13 @@ import { CardTypeGetDto } from '../types/card-types';
 import { GameGetDto } from '../types/games';
 import { RarityGetDto } from '../types/rarities';
 import { SetGetDto } from '../types/sets';
-import { getAllGames } from '../services/DataServices';
+import { getAllGames } from '../services/dataServices/GameServices';
+import { getAllSets } from '../services/dataServices/SetServices';
 
 type DataState = {
   searchTerm: string;
   selectedId: number;
+  selectedGameId: number;
   games: GameGetDto[];
   sets: SetGetDto[];
   cardTypes: CardTypeGetDto[];
@@ -19,6 +21,7 @@ type DataState = {
 const initialState: DataState = {
   searchTerm: '',
   selectedId: 0,
+  selectedGameId: 0,
   games: [],
   sets: [],
   cardTypes: [],
@@ -39,12 +42,26 @@ export const dataSlice = createSlice({
     setSelectedId(state, { payload }: PayloadAction<DataState['selectedId']>) {
       state.selectedId = payload;
     },
+    setSelectedGameId(
+      state,
+      { payload }: PayloadAction<DataState['selectedGameId']>
+    ) {
+      state.selectedGameId = payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getAllGames.fulfilled, (state, { payload }) => {
-      state.games = payload.data;
+      if (!payload.data) {
+        return;
+      } else state.games = payload.data;
+    });
+    builder.addCase(getAllSets.fulfilled, (state, { payload }) => {
+      if (!payload.data) {
+        return;
+      } else state.sets = payload.data;
     });
   },
 });
 
-export const { setAdminSearchTerm, setSelectedId } = dataSlice.actions;
+export const { setAdminSearchTerm, setSelectedId, setSelectedGameId } =
+  dataSlice.actions;
