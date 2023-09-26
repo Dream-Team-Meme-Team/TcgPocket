@@ -6,7 +6,7 @@ from cnn.model_av.card_classifier_a import CardClassifier
 import torch.nn as nn
 
 # IMPORTANT VARS FOR TRAINING
-batch_size = 15
+batch_size = 20
 learning_rate = 0.001
 num_epochs = 5      # 5 for model_av vs 10 for model 0
 
@@ -77,11 +77,11 @@ for e in range(num_epochs):
     print(f'Epoch {e+1} ----------------------------------------------------------')
     train(train_dataloader, model, loss_fn, optimizer)
     test(test_dataloader, model, loss_fn)
-    torch.save(model.state_dict(), 'data-science/cnn/model_a_v1.pt')
+    torch.save(model.state_dict(), 'data-science/cnn/model_av/model_a_v2.pt')
     print("Saved Tenative PyTorch Model State")
 
 print('All Done, you can cry over the accuracy now 	。゜゜(´Ｏ`) ゜゜。')
 
 # SAVE MODEL
-torch.save(model.state_dict(), 'data-science/cnn/model_a_v1.pt')
+torch.save(model.state_dict(), 'data-science/cnn/model_av/model_a_v2.pt')
 print("Saved Final PyTorch Model State")
