@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using TcgPocket.Data;
 using TcgPocket.Shared;
 using TcgPocket.Shared.Dtos;
+using TcgPocket.Shared.Interfaces;
 using TcgPocket.Shared.PagedResult;
 using static TcgPocket.Shared.PagedResult.QueryableExtensions;
 
@@ -28,12 +29,16 @@ public class GetAllCardsPaginatedQueryHandler : IRequestHandler<GetAllCardsPagin
 
     public async Task<Response<PagedResult<CardGetDto>>> Handle(GetAllCardsPaginatedQuery query, CancellationToken cancellationToken)
     {
-        var cards = await _dataContext.Set<Card>()
-            .OrderByDescending(x => x.Id)
-            .GetPagedAsync(query.PageDto.CurrentPage, query.PageDto.PageSize, cancellationToken);
+        var cardsQueryable = _dataContext.Set<Card>()
+            .OrderByDescending(x => x.Id);
 
-        if (cards.Items.IsNullOrEmpty()) return Error.AsResponse<PagedResult<CardGetDto>>("Cards not found");
+        var pagedCards = await cardsQueryable.GetPagedAsync(
+            query.PageDto.CurrentPage,
+            query.PageDto.PageSize,
+            cancellationToken);
 
-        return _mapper.Map<PagedResult<CardGetDto>>(cards).AsResponse();
+        if (pagedCards.Items.IsNullOrEmpty()) return Error.AsResponse<PagedResult<CardGetDto>>("Cards not found");
+
+        return _mapper.Map<PagedResult<CardGetDto>>(pagedCards).AsResponse();
     }
 }

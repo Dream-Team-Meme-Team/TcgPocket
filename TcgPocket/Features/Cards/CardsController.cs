@@ -46,14 +46,6 @@ namespace TcgPocket.Features.Cards
         }
 
         [HttpGet]
-        public async Task<ActionResult<Response<List<CardGetDto>>>> GetAllCards()
-        {
-            var response = await _mediator.Send(new GetAllCardsQuery { });
-
-            return response.HasErrors ? BadRequest(response) : Ok(response);
-        }
-
-        [HttpGet("pages")]
         public async Task<ActionResult<Response<PagedResult<CardGetDto>>>> GetAllCardsPaginatedQuery([FromQuery]PageDto data)
         {
             var response = await _mediator
