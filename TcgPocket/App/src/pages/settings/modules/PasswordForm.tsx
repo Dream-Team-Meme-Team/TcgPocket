@@ -5,12 +5,13 @@ import {
   UserGetDto,
   UserPasswordUpdateDto,
 } from '../../../types/users';
-import { Flex, PasswordInput, createStyles } from '@mantine/core';
+import { Flex, createStyles } from '@mantine/core';
 import { SecondaryButton } from '../../../components/buttons/SecondaryButton';
 import { PrimaryButton } from '../../../components/buttons/PrimaryButton';
 import { dispatch } from '../../../store/configureStore';
 import { updateUserPassword } from '../../../services/AuthServices';
 import { error, success } from '../../../services/notification';
+import { PrimaryPasswordInput } from '../../../components/inputs/PrimaryPasswordInput';
 
 type PasswordFormProps = {
   user: UserGetDto;
@@ -85,20 +86,20 @@ export function PasswordForm({
     <form onSubmit={form.onSubmit(handleSubmit)} onReset={handleReset}>
       <header> Password </header>
 
-      <PasswordInput
+      <PrimaryPasswordInput
         className={classes.passwordInput}
         label="Current Password"
         {...form.getInputProps('currentPassword')}
       />
 
       <div className={classes.newPasswordContainer}>
-        <PasswordInput
+        <PrimaryPasswordInput
           className={classes.passwordInput}
           label="New Password"
           {...form.getInputProps('newPassword')}
         />
 
-        <PasswordInput
+        <PrimaryPasswordInput
           className={classes.passwordInput}
           label="Confirm Password"
           {...form.getInputProps('newPasswordConfirmation')}

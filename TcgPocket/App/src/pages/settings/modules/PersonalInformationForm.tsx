@@ -69,7 +69,7 @@ export function PersonalInformationForm({
     <form onSubmit={form.onSubmit(handleSubmit)} onReset={handleReset}>
       <header> Personal Information </header>
 
-      <Flex gap={8}>
+      <Flex gap={8} sx={{ justifyContent: 'space-between' }}>
         <PrimaryTextInput
           label="Username"
           placeholder={user.userName}
