@@ -1,5 +1,5 @@
 import { RoleGetDto } from './roles';
-import { Id, PageDto } from './shared';
+import { Id } from './shared';
 
 export type UserDto = {
   userName: string;

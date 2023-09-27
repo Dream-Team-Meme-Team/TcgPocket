@@ -18,13 +18,13 @@ public class GetAllCardsByGameIdAndUserIdQuery : IRequest<Response<PagedResult<C
     public UserCardGameDto UserCardGame { get; set; }
 }
 
-public class GetAllUserCardsByGameIdQueryHandler : IRequestHandler<GetAllCardsByGameIdAndUserIdQuery, Response<PagedResult<CardGetDto>>>
+public class GetAllCardsByGameIdQueryHandler : IRequestHandler<GetAllCardsByGameIdAndUserIdQuery, Response<PagedResult<CardGetDto>>>
 {
     private readonly DataContext _dataContext;
     private readonly IMapper _mapper;
     private readonly IValidator<GetAllCardsByGameIdAndUserIdQuery> _validator;
 
-    public GetAllUserCardsByGameIdQueryHandler(DataContext dataContext, IMapper mapper, IValidator<GetAllCardsByGameIdAndUserIdQuery> validator)
+    public GetAllCardsByGameIdQueryHandler(DataContext dataContext, IMapper mapper, IValidator<GetAllCardsByGameIdAndUserIdQuery> validator)
     {
         _dataContext = dataContext;
         _mapper = mapper;

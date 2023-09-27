@@ -15,13 +15,13 @@ public class GetAllCardsByUserIdQuery : IRequest<Response<List<CardGetDto>>>
     public int Id { get; set; }
 }
 
-public class GetAllUserCardsByryHandler : IRequestHandler<GetAllCardsByUserIdQuery, Response<List<CardGetDto>>>
+public class GetAllCardsByUserIdQueryHandler : IRequestHandler<GetAllCardsByUserIdQuery, Response<List<CardGetDto>>>
 {
     private readonly DataContext _dataContext;
     private readonly IMapper _mapper;
     private readonly IValidator<GetAllCardsByUserIdQuery> _validator;
 
-    public GetAllUserCardsByryHandler(DataContext dataContext, IMapper mapper, IValidator<GetAllCardsByUserIdQuery> validator)
+    public GetAllCardsByUserIdQueryHandler(DataContext dataContext, IMapper mapper, IValidator<GetAllCardsByUserIdQuery> validator)
     {
         _dataContext = dataContext;
         _mapper = mapper;
