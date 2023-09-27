@@ -60,7 +60,7 @@ export function RegisterModal({
       form.values.password === '' ||
       form.values.confirmPassword === '' ||
       registerState.loading,
-    [form]
+    [form, registerState]
   );
 
   const handleClose = () => {
