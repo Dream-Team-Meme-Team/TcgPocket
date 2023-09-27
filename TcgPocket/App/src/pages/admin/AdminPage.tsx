@@ -47,10 +47,6 @@ export function AdminPage(): React.ReactElement {
   const { remainingHeight } = useNavbarHeight();
   const { classes } = useStyles();
 
-  // const handleTabChange = () => {
-  //   dispatch(setAdminSearchTerm(''));
-  // };
-
   return (
     <Tabs
       defaultValue={adminTabs[0].label}

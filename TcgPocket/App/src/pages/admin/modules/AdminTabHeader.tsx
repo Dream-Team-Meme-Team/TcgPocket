@@ -26,21 +26,22 @@ export function AdminTabHeader({
     <div className={classes.adminTabHeaderContainer}>
       <h3> Modify {tabTitle} </h3>
 
-      <div className={classes.searchAndBtnContainer}>
+      <div className={classes.controlsContainer}>
+        <div>
+          {tabTitle !== 'Games' && (
+            <Select
+              data={games.map((game) => game.name)}
+              placeholder="Select Game"
+            />
+          )}
+        </div>
+
         <PrimaryTextInput
-          className={classes.textInput}
           icon={<IconSearch />}
           placeholder="Search"
           value={searchTerm}
           onChange={handleInputChange}
         />
-
-        {tabTitle !== 'Games' && (
-          <Select
-            data={games.map((game) => game.name)}
-            placeholder="Select Game"
-          />
-        )}
 
         {addModal}
       </div>
@@ -55,15 +56,12 @@ const useStyles = createStyles(() => {
       gridTemplateRows: 'auto auto auto',
     },
 
-    searchAndBtnContainer: {
-      display: 'flex',
-      justifyContent: 'space-between',
+    controlsContainer: {
+      display: 'grid',
+      gridTemplateColumns: 'auto 1fr auto',
 
+      gap: '8px',
       paddingRight: '2rem',
-    },
-
-    textInput: {
-      width: '30rem',
     },
   };
 });

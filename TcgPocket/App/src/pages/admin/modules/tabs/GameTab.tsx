@@ -14,6 +14,9 @@ import { DeleteModal } from '../../../../components/modals/DeleteModal';
 import { setSelectedId } from '../../../../store/dataSlice';
 import { GameGetDto } from '../../../../types/games';
 import { EditGameModal } from '../modals/EditGameModal';
+import { TabInfoHeader } from '../TabInfoHeader';
+
+const titles = ['Name', 'Edit', 'Delete'];
 
 export function GameTab(): React.ReactElement {
   const { classes } = useStyles();
@@ -70,32 +73,30 @@ export function GameTab(): React.ReactElement {
 
   return (
     <div className={classes.gameTabContainer}>
-      <div className={classes.renderedGamesContainer}>
+      <TabInfoHeader titles={titles} />
+
+      <div>
         {renderedGames.map((game, index) => {
           return (
-            <div key={index} className={classes.gameContainer}>
-              <div className={classes.gameName}>{game.name}</div>
+            <div key={index} className={classes.renderedGameContainer}>
+              <div>{game.name}</div>
 
-              <div className={classes.iconButtonsContainer}>
-                <ActionIcon onClick={() => selectAndOpenEdit(game)}>
-                  <IconEdit />
-                </ActionIcon>
+              <ActionIcon onClick={() => selectAndOpenEdit(game)}>
+                <IconEdit />
+              </ActionIcon>
 
-                <ActionIcon onClick={() => selectAndOpenDelete(game)}>
-                  <IconTrash />
-                </ActionIcon>
-              </div>
+              <ActionIcon onClick={() => selectAndOpenDelete(game)}>
+                <IconTrash />
+              </ActionIcon>
 
-              <div>
-                {selectedId === game.id && (
-                  <EditGameModal
-                    open={openEdit}
-                    setOpen={toggleEdit}
-                    submitAction={editSelectedGame}
-                    value={game}
-                  />
-                )}
-              </div>
+              {selectedId === game.id && (
+                <EditGameModal
+                  open={openEdit}
+                  setOpen={toggleEdit}
+                  submitAction={editSelectedGame}
+                  value={game}
+                />
+              )}
             </div>
           );
         })}
@@ -114,35 +115,19 @@ export function GameTab(): React.ReactElement {
 const useStyles = createStyles((theme: MantineTheme) => {
   return {
     gameTabContainer: {
-      display: 'flex',
-      justifyContent: 'center',
-
-      padding: '8px',
+      paddingLeft: '8px',
     },
 
-    renderedGamesContainer: {
+    renderedGameContainer: {
       display: 'grid',
       gridTemplateColumns: '1fr 1fr 1fr',
-      width: '100%',
-      height: '20%',
 
-      gap: '8px',
-      padding: '8px',
-    },
-
-    gameContainer: {
-      display: 'grid',
-      gridTemplateColumns: '1fr 1fr 1fr',
-    },
-
-    iconButtonsContainer: {
-      display: 'flex',
-      justifyContent: 'flex-end',
-    },
-
-    gameName: {
       ':hover': {
-        color: theme.colors.complimentaryColors[0],
+        backgroundColor: theme.colors.primaryColor[0],
+        // opacity: 0.6,
+
+        borderRadius: 7,
+        paddingLeft: 8,
       },
     },
   };
