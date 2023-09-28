@@ -24,7 +24,7 @@ export type PageDto = {
   pageSize: number;
 };
 
-export type PagedResult<TDto> = {
+export type PagedResult<TDto = any> = {
   items: List<TDto>;
   PageCount: number;
   ItemCount: number;
