@@ -1,10 +1,13 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using TcgPocket.Features.Cards;
 using TcgPocket.Features.Roles;
 using TcgPocket.Features.Users.Commands;
 using TcgPocket.Features.Users.Dtos;
 using TcgPocket.Features.Users.Queries;
 using TcgPocket.Shared;
+using TcgPocket.Shared.Dtos;
+using TcgPocket.Shared.PagedResult;
 
 namespace TcgPocket.Features.Users;
 
@@ -35,12 +38,39 @@ public class UsersController : ControllerBase
         return response.HasErrors ? NotFound(response) : Ok(response);
     }
 
-    [HttpGet("{id:int}/roles", Name = nameof(GetAllRolesByUserId))]
+    [HttpGet("roles/{id:int}", Name = nameof(GetAllRolesByUserId))]
     public async Task<ActionResult<Response<List<RoleGetDto>>>> GetAllRolesByUserId([FromRoute] int id)
     {
         var response = await _mediator.Send(new GetAllRolesByUserIdQuery { UserId = id });
 
         return response.HasErrors ? NotFound(response) : Ok(response);
+    }
+
+    [HttpGet("{id:int}/cards")]
+    public async Task<ActionResult<Response<List<CardGetDto>>>> GetAllCardsByUserIdQuery([FromRoute] int id)
+    {
+        var response = await _mediator
+            .Send(new GetAllCardsByUserIdQuery { Id = id });
+
+        return response.HasErrors ? BadRequest(response) : Ok(response);
+    }
+
+    [HttpGet("{id:int}/games/{gameId:int}")]
+    public async Task<ActionResult<Response<PagedResult<CardGetDto>>>> GetAllCardsByGameIdAndUserIdQuery([FromRoute] int gameId, int id, [FromQuery] PageDto data)
+    {
+        var response = await _mediator
+            .Send(new GetAllCardsByGameIdAndUserIdQuery
+            {
+                UserCardGame = new UserCardGameDto
+                {
+                    GameId = gameId,
+                    UserId = id,
+                    CurrentPage = data.CurrentPage,
+                    PageSize = data.PageSize,
+                }
+            });
+
+        return response.HasErrors ? BadRequest(response) : Ok(response);
     }
 
     [HttpPost]
@@ -53,7 +83,7 @@ public class UsersController : ControllerBase
             : CreatedAtRoute(nameof(GetUserById), new { response.Data.Id }, response);
     }
 
-    [HttpPost("{id:int}/roles")]
+    [HttpPost("roles/{id:int}")]
     public async Task<ActionResult<Response<UserRoleDto>>> AddRoleToUser([FromRoute] int id, [FromBody] RoleDto data)
     {
         var response = await _mediator.Send(new AddRoleToUserCommand { Id = id, Role = data });
@@ -89,10 +119,34 @@ public class UsersController : ControllerBase
         return response.HasErrors ? BadRequest(response) : Ok(response);
     }
 
-    [HttpDelete("{id:int}/role")]
+    [HttpDelete("role/{id:int}")]
     public async Task<ActionResult<Response>> RemoveRoleFromUser([FromRoute] int id, [FromBody] RoleDto data )
     {
         var response = await _mediator.Send(new RemoveRoleFromUserCommand { UserId = id, Role = data });
+
+        return response.HasErrors ? BadRequest(response) : Ok(response);
+    }
+
+    [HttpPost("sign-in")]
+    public async Task<ActionResult<Response<UserGetDto>>> SignInUser(SignInUserDto data)
+    {
+        var response = await _mediator.Send(new SignInUserCommand {Data = data});
+        
+        return response.HasErrors ? BadRequest(response) : Ok(response);
+    }
+    
+    [HttpPost("sign-out")]
+    public async Task<ActionResult<Response>> SignInUser()
+    {
+        var response = await _mediator.Send(new SignOutUserCommand());
+        
+        return response.HasErrors ? BadRequest(response) : Ok(response);
+    }
+    
+    [HttpGet("signed-in-user")]
+    public async Task<ActionResult<Response<List<UserDto>>>> GetSignedInUser()
+    {
+        var response = await _mediator.Send(new GetSignedInUserQuery());
 
         return response.HasErrors ? BadRequest(response) : Ok(response);
     }

@@ -10,7 +10,7 @@ export type Response<T> = {
 };
 
 export type Response = {
-  data: any;
+  data;
   errors: Error[];
   hasErrors: boolean;
 };
@@ -18,3 +18,16 @@ export type Response = {
 export type Id = {
   id: number;
 };
+
+export type PageDto = {
+  currentPage: number;
+  pageSize: number;
+};
+
+export type PagedResult<TDto = any> = {
+  items: List<TDto>;
+  PageCount: number;
+  ItemCount: number;
+  FirstRowOnPage: number;
+  LastRowOnPage: number;
+} & PageDto;

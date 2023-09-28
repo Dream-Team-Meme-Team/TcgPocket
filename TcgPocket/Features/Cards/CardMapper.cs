@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using TcgPocket.Features.CardAttributes;
+using TcgPocket.Shared.PagedResult;
 
 namespace TcgPocket.Features.Cards
 {
@@ -15,6 +15,8 @@ namespace TcgPocket.Features.Cards
 
             CreateMap<CardDto, Card>()
                 .ForMember(x => x.Id, y => y.Ignore());
+
+            CreateMap<PagedResult<Card>, PagedResult<CardDetailDto>>();
 
             CreateMap<Card, CreateCardDto>()
                 .ForMember(x => x.Attributes, opts =>
