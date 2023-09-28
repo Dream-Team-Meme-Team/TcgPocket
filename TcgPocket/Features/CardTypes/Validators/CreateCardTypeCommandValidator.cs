@@ -3,9 +3,9 @@ using TcgPocket.Features.CardTypes.Commands;
 
 namespace TcgPocket.Features.CardTypes.Validators;
 
-public class CreateCardTypeRequestValidator : AbstractValidator<CreateCardTypeCommand>
+public class CreateCardTypeCommandValidator : AbstractValidator<CreateCardTypeCommand>
 {
-    public CreateCardTypeRequestValidator(IValidator<CardTypeDto> baseValidator)
+    public CreateCardTypeCommandValidator(IValidator<CardTypeDto> baseValidator)
     {
         RuleFor(x => x.CardType)
             .SetValidator(baseValidator);

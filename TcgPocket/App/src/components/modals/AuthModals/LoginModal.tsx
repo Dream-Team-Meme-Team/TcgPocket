@@ -12,8 +12,8 @@ import { error, success } from '../../../services/notification';
 import { PrimaryPasswordInput } from '../../inputs/PrimaryPasswordInput';
 
 type LoginModalProps = {
-  openModal: boolean;
-  setOpenModal: (arg: boolean) => void;
+  open: boolean;
+  setOpen: (arg: boolean) => void;
 };
 
 const initialValues: SignInUserDto = {
@@ -22,8 +22,8 @@ const initialValues: SignInUserDto = {
 } as const;
 
 export function LoginModal({
-  openModal,
-  setOpenModal,
+  open,
+  setOpen,
 }: LoginModalProps): React.ReactElement {
   const { classes } = useLoginOrRegisterStyles();
 
@@ -34,7 +34,7 @@ export function LoginModal({
   });
 
   const handleClose = () => {
-    setOpenModal(false);
+    setOpen(false);
     form.reset();
   };
 
@@ -59,7 +59,7 @@ export function LoginModal({
   );
 
   return (
-    <PrimaryModal opened={openModal} onClose={handleClose} title="Login">
+    <PrimaryModal opened={open} onClose={handleClose} title="Login">
       <form onSubmit={form.onSubmit(handleSignIn)}>
         <div className={classes.bodyContainer}>
           <PrimaryTextInput

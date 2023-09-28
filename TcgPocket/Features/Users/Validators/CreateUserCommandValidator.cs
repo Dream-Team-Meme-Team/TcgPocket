@@ -3,9 +3,9 @@ using TcgPocket.Features.Users.Commands;
 
 namespace TcgPocket.Features.Users.Validators;
 
-public class CreateUserRequestValidator : AbstractValidator<CreateUserCommand>
+public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
 {
-    public CreateUserRequestValidator(IValidator<UserDto> baseValidator)
+    public CreateUserCommandValidator(IValidator<UserDto> baseValidator)
     {
         RuleFor(x => x.User)
             .SetValidator(baseValidator);
