@@ -76,7 +76,9 @@ export function DeleteAccount({ user }: UserFormProps): React.ReactElement {
             <SecondaryButton type="button" onClick={handleCancel}>
               Cancel
             </SecondaryButton>
-            <DeleteButton type="submit">Delete</DeleteButton>
+            <DeleteButton type="submit" disabled={!form.isDirty()}>
+              Delete
+            </DeleteButton>
           </div>
         </form>
       </PrimaryModal>

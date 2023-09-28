@@ -89,7 +89,7 @@ export function PasswordForm({ user }: PasswordFormProps): React.ReactElement {
       </div>
 
       <div className={classes.buttonsContainer}>
-        <SecondaryButton type="reset" disabled={!form.isDirty()}>
+        <SecondaryButton type="reset" disabled={!form.isTouched()}>
           Cancel
         </SecondaryButton>
         <PrimaryButton type="submit" disabled={determineDisabled}>

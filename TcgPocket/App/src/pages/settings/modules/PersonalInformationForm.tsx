@@ -97,7 +97,7 @@ export function PersonalInformationForm({
       />
 
       <div className={classes.buttonsContainer}>
-        <SecondaryButton type="reset" disabled={!form.isDirty()}>
+        <SecondaryButton type="reset" disabled={!form.isTouched()}>
           Cancel
         </SecondaryButton>
         <PrimaryButton type="submit" disabled={determineDisabled}>
