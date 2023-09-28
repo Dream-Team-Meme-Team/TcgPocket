@@ -31,10 +31,10 @@ export function useScaledViewportSize(
     }
 
     return scaledHeight;
-  }, [height]);
+  }, [height, heightFactor]);
 
   const scaledWidth = useMemo(() => {
-    let scaledWidth = width * widthFactor.scale;
+    const scaledWidth = width * widthFactor.scale;
 
     if (widthFactor.min && scaledWidth < widthFactor.min) {
       return widthFactor.min;
@@ -45,7 +45,7 @@ export function useScaledViewportSize(
     }
 
     return scaledWidth;
-  }, [width]);
+  }, [width, widthFactor]);
 
   return { scaledHeight, scaledWidth };
 }

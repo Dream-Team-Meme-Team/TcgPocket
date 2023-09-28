@@ -2,6 +2,7 @@
 using TcgPocket.Features.Games;
 using TcgPocket.Features.Rarities;
 using TcgPocket.Features.Sets;
+using TcgPocket.Features.UserCards;
 using TcgPocket.Shared.Interfaces;
 
 namespace TcgPocket.Features.Cards
@@ -12,6 +13,7 @@ namespace TcgPocket.Features.Cards
         public CardType CardType { get; set; }
         public Rarity Rarity { get; set; }
         public Set Set { get; set; }
+        public List<UserCard> UserCards { get; set; }
     }
 
     public class CardGetDto : CardDto
