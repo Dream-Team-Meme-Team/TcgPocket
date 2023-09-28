@@ -62,23 +62,24 @@ namespace TcgPocket.Features.Cards.Commands
             {
                 if (!await _dataContext.Set<Attribute>().AnyAsync(x => x.Id == attribute.AttributeId))
                 {
-                    errors.Add(new Error { Message = "Attribute not found", Property = "attributeId" });
+                    errors.Add(new Error { Message = $"Attribute with Id: '{attribute.AttributeId}' not found", Property = "attributeId" });
                 }
             }
 
             if (errors.Any()) return new Response<CardDetailDto> { Errors = errors };
 
-            var foos = command.CreateCardDto.Attributes.Select(x => x.AttributeId).ToList();
+            var attributeIds = command.CreateCardDto.Attributes.Select(x => x.AttributeId).ToList();
 
             var card = _mapper.Map<Card>(command.CreateCardDto);
 
-            var yomomma = foos.Select(x => new CardAttribute
+            var cardAttributes = attributeIds.Select(attributeId => new CardAttribute
             {
                 Card = card,
-                AttributeId = x
-            }).ToList();
+                AttributeId = attributeId
+            })
+            .ToList();
 
-            card.CardAttributes = yomomma;
+            card.CardAttributes = cardAttributes;
 
             await _dataContext.Set<Card>().AddAsync(card);
             await _dataContext.SaveChangesAsync();

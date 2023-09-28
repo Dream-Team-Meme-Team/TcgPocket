@@ -9,11 +9,11 @@ using TcgPocket.Shared;
 
 namespace TcgPocket.Features.Cards.Queries
 {
-    public class GetAllCardsQuery : IRequest<Response<List<CardGetDto>>>
+    public class GetAllCardsQuery : IRequest<Response<List<CardDetailDto>>>
     {
     }
 
-    public class GetAllCardsQueryHandler : IRequestHandler<GetAllCardsQuery, Response<List<CardGetDto>>>
+    public class GetAllCardsQueryHandler : IRequestHandler<GetAllCardsQuery, Response<List<CardDetailDto>>>
     {
         private readonly DataContext _dataContext;
         private readonly IMapper _mapper;
@@ -25,13 +25,13 @@ namespace TcgPocket.Features.Cards.Queries
             _mapper = mapper;
         }
 
-        public async Task<Response<List<CardGetDto>>> Handle(GetAllCardsQuery query, CancellationToken cancellationToken)
+        public async Task<Response<List<CardDetailDto>>> Handle(GetAllCardsQuery query, CancellationToken cancellationToken)
         {
-            var cards = await _dataContext.Set<Card>().ToListAsync();
+            var cards = await _dataContext.Set<Card>().Include(x => x.CardAttributes).ToListAsync();
 
-            if (cards.IsNullOrEmpty()) return Error.AsResponse<List<CardGetDto>>("Cards not found");
+            if (cards.IsNullOrEmpty()) return Error.AsResponse<List<CardDetailDto>>("Cards not found");
 
-            return _mapper.Map<List<CardGetDto>>(cards).AsResponse();
+            return _mapper.Map<List<CardDetailDto>>(cards).AsResponse();
         }
     }
 }
