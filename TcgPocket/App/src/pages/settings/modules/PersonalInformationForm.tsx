@@ -9,7 +9,7 @@ import { PrimaryButton } from '../../../components/buttons/PrimaryButton';
 import { error, success } from '../../../services/notification';
 import { updateUserInformation } from '../../../services/AuthServices';
 
-type PersonalInformationFormProps = {
+export type UserFormProps = {
   user: UserGetDto;
 };
 
@@ -22,7 +22,7 @@ type PersonalInformationFormDto = {
 
 export function PersonalInformationForm({
   user,
-}: PersonalInformationFormProps): React.ReactElement {
+}: UserFormProps): React.ReactElement {
   const { classes } = useStyles();
   const { validateTextInput, validateEmail, validatePhoneNumer } =
     useFormValidation();

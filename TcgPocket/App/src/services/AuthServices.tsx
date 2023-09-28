@@ -54,15 +54,11 @@ export const updateUserInformation = createAsyncThunk<
 });
 
 export const updateUserPassword = createAsyncThunk<
-  Response<UserGetDto>,
+  Response,
   UserPasswordUpdateDto,
-  { rejectValue: Response<UserGetDto> }
+  { rejectValue: Response }
 >('updateUserPassword', async (user) => {
-  return await apiCall<UserGetDto>(
-    'PUT',
-    `${apiRoutes.users.updatePassword}`,
-    user
-  );
+  return await apiCall('PUT', `${apiRoutes.users.updatePassword}`, user);
 });
 
 export const deleteUserAccount = createAsyncThunk<

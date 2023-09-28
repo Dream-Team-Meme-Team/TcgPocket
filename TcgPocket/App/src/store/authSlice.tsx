@@ -6,7 +6,6 @@ import {
   signInUser,
   signOutUser,
   updateUserInformation,
-  updateUserPassword,
 } from '../services/AuthServices';
 
 type AuthState = {
@@ -48,9 +47,6 @@ export const authSlice = createSlice({
       state.user = payload.data;
     });
     builder.addCase(updateUserInformation.fulfilled, (state, { payload }) => {
-      state.user = payload.data;
-    });
-    builder.addCase(updateUserPassword.fulfilled, (state, { payload }) => {
       state.user = payload.data;
     });
   },

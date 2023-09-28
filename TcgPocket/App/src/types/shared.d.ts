@@ -3,7 +3,7 @@ export type Error = {
   message: string;
 };
 
-export type Response<T> = {
+export type Response<T = any> = {
   data: T;
   errors: Error[];
   hasErrors: boolean;

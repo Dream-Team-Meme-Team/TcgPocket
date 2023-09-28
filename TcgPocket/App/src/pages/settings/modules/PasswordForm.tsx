@@ -1,10 +1,6 @@
 import { useForm } from '@mantine/form';
 import { useFormValidation } from '../../../helpers/useFormValidation';
-import {
-  SignInUserDto,
-  UserGetDto,
-  UserPasswordUpdateDto,
-} from '../../../types/users';
+import { UserGetDto, UserPasswordUpdateDto } from '../../../types/users';
 import { PasswordInput, createStyles } from '@mantine/core';
 import { SecondaryButton } from '../../../components/buttons/SecondaryButton';
 import { PrimaryButton } from '../../../components/buttons/PrimaryButton';
@@ -14,7 +10,6 @@ import { error, success } from '../../../services/notification';
 
 type PasswordFormProps = {
   user: UserGetDto;
-  loginUserAfterUpdate: (arg: SignInUserDto) => void;
 };
 
 type PasswordForm = Omit<UserPasswordUpdateDto, 'userName'>;
@@ -25,10 +20,7 @@ const initialValues = {
   newPasswordConfirmation: '',
 } as const;
 
-export function PasswordForm({
-  user,
-  loginUserAfterUpdate,
-}: PasswordFormProps): React.ReactElement {
+export function PasswordForm({ user }: PasswordFormProps): React.ReactElement {
   const { classes } = useStyles();
   const { validatePassword } = useFormValidation();
 
@@ -67,11 +59,6 @@ export function PasswordForm({
     } else {
       success('Password Updated');
       form.reset();
-
-      loginUserAfterUpdate({
-        userName: user.userName,
-        password: values.newPassword,
-      });
     }
   };
 

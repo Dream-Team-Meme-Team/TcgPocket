@@ -3,7 +3,6 @@ import { PrimaryModal } from '../../../components/modals/PrimaryModal';
 import { deleteUserAccount, signOutUser } from '../../../services/AuthServices';
 import { error, success } from '../../../services/notification';
 import { dispatch } from '../../../store/configureStore';
-import { UserGetDto } from '../../../types/users';
 import { useForm } from '@mantine/form';
 import { PrimaryTextInput } from '../../../components/inputs/PrimaryTextInput';
 import { SecondaryButton } from '../../../components/buttons/SecondaryButton';
@@ -11,18 +10,13 @@ import { Flex, createStyles } from '@mantine/core';
 import { DeleteButton } from '../../../components/buttons/DeleteButton';
 import { useNavigate } from 'react-router-dom';
 import { routes } from '../../../routes';
-
-type DeleteAccountProps = {
-  user: UserGetDto;
-};
+import { UserFormProps } from './PersonalInformationForm';
 
 const initialValues = {
   userName: '',
 } as const;
 
-export function DeleteAccount({
-  user,
-}: DeleteAccountProps): React.ReactElement {
+export function DeleteAccount({ user }: UserFormProps): React.ReactElement {
   const { classes } = useStyles();
   const [open, { toggle }] = useDisclosure(false);
   const navigate = useNavigate();
