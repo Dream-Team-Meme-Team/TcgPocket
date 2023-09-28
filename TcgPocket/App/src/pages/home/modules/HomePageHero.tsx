@@ -73,11 +73,8 @@ export function HeroTitle() {
         </Container>
       </div>
 
-      <LoginModal openModal={openLoginModal} setOpenModal={setOpenLoginModal} />
-      <RegisterModal
-        openModal={openRegisterModal}
-        setOpenModal={setOpenRegisterModal}
-      />
+      <LoginModal open={openLoginModal} setOpen={setOpenLoginModal} />
+      <RegisterModal open={openRegisterModal} setOpen={setOpenRegisterModal} />
     </>
   );
 }
