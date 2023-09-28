@@ -23,3 +23,11 @@ export type PageDto = {
   currentPage: number;
   pageSize: number;
 };
+
+export type PagedResult<TDto> = {
+  items: List<TDto>;
+  PageCount: number;
+  ItemCount: number;
+  FirstRowOnPage: number;
+  LastRowOnPage: number;
+} & PageDto;

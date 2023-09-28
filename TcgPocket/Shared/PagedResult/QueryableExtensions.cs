@@ -167,14 +167,14 @@ public static class QueryableExtensions
         return pagedEntity;
     }
 
-    public class PagedResult<T> : PagedResultBase
-    {
-        public IList<T> Items { get; set; }
+}
+public class PagedResult<T> : PagedResultBase
+{
+    public IList<T> Items { get; set; }
 
-        public PagedResult()
-        {
-            Items = new List<T>();
-        }
+    public PagedResult()
+    {
+        Items = new List<T>();
     }
 }
 

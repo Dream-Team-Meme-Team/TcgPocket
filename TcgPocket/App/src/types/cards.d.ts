@@ -11,12 +11,4 @@ export type CardDto = {
   description: string;
 };
 
-export type PagedResult<CardGetDto> = {
-  items: List<CardGetDto>;
-  PageCount: number;
-  ItemCount: number;
-  FirstRowOnPage: number;
-  LastRowOnPage: number;
-} & PageDto;
-
 export type CardGetDto = Id & CardDto;

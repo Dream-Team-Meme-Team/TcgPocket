@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using TcgPocket.Features.Games.Commands;
 using TcgPocket.Features.Games.Queries;
-using TcgPocket.Features.UserCards.Queries;
-using TcgPocket.Features.UserCards;
 using TcgPocket.Shared;
 
 namespace TcgPocket.Features.Games;

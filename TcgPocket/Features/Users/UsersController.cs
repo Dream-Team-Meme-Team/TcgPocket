@@ -7,7 +7,7 @@ using TcgPocket.Features.Users.Dtos;
 using TcgPocket.Features.Users.Queries;
 using TcgPocket.Shared;
 using TcgPocket.Shared.Dtos;
-using static TcgPocket.Shared.PagedResult.QueryableExtensions;
+using TcgPocket.Shared.PagedResult;
 
 namespace TcgPocket.Features.Users;
 
