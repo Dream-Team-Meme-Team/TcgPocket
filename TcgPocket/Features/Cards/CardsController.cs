@@ -3,16 +3,18 @@ using Microsoft.AspNetCore.Mvc;
 using TcgPocket.Features.Cards.Commands;
 using TcgPocket.Features.Cards.Queries;
 using TcgPocket.Shared;
+using TcgPocket.Shared.Dtos;
+using TcgPocket.Shared.PagedResult;
 
 namespace TcgPocket.Features.Cards
 {
     [ApiController]
     [Route("/api/cards")]
-    public class CardController : ControllerBase
+    public class CardsController : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public CardController(IMediator mediator)
+        public CardsController(IMediator mediator)
         {
             _mediator = mediator;
         }
@@ -44,9 +46,10 @@ namespace TcgPocket.Features.Cards
         }
 
         [HttpGet]
-        public async Task<ActionResult<Response<List<CardGetDto>>>> GetAllCards()
+        public async Task<ActionResult<Response<PagedResult<CardGetDto>>>> GetAllCardsPaginatedQuery([FromQuery]PageDto data)
         {
-            var response = await _mediator.Send(new GetAllCardsQuery { });
+            var response = await _mediator
+                .Send(new GetAllCardsPaginatedQuery { PageDto = data });
 
             return response.HasErrors ? BadRequest(response) : Ok(response);
         }

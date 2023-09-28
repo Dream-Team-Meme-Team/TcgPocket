@@ -3,9 +3,9 @@ using TcgPocket.Features.Users.Commands;
 
 namespace TcgPocket.Features.Users.Validators;
 
-public class UpdatePasswordRequestValidator : AbstractValidator<UpdatePasswordCommand>
+public class UpdatePasswordCommandValidator : AbstractValidator<UpdatePasswordCommand>
 {
-    public UpdatePasswordRequestValidator()
+    public UpdatePasswordCommandValidator()
     {
         RuleFor(x => x.PasswordUpdateDto.UserName)
             .NotEmpty();
