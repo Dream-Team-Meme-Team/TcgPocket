@@ -99,8 +99,8 @@ export function PrimaryNavigation(): React.ReactElement {
         </Flex>
       </Navbar>
 
-      <LoginModal openModal={loginState} setOpenModal={login.close} />
-      <RegisterModal openModal={registerState} setOpenModal={register.close} />
+      <LoginModal open={loginState} setOpen={login.close} />
+      <RegisterModal open={registerState} setOpen={register.close} />
     </>
   );
 }

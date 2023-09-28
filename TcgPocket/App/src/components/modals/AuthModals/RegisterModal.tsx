@@ -13,8 +13,8 @@ import { useFormValidation } from '../../../helpers/useFormValidation';
 import { error, success } from '../../../services/notification';
 
 type RegisterModal = {
-  openModal: boolean;
-  setOpenModal: (arg: boolean) => void;
+  open: boolean;
+  setOpen: (arg: boolean) => void;
 };
 
 const initialValues: UserCreateDto = {
@@ -26,8 +26,8 @@ const initialValues: UserCreateDto = {
 } as const;
 
 export function RegisterModal({
-  openModal,
-  setOpenModal,
+  open,
+  setOpen,
 }: RegisterModal): React.ReactElement {
   const { classes } = useLoginOrRegisterStyles();
   const {
@@ -63,11 +63,18 @@ export function RegisterModal({
       validatePassword(form.values.password) ||
       form.values.confirmPassword !== form.values.password ||
       isLoading,
-    [form, isLoading]
+    [
+      form,
+      isLoading,
+      validateEmail,
+      validatePassword,
+      validatePhoneNumer,
+      validateTextInput,
+    ]
   );
 
   const handleClose = () => {
-    setOpenModal(false);
+    setOpen(false);
     form.reset();
   };
 
@@ -88,7 +95,7 @@ export function RegisterModal({
   };
 
   return (
-    <PrimaryModal opened={openModal} onClose={handleClose} title="Register">
+    <PrimaryModal opened={open} onClose={handleClose} title="Register">
       <form onSubmit={form.onSubmit(handleRegisterUser)}>
         <div className={classes.bodyContainer}>
           <PrimaryTextInput

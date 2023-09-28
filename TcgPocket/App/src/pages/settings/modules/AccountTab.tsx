@@ -1,4 +1,4 @@
-import { Flex, createStyles } from '@mantine/core';
+import { createStyles } from '@mantine/core';
 import { dispatch, useAppSelector } from '../../../store/configureStore';
 import { PersonalInformationForm } from './PersonalInformationForm';
 import { PasswordForm } from './PasswordForm';
@@ -25,7 +25,7 @@ export function AccountTab(): React.ReactElement {
   };
 
   return (
-    <Flex justify={'center'} sx={{ height: '100%' }}>
+    <div className={classes.accountTabContainer}>
       {user && (
         <div className={classes.accountInfoContainer}>
           <div className={classes.titleText}>Update Account Information</div>
@@ -42,12 +42,19 @@ export function AccountTab(): React.ReactElement {
           </div>
         </div>
       )}
-    </Flex>
+    </div>
   );
 }
 
 const useStyles = createStyles(() => {
   return {
+    accountTabContainer: {
+      display: 'flex',
+      justifyContent: 'center',
+
+      height: '100%',
+    },
+
     accountInfoContainer: {
       display: 'grid',
       gridTemplateRows: '15% auto',

@@ -7,7 +7,7 @@ import { UserGetDto } from '../../../types/users';
 import { useForm } from '@mantine/form';
 import { PrimaryTextInput } from '../../../components/inputs/PrimaryTextInput';
 import { SecondaryButton } from '../../../components/buttons/SecondaryButton';
-import { Flex } from '@mantine/core';
+import { Flex, createStyles } from '@mantine/core';
 import { DeleteButton } from '../../../components/buttons/DeleteButton';
 import { useNavigate } from 'react-router-dom';
 import { routes } from '../../../routes';
@@ -18,11 +18,12 @@ type DeleteAccountProps = {
 
 const initialValues = {
   userName: '',
-};
+} as const;
 
 export function DeleteAccount({
   user,
 }: DeleteAccountProps): React.ReactElement {
+  const { classes } = useStyles();
   const [open, { toggle }] = useDisclosure(false);
   const navigate = useNavigate();
 
@@ -77,14 +78,26 @@ export function DeleteAccount({
             {...form.getInputProps('userName')}
           />
 
-          <Flex gap={8} justify={'flex-end'} sx={{ paddingTop: '8px' }}>
+          <div className={classes.buttonsContainer}>
             <SecondaryButton type="button" onClick={handleCancel}>
               Cancel
             </SecondaryButton>
             <DeleteButton type="submit">Delete</DeleteButton>
-          </Flex>
+          </div>
         </form>
       </PrimaryModal>
     </Flex>
   );
 }
+
+const useStyles = createStyles(() => {
+  return {
+    buttonsContainer: {
+      display: 'flex',
+      justifyContent: 'flex-end',
+
+      gap: '8px',
+      paddingTop: '8px',
+    },
+  };
+});

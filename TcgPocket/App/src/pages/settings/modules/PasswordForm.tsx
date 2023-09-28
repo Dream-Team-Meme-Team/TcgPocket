@@ -5,7 +5,7 @@ import {
   UserGetDto,
   UserPasswordUpdateDto,
 } from '../../../types/users';
-import { Flex, PasswordInput, createStyles } from '@mantine/core';
+import { PasswordInput, createStyles } from '@mantine/core';
 import { SecondaryButton } from '../../../components/buttons/SecondaryButton';
 import { PrimaryButton } from '../../../components/buttons/PrimaryButton';
 import { dispatch } from '../../../store/configureStore';
@@ -75,14 +75,10 @@ export function PasswordForm({
     }
   };
 
-  const handleReset = () => {
-    form.reset();
-  };
-
   const determineDisabled = !form.isValid();
 
   return (
-    <form onSubmit={form.onSubmit(handleSubmit)} onReset={handleReset}>
+    <form onSubmit={form.onSubmit(handleSubmit)} onReset={form.reset}>
       <header> Password </header>
 
       <PasswordInput
@@ -105,12 +101,14 @@ export function PasswordForm({
         />
       </div>
 
-      <Flex gap={8} justify={'flex-end'} sx={{ paddingTop: '8px' }}>
-        <SecondaryButton type="reset"> Cancel </SecondaryButton>
+      <div className={classes.buttonsContainer}>
+        <SecondaryButton type="reset" disabled={!form.isDirty()}>
+          Cancel
+        </SecondaryButton>
         <PrimaryButton type="submit" disabled={determineDisabled}>
           Update
         </PrimaryButton>
-      </Flex>
+      </div>
     </form>
   );
 }
@@ -127,6 +125,14 @@ const useStyles = createStyles(() => {
       input: {
         backgroundColor: 'white',
       },
+    },
+
+    buttonsContainer: {
+      display: 'flex',
+      justifyContent: 'flex-end',
+
+      gap: '8px',
+      paddingTop: '8px',
     },
   };
 });
