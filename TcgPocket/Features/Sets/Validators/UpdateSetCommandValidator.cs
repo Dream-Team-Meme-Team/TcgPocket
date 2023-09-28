@@ -3,9 +3,9 @@ using TcgPocket.Features.Sets.Commands;
 
 namespace TcgPocket.Features.Sets.Validators;
 
-public class UpdateSetRequestValidator : AbstractValidator<UpdateSetCommand>
+public class UpdateSetCommandValidator : AbstractValidator<UpdateSetCommand>
 {
-    public UpdateSetRequestValidator(IValidator<SetDto> baseValidator)
+    public UpdateSetCommandValidator(IValidator<SetDto> baseValidator)
     {
         RuleFor(x => x.Id)
             .GreaterThan(0);

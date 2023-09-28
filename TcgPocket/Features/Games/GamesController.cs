@@ -32,7 +32,7 @@ public class GamesController : ControllerBase
 
         return response.HasErrors ? NotFound(response) : Ok(response);
     }
-    
+
     [HttpPost]
     public async Task<ActionResult<Response<GameGetDto>>> CreateGame([FromBody] GameDto data)
     {
