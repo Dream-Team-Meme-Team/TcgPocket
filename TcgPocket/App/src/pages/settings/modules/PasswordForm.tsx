@@ -1,11 +1,7 @@
 import { useForm } from '@mantine/form';
 import { useFormValidation } from '../../../helpers/useFormValidation';
-import {
-  SignInUserDto,
-  UserGetDto,
-  UserPasswordUpdateDto,
-} from '../../../types/users';
-import { Flex, createStyles } from '@mantine/core';
+import { UserGetDto, UserPasswordUpdateDto } from '../../../types/users';
+import { PasswordInput, createStyles } from '@mantine/core';
 import { SecondaryButton } from '../../../components/buttons/SecondaryButton';
 import { PrimaryButton } from '../../../components/buttons/PrimaryButton';
 import { dispatch } from '../../../store/configureStore';
@@ -15,7 +11,6 @@ import { PrimaryPasswordInput } from '../../../components/inputs/PrimaryPassword
 
 type PasswordFormProps = {
   user: UserGetDto;
-  loginUserAfterUpdate: (arg: SignInUserDto) => void;
 };
 
 type PasswordForm = Omit<UserPasswordUpdateDto, 'userName'>;
@@ -26,10 +21,7 @@ const initialValues = {
   newPasswordConfirmation: '',
 } as const;
 
-export function PasswordForm({
-  user,
-  loginUserAfterUpdate,
-}: PasswordFormProps): React.ReactElement {
+export function PasswordForm({ user }: PasswordFormProps): React.ReactElement {
   const { classes } = useStyles();
   const { validatePassword } = useFormValidation();
 
@@ -68,22 +60,13 @@ export function PasswordForm({
     } else {
       success('Password Updated');
       form.reset();
-
-      loginUserAfterUpdate({
-        userName: user.userName,
-        password: values.newPassword,
-      });
     }
-  };
-
-  const handleReset = () => {
-    form.reset();
   };
 
   const determineDisabled = !form.isValid();
 
   return (
-    <form onSubmit={form.onSubmit(handleSubmit)} onReset={handleReset}>
+    <form onSubmit={form.onSubmit(handleSubmit)} onReset={form.reset}>
       <header> Password </header>
 
       <PrimaryPasswordInput
@@ -106,12 +89,14 @@ export function PasswordForm({
         />
       </div>
 
-      <Flex gap={8} justify={'flex-end'} sx={{ paddingTop: '8px' }}>
-        <SecondaryButton type="reset"> Cancel </SecondaryButton>
+      <div className={classes.buttonsContainer}>
+        <SecondaryButton type="reset" disabled={!form.isTouched()}>
+          Cancel
+        </SecondaryButton>
         <PrimaryButton type="submit" disabled={determineDisabled}>
           Update
         </PrimaryButton>
-      </Flex>
+      </div>
     </form>
   );
 }
@@ -128,6 +113,14 @@ const useStyles = createStyles(() => {
       input: {
         backgroundColor: 'white',
       },
+    },
+
+    buttonsContainer: {
+      display: 'flex',
+      justifyContent: 'flex-end',
+
+      gap: '8px',
+      paddingTop: '8px',
     },
   };
 });

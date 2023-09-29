@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
-using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using TcgPocket.Data;
-using TcgPocket.Features.Games.Commands;
 using TcgPocket.Shared;
 
 namespace TcgPocket.Features.Cards.Queries

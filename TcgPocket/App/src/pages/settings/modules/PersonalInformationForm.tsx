@@ -1,46 +1,57 @@
 import { useForm } from '@mantine/form';
 import { useFormValidation } from '../../../helpers/useFormValidation';
-import { Flex } from '@mantine/core';
+import { createStyles } from '@mantine/core';
 import { PrimaryTextInput } from '../../../components/inputs/PrimaryTextInput';
 import { dispatch } from '../../../store/configureStore';
-import { UserDto, UserGetDto } from '../../../types/users';
+import { UserGetDto } from '../../../types/users';
 import { SecondaryButton } from '../../../components/buttons/SecondaryButton';
 import { PrimaryButton } from '../../../components/buttons/PrimaryButton';
 import { error, success } from '../../../services/notification';
 import { updateUserInformation } from '../../../services/AuthServices';
 
-type PersonalInformationFormProps = {
+export type UserFormProps = {
   user: UserGetDto;
+};
+
+type PersonalInformationFormDto = {
+  id: number;
+  userName: string | null;
+  email: string | null;
+  phoneNumber: string | null;
 };
 
 export function PersonalInformationForm({
   user,
-}: PersonalInformationFormProps): React.ReactElement {
+}: UserFormProps): React.ReactElement {
+  const { classes } = useStyles();
   const { validateTextInput, validateEmail, validatePhoneNumer } =
     useFormValidation();
 
+  const initialValues: PersonalInformationFormDto = {
+    id: user.id,
+    userName: null,
+    email: null,
+    phoneNumber: null,
+  };
+
   const form = useForm({
-    initialValues: {
-      userName: user.userName,
-      phoneNumber: user.phoneNumber,
-      email: user.email,
-    },
+    initialValues: initialValues,
     validateInputOnBlur: true,
     validate: {
       userName: (value) =>
-        validateTextInput(value) ? 'Invalid Username' : null,
+        validateTextInput(value ?? '') ? 'Invalid Username' : null,
       phoneNumber: (value) =>
-        validatePhoneNumer(value) ? 'Invalid Phone Number' : null,
-      email: (value) => (validateEmail(value) ? 'Invalid Email' : null),
+        validatePhoneNumer(value ?? '') ? 'Invalid Phone Number' : null,
+      email: (value) => (validateEmail(value ?? '') ? 'Invalid Email' : null),
     },
   });
 
-  const handleSubmit = async (values: UserDto) => {
+  const handleSubmit = async (values: PersonalInformationFormDto) => {
     const userToUpdate: UserGetDto = {
       id: user.id,
-      userName: values.userName,
-      email: values.email,
-      phoneNumber: values.phoneNumber,
+      userName: values.userName ?? user.userName,
+      email: values.email ?? user.email,
+      phoneNumber: values.phoneNumber ?? user.phoneNumber,
     };
 
     const { payload } = await dispatch(updateUserInformation(userToUpdate));
@@ -51,12 +62,8 @@ export function PersonalInformationForm({
       payload.errors.forEach((err) => error(err.message));
       return;
     } else {
-      success('User Information Updated');
+      success('User Information Updated!');
     }
-  };
-
-  const handleReset = () => {
-    form.setValues(user);
   };
 
   const determineDisabled =
@@ -66,10 +73,10 @@ export function PersonalInformationForm({
     !form.isValid();
 
   return (
-    <form onSubmit={form.onSubmit(handleSubmit)} onReset={handleReset}>
+    <form onSubmit={form.onSubmit(handleSubmit)} onReset={form.reset}>
       <header> Personal Information </header>
 
-      <Flex gap={8} sx={{ justifyContent: 'space-between' }}>
+      <div className={classes.textInputContainer}>
         <PrimaryTextInput
           label="Username"
           placeholder={user.userName}
@@ -81,7 +88,7 @@ export function PersonalInformationForm({
           placeholder={user.phoneNumber}
           {...form.getInputProps('phoneNumber')}
         />
-      </Flex>
+      </div>
 
       <PrimaryTextInput
         label="Email"
@@ -89,12 +96,31 @@ export function PersonalInformationForm({
         {...form.getInputProps('email')}
       />
 
-      <Flex gap={8} justify={'flex-end'} sx={{ paddingTop: '8px' }}>
-        <SecondaryButton type="reset">Cancel</SecondaryButton>
+      <div className={classes.buttonsContainer}>
+        <SecondaryButton type="reset" disabled={!form.isTouched()}>
+          Cancel
+        </SecondaryButton>
         <PrimaryButton type="submit" disabled={determineDisabled}>
           Update
         </PrimaryButton>
-      </Flex>
+      </div>
     </form>
   );
 }
+
+const useStyles = createStyles(() => {
+  return {
+    textInputContainer: {
+      display: 'flex',
+      gap: '8px',
+    },
+
+    buttonsContainer: {
+      display: 'flex',
+      justifyContent: 'flex-end',
+
+      gap: '8px',
+      paddingTop: '8px',
+    },
+  };
+});

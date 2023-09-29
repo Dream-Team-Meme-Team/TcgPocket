@@ -31,7 +31,7 @@ function useNavButtonSx(route: string) {
     const [pathSegment] = pathname.split('/[^/]*', 1);
 
     return pathSegment === route && route !== routes.home;
-  }, [pathname]);
+  }, [pathname, route]);
 
   return (theme: MantineTheme): CSSObject => {
     return {

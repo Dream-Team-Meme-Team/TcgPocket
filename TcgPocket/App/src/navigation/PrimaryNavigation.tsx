@@ -54,7 +54,7 @@ export function PrimaryNavigation(): React.ReactElement {
             <Flex gap={10}>
               <NavButton route={routes.inventory}>Inventory</NavButton>
               <NavButton route={routes.cardUpload}>Upload Cards</NavButton>
-              <NavButton route={routes.deckBuilder}> Deck Builder</NavButton>
+              {/* <NavButton route={routes.deckBuilder}> Deck Builder</NavButton> */}
               <NavButton route={routes.adminPortal}> Admin Portal </NavButton>
             </Flex>
           )}
@@ -100,8 +100,8 @@ export function PrimaryNavigation(): React.ReactElement {
         </Flex>
       </Navbar>
 
-      <LoginModal openModal={loginState} setOpenModal={login.close} />
-      <RegisterModal openModal={registerState} setOpenModal={register.close} />
+      <LoginModal open={loginState} setOpen={login.close} />
+      <RegisterModal open={registerState} setOpen={register.close} />
     </>
   );
 }

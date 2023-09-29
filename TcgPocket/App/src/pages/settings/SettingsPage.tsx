@@ -2,8 +2,9 @@ import { Tabs, createStyles } from '@mantine/core';
 import { IconUser } from '@tabler/icons-react';
 import { AccountTab } from './modules/AccountTab';
 import { useNavbarHeight } from '../../hooks/use-navbar-height';
+import { Tab } from '../../types/tabs';
 
-const tabs = [
+const tabs: Tab[] = [
   { label: 'Account', icon: <IconUser />, element: <AccountTab /> },
 ];
 

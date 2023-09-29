@@ -1,10 +1,7 @@
-import { Flex, createStyles } from '@mantine/core';
-import { dispatch, useAppSelector } from '../../../store/configureStore';
+import { createStyles } from '@mantine/core';
+import { useAppSelector } from '../../../store/configureStore';
 import { PersonalInformationForm } from './PersonalInformationForm';
 import { PasswordForm } from './PasswordForm';
-import { SignInUserDto } from '../../../types/users';
-import { signInUser } from '../../../services/AuthServices';
-import { error, success } from '../../../services/notification';
 import { DeleteAccount } from './DeleteAccount';
 
 export function AccountTab(): React.ReactElement {
@@ -12,20 +9,8 @@ export function AccountTab(): React.ReactElement {
 
   const user = useAppSelector((state) => state.user.user);
 
-  const loginUserAfterUpdate = async (user: SignInUserDto) => {
-    const { payload } = await dispatch(signInUser(user));
-
-    if (!payload) {
-      return;
-    } else if (payload.hasErrors) {
-      payload.errors.forEach((err) => error(err.message));
-    } else {
-      success('Signed In!');
-    }
-  };
-
   return (
-    <Flex justify={'center'} sx={{ height: '100%' }}>
+    <div className={classes.accountTabContainer}>
       {user && (
         <div className={classes.accountInfoContainer}>
           <div className={classes.titleText}>Update Account Information</div>
@@ -33,21 +18,25 @@ export function AccountTab(): React.ReactElement {
           <div className={classes.contentContainer}>
             <PersonalInformationForm user={user} />
 
-            <PasswordForm
-              user={user}
-              loginUserAfterUpdate={loginUserAfterUpdate}
-            />
+            <PasswordForm user={user} />
 
             <DeleteAccount user={user} />
           </div>
         </div>
       )}
-    </Flex>
+    </div>
   );
 }
 
 const useStyles = createStyles(() => {
   return {
+    accountTabContainer: {
+      display: 'flex',
+      justifyContent: 'center',
+
+      height: '100%',
+    },
+
     accountInfoContainer: {
       display: 'grid',
       gridTemplateRows: '15% auto',
