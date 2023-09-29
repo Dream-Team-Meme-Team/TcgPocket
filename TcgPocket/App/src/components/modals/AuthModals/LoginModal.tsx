@@ -1,63 +1,66 @@
-import { PrimaryModal } from './PrimaryModal';
+import { PrimaryModal } from '../PrimaryModal';
 import { useLoginOrRegisterStyles } from './loginOrRegisterStyling';
-import { PrimaryButton } from '../buttons/PrimaryButton';
+import { PrimaryButton } from '../../buttons/PrimaryButton';
 import { useForm } from '@mantine/form';
-import { PrimaryTextInput } from '../inputs/PrimaryTextInput';
-import { SecondaryButton } from '../buttons/SecondaryButton';
+import { PrimaryTextInput } from '../../inputs/PrimaryTextInput';
+import { SecondaryButton } from '../../buttons/SecondaryButton';
 import { PasswordInput } from '@mantine/core';
-import { SignInUserDto } from '../../types/users';
+import { SignInUserDto } from '../../../types/users';
 import { useMemo } from 'react';
-import { useAuth } from '../../hooks/use-auth';
-import { notifications } from '@mantine/notifications';
-import { tcgNotifications } from '../../constants/notifications';
-import { useAsyncFn } from 'react-use';
+import { dispatch, useAppSelector } from '../../../store/configureStore';
+import { signInUser } from '../../../services/AuthServices';
+import { error, success } from '../../../services/notification';
+
+type LoginModalProps = {
+  open: boolean;
+  setOpen: (arg: boolean) => void;
+};
 
 const initialValues: SignInUserDto = {
   userName: '',
   password: '',
 } as const;
 
-interface LoginModalProps {
-  openModal: boolean;
-  setOpenModal: (arg: boolean) => void;
-}
-
 export function LoginModal({
-  openModal,
-  setOpenModal,
+  open,
+  setOpen,
 }: LoginModalProps): React.ReactElement {
   const { classes } = useLoginOrRegisterStyles();
-  const auth = useAuth();
+
+  const isLoading = useAppSelector((state) => state.user.isLoading);
 
   const form = useForm({
     initialValues: initialValues,
   });
 
   const handleClose = () => {
-    setOpenModal(false);
+    setOpen(false);
     form.reset();
   };
 
-  const [loginState, handleLogin] = useAsyncFn(
-    async (values: SignInUserDto) => {
-      await auth.signIn(values);
+  const handleSignIn = async (values: SignInUserDto) => {
+    const { payload } = await dispatch(signInUser(values));
 
-      notifications.show(tcgNotifications.signIn);
+    if (!payload) {
+      return;
+    } else if (payload.hasErrors) {
+      payload.errors.forEach((err) => error(err.message));
+      return;
+    } else {
+      success('Signed In!');
       handleClose();
     }
-  );
+  };
 
   const disableLogin = useMemo(
     () =>
-      form.values.userName === '' ||
-      form.values.password === '' ||
-      loginState.loading,
-    [form, loginState]
+      form.values.password === '' || form.values.userName === '' || isLoading,
+    [form, isLoading]
   );
 
   return (
-    <PrimaryModal opened={openModal} onClose={handleClose} title="Login">
-      <form onSubmit={form.onSubmit(handleLogin)}>
+    <PrimaryModal opened={open} onClose={handleClose} title="Login">
+      <form onSubmit={form.onSubmit(handleSignIn)}>
         <div className={classes.bodyContainer}>
           <PrimaryTextInput
             withAsterisk
