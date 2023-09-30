@@ -4,27 +4,30 @@ import { deleteUserAccount, signOutUser } from '../../../services/AuthServices';
 import { error, success } from '../../../services/notification';
 import { dispatch } from '../../../store/configureStore';
 import { useForm } from '@mantine/form';
-import { PrimaryTextInput } from '../../../components/inputs/PrimaryTextInput';
 import { SecondaryButton } from '../../../components/buttons/SecondaryButton';
 import { Flex, createStyles } from '@mantine/core';
 import { DeleteButton } from '../../../components/buttons/DeleteButton';
-import { useNavigate } from 'react-router-dom';
-import { routes } from '../../../routes';
-import { UserFormProps } from './PersonalInformationForm';
+import { UserDeleteDto } from '../../../types/users';
+import { PrimaryPasswordInput } from '../../../components/inputs/PrimaryPasswordInput';
+
+type DeleteAccount = UserDeleteDto;
 
 const initialValues = {
-  userName: '',
+  password: '',
+  confirmPassword: '',
 } as const;
 
-export function DeleteAccount({ user }: UserFormProps): React.ReactElement {
+export function DeleteAccount(): React.ReactElement {
   const { classes } = useStyles();
   const [open, { toggle }] = useDisclosure(false);
-  const navigate = useNavigate();
 
   const form = useForm({
     initialValues: initialValues,
     validate: {
-      userName: (value) => (value !== user.userName ? 'Wrong Username' : null),
+      password: (value) =>
+        value === '' || value === null ? 'Must not be empty.' : null,
+      confirmPassword: (value) =>
+        value === '' || value === null ? 'Must not be empty.' : null,
     },
   });
 
@@ -38,17 +41,22 @@ export function DeleteAccount({ user }: UserFormProps): React.ReactElement {
     } else success('Signed Out');
   };
 
-  const handleDelete = async () => {
-    const { payload } = await dispatch(deleteUserAccount(user.id));
+  const handleDelete = async (values: DeleteAccount) => {
+    const x: UserDeleteDto = {
+      password: values.password,
+      confirmPassword: values.confirmPassword,
+    };
+    const { payload } = await dispatch(deleteUserAccount(x));
 
     if (!payload) {
       return;
-    } else if (payload.hasErrors) {
+    } else if (payload.data) {
       payload.errors.forEach((err) => error(err.message));
     } else {
+      console.log('debug', payload.errors);
       success('Account Deleted');
-      handleSignOut();
-      navigate(routes.home);
+      // handleSignOut();
+      // navigate(routes.home);
     }
   };
 
@@ -64,14 +72,17 @@ export function DeleteAccount({ user }: UserFormProps): React.ReactElement {
       <PrimaryModal
         opened={open}
         onClose={toggle}
-        title="Are you sure you want to delete your account?"
+        title="If you would like to delete your account, enter password."
       >
         <form onSubmit={form.onSubmit(handleDelete)}>
-          <PrimaryTextInput
-            label="Confirm username to delete"
-            {...form.getInputProps('userName')}
+          <PrimaryPasswordInput
+            label="Password: "
+            {...form.getInputProps('password')}
           />
-
+          <PrimaryPasswordInput
+            label="Confirm password:"
+            {...form.getInputProps('confirmPassword')}
+          />
           <div className={classes.buttonsContainer}>
             <SecondaryButton type="button" onClick={handleCancel}>
               Cancel

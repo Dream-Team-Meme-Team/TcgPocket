@@ -2,6 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
   SignInUserDto,
   UserCreateDto,
+  UserDeleteDto,
   UserGetDto,
   UserPasswordUpdateDto,
 } from '../types/users';
@@ -62,9 +63,9 @@ export const updateUserPassword = createAsyncThunk<
 });
 
 export const deleteUserAccount = createAsyncThunk<
-  Response<void>,
-  number,
-  { rejectValue: Response<void> }
->('deleteUserAccount', async (id) => {
-  return await apiCall('DELETE', `${apiRoutes.users.base}/${id}`);
+  Response,
+  UserDeleteDto,
+  { rejectValue: Response }
+>('deleteUserAccount', async () => {
+  return await apiCall('DELETE', apiRoutes.users.base);
 });
