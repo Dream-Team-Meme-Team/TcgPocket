@@ -4,13 +4,13 @@ import { PrimaryButton } from '../../buttons/PrimaryButton';
 import { SecondaryButton } from '../../buttons/SecondaryButton';
 import { useForm } from '@mantine/form';
 import { PrimaryTextInput } from '../../inputs/PrimaryTextInput';
-import { PasswordInput } from '@mantine/core';
 import { UserCreateDto } from '../../../types/users';
 import { useMemo } from 'react';
 import { dispatch, useAppSelector } from '../../../store/configureStore';
 import { registerUser } from '../../../services/AuthServices';
 import { useFormValidation } from '../../../helpers/useFormValidation';
 import { error, success } from '../../../services/notification';
+import { PrimaryPasswordInput } from '../../inputs/PrimaryPasswordInput';
 
 type RegisterModal = {
   open: boolean;
@@ -116,14 +116,14 @@ export function RegisterModal({
             {...form.getInputProps('phoneNumber')}
           />
 
-          <PasswordInput
+          <PrimaryPasswordInput
             withAsterisk
             className={classes.passwordInput}
             label="Password"
             {...form.getInputProps('password')}
           />
 
-          <PasswordInput
+          <PrimaryPasswordInput
             withAsterisk
             className={classes.passwordInput}
             label="Confirm Password"

@@ -4,12 +4,12 @@ import { PrimaryButton } from '../../buttons/PrimaryButton';
 import { useForm } from '@mantine/form';
 import { PrimaryTextInput } from '../../inputs/PrimaryTextInput';
 import { SecondaryButton } from '../../buttons/SecondaryButton';
-import { PasswordInput } from '@mantine/core';
 import { SignInUserDto } from '../../../types/users';
 import { useMemo } from 'react';
 import { dispatch, useAppSelector } from '../../../store/configureStore';
 import { signInUser } from '../../../services/AuthServices';
 import { error, success } from '../../../services/notification';
+import { PrimaryPasswordInput } from '../../inputs/PrimaryPasswordInput';
 
 type LoginModalProps = {
   open: boolean;
@@ -67,7 +67,7 @@ export function LoginModal({
             label="Username"
             {...form.getInputProps('userName')}
           />
-          <PasswordInput
+          <PrimaryPasswordInput
             withAsterisk
             className={classes.passwordInput}
             label="Password"
