@@ -29,10 +29,6 @@ public class SignInUserCommandHandler : IRequestHandler<SignInUserCommand, Respo
     
     public async Task<Response<UserGetDto>> Handle(SignInUserCommand request, CancellationToken c)
     {
-        var signedInUser = await _signInManager.GetSignedInUserAsync();
-        
-        if (signedInUser is not null) return Error.AsResponse<UserGetDto>("User already signed in");
-        
         var normalizedUserName = _userManager.NormalizeName(request.Data.UserName);
         
         var user = await _userManager
