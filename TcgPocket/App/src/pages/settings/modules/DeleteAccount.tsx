@@ -22,6 +22,7 @@ const initialValues = {
 export function DeleteAccount(): React.ReactElement {
   const { classes } = useStyles();
   const [open, { toggle }] = useDisclosure(false);
+  const navigate = useNavigate();
 
   const form = useForm({
     initialValues: initialValues,
@@ -40,12 +41,12 @@ export function DeleteAccount(): React.ReactElement {
       return;
     } else if (payload.hasErrors) {
       payload.errors.forEach((err) => error(err.message));
-    } else success('Signed Out');
+    } else {
+      navigate(routes.home);
+    }
   };
 
   const handleDelete = async (values: DeleteAccount) => {
-    const navigate = useNavigate();
-
     const userDelete: UserDeleteDto = {
       password: values.password,
       confirmPassword: values.confirmPassword,
@@ -60,7 +61,6 @@ export function DeleteAccount(): React.ReactElement {
     } else {
       success('Account Deleted');
       handleSignOut();
-      navigate(routes.home);
     }
   };
 
