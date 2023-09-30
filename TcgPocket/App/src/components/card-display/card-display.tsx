@@ -9,18 +9,43 @@ import {
   Badge,
   CSSObject,
 } from '@mantine/core';
+import { CardDisplayDto } from '../../types/cards';
 
-const testCard = {
-  gameName: 'Magic: The Gathering',
-  setName: 'Wilds of Elderaine',
-  rarity: 'Common',
-  setIndex: '#276',
-  cardName: 'Fury Sliver',
-  uri: 'https://cards.scryfall.io/normal/front/0/0/0000579f-7b35-4ed3-b44c-db2a538066fe.jpg?1562894979',
-  attributes: ['Creature', 'Sliver', 'Red', 'Creature', 'Sliver', 'Red'],
+export const testCard: CardDisplayDto = {
+  id: 1,
+  name: 'Fury Sliver',
+  game: {
+    id: 1,
+    name: 'Magic: The Gathering',
+  },
+  set: {
+    id: 1,
+    gameId: 1,
+    name: 'Wilds of Elderaine',
+  },
+  rarity: {
+    id: 1,
+    gameId: 1,
+    name: 'Common',
+  },
+  cardNumber: '#276',
+  imageUrl:
+    'https://cards.scryfall.io/normal/front/0/0/0000579f-7b35-4ed3-b44c-db2a538066fe.jpg?1562894979',
+  attributes: [
+    { id: 0, gameId: 1, name: 'Creature' },
+    { id: 0, gameId: 1, name: 'Sliver' },
+    { id: 0, gameId: 1, name: 'Red' },
+    { id: 0, gameId: 1, name: 'Creature' },
+    { id: 0, gameId: 1, name: 'Sliver' },
+    { id: 0, gameId: 1, name: 'Red' },
+  ],
+  cardType: {
+    id: 1,
+    gameId: 1,
+    name: 'Permanent',
+  },
+  description: 'yomomma',
 };
-
-type CardDisplayDto = typeof testCard;
 
 type CardContainerProps = {
   card: CardDisplayDto;
@@ -30,30 +55,30 @@ export const CardDisplay: React.FC<CardContainerProps> = ({ card }) => {
   return (
     <Paper sx={containerSx}>
       <Flex>
-        <Image src={card.uri} fit="scale-down" width={'152px'} />
+        <Image src={card.imageUrl} fit="scale-down" width={'152px'} />
         <Container>
           <Text size={'sm'} color="#5e616c">
-            {card.gameName}
+            {card.game.name}
           </Text>
           <Text size={'sm'} color="#5e616c">
-            {card.setName}
+            {card.set.name}
           </Text>
 
           <Space h={'1rem'} />
 
           <Text size={'sm'} color="#5e616c">
-            {card.rarity} | {card.setIndex}
+            {card.rarity.name} | {card.cardNumber}
           </Text>
 
           <Space h={'s'} />
 
-          <Title order={4}>{card.cardName}</Title>
+          <Title order={4}>{card.name}</Title>
 
           <Space h={'1rem'} />
 
           <Flex gap={'.4rem'} wrap={'wrap'}>
             {card.attributes.map((x) => (
-              <Badge variant="outline">{x}</Badge>
+              <Badge variant="outline">{x.name}</Badge>
             ))}
           </Flex>
         </Container>
