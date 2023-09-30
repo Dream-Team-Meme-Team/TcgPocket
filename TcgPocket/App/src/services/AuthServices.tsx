@@ -62,10 +62,10 @@ export const updateUserPassword = createAsyncThunk<
   return await apiCall('PUT', `${apiRoutes.users.updatePassword}`, user);
 });
 
-export const deleteUserAccount = createAsyncThunk<
+export const deleteUser = createAsyncThunk<
   Response,
   UserDeleteDto,
   { rejectValue: Response }
->('deleteUserAccount', async () => {
-  return await apiCall('DELETE', apiRoutes.users.base);
+>('deleteUser', async (values) => {
+  return await apiCall('DELETE', apiRoutes.users.base, values);
 });

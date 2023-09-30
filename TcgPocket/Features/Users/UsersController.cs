@@ -112,7 +112,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpDelete]
-    public async Task<ActionResult<Response>> DeleteUser([FromQuery] UserDeleteDto deleteDto)
+    public async Task<ActionResult<Response>> DeleteUser([FromBody] UserDeleteDto deleteDto)
     {
         var response = await _mediator.Send(new DeleteUserCommand { DeleteDto = deleteDto });
 

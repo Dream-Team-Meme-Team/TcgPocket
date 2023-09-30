@@ -1,6 +1,6 @@
 import { useDisclosure } from '@mantine/hooks';
 import { PrimaryModal } from '../../../components/modals/PrimaryModal';
-import { deleteUserAccount, signOutUser } from '../../../services/AuthServices';
+import { deleteUser, signOutUser } from '../../../services/AuthServices';
 import { error, success } from '../../../services/notification';
 import { dispatch } from '../../../store/configureStore';
 import { useForm } from '@mantine/form';
@@ -9,6 +9,8 @@ import { Flex, createStyles } from '@mantine/core';
 import { DeleteButton } from '../../../components/buttons/DeleteButton';
 import { UserDeleteDto } from '../../../types/users';
 import { PrimaryPasswordInput } from '../../../components/inputs/PrimaryPasswordInput';
+import { useNavigate } from 'react-router-dom';
+import { routes } from '../../../routes';
 
 type DeleteAccount = UserDeleteDto;
 
@@ -42,21 +44,23 @@ export function DeleteAccount(): React.ReactElement {
   };
 
   const handleDelete = async (values: DeleteAccount) => {
-    const x: UserDeleteDto = {
+    const navigate = useNavigate();
+
+    const userDelete: UserDeleteDto = {
       password: values.password,
       confirmPassword: values.confirmPassword,
     };
-    const { payload } = await dispatch(deleteUserAccount(x));
+
+    const { payload } = await dispatch(deleteUser(userDelete));
 
     if (!payload) {
       return;
-    } else if (payload.data) {
+    } else if (payload.hasErrors) {
       payload.errors.forEach((err) => error(err.message));
     } else {
-      console.log('debug', payload.errors);
       success('Account Deleted');
-      // handleSignOut();
-      // navigate(routes.home);
+      handleSignOut();
+      navigate(routes.home);
     }
   };
 
@@ -68,11 +72,10 @@ export function DeleteAccount(): React.ReactElement {
   return (
     <Flex>
       <DeleteButton onClick={toggle}>Delete Account</DeleteButton>
-
       <PrimaryModal
         opened={open}
         onClose={toggle}
-        title="If you would like to delete your account, enter password."
+        title="Enter and confirm password to delete account."
       >
         <form onSubmit={form.onSubmit(handleDelete)}>
           <PrimaryPasswordInput
