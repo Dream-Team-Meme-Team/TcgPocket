@@ -11,16 +11,13 @@ import {
 } from '../../../../services/dataServices/GameServices';
 import { responseWrapper } from '../../../../services/responseWrapper';
 import { dispatch } from '../../../../store/configureStore';
-import { SecondaryButton } from '../../../../components/buttons/SecondaryButton';
-import { createStyles } from '@mantine/core';
+import { AdminButtons } from '../../../../components/buttons/AdminButtons';
 
 const initialValues = {
   name: '',
 } as const;
 
 export function AddGameModal(): React.ReactElement {
-  const { classes } = useStyles();
-
   const [open, { toggle }] = useDisclosure();
 
   const form = useForm({
@@ -64,26 +61,9 @@ export function AddGameModal(): React.ReactElement {
             {...form.getInputProps('name')}
           />
 
-          <div className={classes.buttonsContainer}>
-            <SecondaryButton type="reset" onClick={handleCancel}>
-              Cancel
-            </SecondaryButton>
-            <PrimaryButton type="submit"> Add </PrimaryButton>
-          </div>
+          <AdminButtons handleCancel={handleCancel} />
         </form>
       </PrimaryModal>
     </div>
   );
 }
-
-const useStyles = createStyles(() => {
-  return {
-    buttonsContainer: {
-      display: 'flex',
-      justifyContent: 'flex-end',
-
-      paddingTop: '8px',
-      gap: '8px',
-    },
-  };
-});

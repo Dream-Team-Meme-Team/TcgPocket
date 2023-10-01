@@ -4,7 +4,7 @@ import {
   deleteSet,
   editSet,
   getAllSets,
-} from '../../../../services/dataServices/SetServices';
+} from '../../../../services/dataServices/SetsServices';
 import { responseWrapper } from '../../../../services/responseWrapper';
 import { TabInfoHeader } from '../TabInfoHeader';
 import { ActionIcon, MantineTheme, createStyles } from '@mantine/core';
@@ -15,7 +15,7 @@ import { EditModal } from '../modals/EditModal';
 import { SetGetDto } from '../../../../types/sets';
 import { setSelectedId } from '../../../../store/dataSlice';
 
-const titles = ['Name', 'Game', 'Edit', 'Delete'];
+const titles: string[] = ['Name', 'Game', 'Edit', 'Delete'];
 
 export function SetTab(): React.ReactElement {
   const { classes } = useStyles();

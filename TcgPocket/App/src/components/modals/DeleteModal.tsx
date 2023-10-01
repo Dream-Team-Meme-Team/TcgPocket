@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { PrimaryModal } from './PrimaryModal';
 import { PrimaryTextInput } from '../inputs/PrimaryTextInput';
 import { SecondaryButton } from '../buttons/SecondaryButton';
@@ -21,6 +21,10 @@ export function DeleteModal({
   const { classes } = useStyles();
 
   const [text, setText] = useState('');
+
+  const textError = useMemo(() => {
+    return text.toLowerCase().includes(deleteText.toLowerCase());
+  }, [text]);
 
   const handleText = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
@@ -47,15 +51,11 @@ export function DeleteModal({
         <i> Type '{deleteText}' to submit.</i>
       </div>
 
-      <PrimaryTextInput
-        value={text}
-        onChange={handleText}
-        error={text !== deleteText}
-      />
+      <PrimaryTextInput value={text} onChange={handleText} />
 
       <div className={classes.buttonsContainer}>
         <SecondaryButton onClick={handleClose}> Cancel </SecondaryButton>
-        <PrimaryButton onClick={handleSubmit} disabled={text !== deleteText}>
+        <PrimaryButton onClick={handleSubmit} disabled={!textError}>
           Submit
         </PrimaryButton>
       </div>

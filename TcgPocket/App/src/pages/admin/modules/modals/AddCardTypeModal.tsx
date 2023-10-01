@@ -4,7 +4,6 @@ import { IconPlus } from '@tabler/icons-react';
 import { PrimaryModal } from '../../../../components/modals/PrimaryModal';
 import { useForm } from '@mantine/form';
 import { PrimaryTextInput } from '../../../../components/inputs/PrimaryTextInput';
-import { SecondaryButton } from '../../../../components/buttons/SecondaryButton';
 import { dispatch, useAppSelector } from '../../../../store/configureStore';
 import {
   createCardType,
@@ -12,7 +11,7 @@ import {
 } from '../../../../services/dataServices/CardTypeServices';
 import { responseWrapper } from '../../../../services/responseWrapper';
 import { CardTypeDto } from '../../../../types/card-types';
-import { createStyles } from '@mantine/core';
+import { AdminButtons } from '../../../../components/buttons/AdminButtons';
 
 const initialValues = {
   name: '',
@@ -20,8 +19,6 @@ const initialValues = {
 } as const;
 
 export function AddCardTypeModal(): React.ReactElement {
-  const { classes } = useStyles();
-
   const [open, { toggle }] = useDisclosure();
 
   const selectGameId = useAppSelector((state) => state.data.selectedGameId);
@@ -51,6 +48,7 @@ export function AddCardTypeModal(): React.ReactElement {
     };
 
     const { payload } = await dispatch(createCardType(updateGameId));
+    responseWrapper(payload, 'Card Type Added');
 
     if (payload && !payload.hasErrors) {
       loadCardTypes();
@@ -77,26 +75,9 @@ export function AddCardTypeModal(): React.ReactElement {
             {...form.getInputProps('name')}
           />
 
-          <div className={classes.buttonsContainer}>
-            <SecondaryButton type="reset" onClick={handleCancel}>
-              Cancel
-            </SecondaryButton>
-            <PrimaryButton type="submit">Add</PrimaryButton>
-          </div>
+          <AdminButtons handleCancel={handleCancel} />
         </form>
       </PrimaryModal>
     </div>
   );
 }
-
-const useStyles = createStyles(() => {
-  return {
-    buttonsContainer: {
-      display: 'flex',
-      justifyContent: 'flex-end',
-
-      paddingTop: '8px',
-      gap: '8px',
-    },
-  };
-});

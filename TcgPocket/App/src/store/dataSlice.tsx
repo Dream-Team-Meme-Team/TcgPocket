@@ -5,8 +5,9 @@ import { GameGetDto } from '../types/games';
 import { RarityGetDto } from '../types/rarities';
 import { SetGetDto } from '../types/sets';
 import { getAllGames } from '../services/dataServices/GameServices';
-import { getAllSets } from '../services/dataServices/SetServices';
+import { getAllSets } from '../services/dataServices/SetsServices';
 import { getAllCardTypes } from '../services/dataServices/CardTypeServices';
+import { getAllRarities } from '../services/dataServices/RaritiesServices';
 
 type DataState = {
   searchTerm: string;
@@ -59,6 +60,9 @@ export const dataSlice = createSlice({
     });
     builder.addCase(getAllCardTypes.fulfilled, (state, { payload }) => {
       state.cardTypes = payload.data;
+    });
+    builder.addCase(getAllRarities.fulfilled, (state, { payload }) => {
+      state.rarities = payload.data;
     });
   },
 });

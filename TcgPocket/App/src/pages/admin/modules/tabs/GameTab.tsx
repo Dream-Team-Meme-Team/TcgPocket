@@ -16,7 +16,7 @@ import { GameGetDto } from '../../../../types/games';
 import { EditModal } from '../modals/EditModal';
 import { TabInfoHeader } from '../TabInfoHeader';
 
-const titles = ['Name', 'Edit', 'Delete'];
+const titles: string[] = ['Name', 'Edit', 'Delete'];
 
 export function GameTab(): React.ReactElement {
   const { classes } = useStyles();

@@ -15,7 +15,7 @@ import { CardTypeGetDto } from '../../../../types/card-types';
 import { DeleteModal } from '../../../../components/modals/DeleteModal';
 import { setSelectedId } from '../../../../store/dataSlice';
 
-const titles = ['Name', 'Edit', 'Delete'];
+const titles: string[] = ['Name', 'Edit', 'Delete'];
 
 export function CardTypeTab(): React.ReactElement {
   const { classes } = useStyles();
@@ -61,7 +61,13 @@ export function CardTypeTab(): React.ReactElement {
   };
 
   const editSelectedCardType = async (editedCardType: CardTypeGetDto) => {
-    const { payload } = await dispatch(editCardType(editedCardType));
+    const updatedCardType: CardTypeGetDto = {
+      id: editedCardType.id,
+      name: editedCardType.name,
+      gameId: selectedGameId,
+    };
+
+    const { payload } = await dispatch(editCardType(updatedCardType));
     responseWrapper(payload, 'Card Type Edited');
 
     if (payload && !payload.hasErrors) {

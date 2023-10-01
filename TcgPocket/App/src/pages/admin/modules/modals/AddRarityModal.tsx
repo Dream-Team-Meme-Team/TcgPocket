@@ -1,16 +1,16 @@
-import { useDisclosure } from '@mantine/hooks';
-import { PrimaryButton } from '../../../../components/buttons/PrimaryButton';
 import { IconPlus } from '@tabler/icons-react';
+import { PrimaryButton } from '../../../../components/buttons/PrimaryButton';
+import { useDisclosure } from '@mantine/hooks';
+import { dispatch, useAppSelector } from '../../../../store/configureStore';
 import { PrimaryModal } from '../../../../components/modals/PrimaryModal';
 import { useForm } from '@mantine/form';
-import { dispatch, useAppSelector } from '../../../../store/configureStore';
-import {
-  createSet,
-  getAllSets,
-} from '../../../../services/dataServices/SetsServices';
-import { responseWrapper } from '../../../../services/responseWrapper';
-import { SetDto } from '../../../../types/sets';
 import { PrimaryTextInput } from '../../../../components/inputs/PrimaryTextInput';
+import {
+  createRarity,
+  getAllRarities,
+} from '../../../../services/dataServices/RaritiesServices';
+import { responseWrapper } from '../../../../services/responseWrapper';
+import { RarityDto } from '../../../../types/rarities';
 import { AdminButtons } from '../../../../components/buttons/AdminButtons';
 
 const initialValues = {
@@ -18,7 +18,7 @@ const initialValues = {
   gameId: 0,
 } as const;
 
-export function AddSetsModal(): React.ReactElement {
+export function AddRarityModal(): React.ReactElement {
   const [open, { toggle }] = useDisclosure();
 
   const selectedGameId = useAppSelector((state) => state.data.selectedGameId);
@@ -32,8 +32,8 @@ export function AddSetsModal(): React.ReactElement {
     form.reset();
   };
 
-  const loadSets = async () => {
-    const { payload } = await dispatch(getAllSets());
+  const loadRarities = async () => {
+    const { payload } = await dispatch(getAllRarities());
     responseWrapper(payload);
 
     if (payload && !payload.hasErrors) {
@@ -41,17 +41,17 @@ export function AddSetsModal(): React.ReactElement {
     }
   };
 
-  const handleAdd = async (newSet: SetDto) => {
-    const updateGameId: SetDto = {
-      name: newSet.name,
+  const handleAdd = async (newRarity: RarityDto) => {
+    const updatedRarity: RarityDto = {
+      name: newRarity.name,
       gameId: selectedGameId,
     };
 
-    const { payload } = await dispatch(createSet(updateGameId));
-    responseWrapper(payload, 'Successfully added Set');
+    const { payload } = await dispatch(createRarity(updatedRarity));
+    responseWrapper(payload, 'Successfully added Rarity');
 
     if (payload && !payload.hasErrors) {
-      loadSets();
+      loadRarities();
     }
   };
 
@@ -64,14 +64,14 @@ export function AddSetsModal(): React.ReactElement {
         onClick={toggle}
         disabled={determineDisabled}
       >
-        Add Set
+        Add Rarity
       </PrimaryButton>
 
-      <PrimaryModal opened={open} onClose={toggle} title="Add Set">
+      <PrimaryModal opened={open} onClose={toggle} title="Add Rarity">
         <form onSubmit={form.onSubmit(handleAdd)}>
           <PrimaryTextInput
             withAsterisk
-            label="Sets"
+            label="Rarities"
             {...form.getInputProps('name')}
           />
 
