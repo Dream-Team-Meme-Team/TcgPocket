@@ -1,4 +1,5 @@
 import { TabLabel } from '../AdminPage';
+import { AddCardTypeModal } from './modals/AddCardTypeModal';
 import { AddGameModal } from './modals/AddGameModal';
 import { AddSetsModal } from './modals/AddSetsModal';
 
@@ -13,6 +14,7 @@ export function AddModalRenderer({
     <div>
       {label === TabLabel.GAMES && <AddGameModal />}
       {label === TabLabel.SETS && <AddSetsModal />}
+      {label === TabLabel.CARD_TYPES && <AddCardTypeModal />}
     </div>
   );
 }

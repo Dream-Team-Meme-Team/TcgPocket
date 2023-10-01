@@ -3,15 +3,15 @@ import { PrimaryButton } from '../../../../components/buttons/PrimaryButton';
 import { IconPlus } from '@tabler/icons-react';
 import { PrimaryModal } from '../../../../components/modals/PrimaryModal';
 import { useForm } from '@mantine/form';
-import { dispatch, useAppSelector } from '../../../../store/configureStore';
-import {
-  createSet,
-  getAllSets,
-} from '../../../../services/dataServices/SetServices';
-import { responseWrapper } from '../../../../services/responseWrapper';
-import { SetDto } from '../../../../types/sets';
 import { PrimaryTextInput } from '../../../../components/inputs/PrimaryTextInput';
 import { SecondaryButton } from '../../../../components/buttons/SecondaryButton';
+import { dispatch, useAppSelector } from '../../../../store/configureStore';
+import {
+  createCardType,
+  getAllCardTypes,
+} from '../../../../services/dataServices/CardTypeServices';
+import { responseWrapper } from '../../../../services/responseWrapper';
+import { CardTypeDto } from '../../../../types/card-types';
 import { createStyles } from '@mantine/core';
 
 const initialValues = {
@@ -19,12 +19,12 @@ const initialValues = {
   gameId: 0,
 } as const;
 
-export function AddSetsModal(): React.ReactElement {
+export function AddCardTypeModal(): React.ReactElement {
   const { classes } = useStyles();
 
   const [open, { toggle }] = useDisclosure();
 
-  const selectedGameId = useAppSelector((state) => state.data.selectedGameId);
+  const selectGameId = useAppSelector((state) => state.data.selectedGameId);
 
   const form = useForm({
     initialValues: initialValues,
@@ -35,9 +35,8 @@ export function AddSetsModal(): React.ReactElement {
     form.reset();
   };
 
-  const loadSets = async () => {
-    const { payload } = await dispatch(getAllSets());
-    console.log(payload);
+  const loadCardTypes = async () => {
+    const { payload } = await dispatch(getAllCardTypes());
     responseWrapper(payload);
 
     if (payload && !payload.hasErrors) {
@@ -45,21 +44,20 @@ export function AddSetsModal(): React.ReactElement {
     }
   };
 
-  const handleAdd = async (newSet: SetDto) => {
-    const updateGameId: SetDto = {
-      name: newSet.name,
-      gameId: selectedGameId,
+  const handleAdd = async (newCardType: CardTypeDto) => {
+    const updateGameId: CardTypeDto = {
+      name: newCardType.name,
+      gameId: selectGameId,
     };
 
-    const { payload } = await dispatch(createSet(updateGameId));
-    responseWrapper(payload, 'Successfully added Set');
+    const { payload } = await dispatch(createCardType(updateGameId));
 
     if (payload && !payload.hasErrors) {
-      loadSets();
+      loadCardTypes();
     }
   };
 
-  const determineDisabled = selectedGameId === 0;
+  const determineDisabled = selectGameId === 0;
 
   return (
     <div>
@@ -68,14 +66,14 @@ export function AddSetsModal(): React.ReactElement {
         onClick={toggle}
         disabled={determineDisabled}
       >
-        Add Set
+        Add Card Type
       </PrimaryButton>
 
-      <PrimaryModal opened={open} onClose={toggle} title="Add Set">
+      <PrimaryModal opened={open} onClose={toggle} title="Add Card Type">
         <form onSubmit={form.onSubmit(handleAdd)}>
           <PrimaryTextInput
             withAsterisk
-            label="Sets"
+            label="Card Types"
             {...form.getInputProps('name')}
           />
 
@@ -83,7 +81,7 @@ export function AddSetsModal(): React.ReactElement {
             <SecondaryButton type="reset" onClick={handleCancel}>
               Cancel
             </SecondaryButton>
-            <PrimaryButton type="submit"> Add </PrimaryButton>
+            <PrimaryButton type="submit">Add</PrimaryButton>
           </div>
         </form>
       </PrimaryModal>

@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Response } from '../../types/shared';
-import { CardTypeGetDto } from '../../types/card-types';
+import { CardTypeDto, CardTypeGetDto } from '../../types/card-types';
 import { apiCall } from '../api';
 import { apiRoutes } from '../../routes';
 
@@ -14,7 +14,7 @@ export const getAllCardTypes = createAsyncThunk<
 
 export const createCardType = createAsyncThunk<
   Response<CardTypeGetDto>,
-  void,
+  CardTypeDto,
   { rejectValue: Response<CardTypeGetDto> }
 >('createCardType', async (newCardType) => {
   return await apiCall<CardTypeGetDto>(
