@@ -1,24 +1,24 @@
 import { useDisclosure } from '@mantine/hooks';
+import { dispatch, useAppSelector } from '../../../../store/configureStore';
+import { useForm } from '@mantine/form';
 import { PrimaryButton } from '../../../../components/buttons/PrimaryButton';
 import { IconPlus } from '@tabler/icons-react';
 import { PrimaryModal } from '../../../../components/modals/PrimaryModal';
-import { useForm } from '@mantine/form';
-import { dispatch, useAppSelector } from '../../../../store/configureStore';
-import {
-  createSet,
-  getAllSets,
-} from '../../../../services/dataServices/SetsServices';
-import { responseWrapper } from '../../../../services/responseWrapper';
-import { SetDto } from '../../../../types/sets';
 import { PrimaryTextInput } from '../../../../components/inputs/PrimaryTextInput';
 import { AdminButtons } from '../../../../components/buttons/AdminButtons';
+import {
+  createAttribute,
+  getAllAttributes,
+} from '../../../../services/dataServices/AttributesServices';
+import { responseWrapper } from '../../../../services/responseWrapper';
+import { AttributeDto } from '../../../../types/attributes';
 
 const initialValues = {
   name: '',
   gameId: 0,
 } as const;
 
-export function AddSetsModal(): React.ReactElement {
+export function AddAttributeModal(): React.ReactElement {
   const [open, { toggle }] = useDisclosure();
 
   const selectedGameId = useAppSelector((state) => state.data.selectedGameId);
@@ -32,8 +32,8 @@ export function AddSetsModal(): React.ReactElement {
     form.reset();
   };
 
-  const loadSets = async () => {
-    const { payload } = await dispatch(getAllSets());
+  const loadAttributes = async () => {
+    const { payload } = await dispatch(getAllAttributes());
     responseWrapper(payload);
 
     if (payload && !payload.hasErrors) {
@@ -41,17 +41,17 @@ export function AddSetsModal(): React.ReactElement {
     }
   };
 
-  const handleAdd = async (newSet: SetDto) => {
-    const updateGameId: SetDto = {
-      name: newSet.name,
+  const handleAdd = async (newAttribute: AttributeDto) => {
+    const updateAttribute: AttributeDto = {
+      name: newAttribute.name,
       gameId: selectedGameId,
     };
 
-    const { payload } = await dispatch(createSet(updateGameId));
-    responseWrapper(payload, 'Successfully added Set');
+    const { payload } = await dispatch(createAttribute(updateAttribute));
+    responseWrapper(payload, 'Successfully added Attribute');
 
     if (payload && !payload.hasErrors) {
-      loadSets();
+      loadAttributes();
     }
   };
 
@@ -64,14 +64,14 @@ export function AddSetsModal(): React.ReactElement {
         onClick={toggle}
         disabled={determineDisabled}
       >
-        Add Set
+        Add Attribute
       </PrimaryButton>
 
-      <PrimaryModal opened={open} onClose={toggle} title="Add Set">
+      <PrimaryModal opened={open} onClose={toggle} title="Add Attribute">
         <form onSubmit={form.onSubmit(handleAdd)}>
           <PrimaryTextInput
             withAsterisk
-            label="Sets"
+            label="Attribute"
             {...form.getInputProps('name')}
           />
 

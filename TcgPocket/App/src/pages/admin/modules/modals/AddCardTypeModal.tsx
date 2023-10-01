@@ -71,7 +71,7 @@ export function AddCardTypeModal(): React.ReactElement {
         <form onSubmit={form.onSubmit(handleAdd)}>
           <PrimaryTextInput
             withAsterisk
-            label="Card Types"
+            label="Card Type"
             {...form.getInputProps('name')}
           />
 
