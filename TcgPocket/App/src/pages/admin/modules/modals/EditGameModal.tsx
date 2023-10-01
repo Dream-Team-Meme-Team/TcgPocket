@@ -5,12 +5,13 @@ import { SecondaryButton } from '../../../../components/buttons/SecondaryButton'
 import { PrimaryButton } from '../../../../components/buttons/PrimaryButton';
 import { createStyles } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { SetGetDto } from '../../../../types/sets';
 
 type EditModalProps = {
-  value: GameGetDto;
+  value: GameGetDto | SetGetDto;
   open: boolean;
   setOpen: () => void;
-  submitAction: (arg: GameGetDto) => void;
+  submitAction: (arg: any) => void;
 };
 
 export function EditGameModal({

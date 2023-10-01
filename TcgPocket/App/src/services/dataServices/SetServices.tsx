@@ -13,18 +13,18 @@ export const getAllSets = createAsyncThunk<
 });
 
 export const createSet = createAsyncThunk<
-  Response<void>,
+  Response<SetGetDto>,
   SetDto,
-  { rejectValue: Response<void> }
->('getAllSets', async (newSet) => {
-  return await apiCall<void>('POST', apiRoutes.sets, newSet);
+  { rejectValue: Response<SetGetDto> }
+>('createSet', async (newSet) => {
+  return await apiCall<SetGetDto>('POST', apiRoutes.sets, newSet);
 });
 
 export const deleteSet = createAsyncThunk<
   Response<void>,
   number,
   { rejectValue: Response<void> }
->('getAllSets', async (id) => {
+>('deleteSet', async (id) => {
   return await apiCall<void>('DELETE', `${apiRoutes.sets}/${id}`);
 });
 
@@ -32,7 +32,7 @@ export const editSet = createAsyncThunk<
   Response<void>,
   SetGetDto,
   { rejectValue: Response<void> }
->('getAllSets', async (editedSet) => {
+>('editSet', async (editedSet) => {
   return await apiCall<void>(
     'PUT',
     `${apiRoutes.sets}/${editedSet.id}`,

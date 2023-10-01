@@ -14,15 +14,22 @@ import {
 import { useNavbarHeight } from '../../hooks/use-navbar-height';
 import { AdminTabHeader } from './modules/AdminTabHeader';
 import { AddGameModal } from './modules/modals/AddGameModal';
+import { AddSetsModal } from './modules/modals/AddSetsModal';
+import { Tab } from '../../types/tabs';
 
-const adminTabs = [
+const adminTabs: Tab[] = [
   {
     label: 'Games',
     icon: <IconDeviceGamepad />,
     element: <GameTab />,
     addModal: <AddGameModal />,
   },
-  { label: 'Sets', icon: <IconCards />, element: <SetTab />, addModal: null },
+  {
+    label: 'Sets',
+    icon: <IconCards />,
+    element: <SetTab />,
+    addModal: <AddSetsModal />,
+  },
   {
     label: 'Card Types',
     icon: <IconPlayCard />,
@@ -67,7 +74,11 @@ export function AdminPage(): React.ReactElement {
           value={tab.label}
           className={classes.panelContainer}
         >
-          <AdminTabHeader tabTitle={tab.label} addModal={tab.addModal} />
+          <AdminTabHeader
+            tabTitle={tab.label}
+            addModal={tab.addModal}
+            gameSelect={tab.label !== adminTabs[0].label}
+          />
 
           {tab.element}
         </Tabs.Panel>

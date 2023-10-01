@@ -51,14 +51,10 @@ export const dataSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getAllGames.fulfilled, (state, { payload }) => {
-      if (!payload.data) {
-        return;
-      } else state.games = payload.data;
+      state.games = payload.data;
     });
     builder.addCase(getAllSets.fulfilled, (state, { payload }) => {
-      if (!payload.data) {
-        return;
-      } else state.sets = payload.data;
+      state.sets = payload.data;
     });
   },
 });

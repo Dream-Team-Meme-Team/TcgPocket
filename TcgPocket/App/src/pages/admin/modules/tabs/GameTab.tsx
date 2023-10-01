@@ -124,7 +124,6 @@ const useStyles = createStyles((theme: MantineTheme) => {
 
       ':hover': {
         backgroundColor: theme.colors.primaryColor[0],
-        // opacity: 0.6,
 
         borderRadius: 7,
         paddingLeft: 8,

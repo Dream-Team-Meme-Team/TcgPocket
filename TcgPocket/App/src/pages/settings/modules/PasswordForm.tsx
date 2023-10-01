@@ -1,7 +1,7 @@
 import { useForm } from '@mantine/form';
 import { useFormValidation } from '../../../helpers/useFormValidation';
 import { UserGetDto, UserPasswordUpdateDto } from '../../../types/users';
-import { PasswordInput, createStyles } from '@mantine/core';
+import { createStyles } from '@mantine/core';
 import { SecondaryButton } from '../../../components/buttons/SecondaryButton';
 import { PrimaryButton } from '../../../components/buttons/PrimaryButton';
 import { dispatch } from '../../../store/configureStore';
