@@ -5,7 +5,7 @@ import {
   editGame,
   getAllGames,
 } from '../../../../services/dataServices/GameServices';
-import { responseWrapper } from '../../../../services/responseWrapper';
+import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { ActionIcon, MantineTheme, createStyles } from '@mantine/core';
 import { useMemo } from 'react';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
@@ -14,12 +14,14 @@ import { DeleteModal } from '../../../../components/modals/DeleteModal';
 import { setSelectedId } from '../../../../store/dataSlice';
 import { GameGetDto } from '../../../../types/games';
 import { EditModal } from '../modals/EditModal';
-import { TabInfoHeader } from '../TabInfoHeader';
+import { TabInfoHeader } from '../headers/TabInfoHeader';
 
 const titles: string[] = ['Name', 'Edit', 'Delete'];
+const colValue: string = '1fr ';
 
 export function GameTab(): React.ReactElement {
-  const { classes } = useStyles();
+  const numOfCol = colValue.repeat(titles.length);
+  const { classes } = useStyles(numOfCol);
 
   const [openDelete, { toggle: toggleDelete }] = useDisclosure();
   const [openEdit, { toggle: toggleEdit }] = useDisclosure();
@@ -112,7 +114,7 @@ export function GameTab(): React.ReactElement {
   );
 }
 
-const useStyles = createStyles((theme: MantineTheme) => {
+const useStyles = createStyles((theme: MantineTheme, numOfCol: string) => {
   return {
     gameTabContainer: {
       paddingLeft: '8px',
@@ -120,7 +122,7 @@ const useStyles = createStyles((theme: MantineTheme) => {
 
     renderedGameContainer: {
       display: 'grid',
-      gridTemplateColumns: '1fr 1fr 1fr',
+      gridTemplateColumns: numOfCol,
 
       ':hover': {
         backgroundColor: theme.colors.primaryColor[0],

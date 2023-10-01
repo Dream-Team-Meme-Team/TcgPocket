@@ -1,7 +1,7 @@
 import { useDisclosure } from '@mantine/hooks';
 import { PrimaryModal } from '../../../components/modals/PrimaryModal';
 import { deleteUserAccount, signOutUser } from '../../../services/AuthServices';
-import { error, success } from '../../../services/notification';
+import { error, success } from '../../../services/helpers/notification';
 import { dispatch } from '../../../store/configureStore';
 import { useForm } from '@mantine/form';
 import { PrimaryTextInput } from '../../../components/inputs/PrimaryTextInput';

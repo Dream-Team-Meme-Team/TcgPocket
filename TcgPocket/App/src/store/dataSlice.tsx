@@ -5,10 +5,10 @@ import { GameGetDto } from '../types/games';
 import { RarityGetDto } from '../types/rarities';
 import { SetGetDto } from '../types/sets';
 import { getAllGames } from '../services/dataServices/GameServices';
-import { getAllSets } from '../services/dataServices/SetsServices';
+import { getAllSets } from '../services/dataServices/SetServices';
 import { getAllCardTypes } from '../services/dataServices/CardTypeServices';
-import { getAllRarities } from '../services/dataServices/RaritiesServices';
-import { getAllAttributes } from '../services/dataServices/AttributesServices';
+import { getAllRarities } from '../services/dataServices/RarityServices';
+import { getAllAttributes } from '../services/dataServices/AttributeServices';
 
 type DataState = {
   searchTerm: string;

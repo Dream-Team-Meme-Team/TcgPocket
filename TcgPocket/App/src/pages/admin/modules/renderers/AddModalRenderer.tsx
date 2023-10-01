@@ -1,9 +1,9 @@
-import { TabLabel } from '../AdminPage';
-import { AddAttributeModal } from './modals/AddAttributeModal';
-import { AddCardTypeModal } from './modals/AddCardTypeModal';
-import { AddGameModal } from './modals/AddGameModal';
-import { AddRarityModal } from './modals/AddRarityModal';
-import { AddSetModal } from './modals/AddSetModal';
+import { TabLabel } from '../../AdminPage';
+import { AddAttributeModal } from '../modals/AddAttributeModal';
+import { AddCardTypeModal } from '../modals/AddCardTypeModal';
+import { AddGameModal } from '../modals/AddGameModal';
+import { AddRarityModal } from '../modals/AddRarityModal';
+import { AddSetModal } from '../modals/AddSetModal';
 
 type AddModalRendererProps = {
   label: string;

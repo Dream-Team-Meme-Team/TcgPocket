@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, { AxiosError } from 'axios';
-import { Response } from '../types/shared';
+import { Response } from '../../types/shared';
 axios.defaults.withCredentials = true;
 
 export type HttpMethod = 'GET' | 'POST' | 'DELETE' | 'PUT' | 'PATCH';

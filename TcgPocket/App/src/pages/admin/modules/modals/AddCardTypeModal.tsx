@@ -9,9 +9,9 @@ import {
   createCardType,
   getAllCardTypes,
 } from '../../../../services/dataServices/CardTypeServices';
-import { responseWrapper } from '../../../../services/responseWrapper';
+import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { CardTypeDto } from '../../../../types/card-types';
-import { AdminButtons } from '../../../../components/buttons/AdminButtons';
+import { AdminButtons } from '../AdminButtons';
 
 const initialValues = {
   name: '',

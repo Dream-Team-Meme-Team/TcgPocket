@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Response } from '../../types/shared';
 import { GameDto, GameGetDto } from '../../types/games';
-import { apiCall } from '../api';
+import { apiCall } from '../helpers/api';
 import { apiRoutes } from '../../routes';
 
 export const getAllGames = createAsyncThunk<

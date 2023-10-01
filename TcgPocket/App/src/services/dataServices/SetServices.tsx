@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Response } from '../../types/shared';
 import { SetDto, SetGetDto } from '../../types/sets';
-import { apiCall } from '../api';
+import { apiCall } from '../helpers/api';
 import { apiRoutes } from '../../routes';
 
 export const getAllSets = createAsyncThunk<

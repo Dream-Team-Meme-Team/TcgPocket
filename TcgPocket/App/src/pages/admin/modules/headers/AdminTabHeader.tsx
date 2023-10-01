@@ -1,14 +1,14 @@
-import { PrimaryTextInput } from '../../../components/inputs/PrimaryTextInput';
+import { PrimaryTextInput } from '../../../../components/inputs/PrimaryTextInput';
 import { IconSearch } from '@tabler/icons-react';
-import { dispatch, useAppSelector } from '../../../store/configureStore';
+import { dispatch, useAppSelector } from '../../../../store/configureStore';
 import {
   setAdminSearchTerm,
   setSelectedGameId,
-} from '../../../store/dataSlice';
+} from '../../../../store/dataSlice';
 import { Select, createStyles } from '@mantine/core';
 import { useMemo } from 'react';
-import { TabLabel } from '../AdminPage';
-import { AddModalRenderer } from './AddModalRenderer';
+import { TabLabel } from '../../AdminPage';
+import { AddModalRenderer } from '../renderers/AddModalRenderer';
 
 type AdminTabHeaderProps = {
   tabTitle: string;

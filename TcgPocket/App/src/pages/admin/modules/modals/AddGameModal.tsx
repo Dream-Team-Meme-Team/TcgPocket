@@ -9,9 +9,9 @@ import {
   createGame,
   getAllGames,
 } from '../../../../services/dataServices/GameServices';
-import { responseWrapper } from '../../../../services/responseWrapper';
+import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { dispatch } from '../../../../store/configureStore';
-import { AdminButtons } from '../../../../components/buttons/AdminButtons';
+import { AdminButtons } from '../AdminButtons';
 
 const initialValues = {
   name: '',

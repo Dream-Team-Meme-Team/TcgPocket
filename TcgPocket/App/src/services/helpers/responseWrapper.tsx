@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Response } from '../types/shared';
+import { Response } from '../../types/shared';
 import { error, success } from './notification';
 
 export function responseWrapper(

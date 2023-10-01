@@ -7,11 +7,11 @@ import { dispatch, useAppSelector } from '../../../../store/configureStore';
 import {
   createSet,
   getAllSets,
-} from '../../../../services/dataServices/SetsServices';
-import { responseWrapper } from '../../../../services/responseWrapper';
+} from '../../../../services/dataServices/SetServices';
+import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { SetDto } from '../../../../types/sets';
 import { PrimaryTextInput } from '../../../../components/inputs/PrimaryTextInput';
-import { AdminButtons } from '../../../../components/buttons/AdminButtons';
+import { AdminButtons } from '../AdminButtons';
 
 const initialValues = {
   name: '',

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { dispatch, useAppSelector } from '../../../../store/configureStore';
-import { TabInfoHeader } from '../TabInfoHeader';
+import { TabInfoHeader } from '../headers/TabInfoHeader';
 import { ActionIcon, MantineTheme, createStyles } from '@mantine/core';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
 import { EditModal } from '../modals/EditModal';
@@ -9,16 +9,18 @@ import {
   deleteRarity,
   editRarity,
   getAllRarities,
-} from '../../../../services/dataServices/RaritiesServices';
-import { responseWrapper } from '../../../../services/responseWrapper';
+} from '../../../../services/dataServices/RarityServices';
+import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { RarityGetDto } from '../../../../types/rarities';
 import { DeleteModal } from '../../../../components/modals/DeleteModal';
 import { setSelectedId } from '../../../../store/dataSlice';
 
 const titles: string[] = ['Name', 'Edit', 'Delete'];
+const colValue: string = '1fr ';
 
 export function RarityTab(): React.ReactElement {
-  const { classes } = useStyles();
+  const numOfCol = colValue.repeat(titles.length);
+  const { classes } = useStyles(numOfCol);
 
   const [openDelete, { toggle: toggleDelete }] = useDisclosure();
   const [openEdit, { toggle: toggleEdit }] = useDisclosure();
@@ -118,7 +120,7 @@ export function RarityTab(): React.ReactElement {
   );
 }
 
-const useStyles = createStyles((theme: MantineTheme) => {
+const useStyles = createStyles((theme: MantineTheme, numOfCol: string) => {
   return {
     rarityTabContainer: {
       paddingLeft: '8px',
@@ -126,7 +128,7 @@ const useStyles = createStyles((theme: MantineTheme) => {
 
     renderedRarityContainer: {
       display: 'grid',
-      gridTemplateColumns: '1fr 1fr 1fr',
+      gridTemplateColumns: numOfCol,
 
       ':hover': {
         backgroundColor: theme.colors.primaryColor[0],

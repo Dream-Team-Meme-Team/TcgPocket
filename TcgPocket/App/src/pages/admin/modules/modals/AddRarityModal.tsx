@@ -8,10 +8,10 @@ import { PrimaryTextInput } from '../../../../components/inputs/PrimaryTextInput
 import {
   createRarity,
   getAllRarities,
-} from '../../../../services/dataServices/RaritiesServices';
-import { responseWrapper } from '../../../../services/responseWrapper';
+} from '../../../../services/dataServices/RarityServices';
+import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { RarityDto } from '../../../../types/rarities';
-import { AdminButtons } from '../../../../components/buttons/AdminButtons';
+import { AdminButtons } from '../AdminButtons';
 
 const initialValues = {
   name: '',

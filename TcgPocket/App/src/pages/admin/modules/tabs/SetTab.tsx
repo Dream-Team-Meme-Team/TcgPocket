@@ -4,9 +4,9 @@ import {
   deleteSet,
   editSet,
   getAllSets,
-} from '../../../../services/dataServices/SetsServices';
-import { responseWrapper } from '../../../../services/responseWrapper';
-import { TabInfoHeader } from '../TabInfoHeader';
+} from '../../../../services/dataServices/SetServices';
+import { responseWrapper } from '../../../../services/helpers/responseWrapper';
+import { TabInfoHeader } from '../headers/TabInfoHeader';
 import { ActionIcon, MantineTheme, createStyles } from '@mantine/core';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
 import { DeleteModal } from '../../../../components/modals/DeleteModal';
@@ -16,9 +16,11 @@ import { SetGetDto } from '../../../../types/sets';
 import { setSelectedId } from '../../../../store/dataSlice';
 
 const titles: string[] = ['Name', 'Game', 'Edit', 'Delete'];
+const colValue: string = '1fr ';
 
 export function SetTab(): React.ReactElement {
-  const { classes } = useStyles();
+  const numOfCol = colValue.repeat(titles.length);
+  const { classes } = useStyles(numOfCol);
 
   const [openDelete, { toggle: toggleDelete }] = useDisclosure();
   const [openEdit, { toggle: toggleEdit }] = useDisclosure();
@@ -126,7 +128,7 @@ export function SetTab(): React.ReactElement {
   );
 }
 
-const useStyles = createStyles((theme: MantineTheme) => {
+const useStyles = createStyles((theme: MantineTheme, numOfCol: string) => {
   return {
     setTabContainer: {
       paddingLeft: '8px',
@@ -134,7 +136,7 @@ const useStyles = createStyles((theme: MantineTheme) => {
 
     renderedSetContainer: {
       display: 'grid',
-      gridTemplateColumns: '1fr 1fr 1fr 1fr',
+      gridTemplateColumns: numOfCol,
 
       ':hover': {
         backgroundColor: theme.colors.primaryColor[0],

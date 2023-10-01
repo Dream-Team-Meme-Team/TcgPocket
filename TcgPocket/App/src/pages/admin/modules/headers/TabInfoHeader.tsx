@@ -4,13 +4,12 @@ type TabInfoHeaderProps = {
   titles: string[];
 };
 
+const autoValue: string = '1fr ';
+
 export function TabInfoHeader({
   titles,
 }: TabInfoHeaderProps): React.ReactElement {
-  const autoValue: string = '1fr ';
-
   const numOfCol = autoValue.repeat(titles.length);
-
   const { classes } = useStyles(numOfCol);
 
   return (

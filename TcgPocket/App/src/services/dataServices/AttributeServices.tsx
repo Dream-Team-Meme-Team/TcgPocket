@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { apiCall } from '../api';
+import { apiCall } from '../helpers/api';
 import { AttributeDto, AttributeGetDto } from '../../types/attributes';
 import { apiRoutes } from '../../routes';
 import { Response } from '../../types/shared';

@@ -1,6 +1,6 @@
 import { createStyles } from '@mantine/core';
-import { PrimaryButton } from './PrimaryButton';
-import { SecondaryButton } from './SecondaryButton';
+import { PrimaryButton } from '../../../components/buttons/PrimaryButton';
+import { SecondaryButton } from '../../../components/buttons/SecondaryButton';
 
 type AdminButtonsProps = {
   handleCancel: () => void;

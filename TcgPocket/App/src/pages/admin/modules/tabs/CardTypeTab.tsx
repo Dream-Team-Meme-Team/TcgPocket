@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { dispatch, useAppSelector } from '../../../../store/configureStore';
-import { TabInfoHeader } from '../TabInfoHeader';
+import { TabInfoHeader } from '../headers/TabInfoHeader';
 import { ActionIcon, MantineTheme, createStyles } from '@mantine/core';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
 import { EditModal } from '../modals/EditModal';
@@ -10,15 +10,17 @@ import {
   editCardType,
   getAllCardTypes,
 } from '../../../../services/dataServices/CardTypeServices';
-import { responseWrapper } from '../../../../services/responseWrapper';
+import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { CardTypeGetDto } from '../../../../types/card-types';
 import { DeleteModal } from '../../../../components/modals/DeleteModal';
 import { setSelectedId } from '../../../../store/dataSlice';
 
 const titles: string[] = ['Name', 'Edit', 'Delete'];
+const colValue: string = '1fr ';
 
 export function CardTypeTab(): React.ReactElement {
-  const { classes } = useStyles();
+  const numOfCol = colValue.repeat(titles.length);
+  const { classes } = useStyles(numOfCol);
 
   const [openDelete, { toggle: toggleDelete }] = useDisclosure();
   const [openEdit, { toggle: toggleEdit }] = useDisclosure();
@@ -118,7 +120,7 @@ export function CardTypeTab(): React.ReactElement {
   );
 }
 
-const useStyles = createStyles((theme: MantineTheme) => {
+const useStyles = createStyles((theme: MantineTheme, numOfCol: string) => {
   return {
     cardTypeContainer: {
       paddingLeft: '8px',
@@ -126,7 +128,7 @@ const useStyles = createStyles((theme: MantineTheme) => {
 
     renderedCardTypeContainer: {
       display: 'grid',
-      gridTemplateColumns: '1fr 1fr 1fr',
+      gridTemplateColumns: numOfCol,
 
       ':hover': {
         backgroundColor: theme.colors.primaryColor[0],

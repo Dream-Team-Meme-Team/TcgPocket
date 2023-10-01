@@ -1,9 +1,4 @@
 import { Tabs, TabsValue, createStyles } from '@mantine/core';
-import { AttributeTab } from './modules/tabs/AttributeTab';
-import { CardTypeTab } from './modules/tabs/CardTypeTab';
-import { GameTab } from './modules/tabs/GameTab';
-import { RarityTab } from './modules/tabs/RarityTab';
-import { SetTab } from './modules/tabs/SetTab';
 import {
   IconCards,
   IconChartTreemap,
@@ -12,7 +7,7 @@ import {
   IconPlayCard,
 } from '@tabler/icons-react';
 import { useNavbarHeight } from '../../hooks/use-navbar-height';
-import { AdminTabHeader } from './modules/AdminTabHeader';
+import { AdminTabHeader } from './modules/headers/AdminTabHeader';
 import { Tab } from '../../types/tabs';
 import { dispatch } from '../../store/configureStore';
 import {
@@ -21,6 +16,7 @@ import {
   setSelectedId,
 } from '../../store/dataSlice';
 import { useState } from 'react';
+import { AdminDataRenderer } from './modules/renderers/AdminDataRenderer';
 
 export enum TabLabel {
   GAMES = 'Games',
@@ -34,27 +30,22 @@ const adminTabs: Tab[] = [
   {
     label: TabLabel.GAMES,
     icon: <IconDeviceGamepad />,
-    element: <GameTab />,
   },
   {
     label: TabLabel.SETS,
     icon: <IconCards />,
-    element: <SetTab />,
   },
   {
     label: TabLabel.CARD_TYPES,
     icon: <IconPlayCard />,
-    element: <CardTypeTab />,
   },
   {
     label: TabLabel.RARITIES,
     icon: <IconChartTreemap />,
-    element: <RarityTab />,
   },
   {
     label: TabLabel.ATTRIBUTES,
     icon: <IconCoffin />,
-    element: <AttributeTab />,
   },
 ];
 
@@ -95,7 +86,7 @@ export function AdminPage(): React.ReactElement {
         >
           <AdminTabHeader tabTitle={tab.label} />
 
-          {tab.element}
+          <AdminDataRenderer label={tab.label} />
         </Tabs.Panel>
       ))}
     </Tabs>

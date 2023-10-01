@@ -6,7 +6,7 @@ import { dispatch } from '../../../store/configureStore';
 import { UserGetDto } from '../../../types/users';
 import { SecondaryButton } from '../../../components/buttons/SecondaryButton';
 import { PrimaryButton } from '../../../components/buttons/PrimaryButton';
-import { error, success } from '../../../services/notification';
+import { error, success } from '../../../services/helpers/notification';
 import { updateUserInformation } from '../../../services/AuthServices';
 
 export type UserFormProps = {

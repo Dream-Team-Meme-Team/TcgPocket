@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { dispatch, useAppSelector } from '../../../../store/configureStore';
-import { TabInfoHeader } from '../TabInfoHeader';
+import { TabInfoHeader } from '../headers/TabInfoHeader';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
 import { ActionIcon, MantineTheme, createStyles } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
@@ -11,14 +11,16 @@ import {
   deleteAttribute,
   editAttribute,
   getAllAttributes,
-} from '../../../../services/dataServices/AttributesServices';
-import { responseWrapper } from '../../../../services/responseWrapper';
+} from '../../../../services/dataServices/AttributeServices';
+import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { DeleteModal } from '../../../../components/modals/DeleteModal';
 
 const titles: string[] = ['Name', 'Edit', 'Delete'];
+const colValue: string = '1fr ';
 
 export function AttributeTab(): React.ReactElement {
-  const { classes } = useStyles();
+  const numOfCol = colValue.repeat(titles.length);
+  const { classes } = useStyles(numOfCol);
 
   const [openDelete, { toggle: toggleDelete }] = useDisclosure();
   const [openEdit, { toggle: toggleEdit }] = useDisclosure();
@@ -118,7 +120,7 @@ export function AttributeTab(): React.ReactElement {
   );
 }
 
-const useStyles = createStyles((theme: MantineTheme) => {
+const useStyles = createStyles((theme: MantineTheme, numOfCol: string) => {
   return {
     attributeTabContainer: {
       paddingLeft: '8px',
@@ -126,7 +128,7 @@ const useStyles = createStyles((theme: MantineTheme) => {
 
     renderedAttributeContainer: {
       display: 'grid',
-      gridTemplateColumns: '1fr 1fr 1fr',
+      gridTemplateColumns: numOfCol,
 
       ':hover': {
         backgroundColor: theme.colors.primaryColor[0],

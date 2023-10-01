@@ -5,7 +5,7 @@ import {
   UserGetDto,
   UserPasswordUpdateDto,
 } from '../types/users';
-import { apiCall } from './api';
+import { apiCall } from './helpers/api';
 import { apiRoutes } from '../routes';
 import { Response } from '../types/shared';
 

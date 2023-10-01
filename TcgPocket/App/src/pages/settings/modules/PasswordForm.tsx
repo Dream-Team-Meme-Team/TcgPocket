@@ -6,7 +6,7 @@ import { SecondaryButton } from '../../../components/buttons/SecondaryButton';
 import { PrimaryButton } from '../../../components/buttons/PrimaryButton';
 import { dispatch } from '../../../store/configureStore';
 import { updateUserPassword } from '../../../services/AuthServices';
-import { error, success } from '../../../services/notification';
+import { error, success } from '../../../services/helpers/notification';
 import { PrimaryPasswordInput } from '../../../components/inputs/PrimaryPasswordInput';
 
 type PasswordFormProps = {

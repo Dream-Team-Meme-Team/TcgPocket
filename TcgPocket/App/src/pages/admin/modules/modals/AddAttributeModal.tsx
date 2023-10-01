@@ -5,12 +5,12 @@ import { PrimaryButton } from '../../../../components/buttons/PrimaryButton';
 import { IconPlus } from '@tabler/icons-react';
 import { PrimaryModal } from '../../../../components/modals/PrimaryModal';
 import { PrimaryTextInput } from '../../../../components/inputs/PrimaryTextInput';
-import { AdminButtons } from '../../../../components/buttons/AdminButtons';
+import { AdminButtons } from '../AdminButtons';
 import {
   createAttribute,
   getAllAttributes,
-} from '../../../../services/dataServices/AttributesServices';
-import { responseWrapper } from '../../../../services/responseWrapper';
+} from '../../../../services/dataServices/AttributeServices';
+import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { AttributeDto } from '../../../../types/attributes';
 
 const initialValues = {
