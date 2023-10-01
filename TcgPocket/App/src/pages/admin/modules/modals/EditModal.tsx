@@ -14,7 +14,7 @@ type EditModalProps = {
   submitAction: (arg: any) => void;
 };
 
-export function EditGameModal({
+export function EditModal({
   value,
   open,
   setOpen,

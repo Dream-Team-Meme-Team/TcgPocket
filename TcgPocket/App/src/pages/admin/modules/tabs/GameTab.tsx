@@ -13,7 +13,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { DeleteModal } from '../../../../components/modals/DeleteModal';
 import { setSelectedId } from '../../../../store/dataSlice';
 import { GameGetDto } from '../../../../types/games';
-import { EditGameModal } from '../modals/EditGameModal';
+import { EditModal } from '../modals/EditModal';
 import { TabInfoHeader } from '../TabInfoHeader';
 
 const titles = ['Name', 'Edit', 'Delete'];
@@ -90,7 +90,7 @@ export function GameTab(): React.ReactElement {
               </ActionIcon>
 
               {selectedId === game.id && (
-                <EditGameModal
+                <EditModal
                   open={openEdit}
                   setOpen={toggleEdit}
                   submitAction={editSelectedGame}

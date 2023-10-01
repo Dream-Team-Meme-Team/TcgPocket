@@ -11,7 +11,7 @@ import { ActionIcon, MantineTheme, createStyles } from '@mantine/core';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
 import { DeleteModal } from '../../../../components/modals/DeleteModal';
 import { useDisclosure } from '@mantine/hooks';
-import { EditGameModal } from '../modals/EditGameModal';
+import { EditModal } from '../modals/EditModal';
 import { SetGetDto } from '../../../../types/sets';
 import { setSelectedId } from '../../../../store/dataSlice';
 
@@ -103,7 +103,7 @@ export function SetTab(): React.ReactElement {
 
               <div>
                 {selectedId === set.id && (
-                  <EditGameModal
+                  <EditModal
                     open={openEdit}
                     setOpen={toggleEdit}
                     submitAction={editSelectedSet}

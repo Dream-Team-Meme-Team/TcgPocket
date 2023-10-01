@@ -7,17 +7,15 @@ import {
 } from '../../../store/dataSlice';
 import { Select, createStyles } from '@mantine/core';
 import { useMemo } from 'react';
+import { TabLabel } from '../AdminPage';
+import { AddModalRenderer } from './AddModalRenderer';
 
 type AdminTabHeaderProps = {
   tabTitle: string;
-  addModal: React.ReactNode;
-  gameSelect?: boolean;
 };
 
 export function AdminTabHeader({
   tabTitle,
-  addModal,
-  gameSelect,
 }: AdminTabHeaderProps): React.ReactElement {
   const { classes } = useStyles();
 
@@ -47,8 +45,9 @@ export function AdminTabHeader({
     if (!foundSelectedGame) return;
 
     dispatch(setSelectedGameId(foundSelectedGame.id));
-    dispatch(setAdminSearchTerm(''));
   };
+
+  const determineSelect = tabTitle !== TabLabel.GAMES;
 
   return (
     <div className={classes.adminTabHeaderContainer}>
@@ -56,7 +55,7 @@ export function AdminTabHeader({
 
       <div className={classes.controlsContainer}>
         <div>
-          {gameSelect && (
+          {determineSelect && (
             <Select
               data={data}
               value={selectedValue}
@@ -73,7 +72,7 @@ export function AdminTabHeader({
           onChange={handleInputChange}
         />
 
-        {addModal}
+        <AddModalRenderer label={tabTitle} />
       </div>
     </div>
   );

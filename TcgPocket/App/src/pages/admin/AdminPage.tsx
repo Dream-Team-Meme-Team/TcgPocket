@@ -1,4 +1,4 @@
-import { Tabs, createStyles } from '@mantine/core';
+import { Tabs, TabsValue, createStyles } from '@mantine/core';
 import { AttributeTab } from './modules/tabs/AttributeTab';
 import { CardTypeTab } from './modules/tabs/CardTypeTab';
 import { GameTab } from './modules/tabs/GameTab';
@@ -13,40 +13,48 @@ import {
 } from '@tabler/icons-react';
 import { useNavbarHeight } from '../../hooks/use-navbar-height';
 import { AdminTabHeader } from './modules/AdminTabHeader';
-import { AddGameModal } from './modules/modals/AddGameModal';
-import { AddSetsModal } from './modules/modals/AddSetsModal';
 import { Tab } from '../../types/tabs';
+import { dispatch } from '../../store/configureStore';
+import {
+  setAdminSearchTerm,
+  setSelectedGameId,
+  setSelectedId,
+} from '../../store/dataSlice';
+import { useState } from 'react';
+
+export enum TabLabel {
+  GAMES = 'Games',
+  SETS = 'Sets',
+  CARD_TYPES = 'Card Types',
+  RARITIES = 'Rarities',
+  ATTRIBUTES = 'Attributes',
+}
 
 const adminTabs: Tab[] = [
   {
-    label: 'Games',
+    label: TabLabel.GAMES,
     icon: <IconDeviceGamepad />,
     element: <GameTab />,
-    addModal: <AddGameModal />,
   },
   {
-    label: 'Sets',
+    label: TabLabel.SETS,
     icon: <IconCards />,
     element: <SetTab />,
-    addModal: <AddSetsModal />,
   },
   {
-    label: 'Card Types',
+    label: TabLabel.CARD_TYPES,
     icon: <IconPlayCard />,
     element: <CardTypeTab />,
-    addModal: null,
   },
   {
-    label: 'Rarities',
+    label: TabLabel.RARITIES,
     icon: <IconChartTreemap />,
     element: <RarityTab />,
-    addModal: null,
   },
   {
-    label: 'Attributes',
+    label: TabLabel.ATTRIBUTES,
     icon: <IconCoffin />,
     element: <AttributeTab />,
-    addModal: null,
   },
 ];
 
@@ -54,9 +62,20 @@ export function AdminPage(): React.ReactElement {
   const { remainingHeight } = useNavbarHeight();
   const { classes } = useStyles();
 
+  const [activeTab, setActiveTab] = useState<string | null>(adminTabs[0].label);
+
+  const handleTabChange = (value: TabsValue) => {
+    setActiveTab(value);
+    dispatch(setAdminSearchTerm(''));
+    dispatch(setSelectedGameId(0));
+    dispatch(setSelectedId(0));
+  };
+
   return (
     <Tabs
       defaultValue={adminTabs[0].label}
+      value={activeTab}
+      onTabChange={handleTabChange}
       orientation="vertical"
       sx={{ height: `${remainingHeight}px` }}
     >
@@ -74,11 +93,7 @@ export function AdminPage(): React.ReactElement {
           value={tab.label}
           className={classes.panelContainer}
         >
-          <AdminTabHeader
-            tabTitle={tab.label}
-            addModal={tab.addModal}
-            gameSelect={tab.label !== adminTabs[0].label}
-          />
+          <AdminTabHeader tabTitle={tab.label} />
 
           {tab.element}
         </Tabs.Panel>
