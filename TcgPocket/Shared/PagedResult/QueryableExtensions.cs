@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Linq.Expressions;
+using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using TcgPocket.Shared.Dtos;
@@ -167,6 +168,48 @@ public static class QueryableExtensions
         return pagedEntity;
     }
 
+    public static IQueryable<TEntity> FilterBy<TEntity, TFilter>(this IQueryable<TEntity> query, TFilter filter)
+    where TEntity : class
+    where TFilter : class
+    {
+        // get object fields
+        var entityFields = typeof(TEntity).GetProperties();
+        var filterFields = typeof(TFilter).GetProperties();
+
+        // get common fields where filter value is not null 
+        var commonFields = filterFields
+            .Where(x => entityFields.Any(y => y.Name == x.Name))
+            .Where(fields => fields.GetValue(filter, null) is not null)
+            .ToList();
+
+        // setup predicate and type expression
+        var entityTypeExpression = Expression.Parameter(typeof(TEntity));
+        Expression? expression = null;
+
+        commonFields.ForEach(field =>
+        {
+            // get entity field and value
+            var entityField = Expression.PropertyOrField(entityTypeExpression, field.Name);
+            var entityFieldType = entityField.Type;
+
+            // convert raw field value to desired type (probably not necessary but it makes me feel safe)
+            var rawFiledValue = field.GetValue(filter);
+            var convertedFieldValue = Convert.ChangeType(rawFiledValue, entityFieldType);
+            
+            var filterExpression = 
+                Expression.Equal(entityField, Expression.Constant(convertedFieldValue, entityFieldType));
+            
+            expression ??= filterExpression;
+            expression = Expression.AndAlso(expression, filterExpression);
+        });
+
+        if (expression is null) return query;
+        
+        var lambda = Expression.Lambda<Func<TEntity, bool>>(expression, entityTypeExpression);
+        query = query.Where(lambda);
+
+        return query;
+    }
 }
 public class PagedResult<T> : PagedResultBase
 {
