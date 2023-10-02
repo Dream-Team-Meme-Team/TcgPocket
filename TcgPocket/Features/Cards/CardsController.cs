@@ -20,9 +20,9 @@ namespace TcgPocket.Features.Cards
         }
 
         [HttpPost]
-        public async Task<ActionResult<Response<CardGetDto>>> CreateCard([FromBody] CardDto dto)
+        public async Task<ActionResult<Response<CardDetailDto>>> CreateCard([FromBody] CreateCardDto dto)
         {
-            var response = await _mediator.Send(new CreateCardCommand { CardDto = dto });
+            var response = await _mediator.Send(new CreateCardCommand { CreateCardDto = dto });
 
             return response.HasErrors
                 ? BadRequest(response)
@@ -38,7 +38,7 @@ namespace TcgPocket.Features.Cards
         }
 
         [HttpGet("{id}", Name = nameof(GetCardById))]
-        public async Task<ActionResult<Response<CardGetDto>>> GetCardById([FromRoute] int id)
+        public async Task<ActionResult<Response<CardDetailDto>>> GetCardById([FromRoute] int id)
         {
             var response = await _mediator.Send(new GetCardByIdQuery { Id = id });
 

@@ -1,4 +1,5 @@
-﻿using TcgPocket.Features.CardTypes;
+﻿using TcgPocket.Features.CardAttributes;
+using TcgPocket.Features.CardTypes;
 using TcgPocket.Features.Games;
 using TcgPocket.Features.Rarities;
 using TcgPocket.Features.Sets;
@@ -14,6 +15,7 @@ namespace TcgPocket.Features.Cards
         public Rarity Rarity { get; set; }
         public Set Set { get; set; }
         public List<UserCard> UserCards { get; set; }
+        public List<CardAttribute> CardAttributes { get; set; }
     }
 
     public class CardGetDto : CardDto
@@ -31,5 +33,15 @@ namespace TcgPocket.Features.Cards
         public int SetId { get; set; }
         public string ImageUrl { get; set; }
         public string Description { get; set; }
+    }
+
+    public class CardDetailDto : CardGetDto
+    {
+        public List<CardAttributeDto> Attributes { get; set; }
+    }
+
+    public class CreateCardDto : CardDto
+    {
+        public List<CardAttributeDto> Attributes { get; set; }
     }
 }

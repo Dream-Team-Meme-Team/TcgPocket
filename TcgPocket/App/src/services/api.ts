@@ -5,7 +5,7 @@ axios.defaults.withCredentials = true;
 
 export type HttpMethod = 'GET' | 'POST' | 'DELETE' | 'PUT' | 'PATCH';
 
-export async function apiCall<TResult>(
+export async function apiCall<TResult = any>(
   method: HttpMethod,
   endpoint: string,
   data?: any
