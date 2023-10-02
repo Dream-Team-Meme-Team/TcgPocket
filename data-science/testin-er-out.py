@@ -20,7 +20,7 @@ from_PIL = transform.Compose([transform.PILToTensor()])
 # img = np.array(Image.open(BytesIO(resp.content)))
 
 # get and load up card from file
-img = np.array(Image.open('data-science/data/collected/card.jpg'))
+img = np.array(Image.open('data-science/data/collected/card4.jpg'))
 
 # rearrange color channels >>> RGBA to BGR, RGB to BGR, etc...
 if img.shape[2] == 4:
@@ -32,7 +32,6 @@ else:
 tensor = from_PIL(Image.fromarray(np.uint8(img))).to(torch.float32)
 card = tensor / torch.max(tensor)
 card = card.unsqueeze(0)
-# print(card.shape)
 
 classif = torch.argmax(card_classify(card)).item()
 
