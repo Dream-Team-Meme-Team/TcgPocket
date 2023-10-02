@@ -51,6 +51,14 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Respo
             return new Response<UserGetDto>{Errors = errors};
         }
 
+        result = await _userManager.AddToRoleAsync(user, "Basic");
+
+        if (!result.Succeeded)
+        {
+            var errors = _mapper.Map<List<Error>>(result.Errors);
+            return new Response<UserGetDto> { Errors = errors };
+        }
+
         await _dataContext.SaveChangesAsync(cancellationToken);
 
         var returnedUser = _userManager.Users.SingleOrDefault(x => x.Id == user.Id);
