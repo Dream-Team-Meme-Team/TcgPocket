@@ -60,13 +60,4 @@ public class GamesController : ControllerBase
         
         return response.HasErrors ? BadRequest(response) : Ok(response);
     }
-    
-    [HttpGet("test")]
-    public async Task<ActionResult<Response<List<GameGetDto>>>> 
-        GetAllGames([FromQuery] FilteredGameRequest request)
-    {
-        var response = await _mediator.Send(request);
-        
-        return response.HasErrors ? BadRequest(response) : Ok(response);
-    }
 }

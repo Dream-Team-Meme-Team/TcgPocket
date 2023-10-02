@@ -40,6 +40,8 @@ public class GetAllCardsByGameIdQueryHandler : IRequestHandler<GetAllCardsByGame
             return new Response<PagedResult<CardGetDto>> { Errors = errors };
         }
 
+        var (page, pageSize) = (query.UserCardGame.CurrentPage, query.UserCardGame.PageSize);
+
         var cards = await _dataContext.Set<UserCard>()
             .Include(x => x.User)
             .Include(x => x.Card)
@@ -47,7 +49,7 @@ public class GetAllCardsByGameIdQueryHandler : IRequestHandler<GetAllCardsByGame
                 && x.Card.GameId == query.UserCardGame.GameId)
             .Select(x => x.Card)
             .OrderByDescending(x => x.Id)
-            .GetPagedAsync(query.UserCardGame.CurrentPage, query.UserCardGame.PageSize, cancellationToken);
+            .GetPagedAsync<Card ,CardGetDto>(_mapper, page, pageSize);
 
         if (cards.Items.IsNullOrEmpty()) return Error.AsResponse<PagedResult<CardGetDto>>("Cards not found", "gameId and userId");
 
