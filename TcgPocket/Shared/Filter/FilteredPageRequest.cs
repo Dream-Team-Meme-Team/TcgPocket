@@ -79,7 +79,7 @@ where TFilter : PageDto
         var orderExpression = Expression.Call(
             typeof(Queryable),
             method,
-            new[] {typeof(TEntity), fieldToSortBy.Type},
+            new[] { typeof(TEntity), fieldToSortBy.Type },
             query.Expression,
             Expression.Quote(lambda)
         );
