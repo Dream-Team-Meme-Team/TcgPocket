@@ -7,11 +7,11 @@ using TcgPocket.Shared.Filter;
 
 namespace TcgPocket.Features.Cards.Queries;
 
-public class GetPagedCardsQuery :  FilteredPageRequest<Card, CardGetDto, PagedCardFilterDto>
+public class GetPagedCardsQuery :  FilteredPageRequest<Card, CardDetailDto, PagedCardFilterDto>
 {
 }
 
-public class GetPagedCardsQueryHandler :  FilteredPageRequestHandler<GetPagedCardsQuery, Card, CardGetDto, PagedCardFilterDto>
+public class GetPagedCardsQueryHandler :  FilteredPageRequestHandler<GetPagedCardsQuery, Card, CardDetailDto, PagedCardFilterDto>
 {
     public GetPagedCardsQueryHandler(
         DataContext dataContext, IMapper mapper, IValidator<PagedCardFilterDto> validator) 

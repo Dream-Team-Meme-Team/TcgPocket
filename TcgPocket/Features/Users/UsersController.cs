@@ -55,7 +55,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet("{id:int}/games/{gameId:int}")]
-    public async Task<ActionResult<Response<PagedResult<CardGetDto>>>> GetAllCardsByGameIdAndUserIdQuery([FromRoute] int gameId, int id, [FromQuery] PageDto data)
+    public async Task<ActionResult<Response<PagedResult<CardDetailDto>>>> GetAllCardsByGameIdAndUserIdQuery([FromRoute] int gameId, int id, [FromQuery] PageDto data)
     {
         var response = await _mediator
             .Send(new GetAllCardsByGameIdAndUserIdQuery
