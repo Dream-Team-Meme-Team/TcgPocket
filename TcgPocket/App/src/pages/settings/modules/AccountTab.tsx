@@ -20,7 +20,7 @@ export function AccountTab(): React.ReactElement {
 
             <PasswordForm user={user} />
 
-            <DeleteAccount user={user} />
+            <DeleteAccount />
           </div>
         </div>
       )}
