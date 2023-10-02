@@ -1,0 +1,2 @@
+class YugiohScraper:
+    pass

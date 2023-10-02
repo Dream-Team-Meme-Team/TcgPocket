@@ -4,11 +4,29 @@ from io import BytesIO
 from apiKeys import IDK_API_KEY
 import torchvision.transforms as transform
 import numpy as np
+import pytesseract as tess
 import cv2
+
+from magic_scraper import MagicScraper
+from yugioh_scraper import YugiohScraper
+from pokemon_scraper import PokemonScraper
 
 from_PIL = transform.Compose([transform.PILToTensor()]) 
 
-"""YUGIOH"""
+# """MAGIC"""
+# # get and load up card from URL
+# resp_mgc = requests.get('https://cards.scryfall.io/normal/front/e/5/e5594689-0f32-4592-859b-c746f3464fc6.jpg?1573509272', headers = {'X-Api-Key': IDK_API_KEY, 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'})
+# img_mgc_raw = Image.open(BytesIO(resp_mgc.content))
+# img_mgc_raw.show()
+
+# # img_mgc_raw = Image.open('data-science/data/collected/card.jpg')
+
+# mgc_scrape = MagicScraper()
+# filt = mgc_scrape.apply_filter(img_mgc_raw)
+# print(mgc_scrape.read_card(filt))
+
+
+# """YUGIOH"""
 # # get and load up ygo card from URL
 # resp_ygo = requests.get('https://images.ygoprodeck.com/images/cards/13026402.jpg', headers = {'X-Api-Key': IDK_API_KEY, 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'})
 # img_ygo_raw = Image.open(BytesIO(resp_ygo.content))
@@ -23,31 +41,8 @@ from_PIL = transform.Compose([transform.PILToTensor()])
 # img_ygo = Image.fromarray(img_ygo_np)
 # img_ygo.show()
 
-"""MAGIC"""
-# # get and load up card from URL
-# resp_mgc = requests.get('https://cards.scryfall.io/normal/front/e/5/e5594689-0f32-4592-859b-c746f3464fc6.jpg?1573509272', headers = {'X-Api-Key': IDK_API_KEY, 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'})
-# img_mgc_raw = Image.open(BytesIO(resp_mgc.content))
-# img_mgc_raw.show()
 
-# img_mgc_np_num = np.array(img_mgc_raw.resize([421,614]))
-# # img_mgc_np_num[570:585, 20:80, :] = 0
-# img_mgc_np_num[:570, :, :] = 0
-# img_mgc_np_num[586:, :, :] = 0
-# img_mgc_np_num[:, :20, :] = 0
-# img_mgc_np_num[:, 79:, :] = 0
-# img_mgc_num = Image.fromarray(img_mgc_np_num)
-# img_mgc_num.show()
-
-# img_mgc_np_set = np.array(img_mgc_raw.resize([421,614]))
-# # img_mgc_np_set[585:595, 20:80, :] = 0
-# img_mgc_np_set[:585, :, :] = 0
-# img_mgc_np_set[596:, :, :] = 0
-# img_mgc_np_set[:, :20, :] = 0
-# img_mgc_np_set[:, 51:, :] = 0
-# img_mgc_set = Image.fromarray(img_mgc_np_set)
-# img_mgc_set.show()
-
-"""POKEMON"""
+# """POKEMON"""
 # # get and load up card from URL
 # resp_pkm = requests.get('https://images.pokemontcg.io/bw8/1_hires.png', headers = {'X-Api-Key': IDK_API_KEY, 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'})
 # img_pkm_raw = Image.open(BytesIO(resp_pkm.content))
@@ -70,7 +65,6 @@ from_PIL = transform.Compose([transform.PILToTensor()])
 # img_pkm_np_set[:, 400:, :] = 0
 # img_pkm_set = Image.fromarray(img_pkm_np_set)
 # img_pkm_set.show()
-
 
 # img = np.array(Image.open('data-science/data/tst.png').resize([421,614]))
 
