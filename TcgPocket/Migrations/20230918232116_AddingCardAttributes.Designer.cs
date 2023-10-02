@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TcgPocket.Data;
 
@@ -11,9 +12,11 @@ using TcgPocket.Data;
 namespace TcgPocket.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230918232116_AddingCardAttributes")]
+    partial class AddingCardAttributes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -344,29 +347,6 @@ namespace TcgPocket.Migrations
                     b.ToTable("Sets", "dbo");
                 });
 
-            modelBuilder.Entity("TcgPocket.Features.UserCards.UserCard", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CardId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CardId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserCards", "dbo");
-                });
-
             modelBuilder.Entity("TcgPocket.Features.UserRoles.UserRole", b =>
                 {
                     b.Property<int>("UserId")
@@ -599,25 +579,6 @@ namespace TcgPocket.Migrations
                     b.Navigation("Game");
                 });
 
-            modelBuilder.Entity("TcgPocket.Features.UserCards.UserCard", b =>
-                {
-                    b.HasOne("TcgPocket.Features.Cards.Card", "Card")
-                        .WithMany("UserCards")
-                        .HasForeignKey("CardId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
-
-                    b.HasOne("TcgPocket.Features.Users.User", "User")
-                        .WithMany("UserCards")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
-
-                    b.Navigation("Card");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("TcgPocket.Features.UserRoles.UserRole", b =>
                 {
                     b.HasOne("TcgPocket.Features.Roles.Role", "Role")
@@ -649,8 +610,6 @@ namespace TcgPocket.Migrations
 
             modelBuilder.Entity("TcgPocket.Features.Cards.Card", b =>
                 {
-                    b.Navigation("UserCards");
-                    
                     b.Navigation("Attributes");
 
                     b.Navigation("CardAttributes");
@@ -693,8 +652,6 @@ namespace TcgPocket.Migrations
                     b.Navigation("Logins");
 
                     b.Navigation("Tokens");
-
-                    b.Navigation("UserCards");
 
                     b.Navigation("UserRoles");
                 });

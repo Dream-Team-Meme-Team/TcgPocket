@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using TcgPocket.Data;
 using TcgPocket.Shared;
@@ -8,12 +9,12 @@ using TcgPocket.Shared.PagedResult;
 
 namespace TcgPocket.Features.Cards.Queries;
 
-public class GetAllCardsPaginatedQuery : IRequest<Response<PagedResult<CardGetDto>>>
+public class GetAllCardsPaginatedQuery : IRequest<Response<PagedResult<CardDetailDto>>>
 {
     public PageDto PageDto { get; set; }
 }
 
-public class GetAllCardsPaginatedQueryHandler : IRequestHandler<GetAllCardsPaginatedQuery, Response<PagedResult<CardGetDto>>>
+public class GetAllCardsPaginatedQueryHandler : IRequestHandler<GetAllCardsPaginatedQuery, Response<PagedResult<CardDetailDto>>>
 {
     private readonly DataContext _dataContext;
     private readonly IMapper _mapper;
@@ -25,9 +26,9 @@ public class GetAllCardsPaginatedQueryHandler : IRequestHandler<GetAllCardsPagin
         _mapper = mapper;
     }
 
-    public async Task<Response<PagedResult<CardGetDto>>> Handle(GetAllCardsPaginatedQuery query, CancellationToken cancellationToken)
+    public async Task<Response<PagedResult<CardDetailDto>>> Handle(GetAllCardsPaginatedQuery query, CancellationToken cancellationToken)
     {
-        var cardsQueryable = _dataContext.Set<Card>()
+        var cardsQueryable = _dataContext.Set<Card>().Include(x => x.CardAttributes)
             .OrderByDescending(x => x.Id);
 
         var pagedCards = await cardsQueryable.GetPagedAsync(
@@ -35,8 +36,8 @@ public class GetAllCardsPaginatedQueryHandler : IRequestHandler<GetAllCardsPagin
             query.PageDto.PageSize,
             cancellationToken);
 
-        if (pagedCards.Items.IsNullOrEmpty()) return Error.AsResponse<PagedResult<CardGetDto>>("Cards not found");
+        if (pagedCards.Items.IsNullOrEmpty()) return Error.AsResponse<PagedResult<CardDetailDto>>("Cards not found");
 
-        return _mapper.Map<PagedResult<CardGetDto>>(pagedCards).AsResponse();
+        return _mapper.Map<PagedResult<CardDetailDto>>(pagedCards).AsResponse();
     }
 }
