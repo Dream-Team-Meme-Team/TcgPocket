@@ -48,7 +48,7 @@ export function HeroTitle() {
         <Container className={classes.inner} color="blue">
           <h1 className={classes.title}>Welcome to </h1>
           <h1 className={classes.title}>
-            <Text component="span" color="#9c498b" inherit>
+            <Text component="span" color="#7d48b7" inherit>
               TCG Pocket
             </Text>
           </h1>
@@ -115,11 +115,13 @@ const useStyles = createStyles((theme: MantineTheme) => ({
     backgroundSize: 'cover',
     backgroundPositionY: 'center',
     backgroundRepeat: 'no-repeat',
+    filter: 'contrast(110%)',
   },
 
   image: {
     borderRadius: '9999999rem !important',
     boxShadow: `5px 10px 20px 1px #000`,
+    filter: 'contrast(105%)',
   },
 
   imageWrapper: {

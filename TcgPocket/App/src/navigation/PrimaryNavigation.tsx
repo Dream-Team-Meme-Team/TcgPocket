@@ -98,11 +98,11 @@ function navbarSx(theme: MantineTheme): CSSObject {
 
 function profileIconSx(theme: MantineTheme): CSSObject {
   return {
-    backgroundColor: '#823372',
+    backgroundColor: '#623990',
     color: 'white',
     borderRadius: '5em',
     ':hover': {
-      backgroundColor: '#662158',
+      backgroundColor: '#7d48b7',
     },
   };
 }

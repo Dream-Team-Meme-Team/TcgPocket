@@ -80,7 +80,7 @@ export function FeaturesCards() {
             Three classic trading card games.
           </Title>
 
-          <Text c="#e5d8e8" className={classes.description} ta="center" mt="md">
+          <Text className={classes.description} ta="center" mt="md">
             Gather your inventory and create decks for some of your favorite
             cards games all in one convenient spot!
           </Text>
@@ -103,14 +103,14 @@ export function FeaturesCards() {
 const useStyles = createStyles((theme) => ({
   cardContainer: {
     padding: '50px 50px 100px 50px',
-    backgroundColor: 'rgba(64,18,56,0.7)',
+    backgroundColor: 'rgba(40, 14, 71,0.75)',
     borderRadius: '50px',
   },
 
   title: {
     fontSize: rem(34),
     fontWeight: 900,
-    color: '#e5d8e8',
+    color: 'white',
 
     [theme.fn.smallerThan('sm')]: {
       fontSize: rem(24),
@@ -121,7 +121,7 @@ const useStyles = createStyles((theme) => ({
     paddingTop: rem(200),
     background: 'rgba(49, 70, 82, .95)',
     backgroundImage:
-      'url(' +
+      'linear-gradient(to bottom, rgba(0, 40, 115, 0.15) 0%,rgba(0, 40, 115, 0.15) 100%), linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 0%,rgba(0, 0, 0, 0.5) 100%), url(' +
       'https://images.unsplash.com/photo-1635431289101-ef85326518f2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80' +
       ')',
     backgroundSize: 'cover',
@@ -131,7 +131,7 @@ const useStyles = createStyles((theme) => ({
   },
 
   badge: {
-    background: '#13222B',
+    background: '#1f426e',
     color: 'white',
     padding: '1.15rem',
   },
@@ -139,11 +139,12 @@ const useStyles = createStyles((theme) => ({
   description: {
     maxWidth: 600,
     margin: 'auto',
+    color: 'white',
 
     '&::after': {
       content: '""',
       display: 'block',
-      backgroundColor: 'purple',
+      backgroundColor: 'blueviolet',
       width: rem(45),
       height: rem(2),
       marginTop: rem(13),
@@ -158,18 +159,19 @@ const useStyles = createStyles((theme) => ({
     backgroundPositionY: 'top',
     backgroundPositionX: 'right',
     backgroundRepeat: 'no-repeat',
-    backgroundImage:
-      'linear-gradient(to bottom, rgba(64,18,56,0.5) 0%, rgba(64,18,56,0.5) 100%), url(' +
-      'https://images.unsplash.com/photo-1638489440786-0ab170d0ae9c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80' +
-      ')',
-    boxShadow: `0px 0px 10px 1px #9c498b`,
+    // backgroundImage:
+    //   'linear-gradient(to bottom, rgba(64,18,56,0.5) 0%, rgba(64,18,56,0.5) 100%), url(' +
+    //   'https://images.unsplash.com/photo-1638489440786-0ab170d0ae9c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80' +
+    //   ')',
+    background: 'rgba(81, 42, 128, 0.5)',
+    boxShadow: `7px 7px 5px 2px rgba(0, 0, 0, 0.25)`,
   },
 
   cardTitle: {
     '&::after': {
       content: '""',
       display: 'block',
-      backgroundColor: 'purple',
+      backgroundColor: 'blueviolet',
       width: rem(45),
       height: rem(2),
       marginTop: theme.spacing.sm,
@@ -179,10 +181,10 @@ const useStyles = createStyles((theme) => ({
   cardInfo: {
     padding: '0.05rem 1rem 1rem 1rem',
     verticalAlign: 'bottom',
-    backgroundColor: 'rgba(18, 16, 43, 1)',
+    backgroundColor: 'rgba(29, 9, 54, 0.9)',
     height: '12rem',
     color: 'white',
     borderRadius: '5px 30px 5px 30px',
-    boxShadow: `0px 0px 5px 0.1rem purple`,
+    boxShadow: `0px 0px 5px 0.1rem #7160db`,
   },
 }));
