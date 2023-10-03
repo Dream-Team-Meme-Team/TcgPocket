@@ -136,7 +136,7 @@ public static class QueryableExtensions
             var convertedFieldValue = Convert.ChangeType(rawFiledValue, entityFieldType);
             
             Expression filterExpression = entityFieldType == typeof(string)
-                ? Expression.Call(entityField, "Contains", null, Expression.Constant(convertedFieldValue))
+                ? Expression.Call(entityField, nameof(string.Contains), null, Expression.Constant(convertedFieldValue))
                 : Expression.Equal(entityField, Expression.Constant(convertedFieldValue, entityFieldType));
             
             expression ??= filterExpression;

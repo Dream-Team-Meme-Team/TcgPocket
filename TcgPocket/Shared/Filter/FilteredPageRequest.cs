@@ -73,8 +73,8 @@ where TFilter : PageDto
         var lambda = Expression.Lambda(fieldToSortBy, parameter);
 
         var method = request.Filter.OrderBy == OrderBy.Ascending
-            ? "OrderBy"
-            : "OrderByDescending";
+            ? nameof(Enumerable.OrderBy)
+            : nameof(Enumerable.OrderByDescending);
 
         var orderExpression = Expression.Call(
             typeof(Queryable),

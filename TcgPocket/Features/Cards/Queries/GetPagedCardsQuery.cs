@@ -11,7 +11,8 @@ public class GetPagedCardsQuery :  FilteredPageRequest<Card, CardDetailDto, Page
 {
 }
 
-public class GetPagedCardsQueryHandler :  FilteredPageRequestHandler<GetPagedCardsQuery, Card, CardDetailDto, PagedCardFilterDto>
+public class GetPagedCardsQueryHandler
+    : FilteredPageRequestHandler<GetPagedCardsQuery, Card, CardDetailDto, PagedCardFilterDto>
 {
     public GetPagedCardsQueryHandler(
         DataContext dataContext, IMapper mapper, IValidator<PagedCardFilterDto> validator) 
