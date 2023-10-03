@@ -54,6 +54,15 @@ namespace TcgPocket.Features.Cards
             return response.HasErrors ? BadRequest(response) : Ok(response);
         }
 
+        [HttpGet("display")]
+        public async Task<ActionResult<Response<List<CardGetDto>>>> GetPagedCardsDisplayQuery()
+        {
+            var response = await _mediator
+                .Send(new GetPagedCardsDisplayQuery ());
+
+            return response.HasErrors ? BadRequest(response) : Ok(response);
+        }
+
         [HttpDelete("{id}")]
         public async Task<ActionResult<Response>> DeleteCard([FromRoute] int id)
         {
