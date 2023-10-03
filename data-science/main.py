@@ -1,25 +1,25 @@
 import requests
 from PIL import Image
 from io import BytesIO
-from apiKeys import IDK_API_KEY
+from cnn.apiKeys import IDK_API_KEY
 import torchvision.transforms as transform
 import numpy as np
 import pytesseract as tess
 import cv2
 
-from magic_scraper import MagicScraper
-from yugioh_scraper import YugiohScraper
-from pokemon_scraper import PokemonScraper
+from scraper.magic_scraper import MagicScraper
+from scraper.yugioh_scraper import YugiohScraper
+from scraper.pokemon_scraper import PokemonScraper
 
 from_PIL = transform.Compose([transform.PILToTensor()]) 
 
-# """MAGIC"""
-# # # get and load up card from URL
-# # resp_mgc = requests.get('https://cards.scryfall.io/normal/front/e/5/e5594689-0f32-4592-859b-c746f3464fc6.jpg?1573509272', headers = {'X-Api-Key': IDK_API_KEY, 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'})
-# # img_mgc_raw = Image.open(BytesIO(resp_mgc.content))
-# # img_mgc_raw.show()
+"""MAGIC"""
+# # get and load up card from URL
+# resp_mgc = requests.get('https://cards.scryfall.io/normal/front/e/5/e5594689-0f32-4592-859b-c746f3464fc6.jpg?1573509272', headers = {'X-Api-Key': IDK_API_KEY, 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'})
+# img_mgc_raw = Image.open(BytesIO(resp_mgc.content))
+# img_mgc_raw.show()
 
-# img_mgc_raw = Image.open('data-science/data/collected/card.jpg')
+# # img_mgc_raw = Image.open('data-science/data/collected/card.jpg')      # from directory
 
 # mgc_scrape = MagicScraper()
 # filt = mgc_scrape.apply_filter(img_mgc_raw)
@@ -27,23 +27,17 @@ from_PIL = transform.Compose([transform.PILToTensor()])
 
 
 """YUGIOH"""
-# get and load up ygo card from URL
-resp_ygo = requests.get('https://images.ygoprodeck.com/images/cards/13026402.jpg', headers = {'X-Api-Key': IDK_API_KEY, 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'})
-img_ygo_raw = Image.open(BytesIO(resp_ygo.content))
-img_ygo_raw.show()
+# # get and load up ygo card from URL
+# resp_ygo = requests.get('https://images.ygoprodeck.com/images/cards/40155554.jpg', headers = {'X-Api-Key': IDK_API_KEY, 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'})
+# img_ygo_raw = Image.open(BytesIO(resp_ygo.content))
+# img_ygo_raw.show()
 
-# img_ygo_raw = Image.open('data-science/data/collected/card4.jpg')
+# # img_ygo_raw = Image.open('data-science/data/collected/card2.jpg')     # from directory
 
 # ygo_scrape = YugiohScraper()
 # filt = ygo_scrape.apply_filter(img_ygo_raw)
 # print(ygo_scrape.read_card(filt))
 
-img_ygo_np = np.array(img_ygo_raw.resize([421,614]))[20:70, 25:355, :]
-img_ygo = Image.fromarray(img_ygo_np)
-img_ygo.show()
-
-print(tess.image_to_string(img_ygo, config="--psm 13").strip('\n')) #  -c tessedit_char_whitelist=0123456789 ABCDEFGHIJKLMNOPQRSTUVWXYZ
-# TODO: how to read text on a yugioh card?
 
 # """POKEMON"""
 # # get and load up card from URL
