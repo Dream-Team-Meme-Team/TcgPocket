@@ -14,6 +14,7 @@ type DataState = {
   searchTerm: string;
   selectedId: number;
   selectedGameId: number;
+  selectedTab: string | null;
   games: GameGetDto[];
   sets: SetGetDto[];
   cardTypes: CardTypeGetDto[];
@@ -25,6 +26,7 @@ const initialState: DataState = {
   searchTerm: '',
   selectedId: 0,
   selectedGameId: 0,
+  selectedTab: null,
   games: [],
   sets: [],
   cardTypes: [],
@@ -51,25 +53,45 @@ export const dataSlice = createSlice({
     ) {
       state.selectedGameId = payload;
     },
+    setSelectedTab(
+      state,
+      { payload }: PayloadAction<DataState['selectedTab']>
+    ) {
+      state.selectedTab = payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getAllGames.fulfilled, (state, { payload }) => {
-      state.games = payload.data;
+      if (!payload.data) {
+        return;
+      } else state.games = payload.data;
     });
     builder.addCase(getAllSets.fulfilled, (state, { payload }) => {
-      state.sets = payload.data;
+      if (!payload.data) {
+        return;
+      } else state.sets = payload.data;
     });
     builder.addCase(getAllCardTypes.fulfilled, (state, { payload }) => {
-      state.cardTypes = payload.data;
+      if (!payload.data) {
+        return;
+      } else state.cardTypes = payload.data;
     });
     builder.addCase(getAllRarities.fulfilled, (state, { payload }) => {
-      state.rarities = payload.data;
+      if (!payload.data) {
+        return;
+      } else state.rarities = payload.data;
     });
     builder.addCase(getAllAttributes.fulfilled, (state, { payload }) => {
-      state.attributes = payload.data;
+      if (!payload.data) {
+        return;
+      } else state.attributes = payload.data;
     });
   },
 });
 
-export const { setAdminSearchTerm, setSelectedId, setSelectedGameId } =
-  dataSlice.actions;
+export const {
+  setAdminSearchTerm,
+  setSelectedId,
+  setSelectedGameId,
+  setSelectedTab,
+} = dataSlice.actions;

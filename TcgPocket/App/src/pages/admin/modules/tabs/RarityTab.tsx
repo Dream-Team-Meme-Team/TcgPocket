@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { dispatch, useAppSelector } from '../../../../store/configureStore';
 import { TabInfoHeader } from '../headers/TabInfoHeader';
 import { ActionIcon, MantineTheme, createStyles } from '@mantine/core';
@@ -14,6 +14,7 @@ import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { RarityGetDto } from '../../../../types/rarities';
 import { DeleteModal } from '../../../../components/modals/DeleteModal';
 import { setSelectedId } from '../../../../store/dataSlice';
+import { TabLabel } from '../../AdminPage';
 
 const titles: string[] = ['Name', 'Edit', 'Delete'];
 const colValue: string = '1fr ';
@@ -29,6 +30,7 @@ export function RarityTab(): React.ReactElement {
   const searchTerm = useAppSelector((state) => state.data.searchTerm);
   const selectedId = useAppSelector((state) => state.data.selectedId);
   const selectedGameId = useAppSelector((state) => state.data.selectedGameId);
+  const selectedTab = useAppSelector((state) => state.data.selectedTab);
 
   const renderedRarities = useMemo(() => {
     return rarities
@@ -76,6 +78,11 @@ export function RarityTab(): React.ReactElement {
       loadRarities();
     }
   };
+
+  useEffect(() => {
+    if (selectedGameId === 0 || selectedTab !== TabLabel.RARITIES) return;
+    loadRarities();
+  }, [selectedGameId, selectedTab]);
 
   return (
     <div className={classes.rarityTabContainer}>

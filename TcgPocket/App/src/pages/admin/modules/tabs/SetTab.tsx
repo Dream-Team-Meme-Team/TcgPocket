@@ -14,6 +14,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { EditModal } from '../modals/EditModal';
 import { SetGetDto } from '../../../../types/sets';
 import { setSelectedId } from '../../../../store/dataSlice';
+import { TabLabel } from '../../AdminPage';
 
 const titles: string[] = ['Name', 'Game', 'Edit', 'Delete'];
 const colValue: string = '1fr ';
@@ -30,6 +31,7 @@ export function SetTab(): React.ReactElement {
   const searchTerm = useAppSelector((state) => state.data.searchTerm);
   const selectedId = useAppSelector((state) => state.data.selectedId);
   const selectedGameId = useAppSelector((state) => state.data.selectedGameId);
+  const selectedTab = useAppSelector((state) => state.data.selectedTab);
 
   const renderedSets = useMemo(() => {
     return sets
@@ -79,9 +81,9 @@ export function SetTab(): React.ReactElement {
   };
 
   useEffect(() => {
-    if (selectedGameId === 0) return;
+    if (selectedGameId === 0 || selectedTab !== TabLabel.SETS) return;
     loadSets();
-  }, [selectedGameId]);
+  }, [selectedGameId, selectedTab]);
 
   return (
     <div className={classes.setTabContainer}>

@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { dispatch, useAppSelector } from '../../../../store/configureStore';
 import { TabInfoHeader } from '../headers/TabInfoHeader';
 import { ActionIcon, MantineTheme, createStyles } from '@mantine/core';
@@ -14,6 +14,7 @@ import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { CardTypeGetDto } from '../../../../types/card-types';
 import { DeleteModal } from '../../../../components/modals/DeleteModal';
 import { setSelectedId } from '../../../../store/dataSlice';
+import { TabLabel } from '../../AdminPage';
 
 const titles: string[] = ['Name', 'Edit', 'Delete'];
 const colValue: string = '1fr ';
@@ -29,6 +30,7 @@ export function CardTypeTab(): React.ReactElement {
   const searchTerm = useAppSelector((state) => state.data.searchTerm);
   const selectedId = useAppSelector((state) => state.data.selectedId);
   const selectedGameId = useAppSelector((state) => state.data.selectedGameId);
+  const selectedTab = useAppSelector((state) => state.data.selectedTab);
 
   const renderedCardTypes = useMemo(() => {
     return cardTypes
@@ -76,6 +78,11 @@ export function CardTypeTab(): React.ReactElement {
       loadCardTypes();
     }
   };
+
+  useEffect(() => {
+    if (selectedGameId === 0 || selectedTab !== TabLabel.CARD_TYPES) return;
+    loadCardTypes();
+  }, [selectedGameId, selectedTab]);
 
   return (
     <div className={classes.cardTypeContainer}>

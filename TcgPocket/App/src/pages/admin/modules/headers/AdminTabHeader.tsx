@@ -30,7 +30,7 @@ export function AdminTabHeader({
   const selectedValue = useMemo(() => {
     const foundGame = games.find((game) => game.id === selectedGameId);
 
-    return foundGame ? foundGame.name : undefined;
+    return foundGame ? foundGame.name : null;
   }, [selectedGameId]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

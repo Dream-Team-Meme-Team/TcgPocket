@@ -9,13 +9,14 @@ import {
 import { useNavbarHeight } from '../../hooks/use-navbar-height';
 import { AdminTabHeader } from './modules/headers/AdminTabHeader';
 import { Tab } from '../../types/tabs';
-import { dispatch } from '../../store/configureStore';
+import { AppState, dispatch, useAppSelector } from '../../store/configureStore';
 import {
   setAdminSearchTerm,
   setSelectedGameId,
   setSelectedId,
+  setSelectedTab,
 } from '../../store/dataSlice';
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { AdminDataRenderer } from './modules/renderers/AdminDataRenderer';
 
 export enum TabLabel {
@@ -53,19 +54,24 @@ export function AdminPage(): React.ReactElement {
   const { remainingHeight } = useNavbarHeight();
   const { classes } = useStyles();
 
-  const [activeTab, setActiveTab] = useState<string | null>(adminTabs[0].label);
+  const selectedTab = useAppSelector(
+    (state: AppState) => state.data.selectedTab
+  );
 
   const handleTabChange = (value: TabsValue) => {
-    setActiveTab(value);
+    dispatch(setSelectedTab(value));
     dispatch(setAdminSearchTerm(''));
     dispatch(setSelectedGameId(0));
     dispatch(setSelectedId(0));
   };
 
+  useEffect(() => {
+    dispatch(setSelectedTab(TabLabel.GAMES));
+  }, []);
+
   return (
     <Tabs
-      defaultValue={adminTabs[0].label}
-      value={activeTab}
+      value={selectedTab}
       onTabChange={handleTabChange}
       orientation="vertical"
       sx={{ height: `${remainingHeight}px` }}

@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { dispatch, useAppSelector } from '../../../../store/configureStore';
 import { TabInfoHeader } from '../headers/TabInfoHeader';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
@@ -14,6 +14,7 @@ import {
 } from '../../../../services/dataServices/AttributeServices';
 import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { DeleteModal } from '../../../../components/modals/DeleteModal';
+import { TabLabel } from '../../AdminPage';
 
 const titles: string[] = ['Name', 'Edit', 'Delete'];
 const colValue: string = '1fr ';
@@ -29,6 +30,7 @@ export function AttributeTab(): React.ReactElement {
   const searchTerm = useAppSelector((state) => state.data.searchTerm);
   const selectedId = useAppSelector((state) => state.data.selectedId);
   const selectedGameId = useAppSelector((state) => state.data.selectedGameId);
+  const selectedTab = useAppSelector((state) => state.data.selectedTab);
 
   const renderedAttributes = useMemo(() => {
     return attributes
@@ -76,6 +78,11 @@ export function AttributeTab(): React.ReactElement {
       loadAttributes();
     }
   };
+
+  useEffect(() => {
+    if (selectedGameId === 0 || selectedTab !== TabLabel.ATTRIBUTES) return;
+    loadAttributes();
+  }, [selectedGameId, selectedTab]);
 
   return (
     <div className={classes.attributeTabContainer}>
