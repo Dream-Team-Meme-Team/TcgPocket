@@ -12,12 +12,12 @@ type PrimaryTextInputProps = TextInputProps &
 const inputStyling = (theme: MantineTheme): CSSObject => ({
   input: {
     background: theme.white,
-    borderColor: theme.colors.complimentaryColors[0],
+    borderColor: theme.colors.secondaryBlueColors[0],
     borderWidth: 2,
-    backgroundColor: 'white',
+    backgroundColor: theme.white,
 
     ':focus': {
-      borderColor: theme.colors.primaryColor[0],
+      borderColor: theme.colors.primaryPurpleColor[0],
     },
   },
 });

@@ -6,10 +6,10 @@ type SecondaryButtonProps = ButtonProps &
 
 const buttonStyling = (theme: MantineTheme): CSSObject => ({
   backgroundColor: theme.colors.gray[5],
-  color: theme.colors.complimentaryColors[1],
+  color: theme.colors.secondaryBlueColors[1],
 
   ':hover': {
-    backgroundColor: theme.colors.complimentaryColors[0],
+    backgroundColor: theme.colors.secondaryBlueColors[0],
   },
 });
 

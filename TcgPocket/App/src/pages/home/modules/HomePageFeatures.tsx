@@ -11,6 +11,7 @@ import {
   Image,
   AspectRatio,
   Space,
+  MantineTheme,
 } from '@mantine/core';
 import { Home2 } from './HomePageTwo';
 
@@ -68,8 +69,8 @@ export function FeaturesCards() {
 
   return (
     <>
-      <div className={classes.et}>
-        <Container className={classes.cardContainer} mb={rem(80)} size="xl">
+      <div className={classes.wrapper}>
+        <Container className={classes.containerSx} mb={rem(80)} size="xl">
           <Group position="center">
             <Badge className={classes.badge} variant="filled" size="xl">
               Trading Card Games
@@ -79,7 +80,6 @@ export function FeaturesCards() {
           <Title order={2} className={classes.title} ta="center" mt="sm">
             Three classic trading card games.
           </Title>
-
           <Text className={classes.description} ta="center" mt="md">
             Gather your inventory and create decks for some of your favorite
             cards games all in one convenient spot!
@@ -100,24 +100,18 @@ export function FeaturesCards() {
   );
 }
 
-const useStyles = createStyles((theme) => ({
-  cardContainer: {
-    padding: '50px 50px 100px 50px',
-    backgroundColor: 'rgba(40, 14, 71,0.75)',
-    borderRadius: '50px',
-  },
-
+const useStyles = createStyles((theme: MantineTheme) => ({
   title: {
     fontSize: rem(34),
     fontWeight: 900,
-    color: 'white',
+    color: theme.white,
 
     [theme.fn.smallerThan('sm')]: {
       fontSize: rem(24),
     },
   },
 
-  et: {
+  wrapper: {
     paddingTop: rem(200),
     background: 'rgba(49, 70, 82, .95)',
     backgroundImage:
@@ -127,19 +121,18 @@ const useStyles = createStyles((theme) => ({
     backgroundSize: 'cover',
     backgroundPositionY: 'center',
     backgroundRepeat: 'no-repeat',
-    // filter: 'blur(99px)',
   },
 
   badge: {
-    background: '#1f426e',
-    color: 'white',
+    background: theme.colors.secondaryBlueColors[4],
+    color: theme.white,
     padding: '1.15rem',
   },
 
   description: {
     maxWidth: 600,
     margin: 'auto',
-    color: 'white',
+    color: theme.white,
 
     '&::after': {
       content: '""',
@@ -153,16 +146,17 @@ const useStyles = createStyles((theme) => ({
     },
   },
 
+  containerSx: {
+    padding: '50px 50px 100px 50px',
+    backgroundColor: 'rgba(40, 14, 71,0.75)',
+    borderRadius: '50px',
+  },
+
   card: {
-    // backgroundColor: '#D0CFEE',
     backgroundSize: 'cover',
     backgroundPositionY: 'top',
     backgroundPositionX: 'right',
     backgroundRepeat: 'no-repeat',
-    // backgroundImage:
-    //   'linear-gradient(to bottom, rgba(64,18,56,0.5) 0%, rgba(64,18,56,0.5) 100%), url(' +
-    //   'https://images.unsplash.com/photo-1638489440786-0ab170d0ae9c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80' +
-    //   ')',
     background: 'rgba(81, 42, 128, 0.5)',
     boxShadow: `7px 7px 5px 2px rgba(0, 0, 0, 0.25)`,
   },
@@ -185,6 +179,6 @@ const useStyles = createStyles((theme) => ({
     height: '12rem',
     color: 'white',
     borderRadius: '5px 30px 5px 30px',
-    boxShadow: `0px 0px 5px 0.1rem #7160db`,
+    boxShadow: `0px 0px 5px 0.1rem ${theme.colors.primaryBlueColor[0]}`,
   },
 }));

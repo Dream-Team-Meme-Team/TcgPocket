@@ -52,14 +52,12 @@ export function HeroTitle() {
               TCG Pocket
             </Text>
           </h1>
-
           <Text className={classes.description} color="white">
             Presenting a trading card game inventory management system along
             with a deck builder. Just upload images of your MTG, Pokémon, and
             Yu-Gi-Oh! cards and allow our card scanner to add the cards to your
             inventory. Sign up or log in to begin! (*^▽^*)
           </Text>
-
           <Group className={classes.controls}>
             <PrimaryButton
               size="xl"
@@ -70,7 +68,6 @@ export function HeroTitle() {
             >
               Register
             </PrimaryButton>
-
             <PrimaryButton
               size="xl"
               className={classes.control}
@@ -95,16 +92,7 @@ export function HeroTitle() {
 }
 
 const useStyles = createStyles((theme: MantineTheme) => ({
-  blackDivider: {
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    borderColor: 'rgba(0, 0, 0, 0.5)',
-    boxShadow: `0px 0px 70px 3.5rem ${'rgba(5, 5, 15, 1)'}`,
-    height: '0.05px',
-    position: 'relative',
-  },
-
   wrapper: {
-    // background: '#9190D5',
     height: rem(900),
     display: 'flex',
     justifyContent: 'space-around',
@@ -118,12 +106,6 @@ const useStyles = createStyles((theme: MantineTheme) => ({
     filter: 'contrast(110%)',
   },
 
-  image: {
-    borderRadius: '9999999rem !important',
-    boxShadow: `5px 10px 20px 1px #000`,
-    filter: 'contrast(105%)',
-  },
-
   imageWrapper: {
     verticalAlign: 'middle !important',
     display: 'flex',
@@ -132,16 +114,18 @@ const useStyles = createStyles((theme: MantineTheme) => ({
     margin: 'auto',
   },
 
+  image: {
+    borderRadius: '9999999rem !important',
+    boxShadow: `5px 10px 20px 1px #000`,
+    filter: 'contrast(105%)',
+  },
+
   inner: {
     position: 'relative',
     alignItems: 'center',
     paddingTop: rem(225),
     paddingBottom: rem(350),
     margin: 'inherit',
-    // backgroundImage:
-    //   'url(' +
-    //   'https://images.unsplash.com/photo-1635431289101-ef85326518f2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80' +
-    //   ')',
 
     [theme.fn.smallerThan('sm')]: {
       paddingBottom: rem(80),
@@ -158,7 +142,7 @@ const useStyles = createStyles((theme: MantineTheme) => ({
     textShadow: '7px 7px 10px rgba(0, 0, 0, .12)',
     margin: 0,
     padding: 0,
-    color: 'white',
+    color: theme.colors.white,
 
     [theme.fn.smallerThan('sm')]: {
       fontSize: rem(42),
@@ -197,5 +181,13 @@ const useStyles = createStyles((theme: MantineTheme) => ({
       paddingRight: rem(18),
       flex: 1,
     },
+  },
+
+  blackDivider: {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    borderColor: 'rgba(0, 0, 0, 0.5)',
+    boxShadow: `0px 0px 70px 3.5rem ${'rgba(5, 5, 15, 1)'}`,
+    height: '0.05px',
+    position: 'relative',
   },
 }));

@@ -1,12 +1,20 @@
 import { MantineThemeOverride } from '@mantine/core';
 
 export const appTheme: MantineThemeOverride = {
-  colorScheme: 'light',
+  colorScheme: 'dark',
   colors: {
-    primaryColor: ['#aacae2'],
-    complimentaryColors: ['#e2c2aa', '#55351D', '#E2C2AB', '#fdf3d3'],
+    primaryPurpleColor: ['#7d48b7'],
+    primaryBlueColor: ['#13222B'],
+    secondaryPurpleColors: ['#623990'],
+    secondaryBlueColors: [
+      '#4442AE',
+      '#13222B',
+      '#2f4552',
+      '#233641',
+      '#1f426e',
+    ],
   },
-  white: '#ffffed',
+  white: '#fff',
   black: '#000000',
   shadows: {
     md: '1px 1px 3px rgba(0, 0, 0, .25)',

@@ -39,9 +39,13 @@ function useNavButtonSx(route: string) {
       borderRadius: '4px',
       transition: 'ease-in .2s',
       color: 'white',
-      backgroundColor: `${isActivePath ? '#2f4552' : '#13222B'}`,
+      backgroundColor: `${
+        isActivePath
+          ? theme.colors.secondaryBlueColors[3]
+          : theme.colors.secondaryBlueColors[1]
+      }`,
       ':hover': {
-        backgroundColor: '#233641',
+        backgroundColor: theme.colors.secondaryBlueColors[2],
       },
     };
   };
