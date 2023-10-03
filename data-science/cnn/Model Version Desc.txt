@@ -1,0 +1,11 @@
+Model Version Breakdown
+
+Model v is a deep CNN with 2 Conv Lyrs (ReLU + mx pool) and 1 Fc Lyr (no activ func) with SGD opitmizer
+Model v1: 84% accuracy, trained on 3000 cards
+Model v2: 91% accuracy, trained on 6000 cards
+Model v3: 94% accuracy, trained on 9000 cards
+
+Model av is a deep CNN with 2 Conv Lyrs (ReLU + mx pool) and 1 Fc Lyr (sft mx) with Adam opitmizer
+Model av1: 97.9% accuracy, trained on 6000 cards (1 epoch)
+Model av2: 99.7% accuracy, trained on 9000 cards (5 epochs)
+
