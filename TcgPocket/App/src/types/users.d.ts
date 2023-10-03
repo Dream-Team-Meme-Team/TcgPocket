@@ -29,3 +29,8 @@ export type UserPasswordUpdateDto = {
   newPassword: string;
   newPasswordConfirmation: string;
 };
+
+export type UserDeleteDto = {
+  password: string;
+  confirmPassword: string;
+};
