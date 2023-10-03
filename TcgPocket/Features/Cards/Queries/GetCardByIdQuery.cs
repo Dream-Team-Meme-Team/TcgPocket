@@ -8,12 +8,12 @@ using TcgPocket.Shared.Interfaces;
 
 namespace TcgPocket.Features.Cards.Queries
 {
-    public class GetCardByIdQuery : IIdentifiable, IRequest<Response<CardGetDto>>
+    public class GetCardByIdQuery : IIdentifiable, IRequest<Response<CardDetailDto>>
     {
         public int Id { get; set; }
     }
 
-    public class GetCardByIdQueryHandler : IRequestHandler<GetCardByIdQuery, Response<CardGetDto>>
+    public class GetCardByIdQueryHandler : IRequestHandler<GetCardByIdQuery, Response<CardDetailDto>>
     {
         private readonly DataContext _dataContext;
         private readonly IMapper _mapper;
@@ -26,21 +26,21 @@ namespace TcgPocket.Features.Cards.Queries
             _validator = validator;
         }
 
-        public async Task<Response<CardGetDto>> Handle(GetCardByIdQuery query, CancellationToken cancellationToken)
+        public async Task<Response<CardDetailDto>> Handle(GetCardByIdQuery query, CancellationToken cancellationToken)
         {
             var result = await _validator.ValidateAsync(query);
 
             if (!result.IsValid)
             {
                 var errors = _mapper.Map<List<Error>>(result.Errors);
-                return new Response<CardGetDto> { Errors = errors };
+                return new Response<CardDetailDto> { Errors = errors };
             }
 
-            var card = await _dataContext.Set<Card>().FirstOrDefaultAsync(x => x.Id == query.Id);
+            var card = await _dataContext.Set<Card>().Include(x => x.CardAttributes).FirstOrDefaultAsync(x => x.Id == query.Id);
 
-            if (card is null) return Error.AsResponse<CardGetDto>("Card not found", "id");
+            if (card is null) return Error.AsResponse<CardDetailDto>("Card not found", "id");
 
-            return _mapper.Map<CardGetDto>(card).AsResponse();
+            return _mapper.Map<CardDetailDto>(card).AsResponse();
         }
     }
 }

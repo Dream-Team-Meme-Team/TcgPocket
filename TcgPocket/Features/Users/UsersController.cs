@@ -1,10 +1,13 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using TcgPocket.Features.Cards;
 using TcgPocket.Features.Roles;
 using TcgPocket.Features.Users.Commands;
 using TcgPocket.Features.Users.Dtos;
 using TcgPocket.Features.Users.Queries;
 using TcgPocket.Shared;
+using TcgPocket.Shared.Dtos;
+using TcgPocket.Shared.PagedResult;
 
 namespace TcgPocket.Features.Users;
 
@@ -41,6 +44,33 @@ public class UsersController : ControllerBase
         var response = await _mediator.Send(new GetAllRolesByUserIdQuery { UserId = id });
 
         return response.HasErrors ? NotFound(response) : Ok(response);
+    }
+
+    [HttpGet("{id:int}/cards")]
+    public async Task<ActionResult<Response<List<CardGetDto>>>> GetAllCardsByUserIdQuery([FromRoute] int id)
+    {
+        var response = await _mediator
+            .Send(new GetAllCardsByUserIdQuery { Id = id });
+
+        return response.HasErrors ? BadRequest(response) : Ok(response);
+    }
+
+    [HttpGet("{id:int}/games/{gameId:int}")]
+    public async Task<ActionResult<Response<PagedResult<CardGetDto>>>> GetAllCardsByGameIdAndUserIdQuery([FromRoute] int gameId, int id, [FromQuery] PageDto data)
+    {
+        var response = await _mediator
+            .Send(new GetAllCardsByGameIdAndUserIdQuery
+            {
+                UserCardGame = new UserCardGameDto
+                {
+                    GameId = gameId,
+                    UserId = id,
+                    CurrentPage = data.CurrentPage,
+                    PageSize = data.PageSize,
+                }
+            });
+
+        return response.HasErrors ? BadRequest(response) : Ok(response);
     }
 
     [HttpPost]
@@ -81,10 +111,10 @@ public class UsersController : ControllerBase
         return response.HasErrors ? BadRequest(response) : Ok(response);
     }
 
-    [HttpDelete("{id:int}")]
-    public async Task<ActionResult<Response>> DeleteUser([FromRoute] int id)
+    [HttpDelete]
+    public async Task<ActionResult<Response>> DeleteUser([FromBody] UserDeleteDto deleteDto)
     {
-        var response = await _mediator.Send(new DeleteUserCommand { Id = id });
+        var response = await _mediator.Send(new DeleteUserCommand { DeleteDto = deleteDto });
 
         return response.HasErrors ? BadRequest(response) : Ok(response);
     }
