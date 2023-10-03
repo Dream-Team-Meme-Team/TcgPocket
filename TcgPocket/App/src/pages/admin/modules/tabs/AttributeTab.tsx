@@ -16,10 +16,10 @@ import { DeleteModal } from '../../../../components/modals/DeleteModal';
 import { setSelectedId } from '../../../../store/adminSlice';
 import { AdminTabLabel } from '../../../../enums/adminTabLabel';
 
-const titles: string[] = ['Name', 'Edit', 'Delete'];
+const titles: string[] = ['Name', 'Game', 'Edit', 'Delete'];
 const colValue: string = '1fr ';
 
-export function AttributeTab(): React.ReactElement {
+export const AttributeTab: React.FC = () => {
   const numOfCol = colValue.repeat(titles.length);
   const { classes } = useStyles(numOfCol);
 
@@ -27,6 +27,7 @@ export function AttributeTab(): React.ReactElement {
   const [openEdit, { toggle: toggleEdit }] = useDisclosure();
 
   const attributes = useAppSelector((state) => state.data.attributes);
+  const games = useAppSelector((state) => state.data.games);
   const searchTerm = useAppSelector((state) => state.admin.searchTerm);
   const selectedId = useAppSelector((state) => state.admin.selectedId);
   const selectedGameId = useAppSelector((state) => state.admin.selectedGameId);
@@ -79,6 +80,12 @@ export function AttributeTab(): React.ReactElement {
     }
   };
 
+  const findGame = (gameId: number) => {
+    const foundGame = games.find((game) => game.id === gameId);
+
+    return foundGame ? foundGame.name : 'Unknown';
+  };
+
   useEffect(() => {
     if (selectedGameId === 0 || selectedTab !== AdminTabLabel.ATTRIBUTES)
       return;
@@ -89,44 +96,51 @@ export function AttributeTab(): React.ReactElement {
     <div className={classes.attributeTabContainer}>
       <TabInfoHeader titles={titles} />
 
-      <div>
-        {renderedAttributes.map((attribute, index) => {
-          return (
-            <div key={index} className={classes.renderedAttributeContainer}>
-              <div> {attribute.name} </div>
+      {renderedAttributes.length !== 0 ? (
+        <div>
+          {renderedAttributes.map((attribute, index) => {
+            return (
+              <div key={index} className={classes.renderedAttributeContainer}>
+                <div> {attribute.name} </div>
 
-              <ActionIcon onClick={() => selectAndOpenEdit(attribute)}>
-                <IconEdit />
-              </ActionIcon>
+                <div> {findGame(attribute.gameId)} </div>
 
-              <ActionIcon onClick={() => selectAndOpenDelete(attribute)}>
-                <IconTrash />
-              </ActionIcon>
+                <ActionIcon onClick={() => selectAndOpenEdit(attribute)}>
+                  <IconEdit />
+                </ActionIcon>
 
-              <div>
-                {selectedId === attribute.id && (
-                  <EditModal
-                    open={openEdit}
-                    setOpen={toggleEdit}
-                    submitAction={editSelectedAttribute}
-                    value={attribute}
-                  />
-                )}
+                <ActionIcon onClick={() => selectAndOpenDelete(attribute)}>
+                  <IconTrash />
+                </ActionIcon>
+
+                <div>
+                  {selectedId === attribute.id && (
+                    <EditModal
+                      open={openEdit}
+                      setOpen={toggleEdit}
+                      submitAction={editSelectedAttribute}
+                      value={attribute}
+                    />
+                  )}
+                </div>
               </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div className={classes.renderedAttributeContainer}>
+          <i> No data to display </i>
+        </div>
+      )}
 
       <DeleteModal
         open={openDelete}
         setOpen={toggleDelete}
-        deleteText="Permanently Delete"
         submitAction={deleteSelectedAttribute}
       />
     </div>
   );
-}
+};
 
 const useStyles = createStyles((theme: MantineTheme, numOfCol: string) => {
   return {

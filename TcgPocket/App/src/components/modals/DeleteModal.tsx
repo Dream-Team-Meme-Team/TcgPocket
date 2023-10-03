@@ -1,38 +1,22 @@
-import { useMemo, useState } from 'react';
 import { PrimaryModal } from './PrimaryModal';
-import { PrimaryTextInput } from '../inputs/PrimaryTextInput';
 import { SecondaryButton } from '../buttons/SecondaryButton';
-import { PrimaryButton } from '../buttons/PrimaryButton';
 import { createStyles } from '@mantine/core';
+import { DeleteButton } from '../buttons/DeleteButton';
 
 type DeleteModalProps = {
-  deleteText: string;
   open: boolean;
   setOpen: () => void;
   submitAction: () => void;
 };
 
 export function DeleteModal({
-  deleteText,
   open,
   setOpen,
   submitAction,
 }: DeleteModalProps): React.ReactElement {
   const { classes } = useStyles();
 
-  const [text, setText] = useState('');
-
-  const textError = useMemo(() => {
-    return text.toLowerCase().includes(deleteText.toLowerCase());
-  }, [text]);
-
-  const handleText = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value;
-    setText(inputValue);
-  };
-
   const handleClose = () => {
-    setText('');
     setOpen();
   };
 
@@ -48,16 +32,12 @@ export function DeleteModal({
       title={'Are you sure you want to delete?'}
     >
       <div>
-        <i> Type '{deleteText}' to submit.</i>
+        <i> Are you sure you want to delete? </i>
       </div>
-
-      <PrimaryTextInput value={text} onChange={handleText} />
 
       <div className={classes.buttonsContainer}>
         <SecondaryButton onClick={handleClose}> Cancel </SecondaryButton>
-        <PrimaryButton onClick={handleSubmit} disabled={!textError}>
-          Submit
-        </PrimaryButton>
+        <DeleteButton onClick={handleSubmit}>Delete</DeleteButton>
       </div>
     </PrimaryModal>
   );

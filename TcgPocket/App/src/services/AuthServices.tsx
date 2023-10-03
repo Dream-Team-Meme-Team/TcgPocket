@@ -14,16 +14,16 @@ export const registerUser = createAsyncThunk<
   Response<UserGetDto>,
   UserCreateDto,
   { rejectValue: Response<UserGetDto> }
->('registerUser', async (user) => {
-  return await apiCall<UserGetDto>('POST', apiRoutes.users.base, user);
+>('registerUser', async (values) => {
+  return await apiCall<UserGetDto>('POST', apiRoutes.users.base, values);
 });
 
 export const signInUser = createAsyncThunk<
   Response<UserGetDto>,
   SignInUserDto,
   { rejectValue: Response<UserGetDto> }
->('signInUser', async (user) => {
-  return await apiCall<UserGetDto>('POST', apiRoutes.users.signIn, user);
+>('signInUser', async (values) => {
+  return await apiCall<UserGetDto>('POST', apiRoutes.users.signIn, values);
 });
 
 export const getSignedInUser = createAsyncThunk<
@@ -46,11 +46,11 @@ export const updateUserInformation = createAsyncThunk<
   Response<UserGetDto>,
   UserGetDto,
   { rejectValue: Response<UserGetDto> }
->('updateUserInformation', async (user) => {
+>('updateUserInformation', async (values) => {
   return await apiCall<UserGetDto>(
     'PUT',
-    `${apiRoutes.users.base}/${user.id}`,
-    user
+    `${apiRoutes.users.base}/${values.id}`,
+    values
   );
 });
 
@@ -58,8 +58,8 @@ export const updateUserPassword = createAsyncThunk<
   Response,
   UserPasswordUpdateDto,
   { rejectValue: Response }
->('updateUserPassword', async (user) => {
-  return await apiCall('PUT', `${apiRoutes.users.updatePassword}`, user);
+>('updateUserPassword', async (values) => {
+  return await apiCall('PUT', `${apiRoutes.users.updatePassword}`, values);
 });
 
 export const deleteUser = createAsyncThunk<

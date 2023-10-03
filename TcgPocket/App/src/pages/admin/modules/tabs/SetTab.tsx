@@ -19,7 +19,7 @@ import { AdminTabLabel } from '../../../../enums/adminTabLabel';
 const titles: string[] = ['Name', 'Game', 'Edit', 'Delete'];
 const colValue: string = '1fr ';
 
-export function SetTab(): React.ReactElement {
+export const SetTab: React.FC = () => {
   const numOfCol = colValue.repeat(titles.length);
   const { classes } = useStyles(numOfCol);
 
@@ -95,46 +95,51 @@ export function SetTab(): React.ReactElement {
     <div className={classes.setTabContainer}>
       <TabInfoHeader titles={titles} />
 
-      <div>
-        {renderedSets.map((set, index) => {
-          return (
-            <div key={index} className={classes.renderedSetContainer}>
-              <div> {set.name} </div>
+      {renderedSets.length !== 0 ? (
+        <div>
+          {renderedSets.map((set, index) => {
+            return (
+              <div key={index} className={classes.renderedSetContainer}>
+                <div> {set.name} </div>
 
-              <div> {findGame(set.gameId)} </div>
+                <div> {findGame(set.gameId)} </div>
 
-              <ActionIcon onClick={() => selectAndOpenEdit(set)}>
-                <IconEdit />
-              </ActionIcon>
+                <ActionIcon onClick={() => selectAndOpenEdit(set)}>
+                  <IconEdit />
+                </ActionIcon>
 
-              <ActionIcon onClick={() => selectAndOpenDelete(set)}>
-                <IconTrash />
-              </ActionIcon>
+                <ActionIcon onClick={() => selectAndOpenDelete(set)}>
+                  <IconTrash />
+                </ActionIcon>
 
-              <div>
-                {selectedId === set.id && (
-                  <EditModal
-                    open={openEdit}
-                    setOpen={toggleEdit}
-                    submitAction={editSelectedSet}
-                    value={set}
-                  />
-                )}
+                <div>
+                  {selectedId === set.id && (
+                    <EditModal
+                      open={openEdit}
+                      setOpen={toggleEdit}
+                      submitAction={editSelectedSet}
+                      value={set}
+                    />
+                  )}
+                </div>
               </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div className={classes.renderedSetContainer}>
+          <i> No data to display </i>
+        </div>
+      )}
 
       <DeleteModal
         open={openDelete}
         setOpen={toggleDelete}
-        deleteText="Permanently Delete"
         submitAction={deleteSelectedSet}
       />
     </div>
   );
-}
+};
 
 const useStyles = createStyles((theme: MantineTheme, numOfCol: string) => {
   return {

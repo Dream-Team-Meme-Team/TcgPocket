@@ -14,12 +14,12 @@ import { GameGetDto } from '../../../../types/games';
 import { EditModal } from '../modals/EditModal';
 import { TabInfoHeader } from '../headers/TabInfoHeader';
 import { setSelectedId } from '../../../../store/adminSlice';
-import { AdminTabLabel } from '../../../../enums/AdminTabLabel';
+import { AdminTabLabel } from '../../../../enums/adminTabLabel';
 
 const titles: string[] = ['Name', 'Edit', 'Delete'];
 const colValue: string = '1fr ';
 
-export function GameTab(): React.ReactElement {
+export const GameTab: React.FC = () => {
   const numOfCol = colValue.repeat(titles.length);
   const { classes } = useStyles(numOfCol);
 
@@ -79,42 +79,47 @@ export function GameTab(): React.ReactElement {
     <div className={classes.gameTabContainer}>
       <TabInfoHeader titles={titles} />
 
-      <div>
-        {renderedGames.map((game, index) => {
-          return (
-            <div key={index} className={classes.renderedGameContainer}>
-              <div>{game.name}</div>
+      {renderedGames.length !== 0 ? (
+        <div>
+          {renderedGames.map((game, index) => {
+            return (
+              <div key={index} className={classes.renderedGameContainer}>
+                <div>{game.name}</div>
 
-              <ActionIcon onClick={() => selectAndOpenEdit(game)}>
-                <IconEdit />
-              </ActionIcon>
+                <ActionIcon onClick={() => selectAndOpenEdit(game)}>
+                  <IconEdit />
+                </ActionIcon>
 
-              <ActionIcon onClick={() => selectAndOpenDelete(game)}>
-                <IconTrash />
-              </ActionIcon>
+                <ActionIcon onClick={() => selectAndOpenDelete(game)}>
+                  <IconTrash />
+                </ActionIcon>
 
-              {selectedId === game.id && (
-                <EditModal
-                  open={openEdit}
-                  setOpen={toggleEdit}
-                  submitAction={editSelectedGame}
-                  value={game}
-                />
-              )}
-            </div>
-          );
-        })}
-      </div>
+                {selectedId === game.id && (
+                  <EditModal
+                    open={openEdit}
+                    setOpen={toggleEdit}
+                    submitAction={editSelectedGame}
+                    value={game}
+                  />
+                )}
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div className={classes.renderedGameContainer}>
+          <i> No data to display </i>
+        </div>
+      )}
 
       <DeleteModal
         open={openDelete}
         setOpen={toggleDelete}
-        deleteText="Permanently Delete"
         submitAction={deleteSelectedGame}
       />
     </div>
   );
-}
+};
 
 const useStyles = createStyles((theme: MantineTheme, numOfCol: string) => {
   return {
@@ -132,6 +137,11 @@ const useStyles = createStyles((theme: MantineTheme, numOfCol: string) => {
         borderRadius: 7,
         paddingLeft: 8,
       },
+    },
+
+    editAndNameContainer: {
+      display: 'flex',
+      gap: 8,
     },
   };
 });

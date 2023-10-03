@@ -9,9 +9,8 @@ import {
 import { useNavbarHeight } from '../../hooks/use-navbar-height';
 import { AdminTabHeader } from './modules/headers/AdminTabHeader';
 import { Tab } from '../../types/tabs';
-import { AppState, dispatch, useAppSelector } from '../../store/configureStore';
+import { dispatch, useAppSelector } from '../../store/configureStore';
 import { useEffect } from 'react';
-import { AdminDataRenderer } from './modules/renderers/AdminDataRenderer';
 import {
   setAdminSearchTerm,
   setSelectedAdminTab,
@@ -19,27 +18,37 @@ import {
   setSelectedId,
 } from '../../store/adminSlice';
 import { AdminTabLabel } from '../../enums/adminTabLabel';
+import { GameTab } from './modules/tabs/GameTab';
+import { SetTab } from './modules/tabs/SetTab';
+import { CardTypeTab } from './modules/tabs/CardTypeTab';
+import { RarityTab } from './modules/tabs/RarityTab';
+import { AttributeTab } from './modules/tabs/AttributeTab';
 
 const adminTabs: Tab[] = [
   {
     label: AdminTabLabel.GAMES,
     icon: <IconDeviceGamepad />,
+    content: GameTab,
   },
   {
     label: AdminTabLabel.SETS,
     icon: <IconCards />,
+    content: SetTab,
   },
   {
     label: AdminTabLabel.CARD_TYPES,
     icon: <IconPlayCard />,
+    content: CardTypeTab,
   },
   {
     label: AdminTabLabel.RARITIES,
     icon: <IconChartTreemap />,
+    content: RarityTab,
   },
   {
     label: AdminTabLabel.ATTRIBUTES,
     icon: <IconCoffin />,
+    content: AttributeTab,
   },
 ];
 
@@ -47,9 +56,8 @@ export function AdminPage(): React.ReactElement {
   const { remainingHeight } = useNavbarHeight();
   const { classes } = useStyles();
 
-  const selectedTab = useAppSelector(
-    (state: AppState) => state.admin.selectedTab
-  );
+  const selectedGameId = useAppSelector((state) => state.admin.selectedGameId);
+  const selectedTab = useAppSelector((state) => state.admin.selectedTab);
 
   const handleTabChange = (value: TabsValue) => {
     dispatch(setSelectedAdminTab(value));
@@ -77,17 +85,25 @@ export function AdminPage(): React.ReactElement {
         ))}
       </Tabs.List>
 
-      {adminTabs.map((tab, index) => (
-        <Tabs.Panel
-          key={index}
-          value={tab.label}
-          className={classes.panelContainer}
-        >
-          <AdminTabHeader label={tab.label} />
+      {adminTabs.map((tab, index) => {
+        const TabContent = tab.content;
 
-          <AdminDataRenderer label={tab.label} />
-        </Tabs.Panel>
-      ))}
+        return (
+          <Tabs.Panel
+            key={index}
+            value={tab.label}
+            className={classes.panelContainer}
+          >
+            <AdminTabHeader label={tab.label} />
+
+            {selectedGameId !== 0 || tab.label === AdminTabLabel.GAMES ? (
+              <TabContent />
+            ) : (
+              <div className={classes.noSelectedGame}>Please Select a Game</div>
+            )}
+          </Tabs.Panel>
+        );
+      })}
     </Tabs>
   );
 }
@@ -104,6 +120,15 @@ const useStyles = createStyles(() => {
     panelHeader: {
       display: 'flex',
       justifyContent: 'center',
+    },
+
+    noSelectedGame: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+
+      fontWeight: 'bold',
+      fontSize: '20px',
     },
   };
 });

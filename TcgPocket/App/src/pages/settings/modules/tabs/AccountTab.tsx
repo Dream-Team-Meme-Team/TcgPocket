@@ -1,10 +1,10 @@
 import { createStyles } from '@mantine/core';
-import { useAppSelector } from '../../../store/configureStore';
-import { PersonalInformationForm } from './PersonalInformationForm';
-import { PasswordForm } from './PasswordForm';
-import { DeleteAccount } from './DeleteAccount';
+import { useAppSelector } from '../../../../store/configureStore';
+import { PersonalInformationForm } from '../PersonalInformationForm';
+import { PasswordForm } from '../PasswordForm';
+import { DeleteAccount } from '../DeleteAccount';
 
-export function AccountTab(): React.ReactElement {
+export const AccountTab: React.FC = () => {
   const { classes } = useStyles();
 
   const user = useAppSelector((state) => state.user.user);
@@ -26,7 +26,7 @@ export function AccountTab(): React.ReactElement {
       )}
     </div>
   );
-}
+};
 
 const useStyles = createStyles(() => {
   return {

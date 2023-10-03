@@ -3,12 +3,13 @@ import { IconUser } from '@tabler/icons-react';
 import { useNavbarHeight } from '../../hooks/use-navbar-height';
 import { Tab } from '../../types/tabs';
 import { SettingTabLabel } from '../../enums/settingTabLabel';
-import { SettingTabRenderer } from './modules/SettingTabRenderer';
+import { AccountTab } from './modules/tabs/AccountTab';
 
 const tabs: Tab[] = [
   {
     label: SettingTabLabel.ACCOUNT,
     icon: <IconUser />,
+    content: AccountTab,
   },
 ];
 
@@ -29,11 +30,15 @@ export function SettingsPage(): React.ReactElement {
         ))}
       </Tabs.List>
 
-      {tabs.map((tab, index) => (
-        <Tabs.Panel key={index} value={tab.label}>
-          <SettingTabRenderer label={tab.label} />
-        </Tabs.Panel>
-      ))}
+      {tabs.map((tab, index) => {
+        const TabContent = tab.content;
+
+        return (
+          <Tabs.Panel key={index} value={tab.label}>
+            <TabContent />
+          </Tabs.Panel>
+        );
+      })}
     </Tabs>
   );
 }

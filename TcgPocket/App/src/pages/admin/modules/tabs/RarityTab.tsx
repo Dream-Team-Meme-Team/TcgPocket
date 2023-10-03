@@ -16,10 +16,10 @@ import { DeleteModal } from '../../../../components/modals/DeleteModal';
 import { setSelectedId } from '../../../../store/adminSlice';
 import { AdminTabLabel } from '../../../../enums/adminTabLabel';
 
-const titles: string[] = ['Name', 'Edit', 'Delete'];
+const titles: string[] = ['Name', 'Game', 'Edit', 'Delete'];
 const colValue: string = '1fr ';
 
-export function RarityTab(): React.ReactElement {
+export const RarityTab: React.FC = () => {
   const numOfCol = colValue.repeat(titles.length);
   const { classes } = useStyles(numOfCol);
 
@@ -27,6 +27,7 @@ export function RarityTab(): React.ReactElement {
   const [openEdit, { toggle: toggleEdit }] = useDisclosure();
 
   const rarities = useAppSelector((state) => state.data.rarities);
+  const games = useAppSelector((state) => state.data.games);
   const searchTerm = useAppSelector((state) => state.admin.searchTerm);
   const selectedId = useAppSelector((state) => state.admin.selectedId);
   const selectedGameId = useAppSelector((state) => state.admin.selectedGameId);
@@ -79,6 +80,12 @@ export function RarityTab(): React.ReactElement {
     }
   };
 
+  const findGame = (gameId: number) => {
+    const foundGame = games.find((game) => game.id === gameId);
+
+    return foundGame ? foundGame.name : 'Unknown';
+  };
+
   useEffect(() => {
     if (selectedGameId === 0 || selectedTab !== AdminTabLabel.RARITIES) return;
     loadRarities();
@@ -88,44 +95,51 @@ export function RarityTab(): React.ReactElement {
     <div className={classes.rarityTabContainer}>
       <TabInfoHeader titles={titles} />
 
-      <div>
-        {renderedRarities.map((rarity, index) => {
-          return (
-            <div key={index} className={classes.renderedRarityContainer}>
-              <div> {rarity.name} </div>
+      {renderedRarities.length !== 0 ? (
+        <div>
+          {renderedRarities.map((rarity, index) => {
+            return (
+              <div key={index} className={classes.renderedRarityContainer}>
+                <div> {rarity.name} </div>
 
-              <ActionIcon onClick={() => selectAndOpenEdit(rarity)}>
-                <IconEdit />
-              </ActionIcon>
+                <div> {findGame(rarity.gameId)} </div>
 
-              <ActionIcon onClick={() => selectAndOpenDelete(rarity)}>
-                <IconTrash />
-              </ActionIcon>
+                <ActionIcon onClick={() => selectAndOpenEdit(rarity)}>
+                  <IconEdit />
+                </ActionIcon>
 
-              <div>
-                {selectedId === rarity.id && (
-                  <EditModal
-                    open={openEdit}
-                    setOpen={toggleEdit}
-                    submitAction={editSelectedRarity}
-                    value={rarity}
-                  />
-                )}
+                <ActionIcon onClick={() => selectAndOpenDelete(rarity)}>
+                  <IconTrash />
+                </ActionIcon>
+
+                <div>
+                  {selectedId === rarity.id && (
+                    <EditModal
+                      open={openEdit}
+                      setOpen={toggleEdit}
+                      submitAction={editSelectedRarity}
+                      value={rarity}
+                    />
+                  )}
+                </div>
               </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div className={classes.renderedRarityContainer}>
+          <i> No data to display </i>
+        </div>
+      )}
 
       <DeleteModal
         open={openDelete}
         setOpen={toggleDelete}
-        deleteText="Permanently Delete"
         submitAction={deleteSelectedRarity}
       />
     </div>
   );
-}
+};
 
 const useStyles = createStyles((theme: MantineTheme, numOfCol: string) => {
   return {

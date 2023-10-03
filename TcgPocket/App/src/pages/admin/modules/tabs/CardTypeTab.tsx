@@ -16,10 +16,10 @@ import { DeleteModal } from '../../../../components/modals/DeleteModal';
 import { setSelectedId } from '../../../../store/adminSlice';
 import { AdminTabLabel } from '../../../../enums/adminTabLabel';
 
-const titles: string[] = ['Name', 'Edit', 'Delete'];
+const titles: string[] = ['Name', 'Game', 'Edit', 'Delete'];
 const colValue: string = '1fr ';
 
-export function CardTypeTab(): React.ReactElement {
+export const CardTypeTab: React.FC = () => {
   const numOfCol = colValue.repeat(titles.length);
   const { classes } = useStyles(numOfCol);
 
@@ -27,6 +27,7 @@ export function CardTypeTab(): React.ReactElement {
   const [openEdit, { toggle: toggleEdit }] = useDisclosure();
 
   const cardTypes = useAppSelector((state) => state.data.cardTypes);
+  const games = useAppSelector((state) => state.data.games);
   const searchTerm = useAppSelector((state) => state.admin.searchTerm);
   const selectedId = useAppSelector((state) => state.admin.selectedId);
   const selectedGameId = useAppSelector((state) => state.admin.selectedGameId);
@@ -79,6 +80,12 @@ export function CardTypeTab(): React.ReactElement {
     }
   };
 
+  const findGame = (gameId: number) => {
+    const foundGame = games.find((game) => game.id === gameId);
+
+    return foundGame ? foundGame.name : 'Unknown';
+  };
+
   useEffect(() => {
     if (selectedGameId === 0 || selectedTab !== AdminTabLabel.CARD_TYPES)
       return;
@@ -89,44 +96,51 @@ export function CardTypeTab(): React.ReactElement {
     <div className={classes.cardTypeContainer}>
       <TabInfoHeader titles={titles} />
 
-      <div>
-        {renderedCardTypes.map((cardType, index) => {
-          return (
-            <div key={index} className={classes.renderedCardTypeContainer}>
-              <div> {cardType.name} </div>
+      {renderedCardTypes.length !== 0 ? (
+        <div>
+          {renderedCardTypes.map((cardType, index) => {
+            return (
+              <div key={index} className={classes.renderedCardTypeContainer}>
+                <div> {cardType.name} </div>
 
-              <ActionIcon onClick={() => selectAndOpenEdit(cardType)}>
-                <IconEdit />
-              </ActionIcon>
+                <div> {findGame(cardType.gameId)} </div>
 
-              <ActionIcon onClick={() => selectAndOpenDelete(cardType)}>
-                <IconTrash />
-              </ActionIcon>
+                <ActionIcon onClick={() => selectAndOpenEdit(cardType)}>
+                  <IconEdit />
+                </ActionIcon>
 
-              <div>
-                {selectedId === cardType.id && (
-                  <EditModal
-                    open={openEdit}
-                    setOpen={toggleEdit}
-                    submitAction={editSelectedCardType}
-                    value={cardType}
-                  />
-                )}
+                <ActionIcon onClick={() => selectAndOpenDelete(cardType)}>
+                  <IconTrash />
+                </ActionIcon>
+
+                <div>
+                  {selectedId === cardType.id && (
+                    <EditModal
+                      open={openEdit}
+                      setOpen={toggleEdit}
+                      submitAction={editSelectedCardType}
+                      value={cardType}
+                    />
+                  )}
+                </div>
               </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div className={classes.renderedCardTypeContainer}>
+          <i> No data to display </i>
+        </div>
+      )}
 
       <DeleteModal
         open={openDelete}
         setOpen={toggleDelete}
-        deleteText="Permanently Delete"
         submitAction={deleteSelectedCardType}
       />
     </div>
   );
-}
+};
 
 const useStyles = createStyles((theme: MantineTheme, numOfCol: string) => {
   return {
