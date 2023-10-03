@@ -7,25 +7,41 @@ import {
   Menu,
   Navbar,
 } from '@mantine/core';
-import { IconLogin, IconRegistered, IconUser } from '@tabler/icons-react';
-import React from 'react';
+import {
+  IconLogin,
+  IconLogout,
+  IconRegistered,
+  IconSettings,
+  IconUser,
+} from '@tabler/icons-react';
+import React, { useMemo } from 'react';
 import { routes } from '../routes';
 import { NavButton } from './NavButton';
-import { LoginModal } from '../components/modals/LoginModal';
-import { RegisterModal } from '../components/modals/RegisterModal';
+import { LoginModal } from '../components/modals/AuthModals/LoginModal';
+import { RegisterModal } from '../components/modals/AuthModals/RegisterModal';
 import { useDisclosure } from '@mantine/hooks';
 import { useNavbarHeight } from '../hooks/use-navbar-height';
+import { useNavigate } from 'react-router-dom';
+import { signOutUser } from '../services/AuthServices';
+import { dispatch, useAppSelector } from '../store/configureStore';
 
 export function PrimaryNavigation(): React.ReactElement {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const { navbarHeight } = useNavbarHeight();
+
+  const signedInUser = useAppSelector((state) => state.user.user);
 
   const [loginState, login] = useDisclosure(false);
   const [registerState, register] = useDisclosure(false);
 
-  // const onLogoutClick = () => {
-  //   console.log('log out');
-  // };
+  const handleSignOut = () => {
+    dispatch(signOutUser());
+    navigate(routes.home);
+  };
+
+  const determineUserState = useMemo(() => {
+    return signedInUser === undefined || signedInUser === null ? false : true;
+  }, [signedInUser]);
 
   return (
     <>
@@ -34,11 +50,13 @@ export function PrimaryNavigation(): React.ReactElement {
           <Image maw={navbarHeight - 16} src="./TcgPocketLogo.svg" />
         </NavButton>
         <Flex align={'center'} gap={25}>
-          <Flex gap={10}>
-            <NavButton route={routes.inventory}>Inventory</NavButton>
-            <NavButton route={routes.cardUpload}>Upload Cards</NavButton>
-            <NavButton route={routes.deckBuilder}> Deck Builder</NavButton>
-          </Flex>
+          {determineUserState && (
+            <Flex gap={10}>
+              <NavButton route={routes.inventory}>Inventory</NavButton>
+              <NavButton route={routes.cardUpload}>Upload Cards</NavButton>
+              {/* <NavButton route={routes.deckBuilder}> Deck Builder</NavButton> */}
+            </Flex>
+          )}
 
           <Menu>
             <Menu.Target>
@@ -47,38 +65,42 @@ export function PrimaryNavigation(): React.ReactElement {
               </ActionIcon>
             </Menu.Target>
 
-            <Menu.Dropdown>
-              <Menu.Item icon={<IconLogin size={14} />} onClick={login.open}>
-                Login
-              </Menu.Item>
-              <Menu.Item
-                icon={<IconRegistered size={14} />}
-                onClick={register.open}
-              >
-                Register
-              </Menu.Item>
-
-              {/* when a user is logged in, these should be displayed */}
-
-              {/* <Menu.Item
-                icon={<IconSettings size={14} />}
-                onClick={() => navigate(routes.settings)}
-                >
-                Settings
+            {!determineUserState && (
+              <Menu.Dropdown>
+                <Menu.Item icon={<IconLogin size={14} />} onClick={login.open}>
+                  Login
                 </Menu.Item>
                 <Menu.Item
-                icon={<IconLogout size={14} />}
-                onClick={onLogoutClick}
+                  icon={<IconRegistered size={14} />}
+                  onClick={register.open}
                 >
-                Logout
-              </Menu.Item> */}
-            </Menu.Dropdown>
+                  Register
+                </Menu.Item>
+              </Menu.Dropdown>
+            )}
+
+            {determineUserState && (
+              <Menu.Dropdown>
+                <Menu.Item
+                  icon={<IconSettings size={14} />}
+                  onClick={() => navigate(routes.settings)}
+                >
+                  Settings
+                </Menu.Item>
+                <Menu.Item
+                  icon={<IconLogout size={14} />}
+                  onClick={handleSignOut}
+                >
+                  Logout
+                </Menu.Item>
+              </Menu.Dropdown>
+            )}
           </Menu>
         </Flex>
       </Navbar>
 
-      <LoginModal openModal={loginState} setOpenModal={login.close} />
-      <RegisterModal openModal={registerState} setOpenModal={register.close} />
+      <LoginModal open={loginState} setOpen={login.close} />
+      <RegisterModal open={registerState} setOpen={register.close} />
     </>
   );
 }

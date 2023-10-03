@@ -111,10 +111,10 @@ public class UsersController : ControllerBase
         return response.HasErrors ? BadRequest(response) : Ok(response);
     }
 
-    [HttpDelete("{id:int}")]
-    public async Task<ActionResult<Response>> DeleteUser([FromRoute] int id)
+    [HttpDelete]
+    public async Task<ActionResult<Response>> DeleteUser([FromBody] UserDeleteDto deleteDto)
     {
-        var response = await _mediator.Send(new DeleteUserCommand { Id = id });
+        var response = await _mediator.Send(new DeleteUserCommand { DeleteDto = deleteDto });
 
         return response.HasErrors ? BadRequest(response) : Ok(response);
     }
