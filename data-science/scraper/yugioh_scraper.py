@@ -17,15 +17,15 @@ class YugiohScraper:
 
         return [median]
     
-    def read_card(self, filt_cards: list):
+    def read_card(self, filt_attrbs: list):
         """
         Arguments:
             filt_cards: list of cropped images containing the values needed to be read
             return: the read values from list of cropped images
         """
         params = []
-        for card in filt_cards:
-            params.append(tess.image_to_string(card, config="--psm 13  -c tessedit_char_whitelist=123456789-ABCDEFGHIJKLMNOPQRSTUVWXYZ").strip('\n'))
+        for attrb in filt_attrbs:
+            params.append(tess.image_to_string(attrb, config="--psm 13  -c tessedit_char_whitelist=123456789-ABCDEFGHIJKLMNOPQRSTUVWXYZ").strip('\n'))
         
         return params
 

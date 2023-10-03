@@ -12,9 +12,9 @@ class MagicScraper:
         set_num = np.array(raw_card.resize([421,614]))[570:586, 20:79, :]
         set_abbrv = np.array(raw_card.resize([421,614]))[585:596, 20:51, :]
         
-        return set_num, set_abbrv
+        return [set_num, set_abbrv]
     
-    def read_card(self, filt_cards: list):
+    def read_card(self, filt_attrbs: list):
         """
         Arguments:
             filt_cards: list of cropped images containing the values needed to be read
@@ -22,8 +22,8 @@ class MagicScraper:
         """
 
         params = []
-        for card in filt_cards:
-            params.append(tess.image_to_string(card).strip('\n'))
+        for attrb in filt_attrbs:
+            params.append(tess.image_to_string(attrb).strip('\n'))
         
         return params
 

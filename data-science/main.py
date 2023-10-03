@@ -39,29 +39,17 @@ from_PIL = transform.Compose([transform.PILToTensor()])
 # print(ygo_scrape.read_card(filt))
 
 
-# """POKEMON"""
-# # get and load up card from URL
-# resp_pkm = requests.get('https://images.pokemontcg.io/bw8/1_hires.png', headers = {'X-Api-Key': IDK_API_KEY, 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'})
-# img_pkm_raw = Image.open(BytesIO(resp_pkm.content))
-# # img_pkm_raw.show()
+"""POKEMON"""
+# get and load up card from URL
+resp_pkm = requests.get('https://images.pokemontcg.io/bw8/1_hires.png', headers = {'X-Api-Key': IDK_API_KEY, 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'})
+img_pkm_raw = Image.open(BytesIO(resp_pkm.content))
+# img_pkm_raw.show()
 
-# img_pkm_np_num = np.array(img_pkm_raw.resize([421,614]))
-# # img_pkm_np_num[577:592, 330:363, :] = 0
-# img_pkm_np_num[:577, :, :] = 0
-# img_pkm_np_num[592:, :, :] = 0
-# img_pkm_np_num[:, :330, :] = 0
-# img_pkm_np_num[:, 363:, :] = 0
-# img_pkm_num = Image.fromarray(img_pkm_np_num)
-# # img_pkm_num.show()
+# TODO from directory
 
-# img_pkm_np_set = np.array(img_pkm_raw.resize([421,614]))
-# # img_pkm_np_set[570:595, 375:400, :] = 0
-# img_pkm_np_set[:570, :, :] = 0
-# img_pkm_np_set[595:, :, :] = 0
-# img_pkm_np_set[:, :375, :] = 0
-# img_pkm_np_set[:, 400:, :] = 0
-# img_pkm_set = Image.fromarray(img_pkm_np_set)
-# img_pkm_set.show()
+pkm_scrape = PokemonScraper()
+filt = pkm_scrape.apply_filter(img_pkm_raw)
+print(pkm_scrape.read_card(filt))
 
 # img = np.array(Image.open('data-science/data/tst.png').resize([421,614]))
 
