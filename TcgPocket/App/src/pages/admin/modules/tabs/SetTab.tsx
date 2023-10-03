@@ -13,8 +13,8 @@ import { DeleteModal } from '../../../../components/modals/DeleteModal';
 import { useDisclosure } from '@mantine/hooks';
 import { EditModal } from '../modals/EditModal';
 import { SetGetDto } from '../../../../types/sets';
-import { setSelectedId } from '../../../../store/dataSlice';
-import { TabLabel } from '../../AdminPage';
+import { setSelectedId } from '../../../../store/adminSlice';
+import { AdminTabLabel } from '../../../../enums/adminTabLabel';
 
 const titles: string[] = ['Name', 'Game', 'Edit', 'Delete'];
 const colValue: string = '1fr ';
@@ -28,10 +28,10 @@ export function SetTab(): React.ReactElement {
 
   const sets = useAppSelector((state) => state.data.sets);
   const games = useAppSelector((state) => state.data.games);
-  const searchTerm = useAppSelector((state) => state.data.searchTerm);
-  const selectedId = useAppSelector((state) => state.data.selectedId);
-  const selectedGameId = useAppSelector((state) => state.data.selectedGameId);
-  const selectedTab = useAppSelector((state) => state.data.selectedTab);
+  const searchTerm = useAppSelector((state) => state.admin.searchTerm);
+  const selectedId = useAppSelector((state) => state.admin.selectedId);
+  const selectedGameId = useAppSelector((state) => state.admin.selectedGameId);
+  const selectedTab = useAppSelector((state) => state.admin.selectedTab);
 
   const renderedSets = useMemo(() => {
     return sets
@@ -66,7 +66,13 @@ export function SetTab(): React.ReactElement {
   };
 
   const editSelectedSet = async (editedSet: SetGetDto) => {
-    const { payload } = await dispatch(editSet(editedSet));
+    const updatedSet: SetGetDto = {
+      id: editedSet.id,
+      name: editedSet.name,
+      gameId: selectedGameId,
+    };
+
+    const { payload } = await dispatch(editSet(updatedSet));
     responseWrapper(payload, 'Set Edited');
 
     if (payload && !payload.hasErrors) {
@@ -81,7 +87,7 @@ export function SetTab(): React.ReactElement {
   };
 
   useEffect(() => {
-    if (selectedGameId === 0 || selectedTab !== TabLabel.SETS) return;
+    if (selectedGameId === 0 || selectedTab !== AdminTabLabel.SETS) return;
     loadSets();
   }, [selectedGameId, selectedTab]);
 

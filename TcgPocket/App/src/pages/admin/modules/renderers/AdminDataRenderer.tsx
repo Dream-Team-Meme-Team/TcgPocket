@@ -1,4 +1,4 @@
-import { TabLabel } from '../../AdminPage';
+import { AdminTabLabel } from '../../../../enums/adminTabLabel';
 import { AttributeTab } from '../tabs/AttributeTab';
 import { CardTypeTab } from '../tabs/CardTypeTab';
 import { GameTab } from '../tabs/GameTab';
@@ -12,13 +12,46 @@ type AdminDataRendererProps = {
 export function AdminDataRenderer({
   label,
 }: AdminDataRendererProps): React.ReactElement {
-  return (
-    <div>
-      {label === TabLabel.GAMES && <GameTab />}
-      {label === TabLabel.SETS && <SetTab />}
-      {label === TabLabel.CARD_TYPES && <CardTypeTab />}
-      {label === TabLabel.RARITIES && <RarityTab />}
-      {label === TabLabel.ATTRIBUTES && <AttributeTab />}
-    </div>
-  );
+  // let Tab;
+
+  // switch (label) {
+  //   case AdminTabLabel.GAMES:
+  //     Tab = GameTab;
+  //     break;
+  //   case AdminTabLabel.SETS:
+  //     Tab = SetTab;
+  //     break;
+  //   case AdminTabLabel.CARD_TYPES:
+  //     Tab = CardTypeTab;
+  //     break;
+  //   case AdminTabLabel.RARITIES:
+  //     Tab = RarityTab;
+  //     break;
+  //   case AdminTabLabel.ATTRIBUTES:
+  //     Tab = AttributeTab;
+  //     break;
+  //   default:
+  //     Tab = '';
+  // }
+
+  // return (
+  //   <div>
+  //     <Tab />
+  //   </div>
+  // );
+
+  switch (label) {
+    case AdminTabLabel.GAMES:
+      return <GameTab />;
+    case AdminTabLabel.SETS:
+      return <SetTab />;
+    case AdminTabLabel.CARD_TYPES:
+      return <CardTypeTab />;
+    case AdminTabLabel.RARITIES:
+      return <RarityTab />;
+    case AdminTabLabel.ATTRIBUTES:
+      return <AttributeTab />;
+    default:
+      return <div />;
+  }
 }

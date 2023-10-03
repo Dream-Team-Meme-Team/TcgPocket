@@ -1,27 +1,27 @@
 import { PrimaryTextInput } from '../../../../components/inputs/PrimaryTextInput';
 import { IconSearch } from '@tabler/icons-react';
 import { dispatch, useAppSelector } from '../../../../store/configureStore';
+import { Select, createStyles } from '@mantine/core';
+import { useMemo } from 'react';
+import { AddModalRenderer } from '../renderers/AddModalRenderer';
 import {
   setAdminSearchTerm,
   setSelectedGameId,
-} from '../../../../store/dataSlice';
-import { Select, createStyles } from '@mantine/core';
-import { useMemo } from 'react';
-import { TabLabel } from '../../AdminPage';
-import { AddModalRenderer } from '../renderers/AddModalRenderer';
+} from '../../../../store/adminSlice';
+import { AdminTabLabel } from '../../../../enums/adminTabLabel';
 
 type AdminTabHeaderProps = {
-  tabTitle: string;
+  label: string;
 };
 
 export function AdminTabHeader({
-  tabTitle,
+  label,
 }: AdminTabHeaderProps): React.ReactElement {
   const { classes } = useStyles();
 
-  const searchTerm = useAppSelector((state) => state.data.searchTerm);
+  const searchTerm = useAppSelector((state) => state.admin.searchTerm);
   const games = useAppSelector((state) => state.data.games);
-  const selectedGameId = useAppSelector((state) => state.data.selectedGameId);
+  const selectedGameId = useAppSelector((state) => state.admin.selectedGameId);
 
   const data = useMemo(() => {
     return games.map((game) => game.name);
@@ -47,11 +47,11 @@ export function AdminTabHeader({
     dispatch(setSelectedGameId(foundSelectedGame.id));
   };
 
-  const determineSelect = tabTitle !== TabLabel.GAMES;
+  const determineSelect = label !== AdminTabLabel.GAMES;
 
   return (
     <div className={classes.adminTabHeaderContainer}>
-      <h3> Modify {tabTitle} </h3>
+      <h3> Modify {label} </h3>
 
       <div className={classes.controlsContainer}>
         <div>
@@ -72,7 +72,7 @@ export function AdminTabHeader({
           onChange={handleInputChange}
         />
 
-        <AddModalRenderer label={tabTitle} />
+        <AddModalRenderer label={label} />
       </div>
     </div>
   );

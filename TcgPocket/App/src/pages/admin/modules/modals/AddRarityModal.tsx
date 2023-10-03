@@ -21,7 +21,7 @@ const initialValues = {
 export function AddRarityModal(): React.ReactElement {
   const [open, { toggle }] = useDisclosure();
 
-  const selectedGameId = useAppSelector((state) => state.data.selectedGameId);
+  const selectedGameId = useAppSelector((state) => state.admin.selectedGameId);
 
   const form = useForm({
     initialValues: initialValues,

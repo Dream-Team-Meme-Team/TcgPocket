@@ -21,7 +21,7 @@ const initialValues = {
 export function AddCardTypeModal(): React.ReactElement {
   const [open, { toggle }] = useDisclosure();
 
-  const selectGameId = useAppSelector((state) => state.data.selectedGameId);
+  const selectGameId = useAppSelector((state) => state.admin.selectedGameId);
 
   const form = useForm({
     initialValues: initialValues,

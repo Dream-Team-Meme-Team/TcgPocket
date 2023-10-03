@@ -5,7 +5,6 @@ import { IconEdit, IconTrash } from '@tabler/icons-react';
 import { ActionIcon, MantineTheme, createStyles } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { AttributeGetDto } from '../../../../types/attributes';
-import { setSelectedId } from '../../../../store/dataSlice';
 import { EditModal } from '../modals/EditModal';
 import {
   deleteAttribute,
@@ -14,7 +13,8 @@ import {
 } from '../../../../services/dataServices/AttributeServices';
 import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { DeleteModal } from '../../../../components/modals/DeleteModal';
-import { TabLabel } from '../../AdminPage';
+import { setSelectedId } from '../../../../store/adminSlice';
+import { AdminTabLabel } from '../../../../enums/adminTabLabel';
 
 const titles: string[] = ['Name', 'Edit', 'Delete'];
 const colValue: string = '1fr ';
@@ -27,10 +27,10 @@ export function AttributeTab(): React.ReactElement {
   const [openEdit, { toggle: toggleEdit }] = useDisclosure();
 
   const attributes = useAppSelector((state) => state.data.attributes);
-  const searchTerm = useAppSelector((state) => state.data.searchTerm);
-  const selectedId = useAppSelector((state) => state.data.selectedId);
-  const selectedGameId = useAppSelector((state) => state.data.selectedGameId);
-  const selectedTab = useAppSelector((state) => state.data.selectedTab);
+  const searchTerm = useAppSelector((state) => state.admin.searchTerm);
+  const selectedId = useAppSelector((state) => state.admin.selectedId);
+  const selectedGameId = useAppSelector((state) => state.admin.selectedGameId);
+  const selectedTab = useAppSelector((state) => state.admin.selectedTab);
 
   const renderedAttributes = useMemo(() => {
     return attributes
@@ -80,7 +80,8 @@ export function AttributeTab(): React.ReactElement {
   };
 
   useEffect(() => {
-    if (selectedGameId === 0 || selectedTab !== TabLabel.ATTRIBUTES) return;
+    if (selectedGameId === 0 || selectedTab !== AdminTabLabel.ATTRIBUTES)
+      return;
     loadAttributes();
   }, [selectedGameId, selectedTab]);
 

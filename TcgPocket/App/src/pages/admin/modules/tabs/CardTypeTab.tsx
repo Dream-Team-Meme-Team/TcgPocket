@@ -13,8 +13,8 @@ import {
 import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { CardTypeGetDto } from '../../../../types/card-types';
 import { DeleteModal } from '../../../../components/modals/DeleteModal';
-import { setSelectedId } from '../../../../store/dataSlice';
-import { TabLabel } from '../../AdminPage';
+import { setSelectedId } from '../../../../store/adminSlice';
+import { AdminTabLabel } from '../../../../enums/adminTabLabel';
 
 const titles: string[] = ['Name', 'Edit', 'Delete'];
 const colValue: string = '1fr ';
@@ -27,10 +27,10 @@ export function CardTypeTab(): React.ReactElement {
   const [openEdit, { toggle: toggleEdit }] = useDisclosure();
 
   const cardTypes = useAppSelector((state) => state.data.cardTypes);
-  const searchTerm = useAppSelector((state) => state.data.searchTerm);
-  const selectedId = useAppSelector((state) => state.data.selectedId);
-  const selectedGameId = useAppSelector((state) => state.data.selectedGameId);
-  const selectedTab = useAppSelector((state) => state.data.selectedTab);
+  const searchTerm = useAppSelector((state) => state.admin.searchTerm);
+  const selectedId = useAppSelector((state) => state.admin.selectedId);
+  const selectedGameId = useAppSelector((state) => state.admin.selectedGameId);
+  const selectedTab = useAppSelector((state) => state.admin.selectedTab);
 
   const renderedCardTypes = useMemo(() => {
     return cardTypes
@@ -80,7 +80,8 @@ export function CardTypeTab(): React.ReactElement {
   };
 
   useEffect(() => {
-    if (selectedGameId === 0 || selectedTab !== TabLabel.CARD_TYPES) return;
+    if (selectedGameId === 0 || selectedTab !== AdminTabLabel.CARD_TYPES)
+      return;
     loadCardTypes();
   }, [selectedGameId, selectedTab]);
 

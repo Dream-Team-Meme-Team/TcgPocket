@@ -1,4 +1,3 @@
-import { useEffectOnce } from 'react-use';
 import { dispatch, useAppSelector } from '../../../../store/configureStore';
 import {
   deleteGame,
@@ -7,14 +6,15 @@ import {
 } from '../../../../services/dataServices/GameServices';
 import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { ActionIcon, MantineTheme, createStyles } from '@mantine/core';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
 import { DeleteModal } from '../../../../components/modals/DeleteModal';
-import { setSelectedId } from '../../../../store/dataSlice';
 import { GameGetDto } from '../../../../types/games';
 import { EditModal } from '../modals/EditModal';
 import { TabInfoHeader } from '../headers/TabInfoHeader';
+import { setSelectedId } from '../../../../store/adminSlice';
+import { AdminTabLabel } from '../../../../enums/AdminTabLabel';
 
 const titles: string[] = ['Name', 'Edit', 'Delete'];
 const colValue: string = '1fr ';
@@ -27,8 +27,9 @@ export function GameTab(): React.ReactElement {
   const [openEdit, { toggle: toggleEdit }] = useDisclosure();
 
   const games = useAppSelector((state) => state.data.games);
-  const searchTerm = useAppSelector((state) => state.data.searchTerm);
-  const selectedId = useAppSelector((state) => state.data.selectedId);
+  const searchTerm = useAppSelector((state) => state.admin.searchTerm);
+  const selectedId = useAppSelector((state) => state.admin.selectedId);
+  const selectedTab = useAppSelector((state) => state.admin.selectedTab);
 
   const renderedGames = useMemo(() => {
     return games.filter((game) =>
@@ -69,9 +70,10 @@ export function GameTab(): React.ReactElement {
     }
   };
 
-  useEffectOnce(() => {
+  useEffect(() => {
+    if (selectedTab !== AdminTabLabel.GAMES) return;
     loadGames();
-  });
+  }, [selectedTab]);
 
   return (
     <div className={classes.gameTabContainer}>

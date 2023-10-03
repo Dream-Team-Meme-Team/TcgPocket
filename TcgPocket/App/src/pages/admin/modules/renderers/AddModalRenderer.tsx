@@ -1,4 +1,4 @@
-import { TabLabel } from '../../AdminPage';
+import { AdminTabLabel } from '../../../../enums/adminTabLabel';
 import { AddAttributeModal } from '../modals/AddAttributeModal';
 import { AddCardTypeModal } from '../modals/AddCardTypeModal';
 import { AddGameModal } from '../modals/AddGameModal';
@@ -12,13 +12,18 @@ type AddModalRendererProps = {
 export function AddModalRenderer({
   label,
 }: AddModalRendererProps): React.ReactElement {
-  return (
-    <div>
-      {label === TabLabel.GAMES && <AddGameModal />}
-      {label === TabLabel.SETS && <AddSetModal />}
-      {label === TabLabel.CARD_TYPES && <AddCardTypeModal />}
-      {label === TabLabel.RARITIES && <AddRarityModal />}
-      {label === TabLabel.ATTRIBUTES && <AddAttributeModal />}
-    </div>
-  );
+  switch (label) {
+    case AdminTabLabel.GAMES:
+      return <AddGameModal />;
+    case AdminTabLabel.SETS:
+      return <AddSetModal />;
+    case AdminTabLabel.CARD_TYPES:
+      return <AddCardTypeModal />;
+    case AdminTabLabel.RARITIES:
+      return <AddRarityModal />;
+    case AdminTabLabel.ATTRIBUTES:
+      return <AddAttributeModal />;
+    default:
+      return <div />;
+  }
 }

@@ -10,42 +10,35 @@ import { useNavbarHeight } from '../../hooks/use-navbar-height';
 import { AdminTabHeader } from './modules/headers/AdminTabHeader';
 import { Tab } from '../../types/tabs';
 import { AppState, dispatch, useAppSelector } from '../../store/configureStore';
-import {
-  setAdminSearchTerm,
-  setSelectedGameId,
-  setSelectedId,
-  setSelectedTab,
-} from '../../store/dataSlice';
 import { useEffect } from 'react';
 import { AdminDataRenderer } from './modules/renderers/AdminDataRenderer';
-
-export enum TabLabel {
-  GAMES = 'Games',
-  SETS = 'Sets',
-  CARD_TYPES = 'Card Types',
-  RARITIES = 'Rarities',
-  ATTRIBUTES = 'Attributes',
-}
+import {
+  setAdminSearchTerm,
+  setSelectedAdminTab,
+  setSelectedGameId,
+  setSelectedId,
+} from '../../store/adminSlice';
+import { AdminTabLabel } from '../../enums/adminTabLabel';
 
 const adminTabs: Tab[] = [
   {
-    label: TabLabel.GAMES,
+    label: AdminTabLabel.GAMES,
     icon: <IconDeviceGamepad />,
   },
   {
-    label: TabLabel.SETS,
+    label: AdminTabLabel.SETS,
     icon: <IconCards />,
   },
   {
-    label: TabLabel.CARD_TYPES,
+    label: AdminTabLabel.CARD_TYPES,
     icon: <IconPlayCard />,
   },
   {
-    label: TabLabel.RARITIES,
+    label: AdminTabLabel.RARITIES,
     icon: <IconChartTreemap />,
   },
   {
-    label: TabLabel.ATTRIBUTES,
+    label: AdminTabLabel.ATTRIBUTES,
     icon: <IconCoffin />,
   },
 ];
@@ -55,18 +48,18 @@ export function AdminPage(): React.ReactElement {
   const { classes } = useStyles();
 
   const selectedTab = useAppSelector(
-    (state: AppState) => state.data.selectedTab
+    (state: AppState) => state.admin.selectedTab
   );
 
   const handleTabChange = (value: TabsValue) => {
-    dispatch(setSelectedTab(value));
+    dispatch(setSelectedAdminTab(value));
     dispatch(setAdminSearchTerm(''));
     dispatch(setSelectedGameId(0));
     dispatch(setSelectedId(0));
   };
 
   useEffect(() => {
-    dispatch(setSelectedTab(TabLabel.GAMES));
+    dispatch(setSelectedAdminTab(AdminTabLabel.GAMES));
   }, []);
 
   return (
@@ -90,7 +83,7 @@ export function AdminPage(): React.ReactElement {
           value={tab.label}
           className={classes.panelContainer}
         >
-          <AdminTabHeader tabTitle={tab.label} />
+          <AdminTabHeader label={tab.label} />
 
           <AdminDataRenderer label={tab.label} />
         </Tabs.Panel>
