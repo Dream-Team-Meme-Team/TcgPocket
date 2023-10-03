@@ -85,21 +85,25 @@ export function PrimaryNavigation(): React.ReactElement {
 
 function navbarSx(theme: MantineTheme): CSSObject {
   return {
-    borderBottom: `1px solid ${theme.colors.blue[3]}`,
-    boxShadow: `0px 0px 4px ${theme.colors.blue[5]}`,
+    borderBottom: `1px solid '#314652'`,
+    boxShadow: `0px 0px 4px #314652`,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: '0rem 2rem 0rem 1rem',
-    background: theme.white,
+    background: '#13222B',
   };
 }
 
 function profileIconSx(theme: MantineTheme): CSSObject {
   return {
-    backgroundColor: `${theme.colors.blue[0]}`,
+    backgroundColor: '#823372',
+    color: 'white',
     borderRadius: '5em',
+    ':hover': {
+      backgroundColor: '#662158',
+    },
   };
 }
 
@@ -109,7 +113,7 @@ function logoIconSx(theme: MantineTheme): CSSObject {
     borderRadius: '15px',
     transition: 'ease-in .2s',
     ':hover': {
-      backgroundColor: theme.colors.blue[1],
+      backgroundColor: '#314652',
     },
   };
 }

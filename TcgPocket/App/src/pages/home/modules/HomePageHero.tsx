@@ -1,4 +1,5 @@
 import {
+  AspectRatio,
   createStyles,
   Container,
   Text,
@@ -29,15 +30,30 @@ export function HeroTitle() {
   return (
     <>
       <div className={classes.wrapper}>
-        <Container size={800} className={classes.inner} color="blue">
+        <AspectRatio
+          ratio={1 / 1}
+          maw={rem(2000)}
+          miw={rem(50)}
+          w={rem(750)}
+          mx={40}
+          className={classes.imageWrapper}
+        >
+          <img
+            className={classes.image}
+            src={
+              'https://images.unsplash.com/photo-1627693685101-687bf0eb1222?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+            }
+          />
+        </AspectRatio>
+        <Container className={classes.inner} color="blue">
           <h1 className={classes.title}>Welcome to </h1>
           <h1 className={classes.title}>
-            <Text component="span" variant="gradient" color="blue" inherit>
+            <Text component="span" color="#9c498b" inherit>
               TCG Pocket
             </Text>
           </h1>
 
-          <Text className={classes.description} color="dimmed">
+          <Text className={classes.description} color="white">
             Presenting a trading card game inventory management system along
             with a deck builder. Just upload images of your MTG, Pokémon, and
             Yu-Gi-Oh! cards and allow our card scanner to add the cards to your
@@ -67,6 +83,7 @@ export function HeroTitle() {
           </Group>
         </Container>
       </div>
+      <div className={classes.blackDivider} />
 
       <LoginModal openModal={openLoginModal} setOpenModal={setOpenLoginModal} />
       <RegisterModal
@@ -78,17 +95,51 @@ export function HeroTitle() {
 }
 
 const useStyles = createStyles((theme: MantineTheme) => ({
-  wrapper: {
+  blackDivider: {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    borderColor: 'rgba(0, 0, 0, 0.5)',
+    boxShadow: `0px 0px 70px 3.5rem ${'rgba(5, 5, 15, 1)'}`,
+    height: '0.05px',
     position: 'relative',
-    boxSizing: 'border-box',
-    background: 'transparent',
+  },
+
+  wrapper: {
+    // background: '#9190D5',
+    height: rem(900),
+    display: 'flex',
+    justifyContent: 'space-around',
+    backgroundImage:
+      'linear-gradient(to bottom, rgba(229, 216, 232,0.1) 0%,rgba(0, 0, 0,0.1) 100%), url(' +
+      'https://images.unsplash.com/photo-1654198340681-a2e0fc449f1b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80' +
+      ')',
+    backgroundSize: 'cover',
+    backgroundPositionY: 'center',
+    backgroundRepeat: 'no-repeat',
+  },
+
+  image: {
+    borderRadius: '9999999rem !important',
+    boxShadow: `5px 10px 20px 1px #000`,
+  },
+
+  imageWrapper: {
+    verticalAlign: 'middle !important',
+    display: 'flex',
+    alignItems: 'end',
+    padding: 'auto',
+    margin: 'auto',
   },
 
   inner: {
     position: 'relative',
-    alignItems: 'space-between',
-    paddingTop: rem(50),
-    paddingBottom: rem(50),
+    alignItems: 'center',
+    paddingTop: rem(225),
+    paddingBottom: rem(350),
+    margin: 'inherit',
+    // backgroundImage:
+    //   'url(' +
+    //   'https://images.unsplash.com/photo-1635431289101-ef85326518f2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80' +
+    //   ')',
 
     [theme.fn.smallerThan('sm')]: {
       paddingBottom: rem(80),
@@ -98,13 +149,14 @@ const useStyles = createStyles((theme: MantineTheme) => ({
 
   title: {
     fontFamily: `Greycliff CF, ${theme.fontFamily}`,
-    fontSize: rem(62),
+    textAlign: 'center',
+    fontSize: rem(72),
     fontWeight: 900,
     lineHeight: 1.1,
     textShadow: '7px 7px 10px rgba(0, 0, 0, .12)',
     margin: 0,
     padding: 0,
-    color: theme.colorScheme === 'dark' ? theme.white : theme.black,
+    color: 'white',
 
     [theme.fn.smallerThan('sm')]: {
       fontSize: rem(42),
@@ -114,7 +166,8 @@ const useStyles = createStyles((theme: MantineTheme) => ({
 
   description: {
     marginTop: theme.spacing.xl,
-    fontSize: rem(24),
+    fontSize: rem(34),
+    textAlign: 'center',
 
     [theme.fn.smallerThan('sm')]: {
       fontSize: rem(18),
@@ -123,6 +176,8 @@ const useStyles = createStyles((theme: MantineTheme) => ({
 
   controls: {
     marginTop: `calc(${theme.spacing.xl} * 2)`,
+    display: 'flex',
+    justifyContent: 'center',
 
     [theme.fn.smallerThan('sm')]: {
       marginTop: theme.spacing.xl,

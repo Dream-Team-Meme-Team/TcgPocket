@@ -5,11 +5,11 @@ import { ButtonHTMLAttributes } from 'react';
 type PrimaryButtonProps = ButtonProps & ButtonHTMLAttributes<HTMLButtonElement>;
 
 const buttonStyling = (theme: MantineTheme): CSSObject => ({
-  backgroundColor: theme.colors.primaryColor,
-  color: theme.colors.complimentaryColors[1],
+  backgroundColor: '#9c498b',
+  color: 'white',
 
   ':hover': {
-    backgroundColor: '#e2c2aa',
+    backgroundColor: '#4442AE',
   },
 });
 

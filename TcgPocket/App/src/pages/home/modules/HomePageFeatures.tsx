@@ -9,7 +9,10 @@ import {
   Container,
   rem,
   Image,
+  AspectRatio,
+  Space,
 } from '@mantine/core';
+import { Home2 } from './HomePageTwo';
 
 const cardData = [
   {
@@ -38,55 +41,76 @@ export function FeaturesCards() {
     <Card
       key={feature.title}
       shadow="md"
-      radius="md"
+      radius={rem(12)}
       className={classes.card}
       padding="xl"
     >
-      <Image src={feature.src} radius={10} height={450} />
-      <Text fz="lg" fw={500} className={classes.cardTitle} mt="md">
-        {feature.title}
-      </Text>
-      <Text fz="sm" c="dimmed" mt="sm">
-        {feature.description}
-      </Text>
+      <AspectRatio ratio={16 / 9} h={445}>
+        <Image src={feature.src} radius={20} height={445} />
+      </AspectRatio>
+      <Space h={rem(13)} />
+      <div className={classes.cardInfo}>
+        <Text
+          fz="lg"
+          fw={500}
+          color="white"
+          className={classes.cardTitle}
+          mt="md"
+        >
+          {feature.title}
+        </Text>
+        <Text fz="md" c="white" mt="sm">
+          {feature.description}
+        </Text>
+      </div>
     </Card>
   ));
 
   return (
-    <div className={classes.et}>
-      <Container size="lg" py="xl">
-        <Group position="center">
-          <Badge variant="filled" size="lg">
-            Trading Card Games
-          </Badge>
-        </Group>
+    <>
+      <div className={classes.et}>
+        <Container className={classes.cardContainer} mb={rem(80)} size="xl">
+          <Group position="center">
+            <Badge className={classes.badge} variant="filled" size="xl">
+              Trading Card Games
+            </Badge>
+          </Group>
 
-        <Title order={2} className={classes.title} ta="center" mt="sm">
-          Three classic trading card games.
-        </Title>
+          <Title order={2} className={classes.title} ta="center" mt="sm">
+            Three classic trading card games.
+          </Title>
 
-        <Text c="dark" className={classes.description} ta="center" mt="md">
-          Gather your inventory and create decks for some of your favorite cards
-          games all in one convenient spot!
-        </Text>
+          <Text c="#e5d8e8" className={classes.description} ta="center" mt="md">
+            Gather your inventory and create decks for some of your favorite
+            cards games all in one convenient spot!
+          </Text>
 
-        <SimpleGrid
-          cols={3}
-          spacing="xl"
-          mt={50}
-          breakpoints={[{ maxWidth: 'md', cols: 1 }]}
-        >
-          {features}
-        </SimpleGrid>
-      </Container>
-    </div>
+          <SimpleGrid
+            cols={3}
+            spacing="xl"
+            mt={50}
+            breakpoints={[{ maxWidth: 'md', cols: 1 }]}
+          >
+            {features}
+          </SimpleGrid>
+        </Container>
+        <Home2 />
+      </div>
+    </>
   );
 }
 
 const useStyles = createStyles((theme) => ({
+  cardContainer: {
+    padding: '50px 50px 100px 50px',
+    backgroundColor: 'rgba(64,18,56,0.7)',
+    borderRadius: '50px',
+  },
+
   title: {
     fontSize: rem(34),
     fontWeight: 900,
+    color: '#e5d8e8',
 
     [theme.fn.smallerThan('sm')]: {
       fontSize: rem(24),
@@ -94,8 +118,22 @@ const useStyles = createStyles((theme) => ({
   },
 
   et: {
-    paddingTop: rem(50),
-    paddingBottom: rem(100),
+    paddingTop: rem(200),
+    background: 'rgba(49, 70, 82, .95)',
+    backgroundImage:
+      'url(' +
+      'https://images.unsplash.com/photo-1635431289101-ef85326518f2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80' +
+      ')',
+    backgroundSize: 'cover',
+    backgroundPositionY: 'center',
+    backgroundRepeat: 'no-repeat',
+    // filter: 'blur(99px)',
+  },
+
+  badge: {
+    background: '#13222B',
+    color: 'white',
+    padding: '1.15rem',
   },
 
   description: {
@@ -105,31 +143,46 @@ const useStyles = createStyles((theme) => ({
     '&::after': {
       content: '""',
       display: 'block',
-      backgroundColor: theme.fn.primaryColor(),
+      backgroundColor: 'purple',
       width: rem(45),
       height: rem(2),
-      marginTop: theme.spacing.sm,
+      marginTop: rem(13),
       marginLeft: 'auto',
       marginRight: 'auto',
     },
   },
 
   card: {
-    border: `${rem(1)} solid ${
-      theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[1]
-    }`,
-    backgroundColor: theme.white,
-    boxShadow: `0px 0px 20px ${theme.colors.blue[5]}`,
+    // backgroundColor: '#D0CFEE',
+    backgroundSize: 'cover',
+    backgroundPositionY: 'top',
+    backgroundPositionX: 'right',
+    backgroundRepeat: 'no-repeat',
+    backgroundImage:
+      'linear-gradient(to bottom, rgba(64,18,56,0.5) 0%, rgba(64,18,56,0.5) 100%), url(' +
+      'https://images.unsplash.com/photo-1638489440786-0ab170d0ae9c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80' +
+      ')',
+    boxShadow: `0px 0px 10px 1px #9c498b`,
   },
 
   cardTitle: {
     '&::after': {
       content: '""',
       display: 'block',
-      backgroundColor: theme.fn.primaryColor(),
+      backgroundColor: 'purple',
       width: rem(45),
       height: rem(2),
       marginTop: theme.spacing.sm,
     },
+  },
+
+  cardInfo: {
+    padding: '0.05rem 1rem 1rem 1rem',
+    verticalAlign: 'bottom',
+    backgroundColor: 'rgba(18, 16, 43, 1)',
+    height: '12rem',
+    color: 'white',
+    borderRadius: '5px 30px 5px 30px',
+    boxShadow: `0px 0px 5px 0.1rem purple`,
   },
 }));
