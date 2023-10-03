@@ -9,8 +9,8 @@ class YugiohScraper:
             raw_card: user uploaded image of card
             return: one cropped img containing the unique code
         """
-        code = np.array(raw_card.resize([421,614]))[435:460, 295:385, :]
-        
+        code = np.array(raw_card.resize([421,614]))[20:70, 30:330, :]
+
         return code
     
     def read_card(self, filt_cards: list):
@@ -22,7 +22,7 @@ class YugiohScraper:
 
         params = []
         for card in filt_cards:
-            params.append(tess.image_to_string(card).strip('\n'))
+            params.append(tess.image_to_string(card, config="--psm 13").strip('\n'))
         
         return params
 
