@@ -1,15 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { userSlice } from './userSlice';
+import { authSlice } from './authSlice';
 import { TypedUseSelectorHook, useSelector } from 'react-redux';
-import { inventorySlice } from './inventorySlice';
 import { dataSlice } from './dataSlice';
+import { adminSlice } from './adminSlice';
 
 export const appStore = configureStore({
-    reducer: {
-        user: userSlice.reducer,
-        data: dataSlice.reducer,
-        inventory: inventorySlice.reducer,
-    },
+  reducer: {
+    user: authSlice.reducer,
+    data: dataSlice.reducer,
+    admin: adminSlice.reducer,
+  },
 });
 
 export type AppState = ReturnType<typeof appStore.getState>;

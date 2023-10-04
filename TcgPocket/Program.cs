@@ -1,4 +1,8 @@
+using Microsoft.AspNetCore.Identity;
 using TcgPocket;
+using TcgPocket.Features.Roles;
+using TcgPocket.Features.Users;
+using TcgPocket.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.json");
@@ -24,5 +28,19 @@ app.UseCors(policyBuilder =>
         .AllowAnyHeader()
         .AllowCredentials();
 });
+
+SeedData(app);
+
+void SeedData(IApplicationBuilder app)
+{
+    var scoped = app.ApplicationServices.CreateScope();
+
+    var userManager = scoped.ServiceProvider.GetService<UserManager<User>>();
+    var roleManager = scoped.ServiceProvider.GetService<RoleManager<Role>>();
+
+
+    var dataContext = scoped.ServiceProvider.GetService<DataContext>();
+    dataContext.Seed(userManager, roleManager);
+}
 
 app.Run();

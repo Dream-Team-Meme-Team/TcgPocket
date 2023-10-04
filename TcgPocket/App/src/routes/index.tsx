@@ -1,11 +1,12 @@
 import { Env } from '../constants/env';
 
 export const routes = {
-    home: '/',
-    inventory: '/inventory',
-    cardUpload: '/card-upload',
-    deck: '/deck',
-    settings: 'settings',
+  home: '/',
+  inventory: '/inventory',
+  cardUpload: '/card-upload',
+  deckBuilder: '/deck-builder',
+  adminPortal: '/admin-portal',
+  settings: 'settings',
 };
 
 export const apiRoutes = {

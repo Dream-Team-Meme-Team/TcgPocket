@@ -3,28 +3,36 @@ import { routes } from '.';
 import { ErrorPage } from '../pages/error/ErrorPage';
 import { NotFoundPage } from '../pages/notFound/NotFoundPage';
 import { HomePage } from '../pages/home/HomePage';
-import { InventoryPage } from '../pages/inventory/InventoryPage';
-import { DeckPage } from '../pages/deck/DeckPage';
+import { SettingsPage } from '../pages/settings/SettingsPage';
+import { useAppSelector } from '../store/configureStore';
+import { AdminPage } from '../pages/admin/AdminPage';
 
 export const AppRoutes = () => {
-    return (
-        <Routes>
-            <Route
-                path={routes.home}
-                element={<HomePage />}
-                errorElement={<ErrorPage />}
-            />
-            <Route
-                path={routes.inventory}
-                element={<InventoryPage />}
-                errorElement={<ErrorPage />}
-            />
-            <Route
-                path={routes.deck}
-                element={<DeckPage />}
-                errorElement={<ErrorPage />}
-            />
-            <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-    );
+  const user = useAppSelector((state) => state.user.user);
+
+  return (
+    <Routes>
+      <Route
+        path={routes.home}
+        element={<HomePage />}
+        errorElement={<ErrorPage />}
+      />
+      {user && (
+        <Route
+          path={routes.settings}
+          element={<SettingsPage />}
+          errorElement={<ErrorPage />}
+        />
+      )}
+      {/* will need to be for ADMINS only */}
+      {user && (
+        <Route
+          path={routes.adminPortal}
+          element={<AdminPage />}
+          errorElement={<ErrorPage />}
+        />
+      )}
+      <Route path="*" element={<NotFoundPage />} />
+    </Routes>
+  );
 };

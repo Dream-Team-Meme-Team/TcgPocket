@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using TcgPocket.Features.CardAttributes;
 
 namespace TcgPocket.Features.Attributes;
 
@@ -8,5 +9,7 @@ public class AttributeMapper : Profile
 	{
 		CreateMap<Attribute, AttributeGetDto>();
 		CreateMap<Attribute, AttributeDto>().ReverseMap();
+
+		CreateMap<Attribute, CardAttributeDto>();
 	}
 }

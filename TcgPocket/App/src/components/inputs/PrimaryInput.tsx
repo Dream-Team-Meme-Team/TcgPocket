@@ -5,11 +5,11 @@ import { InputHTMLAttributes } from 'react';
 type PrimaryInputProps = InputProps & InputHTMLAttributes<HTMLInputElement>;
 
 const inputStyling = (theme: MantineTheme): CSSObject => ({
-    input: {
-        background: theme.white,
-        borderColor: theme.colors.complimentaryColors[0],
-        borderWidth: 2,
-        backgroundColor: 'white',
+  input: {
+    background: theme.white,
+    borderColor: theme.colors.complimentaryColors[0],
+    borderWidth: 1,
+    backgroundColor: 'white',
 
         ':focus': {
             borderColor: theme.colors.primaryColor[0],

@@ -1,125 +1,138 @@
 import {
-    ActionIcon,
-    CSSObject,
-    Flex,
-    Image,
-    MantineTheme,
-    Menu,
-    Navbar,
+  ActionIcon,
+  CSSObject,
+  Flex,
+  Image,
+  MantineTheme,
+  Menu,
+  Navbar,
 } from '@mantine/core';
-import { IconLogin, IconRegistered, IconUser } from '@tabler/icons-react';
-import React from 'react';
+import {
+  IconLogin,
+  IconLogout,
+  IconRegistered,
+  IconSettings,
+  IconUser,
+} from '@tabler/icons-react';
+import React, { useMemo } from 'react';
 import { routes } from '../routes';
 import { NavButton } from './NavButton';
-import { LoginModal } from '../components/modals/LoginModal';
-import { RegisterModal } from '../components/modals/RegisterModal';
+import { LoginModal } from '../components/modals/AuthModals/LoginModal';
+import { RegisterModal } from '../components/modals/AuthModals/RegisterModal';
 import { useDisclosure } from '@mantine/hooks';
 import { useNavbarHeight } from '../hooks/use-navbar-height';
+import { useNavigate } from 'react-router-dom';
+import { signOutUser } from '../services/AuthServices';
+import { dispatch, useAppSelector } from '../store/configureStore';
 
 export function PrimaryNavigation(): React.ReactElement {
-    // const navigate = useNavigate();
-    const { navbarHeight } = useNavbarHeight();
+  const navigate = useNavigate();
+  const { navbarHeight } = useNavbarHeight();
 
-    const [loginState, login] = useDisclosure(false);
-    const [registerState, register] = useDisclosure(false);
+  const signedInUser = useAppSelector((state) => state.user.user);
 
-    // const onLogoutClick = () => {
-    //   console.log('log out');
-    // };
+  const [loginState, login] = useDisclosure(false);
+  const [registerState, register] = useDisclosure(false);
 
-    return (
-        <>
-            <Navbar height={navbarHeight} sx={navbarSx}>
-                <NavButton route={routes.home} sx={logoIconSx}>
-                    <Image maw={navbarHeight - 16} src="./TcgPocketLogo.svg" />
-                </NavButton>
-                <Flex align={'center'} gap={25}>
-                    <Flex gap={10}>
-                        <NavButton route={routes.inventory}>
-                            Inventory
-                        </NavButton>
-                        <NavButton route={routes.cardUpload}>
-                            Upload Cards
-                        </NavButton>
-                        <NavButton route={routes.deck}> Decks </NavButton>
-                    </Flex>
+  const handleSignOut = () => {
+    dispatch(signOutUser());
+    navigate(routes.home);
+  };
 
-                    <Menu>
-                        <Menu.Target>
-                            <ActionIcon size={40} sx={profileIconSx}>
-                                <IconUser size={30} />
-                            </ActionIcon>
-                        </Menu.Target>
+  const determineUserState = useMemo(() => {
+    return signedInUser === undefined || signedInUser === null ? false : true;
+  }, [signedInUser]);
 
-                        <Menu.Dropdown>
-                            <Menu.Item
-                                icon={<IconLogin size={14} />}
-                                onClick={login.open}
-                            >
-                                Login
-                            </Menu.Item>
-                            <Menu.Item
-                                icon={<IconRegistered size={14} />}
-                                onClick={register.open}
-                            >
-                                Register
-                            </Menu.Item>
+  return (
+    <>
+      <Navbar height={navbarHeight} sx={navbarSx}>
+        <NavButton route={routes.home} sx={logoIconSx}>
+          <Image maw={navbarHeight - 16} src="./TcgPocketLogo.svg" />
+        </NavButton>
+        <Flex align={'center'} gap={25}>
+          {determineUserState && (
+            <Flex gap={10}>
+              <NavButton route={routes.inventory}>Inventory</NavButton>
+              <NavButton route={routes.cardUpload}>Upload Cards</NavButton>
+              {/* <NavButton route={routes.deckBuilder}> Deck Builder</NavButton> */}
+              <NavButton route={routes.adminPortal}> Admin Portal </NavButton>
+            </Flex>
+          )}
 
-                            {/* when a user is logged in, these should be displayed */}
+          <Menu>
+            <Menu.Target>
+              <ActionIcon size={40} sx={profileIconSx}>
+                <IconUser size={30} />
+              </ActionIcon>
+            </Menu.Target>
 
-                            {/* <Menu.Item
-                icon={<IconSettings size={14} />}
-                onClick={() => navigate(routes.settings)}
-                >
-                Settings
+            {!determineUserState && (
+              <Menu.Dropdown>
+                <Menu.Item icon={<IconLogin size={14} />} onClick={login.open}>
+                  Login
                 </Menu.Item>
                 <Menu.Item
-                icon={<IconLogout size={14} />}
-                onClick={onLogoutClick}
+                  icon={<IconRegistered size={14} />}
+                  onClick={register.open}
                 >
-                Logout
-              </Menu.Item> */}
-                        </Menu.Dropdown>
-                    </Menu>
-                </Flex>
-            </Navbar>
+                  Register
+                </Menu.Item>
+              </Menu.Dropdown>
+            )}
 
-            <LoginModal openModal={loginState} setOpenModal={login.close} />
-            <RegisterModal
-                openModal={registerState}
-                setOpenModal={register.close}
-            />
-        </>
-    );
+            {determineUserState && (
+              <Menu.Dropdown>
+                <Menu.Item
+                  icon={<IconSettings size={14} />}
+                  onClick={() => navigate(routes.settings)}
+                >
+                  Settings
+                </Menu.Item>
+                <Menu.Item
+                  icon={<IconLogout size={14} />}
+                  onClick={handleSignOut}
+                >
+                  Logout
+                </Menu.Item>
+              </Menu.Dropdown>
+            )}
+          </Menu>
+        </Flex>
+      </Navbar>
+
+      <LoginModal open={loginState} setOpen={login.close} />
+      <RegisterModal open={registerState} setOpen={register.close} />
+    </>
+  );
 }
 
 function navbarSx(theme: MantineTheme): CSSObject {
-    return {
-        borderBottom: `1px solid ${theme.colors.blue[3]}`,
-        boxShadow: `0px 0px 4px ${theme.colors.blue[5]}`,
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: '0rem 2rem 0rem 1rem',
-        background: theme.white,
-    };
+  return {
+    borderBottom: `1px solid ${theme.colors.blue[3]}`,
+    boxShadow: `0px 0px 4px ${theme.colors.blue[5]}`,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '0rem 2rem 0rem 1rem',
+    background: theme.white,
+  };
 }
 
 function profileIconSx(theme: MantineTheme): CSSObject {
-    return {
-        backgroundColor: `${theme.colors.blue[0]}`,
-        borderRadius: '5em',
-    };
+  return {
+    backgroundColor: `${theme.colors.blue[0]}`,
+    borderRadius: '5em',
+  };
 }
 
 function logoIconSx(theme: MantineTheme): CSSObject {
-    return {
-        padding: '4px 4px',
-        borderRadius: '15px',
-        transition: 'ease-in .2s',
-        ':hover': {
-            backgroundColor: theme.colors.blue[1],
-        },
-    };
+  return {
+    padding: '4px 4px',
+    borderRadius: '15px',
+    transition: 'ease-in .2s',
+    ':hover': {
+      backgroundColor: theme.colors.blue[1],
+    },
+  };
 }
