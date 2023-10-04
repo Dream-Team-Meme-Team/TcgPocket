@@ -40,8 +40,8 @@ export function RegisterModal({
   const isLoading = useAppSelector((state) => state.user.isLoading);
 
   const form = useForm({
+    validateInputOnBlur: true,
     initialValues: initialValues,
-    validateInputOnChange: true,
     validate: {
       userName: (value) =>
         validateTextInput(value) ? 'Invalid Username' : null,

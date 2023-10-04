@@ -13,14 +13,19 @@ type PrimaryPasswordInputProps = TextInputProps &
 
 const textInputStyling = (theme: MantineTheme): CSSObject => ({
   input: {
-    background: theme.white,
-    borderColor: theme.colors.complimentaryColors[0],
+    color: 'black',
+    background: theme.fn.lighten(theme.colors.primaryPurpleColor[0], 0.7),
+    backgroundColor: theme.fn.lighten(theme.colors.primaryPurpleColor[0], 0.7),
+    borderColor: theme.colors.grape[9],
     borderWidth: 1,
-    backgroundColor: 'white',
 
     ':focus': {
-      borderColor: theme.colors.primaryColor[0],
+      borderColor: theme.colors.secondaryBlueColors[0],
     },
+  },
+  label: {
+    color: theme.fn.darken(theme.white, 0.15),
+    fontSize: '16px',
   },
 });
 
@@ -36,9 +41,20 @@ export function PrimaryPasswordInput({
       sx={sx ?? textInputStyling}
       type={hidden ? 'password' : ''}
       {...props}
+      styles={{
+        error: {
+          fontWeight: 600,
+          fontSize: '13px',
+          textShadow: '-2px 2px 5px rgba(0,0,0,0.6)',
+        },
+      }}
       rightSection={
         <ActionIcon onClick={() => setHidden(!hidden)}>
-          {hidden ? <IconEye /> : <IconEyeClosed />}
+          {hidden ? (
+            <IconEye color="#13222B" />
+          ) : (
+            <IconEyeClosed color="#13222B" />
+          )}
         </ActionIcon>
       }
     >

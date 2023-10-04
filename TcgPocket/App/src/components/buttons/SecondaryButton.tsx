@@ -5,11 +5,16 @@ type SecondaryButtonProps = ButtonProps &
   ButtonHTMLAttributes<HTMLButtonElement>;
 
 const buttonStyling = (theme: MantineTheme): CSSObject => ({
-  backgroundColor: theme.colors.gray[5],
-  color: theme.colors.secondaryBlueColors[1],
+  backgroundColor: theme.colors.dark[1],
+  color: theme.black,
 
   ':hover': {
-    backgroundColor: theme.colors.secondaryBlueColors[0],
+    backgroundColor: theme.colors.dark[2],
+  },
+
+  ':disabled': {
+    backgroundColor: theme.fn.darken(theme.colors.dark[3], 0.15),
+    color: theme.colors.dark[8],
   },
 });
 
