@@ -17,8 +17,6 @@ export async function apiCall<TResult = any>({
   body,
   params,
 }: ApiCallParameters) {
-  console.log('params: ', params);
-
   const response = axios<Response<TResult>>({
     method: method,
     url: endpoint,
