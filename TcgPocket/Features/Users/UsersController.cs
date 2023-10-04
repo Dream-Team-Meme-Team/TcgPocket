@@ -6,7 +6,6 @@ using TcgPocket.Features.Users.Commands;
 using TcgPocket.Features.Users.Dtos;
 using TcgPocket.Features.Users.Queries;
 using TcgPocket.Shared;
-using TcgPocket.Shared.Dtos;
 using TcgPocket.Shared.PagedResult;
 
 namespace TcgPocket.Features.Users;
@@ -56,7 +55,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet("{id:int}/games/{gameId:int}")]
-    public async Task<ActionResult<Response<PagedResult<CardGetDto>>>> GetAllCardsByGameIdAndUserIdQuery([FromRoute] int gameId, int id, [FromQuery] PageDto data)
+    public async Task<ActionResult<Response<PagedResult<CardDetailDto>>>> GetAllCardsByGameIdAndUserIdQuery([FromRoute] int gameId, int id, [FromQuery] PageDto data)
     {
         var response = await _mediator
             .Send(new GetAllCardsByGameIdAndUserIdQuery

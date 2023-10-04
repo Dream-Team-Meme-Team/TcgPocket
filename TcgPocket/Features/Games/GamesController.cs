@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using TcgPocket.Features.Games.Commands;
 using TcgPocket.Features.Games.Queries;
 using TcgPocket.Shared;
+using TcgPocket.Shared.Filter;
 
 namespace TcgPocket.Features.Games;
 
