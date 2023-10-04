@@ -53,5 +53,3 @@ export const {
     toggleAllFiltersOnInventory,
     removeAllFiltersOnInventory,
 } = inventorySlice.actions;
-
-export default inventorySlice.reducer;

@@ -5,11 +5,10 @@ import { defaultGap, defaultPadding } from '../../constants/theme';
 import { PrimarySelect } from '../inputs/PrimarySelect';
 import { removeAllFiltersOnInventory } from '../../store/inventorySlice';
 import { useEffect, useState } from 'react';
+import { GameGetDto } from '../../types/games';
+import React from 'react';
 import { ToggleShowAppliedFilters } from './modules/ToggleShowAppliedFilters';
 import { FilterCategories } from './modules/FilterCatergories';
-import { GameGetDto } from '../../types/games';
-import { getGames } from '../../store/dataSlice';
-import React from 'react';
 
 export type FilterSideMenuProps = {
     appliedFilters: GameGetDto[];
@@ -44,10 +43,10 @@ export function FilterSideMenu({
         } else setSelectedGame(foundGame);
     };
 
-    useEffect(() => {
-        // this is WRONG and im working on it
-        getGames();
-    }, []);
+    // useEffect(() => {
+    //     // this is WRONG and im working on it
+    //     getGames();
+    // }, []);
 
     console.log($games);
 

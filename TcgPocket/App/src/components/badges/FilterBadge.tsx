@@ -1,11 +1,12 @@
 import { ActionIcon, rem } from '@mantine/core';
 import { IconX } from '@tabler/icons-react';
 import { PrimaryBadge } from './PrimaryBadge';
-import { GameDTO } from '../../models/Game';
-import { FilterSideMenuProps } from '../FilterSideMenu/FilterSideMenu';
+import React from 'react';
+import { FilterSideMenuProps } from '../filterSideMenu/FilterSideMenu';
+import { GameGetDto } from '../../types/games';
 
 type FilterBadgeProps = Pick<FilterSideMenuProps, 'handleRemoveFilter'> & {
-    filter: GameDTO;
+    filter: GameGetDto;
 };
 
 export function FilterBadge({

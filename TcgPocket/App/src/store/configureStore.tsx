@@ -3,13 +3,15 @@ import { authSlice } from './authSlice';
 import { TypedUseSelectorHook, useSelector } from 'react-redux';
 import { dataSlice } from './dataSlice';
 import { adminSlice } from './adminSlice';
+import { inventorySlice } from './inventorySlice';
 
 export const appStore = configureStore({
-  reducer: {
-    user: authSlice.reducer,
-    data: dataSlice.reducer,
-    admin: adminSlice.reducer,
-  },
+    reducer: {
+        user: authSlice.reducer,
+        data: dataSlice.reducer,
+        admin: adminSlice.reducer,
+        inventory: inventorySlice.reducer,
+    },
 });
 
 export type AppState = ReturnType<typeof appStore.getState>;
