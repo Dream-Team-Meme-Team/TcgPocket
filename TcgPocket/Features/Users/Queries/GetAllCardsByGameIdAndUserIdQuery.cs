@@ -12,12 +12,12 @@ using TcgPocket.Shared.PagedResult;
 
 namespace TcgPocket.Features.Users.Queries;
 
-public class GetAllCardsByGameIdAndUserIdQuery : IRequest<Response<PagedResult<CardGetDto>>>
+public class GetAllCardsByGameIdAndUserIdQuery : IRequest<Response<PagedResult<CardDetailDto>>>
 {
     public UserCardGameDto UserCardGame { get; set; }
 }
 
-public class GetAllCardsByGameIdQueryHandler : IRequestHandler<GetAllCardsByGameIdAndUserIdQuery, Response<PagedResult<CardGetDto>>>
+public class GetAllCardsByGameIdQueryHandler : IRequestHandler<GetAllCardsByGameIdAndUserIdQuery, Response<PagedResult<CardDetailDto>>>
 {
     private readonly DataContext _dataContext;
     private readonly IMapper _mapper;
@@ -30,15 +30,17 @@ public class GetAllCardsByGameIdQueryHandler : IRequestHandler<GetAllCardsByGame
         _validator = validator;
     }
 
-    public async Task<Response<PagedResult<CardGetDto>>> Handle(GetAllCardsByGameIdAndUserIdQuery query, CancellationToken cancellationToken)
+    public async Task<Response<PagedResult<CardDetailDto>>> Handle(GetAllCardsByGameIdAndUserIdQuery query, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(query, cancellationToken);
 
         if (!validationResult.IsValid)
         {
             var errors = _mapper.Map<List<Error>>(validationResult.Errors);
-            return new Response<PagedResult<CardGetDto>> { Errors = errors };
+            return new Response<PagedResult<CardDetailDto>> { Errors = errors };
         }
+
+        var (page, pageSize) = (query.UserCardGame.CurrentPage, query.UserCardGame.PageSize);
 
         var cards = await _dataContext.Set<UserCard>()
             .Include(x => x.User)
@@ -47,10 +49,10 @@ public class GetAllCardsByGameIdQueryHandler : IRequestHandler<GetAllCardsByGame
                 && x.Card.GameId == query.UserCardGame.GameId)
             .Select(x => x.Card)
             .OrderByDescending(x => x.Id)
-            .GetPagedAsync(query.UserCardGame.CurrentPage, query.UserCardGame.PageSize, cancellationToken);
+            .GetPagedAsync<Card ,CardDetailDto>(_mapper, page, pageSize);
 
-        if (cards.Items.IsNullOrEmpty()) return Error.AsResponse<PagedResult<CardGetDto>>("Cards not found", "gameId and userId");
+        if (cards.Items.IsNullOrEmpty()) return Error.AsResponse<PagedResult<CardDetailDto>>("Cards not found", "gameId and userId");
 
-        return _mapper.Map<PagedResult<CardGetDto>>(cards).AsResponse();
+        return _mapper.Map<PagedResult<CardDetailDto>>(cards).AsResponse();
     }
 }
