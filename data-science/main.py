@@ -3,10 +3,6 @@ from PIL import Image
 from io import BytesIO
 from cnn.apiKeys import IDK_API_KEY
 import torchvision.transforms as transform
-import numpy as np
-import pytesseract as tess
-import cv2
-import os
 
 from scraper.magic_scraper import MagicScraper
 from scraper.yugioh_scraper import YugiohScraper
@@ -45,6 +41,8 @@ from_PIL = transform.Compose([transform.PILToTensor()])
 resp_pkm = requests.get('https://images.pokemontcg.io/bw9/11_hires.png', headers = {'X-Api-Key': IDK_API_KEY, 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'})
 img_pkm_raw = Image.open(BytesIO(resp_pkm.content))
 # img_pkm_raw.show()
+
+# img_pkm_raw = Image.open('')     # TODO from directory
 
 pkm_scrape = PokemonScraper()
 filt = pkm_scrape.apply_filter(img_pkm_raw)
