@@ -20,9 +20,12 @@ export type Id = {
 };
 
 export type Fn<TValue = void, TResult = void> = (values: TValue) => TResult;
+
 export type PageDto = {
-  currentPage: number;
-  pageSize: number;
+  currentPage?: number;
+  pageSize?: number;
+  sortBy?: string;
+  orderBy?: 'asc' | 'desc';
 };
 
 export type PagedResult<TDto = any> = {

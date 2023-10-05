@@ -1,4 +1,4 @@
-﻿using TcgPocket.Shared.Dtos;
+﻿using TcgPocket.Shared.PagedResult;
 
 namespace TcgPocket.Features.Users.Dtos
 {
