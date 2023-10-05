@@ -6,7 +6,6 @@ using TcgPocket.Features.Users.Commands;
 using TcgPocket.Features.Users.Dtos;
 using TcgPocket.Features.Users.Queries;
 using TcgPocket.Shared;
-using TcgPocket.Shared.Dtos;
 using TcgPocket.Shared.PagedResult;
 
 namespace TcgPocket.Features.Users;
@@ -56,7 +55,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet("{id:int}/games/{gameId:int}")]
-    public async Task<ActionResult<Response<PagedResult<CardGetDto>>>> GetAllCardsByGameIdAndUserIdQuery([FromRoute] int gameId, int id, [FromQuery] PageDto data)
+    public async Task<ActionResult<Response<PagedResult<CardDetailDto>>>> GetAllCardsByGameIdAndUserIdQuery([FromRoute] int gameId, int id, [FromQuery] PageDto data)
     {
         var response = await _mediator
             .Send(new GetAllCardsByGameIdAndUserIdQuery
@@ -111,10 +110,10 @@ public class UsersController : ControllerBase
         return response.HasErrors ? BadRequest(response) : Ok(response);
     }
 
-    [HttpDelete("{id:int}")]
-    public async Task<ActionResult<Response>> DeleteUser([FromRoute] int id)
+    [HttpDelete]
+    public async Task<ActionResult<Response>> DeleteUser([FromBody] UserDeleteDto deleteDto)
     {
-        var response = await _mediator.Send(new DeleteUserCommand { Id = id });
+        var response = await _mediator.Send(new DeleteUserCommand { DeleteDto = deleteDto });
 
         return response.HasErrors ? BadRequest(response) : Ok(response);
     }

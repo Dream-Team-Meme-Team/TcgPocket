@@ -1,0 +1,73 @@
+Using cpu device
+Epoch 1 ----------------------------------------------------------
+loss: 1.069180  [   15/ 3000]
+loss: 1.104895  [ 1515/ 3000]
+Test Error:
+ Accuracy: 52.4%, Avg loss: 1.087007
+
+Saved Tenative PyTorch Model State
+Epoch 2 ----------------------------------------------------------
+loss: 1.092236  [   15/ 3000]
+loss: 1.090020  [ 1515/ 3000]
+Test Error: 
+ Accuracy: 67.6%, Avg loss: 1.067379 
+
+Saved Tenative PyTorch Model State
+Epoch 3 ----------------------------------------------------------
+loss: 1.077313  [   15/ 3000]
+loss: 1.070916  [ 1515/ 3000]
+Test Error: 
+ Accuracy: 74.8%, Avg loss: 1.039027 
+
+Saved Tenative PyTorch Model State
+Epoch 4 ----------------------------------------------------------
+loss: 1.049528  [   15/ 3000]
+loss: 1.040302  [ 1515/ 3000]
+Test Error: 
+ Accuracy: 78.5%, Avg loss: 0.992822 
+
+Saved Tenative PyTorch Model State
+Epoch 5 ----------------------------------------------------------
+loss: 0.998898  [   15/ 3000]
+loss: 0.988093  [ 1515/ 3000]
+Test Error: 
+ Accuracy: 80.7%, Avg loss: 0.916743
+
+Saved Tenative PyTorch Model State
+Epoch 6 ----------------------------------------------------------
+loss: 0.910149  [   15/ 3000]
+loss: 0.901011  [ 1515/ 3000]
+Test Error: 
+ Accuracy: 82.3%, Avg loss: 0.802800
+
+Saved Tenative PyTorch Model State
+Epoch 7 ----------------------------------------------------------
+loss: 0.773566  [   15/ 3000]
+loss: 0.776118  [ 1515/ 3000]
+Test Error: 
+ Accuracy: 82.9%, Avg loss: 0.671499
+
+Saved Tenative PyTorch Model State
+Epoch 8 ----------------------------------------------------------
+loss: 0.614336  [   15/ 3000]
+loss: 0.646035  [ 1515/ 3000]
+Test Error: 
+ Accuracy: 83.5%, Avg loss: 0.565302
+
+Saved Tenative PyTorch Model State
+Epoch 9 ----------------------------------------------------------
+loss: 0.486530  [   15/ 3000]
+loss: 0.548498  [ 1515/ 3000]
+Test Error: 
+ Accuracy: 84.3%, Avg loss: 0.496223
+
+Saved Tenative PyTorch Model State
+Epoch 10 ----------------------------------------------------------
+loss: 0.408136  [   15/ 3000]
+loss: 0.485377  [ 1515/ 3000]
+Test Error: 
+ Accuracy: 84.8%, Avg loss: 0.450017
+
+Saved Tenative PyTorch Model State
+All Done, you can cry over the accuracy now     。゜゜(´Ｏ`) ゜゜。
+Saved Final PyTorch Model State

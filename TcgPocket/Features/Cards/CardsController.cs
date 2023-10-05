@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TcgPocket.Features.Cards.Commands;
+using TcgPocket.Features.Cards.Dtos;
 using TcgPocket.Features.Cards.Queries;
 using TcgPocket.Shared;
-using TcgPocket.Shared.Dtos;
 using TcgPocket.Shared.PagedResult;
 
 namespace TcgPocket.Features.Cards
@@ -20,9 +20,9 @@ namespace TcgPocket.Features.Cards
         }
 
         [HttpPost]
-        public async Task<ActionResult<Response<CardGetDto>>> CreateCard([FromBody] CardDto dto)
+        public async Task<ActionResult<Response<CardDetailDto>>> CreateCard([FromBody] CreateCardDto dto)
         {
-            var response = await _mediator.Send(new CreateCardCommand { CardDto = dto });
+            var response = await _mediator.Send(new CreateCardCommand { CreateCardDto = dto });
 
             return response.HasErrors
                 ? BadRequest(response)
@@ -38,7 +38,7 @@ namespace TcgPocket.Features.Cards
         }
 
         [HttpGet("{id}", Name = nameof(GetCardById))]
-        public async Task<ActionResult<Response<CardGetDto>>> GetCardById([FromRoute] int id)
+        public async Task<ActionResult<Response<CardDetailDto>>> GetCardById([FromRoute] int id)
         {
             var response = await _mediator.Send(new GetCardByIdQuery { Id = id });
 
@@ -46,10 +46,11 @@ namespace TcgPocket.Features.Cards
         }
 
         [HttpGet]
-        public async Task<ActionResult<Response<PagedResult<CardGetDto>>>> GetAllCardsPaginatedQuery([FromQuery]PageDto data)
+        public async Task<ActionResult<Response<PagedResult<CardDetailDto>>>> 
+            GetAllCardsPaginatedQuery([FromQuery] PagedCardFilterDto filter)
         {
             var response = await _mediator
-                .Send(new GetAllCardsPaginatedQuery { PageDto = data });
+                .Send(new GetPagedCardsQuery { Filter = filter });
 
             return response.HasErrors ? BadRequest(response) : Ok(response);
         }
