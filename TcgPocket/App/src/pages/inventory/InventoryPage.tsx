@@ -1,7 +1,6 @@
 import { createStyles } from '@mantine/core';
 import { DisplayCards } from './modules/DisplayCards';
-import { useSelector } from 'react-redux';
-import { AppState, dispatch } from '../../store/configureStore';
+import { dispatch, useAppSelector } from '../../store/configureStore';
 import {
     toggleAllFiltersOnInventory,
     toggleAppliedFilterOnInventory,
@@ -13,8 +12,8 @@ import React from 'react';
 export function InventoryPage(): React.ReactElement {
     const { classes } = useStyles();
 
-    const $appliedFilters = useSelector(
-        (state: AppState) => state.inventory.appliedFilters
+    const appliedFilters = useAppSelector(
+        (state) => state.inventory.appliedFilters
     );
 
     const handleTogglingFilter = (option: GameGetDto) => {
@@ -33,7 +32,7 @@ export function InventoryPage(): React.ReactElement {
         <div className={classes.pageContainer}>
             <div className={classes.filterAndCardContainer}>
                 <FilterSideMenu
-                    appliedFilters={$appliedFilters}
+                    appliedFilters={appliedFilters}
                     handleTogglingFilter={handleTogglingFilter}
                     handleSelectAllFilters={handleSelectAll}
                     handleRemoveFilter={handleRemoveFilter}

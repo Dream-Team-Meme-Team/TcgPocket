@@ -7,7 +7,7 @@ const selectStyling = (theme: MantineTheme): CSSObject => ({
     input: {
         backgroundColor: 'white',
         borderColor: theme.colors.complimentaryColors[0],
-        borderWidth: 2,
+        borderWidth: 1,
 
         ':focus': {
             borderColor: theme.colors.primaryColor[0],

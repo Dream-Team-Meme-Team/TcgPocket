@@ -1,9 +1,9 @@
 import { Collapse, createStyles } from '@mantine/core';
 import { PrimaryButton } from '../../buttons/PrimaryButton';
 import { defaultPadding } from '../../../constants/theme';
-import { FilterSideMenuProps } from '../FilterSideMenu';
 import { FilterBadge } from '../../badges/FilterBadge';
 import { useDisclosure } from '@mantine/hooks';
+import { FilterSideMenuProps } from '../FilterSideMenu';
 
 type ToggleShowAppliedFiltersProps = Pick<
     FilterSideMenuProps,

@@ -9,8 +9,8 @@ import {
     IconArrowBadgeUp,
     IconSearch,
 } from '@tabler/icons-react';
-import { FilterSideMenuProps } from '../FilterSideMenu';
 import { GameGetDto } from '../../../types/games';
+import { FilterSideMenuProps } from '../FilterSideMenu';
 
 type RenderFilterOptionsProps = Omit<
     FilterSideMenuProps,

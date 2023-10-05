@@ -9,6 +9,8 @@ import { GameGetDto } from '../../types/games';
 import React from 'react';
 import { ToggleShowAppliedFilters } from './modules/ToggleShowAppliedFilters';
 import { FilterCategories } from './modules/FilterCatergories';
+import { getAllGames } from '../../services/dataServices/GameServices';
+import { responseWrapper } from '../../services/helpers/responseWrapper';
 
 export type FilterSideMenuProps = {
     appliedFilters: GameGetDto[];
@@ -25,30 +27,32 @@ export function FilterSideMenu({
 }: FilterSideMenuProps): React.ReactElement {
     const { classes } = useStyles();
 
-    const $games = useSelector((state: AppState) => state.data.games);
+    const games = useSelector((state: AppState) => state.data.games);
 
     const [selectedGame, setSelectedGame] = useState<GameGetDto>({
         id: 0,
         name: '',
     });
 
+    const loadGames = async () => {
+        const { payload } = await dispatch(getAllGames());
+        responseWrapper(payload);
+    };
+
     const handleSelectChange = (
         game: string | React.ChangeEvent<HTMLInputElement> | null
     ) => {
         dispatch(removeAllFiltersOnInventory());
 
-        const foundGame = $games.find((value) => value.name === game);
+        const foundGame = games.find((value) => value.name === game);
         if (foundGame === undefined) {
             setSelectedGame({ id: 0, name: '' });
         } else setSelectedGame(foundGame);
     };
 
-    // useEffect(() => {
-    //     // this is WRONG and im working on it
-    //     getGames();
-    // }, []);
-
-    console.log($games);
+    useEffect(() => {
+        loadGames();
+    }, []);
 
     return (
         <div className={classes.filterSideMenuContainer}>
@@ -64,7 +68,7 @@ export function FilterSideMenu({
                     withinPortal
                     label="Select Game:"
                     value={selectedGame.name}
-                    data={$games.map((game) => game.name)}
+                    data={games.map((game) => game.name)}
                     onChange={(value) => handleSelectChange(value)}
                 />
             </div>
@@ -73,6 +77,7 @@ export function FilterSideMenu({
                 appliedFilters={appliedFilters}
                 handleSelectAllFilters={handleSelectAllFilters}
                 handleTogglingFilter={handleTogglingFilter}
+                selectedGame={selectedGame}
             />
         </div>
     );
