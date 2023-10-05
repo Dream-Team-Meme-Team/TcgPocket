@@ -13,10 +13,10 @@ class PokemonScraper:
             return: two cropped imgs containing the set number and set abbreviation
         """
         
+        name = np.array(raw_card.resize([421,614]))[20:60, 100:275, :]
         set_num = np.array(raw_card.resize([421,614]))[577:592, 330:363, :]
-        set_symb = np.array(raw_card.resize([421,614]))[570:595, 375:400, :]
 
-        return [set_num, set_symb]
+        return [set_num, name]
     
     def read_card(self, filt_attrbs: list):
         """
@@ -25,7 +25,8 @@ class PokemonScraper:
             return: the read values from list of cropped images
         """
         params = []
-        params.append(tess.image_to_string(filt_attrbs[0]).strip('\n'))
+        for attrb in filt_attrbs:
+            params.append(tess.image_to_string(attrb).strip('\n'))
 
         return params
 

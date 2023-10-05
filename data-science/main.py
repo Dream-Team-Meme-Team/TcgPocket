@@ -6,6 +6,7 @@ import torchvision.transforms as transform
 import numpy as np
 import pytesseract as tess
 import cv2
+import os
 
 from scraper.magic_scraper import MagicScraper
 from scraper.yugioh_scraper import YugiohScraper
@@ -41,21 +42,10 @@ from_PIL = transform.Compose([transform.PILToTensor()])
 
 """POKEMON"""
 # get and load up card from URL
-resp_pkm = requests.get('https://images.pokemontcg.io/bw8/1_hires.png', headers = {'X-Api-Key': IDK_API_KEY, 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'})
+resp_pkm = requests.get('https://images.pokemontcg.io/bw9/11_hires.png', headers = {'X-Api-Key': IDK_API_KEY, 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'})
 img_pkm_raw = Image.open(BytesIO(resp_pkm.content))
 # img_pkm_raw.show()
-
-# TODO from directory
 
 pkm_scrape = PokemonScraper()
 filt = pkm_scrape.apply_filter(img_pkm_raw)
 print(pkm_scrape.read_card(filt))
-
-# img = np.array(Image.open('data-science/data/tst.png').resize([421,614]))
-
-# if img_pkm_np_set.shape[2] == 4:
-#     img_pkm_np_set = cv2.resize(cv2.cvtColor(cv2.cvtColor(img, cv2.COLOR_BGRA2BGR), cv2.COLOR_BGR2GRAY), [421, 614])
-# else:
-#     img_pkm_np_set = cv2.resize(cv2.cvtColor(img, cv2.COLOR_RGB2BGR), [421, 614])
-
-# print((img_pkm_np_set - img).mean())
