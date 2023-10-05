@@ -1,4 +1,4 @@
-import { Tabs, createStyles } from '@mantine/core';
+import { MantineTheme, Tabs, createStyles } from '@mantine/core';
 import { IconUser } from '@tabler/icons-react';
 import { AccountTab } from './modules/AccountTab';
 import { useNavbarHeight } from '../../hooks/use-navbar-height';
@@ -19,7 +19,12 @@ export function SettingsPage(): React.ReactElement {
     >
       <Tabs.List>
         {tabs.map((tab, index) => (
-          <Tabs.Tab key={index} value={tab.label} icon={tab.icon}>
+          <Tabs.Tab
+            className={classes.tabStyle}
+            key={index}
+            value={tab.label}
+            icon={tab.icon}
+          >
             {tab.label}
           </Tabs.Tab>
         ))}
@@ -34,11 +39,24 @@ export function SettingsPage(): React.ReactElement {
   );
 }
 
-const useStyles = createStyles(() => {
+const useStyles = createStyles((theme: MantineTheme) => {
   const { remainingHeight } = useNavbarHeight();
   return {
     settingsPageContainer: {
       height: `${remainingHeight}px`,
+    },
+    tabStyle: {
+      borderColor: `${theme.fn.lighten(
+        theme.colors.secondaryPurpleColors[0],
+        0.25
+      )} !important`,
+
+      '&:hover': {
+        backgroundColor: theme.fn.rgba(
+          theme.colors.secondaryPurpleColors[0],
+          0.25
+        ),
+      },
     },
   };
 });

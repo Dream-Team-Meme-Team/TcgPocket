@@ -1,10 +1,4 @@
-import {
-  CSSObject,
-  MantineTheme,
-  Modal,
-  ModalBaseSettings,
-  ModalProps,
-} from '@mantine/core';
+import { Modal, ModalBaseSettings, ModalProps } from '@mantine/core';
 import { ModalRootProps } from '@mantine/core/lib/Modal/ModalRoot/ModalRoot';
 
 type PrimaryModalProps = ModalProps & ModalRootProps & ModalBaseSettings;

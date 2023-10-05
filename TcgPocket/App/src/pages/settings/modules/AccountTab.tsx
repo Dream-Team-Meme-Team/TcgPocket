@@ -33,7 +33,7 @@ const useStyles = createStyles((theme: MantineTheme) => {
     accountTabContainer: {
       display: 'flex',
       justifyContent: 'center',
-      backgroundColor: theme.fn.lighten(
+      backgroundColor: theme.fn.darken(
         theme.colors.secondaryBlueColors[2],
         0.15
       ),
