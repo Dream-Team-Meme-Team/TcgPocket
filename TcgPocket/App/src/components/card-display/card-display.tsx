@@ -133,12 +133,12 @@ const containerSx: CSSObject = {
   width: '23rem',
   borderRadius: '7px',
   willChange: 'transform',
-  transition: 'transform 550ms',
+  transition: 'transform 550ms, box-shadow 200ms',
 
   ':hover': {
     boxShadow:
       '0.1rem .1rem .4rem 0 rgba(0, 0, 0, 0.7), inset 0.1rem .1rem 10rem 2rem rgba(34, 22, 51, 0.2)',
-    transition: 'transform 150ms ease-out',
+    transition: 'transform 150ms ease-out, box-shadow 200ms ease-out',
     transform: 'translate3d(0px, -5px, 0px)',
   },
 };
@@ -163,8 +163,8 @@ const useStyles = createStyles((theme) => ({
   },
 
   invalidUrl: {
-    backgroundColor: 'rgba(76, 76, 76, 0.75)',
-    border: 'solid 6px rgba(46, 46, 46, 0.75)',
+    backgroundColor: 'rgba(95, 95, 95, 0.75)',
+    border: 'solid 6px rgba(46, 46, 46, 0.9)',
     width: '152px',
     height: '211px',
     borderRadius: 7,
