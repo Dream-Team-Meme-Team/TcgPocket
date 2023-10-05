@@ -1,3 +1,4 @@
+using TcgPocket.Features.CardAttributes;
 using TcgPocket.Features.CardTypes;
 using TcgPocket.Features.Games;
 using TcgPocket.Features.Rarities;
@@ -16,5 +17,5 @@ public class CardDisplayDto
     public SetGetDto Set { get; set; }
     public string ImageUrl { get; set; }
     public string Description { get; set; }
-    //public List<CardAttributeDto> Attributes { get; set; }
+    public List<CardAttributeDto> Attributes { get; set; }
 }

@@ -1,42 +1,31 @@
 ﻿using AutoMapper;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
+using FluentValidation;
 using TcgPocket.Data;
 using TcgPocket.Features.Cards.Dtos;
-using TcgPocket.Shared;
-using TcgPocket.Shared.Dtos;
+using TcgPocket.Features.Cards;
+using TcgPocket.Shared.Filter;
+using Microsoft.EntityFrameworkCore;
 
-namespace TcgPocket.Features.Cards.Queries;
-
-public class GetPagedCardsDisplayQuery : IRequest<Response<List<CardDisplayDto>>>
+public class GetPagedCardsDisplayQuery : FilteredPageRequest<Card, CardDisplayDto, PagedCardFilterDto>
 {
 }
 
-public class GetPagedCardsDisplayQueryHandler : IRequestHandler<GetPagedCardsDisplayQuery, Response<List<CardDisplayDto>>>
+public class GetPagedCardsDisplayQueryHandler
+    : FilteredPageRequestHandler<GetPagedCardsDisplayQuery, Card, CardDisplayDto, PagedCardFilterDto>
 {
-    private readonly DataContext _dataContext;
-    private readonly IMapper _mapper;
-
-    public GetPagedCardsDisplayQueryHandler(DataContext dataContext,
-        IMapper mapper)
+    public GetPagedCardsDisplayQueryHandler(
+        DataContext dataContext, IMapper mapper, IValidator<PagedCardFilterDto> validator)
+        : base(dataContext, mapper, validator)
     {
-        _dataContext = dataContext;
-        _mapper = mapper;
     }
 
-    public async Task<Response<List<CardDisplayDto>>> Handle(GetPagedCardsDisplayQuery query, CancellationToken cancellationToken)
+    protected override IQueryable<Card> GetEntities()
     {
-        var cardsQueryable = _dataContext.Set<Card>()
+        return base.GetEntities()
+            .Include(x => x.CardAttributes)
             .Include(x => x.Game)
             .Include(x => x.CardType)
             .Include(x => x.Rarity)
-            .Include(x => x.Set)
-            .OrderByDescending(x => x.Id)
-            .ToList();
-
-        if (cardsQueryable.IsNullOrEmpty()) return Error.AsResponse<List<CardDisplayDto>>("Cards not found");
-
-        return _mapper.Map<List<CardDisplayDto>>(cardsQueryable).AsResponse();
+            .Include(x => x.Set);
     }
 }

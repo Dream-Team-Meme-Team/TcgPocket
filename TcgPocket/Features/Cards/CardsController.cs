@@ -56,10 +56,11 @@ namespace TcgPocket.Features.Cards
         }
 
         [HttpGet("display")]
-        public async Task<ActionResult<Response<List<CardGetDto>>>> GetPagedCardsDisplayQuery()
+        public async Task<ActionResult<Response<PagedResult<CardDisplayDto>>>> 
+            GetPagedCardsDisplayQuery([FromQuery] PagedCardFilterDto filter)
         {
             var response = await _mediator
-                .Send(new GetPagedCardsDisplayQuery ());
+                .Send(new GetPagedCardsDisplayQuery { Filter = filter });
 
             return response.HasErrors ? BadRequest(response) : Ok(response);
         }
