@@ -31,10 +31,6 @@ export function DeleteModal({
       onClose={setOpen}
       title={'Are you sure you want to delete?'}
     >
-      <div>
-        <i> Are you sure you want to delete? </i>
-      </div>
-
       <div className={classes.buttonsContainer}>
         <SecondaryButton onClick={handleClose}> Cancel </SecondaryButton>
         <DeleteButton onClick={handleSubmit}>Delete</DeleteButton>

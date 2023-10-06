@@ -57,12 +57,13 @@ export const AttributeTab: React.FC = () => {
   };
 
   const deleteSelectedAttribute = async () => {
-    const { payload } = await dispatch(deleteAttribute(selectedId));
-    responseWrapper(payload, 'Attribute Deleted');
+    dispatch(deleteAttribute(selectedId)).then(({ payload }) => {
+      responseWrapper(payload, 'Attribute Deleted');
 
-    if (payload && !payload.hasErrors) {
-      loadAttributes();
-    }
+      if (payload && !payload.hasErrors) {
+        loadAttributes();
+      }
+    });
   };
 
   const editSelectedAttribute = async (editedAttribute: AttributeGetDto) => {
@@ -72,12 +73,13 @@ export const AttributeTab: React.FC = () => {
       gameId: selectedGameId,
     };
 
-    const { payload } = await dispatch(editAttribute(updatedAttribute));
-    responseWrapper(payload, 'Attribute Edited');
+    dispatch(editAttribute(updatedAttribute)).then(({ payload }) => {
+      responseWrapper(payload, 'Attribute Edited');
 
-    if (payload && !payload.hasErrors) {
-      loadAttributes();
-    }
+      if (payload && !payload.hasErrors) {
+        loadAttributes();
+      }
+    });
   };
 
   const findGame = (gameId: number) => {

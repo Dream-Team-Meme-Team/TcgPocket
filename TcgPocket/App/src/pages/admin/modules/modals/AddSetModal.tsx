@@ -32,27 +32,29 @@ export function AddSetModal(): React.ReactElement {
     form.reset();
   };
 
-  const loadSets = async () => {
-    const { payload } = await dispatch(getAllSets());
-    responseWrapper(payload);
+  const loadSets = () => {
+    dispatch(getAllSets()).then(({ payload }) => {
+      responseWrapper(payload);
 
-    if (payload && !payload.hasErrors) {
-      handleCancel();
-    }
+      if (payload && !payload.hasErrors) {
+        handleCancel();
+      }
+    });
   };
 
-  const handleAdd = async (newSet: SetDto) => {
+  const handleAdd = (newSet: SetDto) => {
     const updateGameId: SetDto = {
       name: newSet.name,
       gameId: selectedGameId,
     };
 
-    const { payload } = await dispatch(createSet(updateGameId));
-    responseWrapper(payload, 'Successfully added Set');
+    dispatch(createSet(updateGameId)).then(({ payload }) => {
+      responseWrapper(payload, 'Set Added');
 
-    if (payload && !payload.hasErrors) {
-      loadSets();
-    }
+      if (payload && !payload.hasErrors) {
+        loadSets();
+      }
+    });
   };
 
   const determineDisabled = selectedGameId === 0;

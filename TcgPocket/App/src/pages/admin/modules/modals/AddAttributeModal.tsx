@@ -33,12 +33,13 @@ export function AddAttributeModal(): React.ReactElement {
   };
 
   const loadAttributes = async () => {
-    const { payload } = await dispatch(getAllAttributes());
-    responseWrapper(payload);
+    dispatch(getAllAttributes()).then(({ payload }) => {
+      responseWrapper(payload);
 
-    if (payload && !payload.hasErrors) {
-      handleCancel();
-    }
+      if (payload && !payload.hasErrors) {
+        handleCancel();
+      }
+    });
   };
 
   const handleAdd = async (newAttribute: AttributeDto) => {
@@ -47,12 +48,13 @@ export function AddAttributeModal(): React.ReactElement {
       gameId: selectedGameId,
     };
 
-    const { payload } = await dispatch(createAttribute(updateAttribute));
-    responseWrapper(payload, 'Successfully added Attribute');
+    dispatch(createAttribute(updateAttribute)).then(({ payload }) => {
+      responseWrapper(payload, 'Successfully added Attribute');
 
-    if (payload && !payload.hasErrors) {
-      loadAttributes();
-    }
+      if (payload && !payload.hasErrors) {
+        loadAttributes();
+      }
+    });
   };
 
   const determineDisabled = selectedGameId === 0;

@@ -52,22 +52,24 @@ export const GameTab: React.FC = () => {
     responseWrapper(payload);
   };
 
-  const deleteSelectedGame = async () => {
-    const { payload } = await dispatch(deleteGame(selectedId));
-    responseWrapper(payload, 'Game Deleted');
+  const deleteSelectedGame = () => {
+    dispatch(deleteGame(selectedId)).then(({ payload }) => {
+      responseWrapper(payload, 'Game Deleted');
 
-    if (payload && !payload.hasErrors) {
-      loadGames();
-    }
+      if (payload && !payload.hasErrors) {
+        loadGames();
+      }
+    });
   };
 
-  const editSelectedGame = async (editedGame: GameGetDto) => {
-    const { payload } = await dispatch(editGame(editedGame));
-    responseWrapper(payload, 'Game Edited');
+  const editSelectedGame = (editedGame: GameGetDto) => {
+    dispatch(editGame(editedGame)).then(({ payload }) => {
+      responseWrapper(payload, 'Game Edited');
 
-    if (payload && !payload.hasErrors) {
-      loadGames();
-    }
+      if (payload && !payload.hasErrors) {
+        loadGames();
+      }
+    });
   };
 
   useEffect(() => {

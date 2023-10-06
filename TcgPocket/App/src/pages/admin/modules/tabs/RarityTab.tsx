@@ -56,28 +56,30 @@ export const RarityTab: React.FC = () => {
     responseWrapper(payload);
   };
 
-  const deleteSelectedRarity = async () => {
-    const { payload } = await dispatch(deleteRarity(selectedId));
-    responseWrapper(payload, 'Rarity Deleted');
+  const deleteSelectedRarity = () => {
+    dispatch(deleteRarity(selectedId)).then(({ payload }) => {
+      responseWrapper(payload, 'Rarity Deleted');
 
-    if (payload && !payload.hasErrors) {
-      loadRarities();
-    }
+      if (payload && !payload.hasErrors) {
+        loadRarities();
+      }
+    });
   };
 
-  const editSelectedRarity = async (editedRarity: RarityGetDto) => {
+  const editSelectedRarity = (editedRarity: RarityGetDto) => {
     const updatedRarity: RarityGetDto = {
       id: editedRarity.id,
       name: editedRarity.name,
       gameId: selectedGameId,
     };
 
-    const { payload } = await dispatch(editRarity(updatedRarity));
-    responseWrapper(payload, 'Rarity Edited');
+    dispatch(editRarity(updatedRarity)).then(({ payload }) => {
+      responseWrapper(payload, 'Rarity Edited');
 
-    if (payload && !payload.hasErrors) {
-      loadRarities();
-    }
+      if (payload && !payload.hasErrors) {
+        loadRarities();
+      }
+    });
   };
 
   const findGame = (gameId: number) => {

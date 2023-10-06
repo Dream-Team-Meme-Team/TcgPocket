@@ -32,27 +32,29 @@ export function AddRarityModal(): React.ReactElement {
     form.reset();
   };
 
-  const loadRarities = async () => {
-    const { payload } = await dispatch(getAllRarities());
-    responseWrapper(payload);
+  const loadRarities = () => {
+    dispatch(getAllRarities()).then(({ payload }) => {
+      responseWrapper(payload);
 
-    if (payload && !payload.hasErrors) {
-      handleCancel();
-    }
+      if (payload && !payload.hasErrors) {
+        handleCancel();
+      }
+    });
   };
 
-  const handleAdd = async (newRarity: RarityDto) => {
+  const handleAdd = (newRarity: RarityDto) => {
     const updatedRarity: RarityDto = {
       name: newRarity.name,
       gameId: selectedGameId,
     };
 
-    const { payload } = await dispatch(createRarity(updatedRarity));
-    responseWrapper(payload, 'Successfully added Rarity');
+    dispatch(createRarity(updatedRarity)).then(({ payload }) => {
+      responseWrapper(payload, 'Rarity Added');
 
-    if (payload && !payload.hasErrors) {
-      loadRarities();
-    }
+      if (payload && !payload.hasErrors) {
+        loadRarities();
+      }
+    });
   };
 
   const determineDisabled = selectedGameId === 0;

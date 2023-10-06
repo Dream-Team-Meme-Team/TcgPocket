@@ -56,28 +56,30 @@ export const SetTab: React.FC = () => {
     responseWrapper(payload);
   };
 
-  const deleteSelectedSet = async () => {
-    const { payload } = await dispatch(deleteSet(selectedId));
-    responseWrapper(payload, 'Set Deleted');
+  const deleteSelectedSet = () => {
+    dispatch(deleteSet(selectedId)).then(({ payload }) => {
+      responseWrapper(payload, 'Set Deleted');
 
-    if (payload && !payload.hasErrors) {
-      loadSets();
-    }
+      if (payload && !payload.hasErrors) {
+        loadSets();
+      }
+    });
   };
 
-  const editSelectedSet = async (editedSet: SetGetDto) => {
+  const editSelectedSet = (editedSet: SetGetDto) => {
     const updatedSet: SetGetDto = {
       id: editedSet.id,
       name: editedSet.name,
       gameId: selectedGameId,
     };
 
-    const { payload } = await dispatch(editSet(updatedSet));
-    responseWrapper(payload, 'Set Edited');
+    dispatch(editSet(updatedSet)).then(({ payload }) => {
+      responseWrapper(payload, 'Set Edited');
 
-    if (payload && !payload.hasErrors) {
-      loadSets();
-    }
+      if (payload && !payload.hasErrors) {
+        loadSets();
+      }
+    });
   };
 
   const findGame = (gameId: number) => {

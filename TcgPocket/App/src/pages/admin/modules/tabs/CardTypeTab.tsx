@@ -56,13 +56,14 @@ export const CardTypeTab: React.FC = () => {
     responseWrapper(payload);
   };
 
-  const deleteSelectedCardType = async () => {
-    const { payload } = await dispatch(deleteCardType(selectedId));
-    responseWrapper(payload, 'Card Type Deleted');
+  const deleteSelectedCardType = () => {
+    dispatch(deleteCardType(selectedId)).then(({ payload }) => {
+      responseWrapper(payload, 'Card Type Deleted');
 
-    if (payload && !payload.hasErrors) {
-      loadCardTypes();
-    }
+      if (payload && !payload.hasErrors) {
+        loadCardTypes();
+      }
+    });
   };
 
   const editSelectedCardType = async (editedCardType: CardTypeGetDto) => {
@@ -72,12 +73,13 @@ export const CardTypeTab: React.FC = () => {
       gameId: selectedGameId,
     };
 
-    const { payload } = await dispatch(editCardType(updatedCardType));
-    responseWrapper(payload, 'Card Type Edited');
+    dispatch(editCardType(updatedCardType)).then(({ payload }) => {
+      responseWrapper(payload, 'Card Type Edited');
 
-    if (payload && !payload.hasErrors) {
-      loadCardTypes();
-    }
+      if (payload && !payload.hasErrors) {
+        loadCardTypes();
+      }
+    });
   };
 
   const findGame = (gameId: number) => {

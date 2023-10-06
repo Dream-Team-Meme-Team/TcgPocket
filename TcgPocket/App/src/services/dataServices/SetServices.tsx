@@ -4,12 +4,44 @@ import { SetDto, SetGetDto } from '../../types/sets';
 import { apiCall } from '../helpers/api';
 import { apiRoutes } from '../../routes';
 
+export const SetServices = {
+  getAllSets: async () => {
+    return await apiCall<SetGetDto[]>({
+      method: 'GET',
+      endpoint: apiRoutes.sets,
+    });
+  },
+
+  createSet: async (values: SetDto) => {
+    return await apiCall<SetGetDto>({
+      method: 'POST',
+      endpoint: apiRoutes.sets,
+      data: values,
+    });
+  },
+
+  deleteSet: async (id: number) => {
+    return await apiCall({
+      method: 'DELETE',
+      endpoint: `${apiRoutes.sets}/${id}`,
+    });
+  },
+
+  editSet: async (values: SetGetDto) => {
+    return await apiCall({
+      method: 'PUT',
+      endpoint: `${apiRoutes.sets}/${values.id}`,
+      data: values,
+    });
+  },
+};
+
 export const getAllSets = createAsyncThunk<
   Response<SetGetDto[]>,
   void,
   { rejectValue: Response<SetGetDto[]> }
 >('getAllSets', async () => {
-  return await apiCall<SetGetDto[]>('GET', apiRoutes.sets);
+  return await SetServices.getAllSets();
 });
 
 export const createSet = createAsyncThunk<
@@ -17,7 +49,7 @@ export const createSet = createAsyncThunk<
   SetDto,
   { rejectValue: Response<SetGetDto> }
 >('createSet', async (newSet) => {
-  return await apiCall<SetGetDto>('POST', apiRoutes.sets, newSet);
+  return await SetServices.createSet(newSet);
 });
 
 export const deleteSet = createAsyncThunk<
@@ -25,7 +57,7 @@ export const deleteSet = createAsyncThunk<
   number,
   { rejectValue: Response<void> }
 >('deleteSet', async (id) => {
-  return await apiCall<void>('DELETE', `${apiRoutes.sets}/${id}`);
+  return await SetServices.deleteSet(id);
 });
 
 export const editSet = createAsyncThunk<
@@ -33,9 +65,5 @@ export const editSet = createAsyncThunk<
   SetGetDto,
   { rejectValue: Response<void> }
 >('editSet', async (editedSet) => {
-  return await apiCall<void>(
-    'PUT',
-    `${apiRoutes.sets}/${editedSet.id}`,
-    editedSet
-  );
+  return await SetServices.editSet(editedSet);
 });
