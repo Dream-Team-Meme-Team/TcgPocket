@@ -1,6 +1,10 @@
 import { apiRoutes } from '../routes';
-import { CardDetailDto, CardDto, CardGetDto } from '../types/cards';
-import { Response } from '../types/shared';
+import {
+  CardDetailDto,
+  CardDto,
+  CardFilterDto,
+  CardGetDto,
+} from '../types/cards';
 import { apiCall } from './api';
 
 type UpdateCardParams = {
@@ -8,14 +12,17 @@ type UpdateCardParams = {
   body: CardDto;
 };
 
-export type CardsService = {
-  getCardById: (id: number) => Response<CardDetailDto>;
-  createCard: (body: CardDto) => Response<CardDetailDto>;
-  updateCard: ({ id, body }: UpdateCardParams) => Response<CardGetDto>;
-  deleteCard: (id: number) => Response;
-};
+export type CardsService = typeof CardsService;
 
 export const CardsService = {
+  getAllCards: async (params?: CardFilterDto) => {
+    return await apiCall<CardDetailDto>({
+      method: 'GET',
+      endpoint: apiRoutes.cards,
+      params: params,
+    });
+  },
+
   getCardById: async (id: number) => {
     return await apiCall<CardDetailDto>({
       method: 'GET',
@@ -34,7 +41,7 @@ export const CardsService = {
   updateCard: async ({ id, body }: UpdateCardParams) => {
     return await apiCall<CardGetDto>({
       method: 'PUT',
-      endpoint: `${apiRoutes.cards}/${id}`,
+      endpoint: `${apiRoutes.cards}/${id}?gameId={}`,
       body: body,
     });
   },
