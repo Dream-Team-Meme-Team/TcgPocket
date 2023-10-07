@@ -1,18 +1,9 @@
 import { createStyles } from '@mantine/core';
 import { HeroTitle } from './modules/HomePageHero';
 import { FeaturesCards } from './modules/HomePageFeatures';
-import { useAsync } from 'react-use';
-import { CardsService } from '../../services/CardsService';
 
 export function HomePage(): React.ReactElement {
   const { classes } = useStyles();
-
-  useAsync(async () => {
-    const id = 2;
-    const response = await CardsService.getCardById(id);
-
-    console.log('data: ', response.data);
-  });
 
   return (
     <div className={classes.gradient}>
