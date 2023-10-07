@@ -16,7 +16,7 @@ export type CardsService = typeof CardsService;
 
 export const CardsService = {
   getAllCards: async (params?: CardFilterDto) => {
-    return await apiCall<CardDetailDto>({
+    return await apiCall<CardDetailDto[]>({
       method: 'GET',
       endpoint: apiRoutes.cards,
       params: params,
