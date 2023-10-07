@@ -2,6 +2,7 @@
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using TcgPocket.Data;
 using TcgPocket.Shared;
 
@@ -41,7 +42,10 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Respo
             return new Response<UserGetDto> { Errors = errors };
         }
 
-        var user = _userManager.Users.SingleOrDefault(x => x.Id == command.Id);
+        var user = _userManager.Users
+            .Include(x => x.UserRoles)
+            .ThenInclude(x => x.Role)
+            .SingleOrDefault(x => x.Id == command.Id);
 
         if (user is null)
         {

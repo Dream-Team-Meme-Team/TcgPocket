@@ -2,6 +2,7 @@
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using TcgPocket.Features.Users.Dtos;
 using TcgPocket.Shared;
 
@@ -35,7 +36,10 @@ public class UpdatePasswordCommandHandler : IRequestHandler<UpdatePasswordComman
             return new Response { Errors = errors };
         }
 
-        var user = _userManager.Users.FirstOrDefault(x => x.UserName == command.PasswordUpdateDto.UserName);
+        var user = _userManager.Users
+            .Include(x => x.UserRoles)
+            .ThenInclude(x => x.Role)
+            .FirstOrDefault(x => x.UserName == command.PasswordUpdateDto.UserName);
 
         if (user is null)
         {
