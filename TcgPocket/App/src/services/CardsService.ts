@@ -41,7 +41,7 @@ export const CardsService = {
   updateCard: async ({ id, body }: UpdateCardParams) => {
     return await apiCall<CardGetDto>({
       method: 'PUT',
-      endpoint: `${apiRoutes.cards}/${id}?gameId={}`,
+      endpoint: `${apiRoutes.cards}/${id}`,
       body: body,
     });
   },
