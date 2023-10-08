@@ -32,29 +32,19 @@ export const dataSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getAllGames.fulfilled, (state, { payload }) => {
-      if (!payload.data) {
-        state.games = [];
-      } else state.games = payload.data;
+      state.games = payload.data;
     });
     builder.addCase(getAllSets.fulfilled, (state, { payload }) => {
-      if (!payload.data) {
-        state.sets = [];
-      } else state.sets = payload.data;
+      state.sets = payload.data;
     });
     builder.addCase(getAllCardTypes.fulfilled, (state, { payload }) => {
-      if (!payload.data) {
-        state.cardTypes = [];
-      } else state.cardTypes = payload.data;
+      state.cardTypes = payload.data;
     });
     builder.addCase(getAllRarities.fulfilled, (state, { payload }) => {
-      if (!payload.data) {
-        state.rarities = [];
-      } else state.rarities = payload.data;
+      state.rarities = payload.data;
     });
     builder.addCase(getAllAttributes.fulfilled, (state, { payload }) => {
-      if (!payload.data) {
-        state.attributes = [];
-      } else state.attributes = payload.data;
+      state.attributes = payload.data;
     });
   },
 });
