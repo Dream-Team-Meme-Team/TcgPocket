@@ -27,13 +27,6 @@ export const RarityTab: React.FC = () => {
   const [openDelete, { toggle: toggleDelete }] = useDisclosure();
   const [openEdit, { toggle: toggleEdit }] = useDisclosure();
 
-  // const rarities = useAppSelector((state) => state.data.rarities);
-  // const games = useAppSelector((state) => state.data.games);
-  // const searchTerm = useAppSelector((state) => state.admin.searchTerm);
-  // const selectedId = useAppSelector((state) => state.admin.selectedId);
-  // const selectedGameId = useAppSelector((state) => state.admin.selectedGameId);
-  // const selectedTab = useAppSelector((state) => state.admin.selectedTab);
-
   const [rarities, games] = useAppSelector(
     (state) => [state.data.rarities, state.data.games],
     shallowEqual

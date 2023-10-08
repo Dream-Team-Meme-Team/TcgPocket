@@ -27,13 +27,6 @@ export const CardTypeTab: React.FC = () => {
   const [openDelete, { toggle: toggleDelete }] = useDisclosure();
   const [openEdit, { toggle: toggleEdit }] = useDisclosure();
 
-  // const cardTypes = useAppSelector((state) => state.data.cardTypes);
-  // const games = useAppSelector((state) => state.data.games);
-  // const searchTerm = useAppSelector((state) => state.admin.searchTerm);
-  // const selectedId = useAppSelector((state) => state.admin.selectedId);
-  // const selectedGameId = useAppSelector((state) => state.admin.selectedGameId);
-  // const selectedTab = useAppSelector((state) => state.admin.selectedTab);
-
   const [cardTypes, games] = useAppSelector(
     (state) => [state.data.cardTypes, state.data.games],
     shallowEqual

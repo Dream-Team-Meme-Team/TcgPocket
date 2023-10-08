@@ -56,9 +56,6 @@ const adminTabs: Tab[] = [
 export function AdminPage(): React.ReactElement {
   const { classes } = useStyles();
 
-  // const selectedGameId = useAppSelector((state) => state.admin.selectedGameId);
-  // const selectedTab = useAppSelector((state) => state.admin.selectedTab);
-
   const [selectedGameId, selectedTab] = useAppSelector(
     (state) => [state.admin.selectedGameId, state.admin.selectedTab],
     shallowEqual

@@ -20,10 +20,6 @@ export function AdminTabHeader({
 }: AdminTabHeaderProps): React.ReactElement {
   const { classes } = useStyles();
 
-  // const searchTerm = useAppSelector((state) => state.admin.searchTerm);
-  // const games = useAppSelector((state) => state.data.games);
-  // const selectedGameId = useAppSelector((state) => state.admin.selectedGameId);
-
   const [searchTerm, selectedGameId] = useAppSelector(
     (state) => [state.admin.searchTerm, state.admin.selectedGameId],
     shallowEqual

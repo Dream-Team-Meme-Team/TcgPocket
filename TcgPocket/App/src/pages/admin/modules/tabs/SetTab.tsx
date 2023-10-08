@@ -27,13 +27,6 @@ export const SetTab: React.FC = () => {
   const [openDelete, { toggle: toggleDelete }] = useDisclosure();
   const [openEdit, { toggle: toggleEdit }] = useDisclosure();
 
-  // const sets = useAppSelector((state) => state.data.sets);
-  // const games = useAppSelector((state) => state.data.games);
-  // const searchTerm = useAppSelector((state) => state.admin.searchTerm);
-  // const selectedId = useAppSelector((state) => state.admin.selectedId);
-  // const selectedGameId = useAppSelector((state) => state.admin.selectedGameId);
-  // const selectedTab = useAppSelector((state) => state.admin.selectedTab);
-
   const [sets, games] = useAppSelector(
     (state) => [state.data.sets, state.data.games],
     shallowEqual
