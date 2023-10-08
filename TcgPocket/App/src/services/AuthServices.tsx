@@ -10,6 +10,8 @@ import { apiCall } from './helpers/api';
 import { apiRoutes } from '../routes';
 import { Response } from '../types/shared';
 
+export type AuthServices = typeof AuthServices;
+
 export const AuthServices = {
   registerUser: async (values: UserCreateDto) => {
     return await apiCall<UserGetDto>({

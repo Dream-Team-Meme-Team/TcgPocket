@@ -16,13 +16,9 @@ export function DeleteModal({
 }: DeleteModalProps): React.ReactElement {
   const { classes } = useStyles();
 
-  const handleClose = () => {
-    setOpen();
-  };
-
   const handleSubmit = () => {
     submitAction();
-    handleClose();
+    setOpen();
   };
 
   return (
@@ -32,7 +28,7 @@ export function DeleteModal({
       title={'Are you sure you want to delete?'}
     >
       <div className={classes.buttonsContainer}>
-        <SecondaryButton onClick={handleClose}> Cancel </SecondaryButton>
+        <SecondaryButton onClick={setOpen}> Cancel </SecondaryButton>
         <DeleteButton onClick={handleSubmit}>Delete</DeleteButton>
       </div>
     </PrimaryModal>

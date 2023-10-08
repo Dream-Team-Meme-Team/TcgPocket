@@ -4,6 +4,8 @@ import { RarityDto, RarityGetDto } from '../../types/rarities';
 import { apiRoutes } from '../../routes';
 import { Response } from '../../types/shared';
 
+export type RarityServices = typeof RarityServices;
+
 export const RarityServices = {
   getAll: async () => {
     return await apiCall<RarityGetDto[]>({

@@ -4,6 +4,8 @@ import { SetDto, SetGetDto } from '../../types/sets';
 import { apiCall } from '../helpers/api';
 import { apiRoutes } from '../../routes';
 
+export type SetServices = typeof SetServices;
+
 export const SetServices = {
   getAllSets: async () => {
     return await apiCall<SetGetDto[]>({

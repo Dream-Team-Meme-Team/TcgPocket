@@ -4,6 +4,8 @@ import { AttributeDto, AttributeGetDto } from '../../types/attributes';
 import { apiRoutes } from '../../routes';
 import { Response } from '../../types/shared';
 
+export type AttributeServices = typeof AttributeServices;
+
 export const AttributeServices = {
   getAll: async () => {
     return await apiCall<AttributeGetDto[]>({

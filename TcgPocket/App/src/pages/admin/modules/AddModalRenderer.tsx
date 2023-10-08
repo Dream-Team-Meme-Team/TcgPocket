@@ -13,15 +13,15 @@ export function AddModalRenderer({
   label,
 }: AddModalRendererProps): React.ReactElement {
   switch (label) {
-    case AdminTabLabel.GAMES:
+    case AdminTabLabel.Games:
       return <AddGameModal />;
-    case AdminTabLabel.SETS:
+    case AdminTabLabel.Sets:
       return <AddSetModal />;
-    case AdminTabLabel.CARD_TYPES:
+    case AdminTabLabel.CardTypes:
       return <AddCardTypeModal />;
-    case AdminTabLabel.RARITIES:
+    case AdminTabLabel.Rarities:
       return <AddRarityModal />;
-    case AdminTabLabel.ATTRIBUTES:
+    case AdminTabLabel.Attributes:
       return <AddAttributeModal />;
     default:
       return <div />;

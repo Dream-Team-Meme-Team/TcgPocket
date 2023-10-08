@@ -15,6 +15,7 @@ import { EditModal } from '../modals/EditModal';
 import { TabInfoHeader } from '../headers/TabInfoHeader';
 import { setSelectedId } from '../../../../store/adminSlice';
 import { AdminTabLabel } from '../../../../enums/adminTabLabel';
+import { shallowEqual } from 'react-redux';
 
 const titles: string[] = ['Name', 'Edit', 'Delete'];
 const colValue: string = '1fr ';
@@ -26,10 +27,21 @@ export const GameTab: React.FC = () => {
   const [openDelete, { toggle: toggleDelete }] = useDisclosure();
   const [openEdit, { toggle: toggleEdit }] = useDisclosure();
 
-  const games = useAppSelector((state) => state.data.games);
-  const searchTerm = useAppSelector((state) => state.admin.searchTerm);
-  const selectedId = useAppSelector((state) => state.admin.selectedId);
-  const selectedTab = useAppSelector((state) => state.admin.selectedTab);
+  // const games = useAppSelector((state) => state.data.games);
+  // const searchTerm = useAppSelector((state) => state.admin.searchTerm);
+  // const selectedId = useAppSelector((state) => state.admin.selectedId);
+  // const selectedTab = useAppSelector((state) => state.admin.selectedTab);
+
+  const [games] = useAppSelector((state) => [state.data.games], shallowEqual);
+
+  const [searchTerm, selectedId, selectedTab] = useAppSelector(
+    (state) => [
+      state.admin.searchTerm,
+      state.admin.selectedId,
+      state.admin.selectedTab,
+    ],
+    shallowEqual
+  );
 
   const renderedGames = useMemo(() => {
     return games.filter((game) =>
@@ -73,7 +85,7 @@ export const GameTab: React.FC = () => {
   };
 
   useEffect(() => {
-    if (selectedTab !== AdminTabLabel.GAMES) return;
+    if (selectedTab !== AdminTabLabel.Games) return;
     loadGames();
   }, [selectedTab]);
 

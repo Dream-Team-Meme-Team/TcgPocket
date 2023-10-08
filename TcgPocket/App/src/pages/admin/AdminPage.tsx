@@ -23,41 +23,46 @@ import { SetTab } from './modules/tabs/SetTab';
 import { CardTypeTab } from './modules/tabs/CardTypeTab';
 import { RarityTab } from './modules/tabs/RarityTab';
 import { AttributeTab } from './modules/tabs/AttributeTab';
+import { shallowEqual } from 'react-redux';
 
 const adminTabs: Tab[] = [
   {
-    label: AdminTabLabel.GAMES,
+    label: AdminTabLabel.Games,
     icon: <IconDeviceGamepad />,
     content: GameTab,
   },
   {
-    label: AdminTabLabel.SETS,
+    label: AdminTabLabel.Sets,
     icon: <IconCards />,
     content: SetTab,
   },
   {
-    label: AdminTabLabel.CARD_TYPES,
+    label: AdminTabLabel.CardTypes,
     icon: <IconPlayCard />,
     content: CardTypeTab,
   },
   {
-    label: AdminTabLabel.RARITIES,
+    label: AdminTabLabel.Rarities,
     icon: <IconChartTreemap />,
     content: RarityTab,
   },
   {
-    label: AdminTabLabel.ATTRIBUTES,
+    label: AdminTabLabel.Attributes,
     icon: <IconCoffin />,
     content: AttributeTab,
   },
 ];
 
 export function AdminPage(): React.ReactElement {
-  const { remainingHeight } = useNavbarHeight();
   const { classes } = useStyles();
 
-  const selectedGameId = useAppSelector((state) => state.admin.selectedGameId);
-  const selectedTab = useAppSelector((state) => state.admin.selectedTab);
+  // const selectedGameId = useAppSelector((state) => state.admin.selectedGameId);
+  // const selectedTab = useAppSelector((state) => state.admin.selectedTab);
+
+  const [selectedGameId, selectedTab] = useAppSelector(
+    (state) => [state.admin.selectedGameId, state.admin.selectedTab],
+    shallowEqual
+  );
 
   const handleTabChange = (value: TabsValue) => {
     dispatch(setSelectedAdminTab(value));
@@ -67,7 +72,7 @@ export function AdminPage(): React.ReactElement {
   };
 
   useEffect(() => {
-    dispatch(setSelectedAdminTab(AdminTabLabel.GAMES));
+    dispatch(setSelectedAdminTab(AdminTabLabel.Games));
   }, []);
 
   return (
@@ -75,7 +80,7 @@ export function AdminPage(): React.ReactElement {
       value={selectedTab}
       onTabChange={handleTabChange}
       orientation="vertical"
-      sx={{ height: `${remainingHeight}px` }}
+      className={classes.tab}
     >
       <Tabs.List>
         {adminTabs.map((tab, index) => (
@@ -96,7 +101,7 @@ export function AdminPage(): React.ReactElement {
           >
             <AdminTabHeader label={tab.label} />
 
-            {selectedGameId !== 0 || tab.label === AdminTabLabel.GAMES ? (
+            {selectedGameId !== 0 || tab.label === AdminTabLabel.Games ? (
               <TabContent />
             ) : (
               <div className={classes.noSelectedGame}>Please Select a Game</div>
@@ -109,7 +114,13 @@ export function AdminPage(): React.ReactElement {
 }
 
 const useStyles = createStyles(() => {
+  const { remainingHeight } = useNavbarHeight();
+
   return {
+    tab: {
+      height: `${remainingHeight}px`,
+    },
+
     panelContainer: {
       display: 'grid',
       gridTemplateRows: 'auto 1fr',

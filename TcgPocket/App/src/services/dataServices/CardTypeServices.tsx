@@ -4,6 +4,8 @@ import { CardTypeDto, CardTypeGetDto } from '../../types/card-types';
 import { apiCall } from '../helpers/api';
 import { apiRoutes } from '../../routes';
 
+export type CardTypeServices = typeof CardTypeServices;
+
 export const CardTypeServices = {
   getAll: async () => {
     return await apiCall<CardTypeGetDto[]>({

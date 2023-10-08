@@ -15,6 +15,7 @@ import { EditModal } from '../modals/EditModal';
 import { SetGetDto } from '../../../../types/sets';
 import { setSelectedId } from '../../../../store/adminSlice';
 import { AdminTabLabel } from '../../../../enums/adminTabLabel';
+import { shallowEqual } from 'react-redux';
 
 const titles: string[] = ['Name', 'Game', 'Edit', 'Delete'];
 const colValue: string = '1fr ';
@@ -26,12 +27,27 @@ export const SetTab: React.FC = () => {
   const [openDelete, { toggle: toggleDelete }] = useDisclosure();
   const [openEdit, { toggle: toggleEdit }] = useDisclosure();
 
-  const sets = useAppSelector((state) => state.data.sets);
-  const games = useAppSelector((state) => state.data.games);
-  const searchTerm = useAppSelector((state) => state.admin.searchTerm);
-  const selectedId = useAppSelector((state) => state.admin.selectedId);
-  const selectedGameId = useAppSelector((state) => state.admin.selectedGameId);
-  const selectedTab = useAppSelector((state) => state.admin.selectedTab);
+  // const sets = useAppSelector((state) => state.data.sets);
+  // const games = useAppSelector((state) => state.data.games);
+  // const searchTerm = useAppSelector((state) => state.admin.searchTerm);
+  // const selectedId = useAppSelector((state) => state.admin.selectedId);
+  // const selectedGameId = useAppSelector((state) => state.admin.selectedGameId);
+  // const selectedTab = useAppSelector((state) => state.admin.selectedTab);
+
+  const [sets, games] = useAppSelector(
+    (state) => [state.data.sets, state.data.games],
+    shallowEqual
+  );
+
+  const [searchTerm, selectedId, selectedGameId, selectedTab] = useAppSelector(
+    (state) => [
+      state.admin.searchTerm,
+      state.admin.selectedId,
+      state.admin.selectedGameId,
+      state.admin.selectedTab,
+    ],
+    shallowEqual
+  );
 
   const renderedSets = useMemo(() => {
     return sets
@@ -89,7 +105,7 @@ export const SetTab: React.FC = () => {
   };
 
   useEffect(() => {
-    if (selectedGameId === 0 || selectedTab !== AdminTabLabel.SETS) return;
+    if (selectedGameId === 0 || selectedTab !== AdminTabLabel.Sets) return;
     loadSets();
   }, [selectedGameId, selectedTab]);
 

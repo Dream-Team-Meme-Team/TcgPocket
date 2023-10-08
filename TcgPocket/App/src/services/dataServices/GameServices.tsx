@@ -4,6 +4,8 @@ import { GameDto, GameGetDto } from '../../types/games';
 import { apiCall } from '../helpers/api';
 import { apiRoutes } from '../../routes';
 
+export type GameServices = typeof GameServices;
+
 export const GameServices = {
   getAllGames: async () => {
     return await apiCall<GameGetDto[]>({

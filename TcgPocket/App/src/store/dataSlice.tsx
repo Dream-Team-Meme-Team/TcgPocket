@@ -58,5 +58,3 @@ export const dataSlice = createSlice({
     });
   },
 });
-
-export const {} = dataSlice.actions;

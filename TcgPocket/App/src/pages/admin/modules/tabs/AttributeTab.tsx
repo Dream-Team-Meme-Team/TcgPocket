@@ -15,6 +15,7 @@ import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { DeleteModal } from '../../../../components/modals/DeleteModal';
 import { setSelectedId } from '../../../../store/adminSlice';
 import { AdminTabLabel } from '../../../../enums/adminTabLabel';
+import { shallowEqual } from 'react-redux';
 
 const titles: string[] = ['Name', 'Game', 'Edit', 'Delete'];
 const colValue: string = '1fr ';
@@ -26,12 +27,27 @@ export const AttributeTab: React.FC = () => {
   const [openDelete, { toggle: toggleDelete }] = useDisclosure();
   const [openEdit, { toggle: toggleEdit }] = useDisclosure();
 
-  const attributes = useAppSelector((state) => state.data.attributes);
-  const games = useAppSelector((state) => state.data.games);
-  const searchTerm = useAppSelector((state) => state.admin.searchTerm);
-  const selectedId = useAppSelector((state) => state.admin.selectedId);
-  const selectedGameId = useAppSelector((state) => state.admin.selectedGameId);
-  const selectedTab = useAppSelector((state) => state.admin.selectedTab);
+  // const attributes = useAppSelector((state) => state.data.attributes);
+  // const games = useAppSelector((state) => state.data.games);
+  // const searchTerm = useAppSelector((state) => state.admin.searchTerm);
+  // const selectedId = useAppSelector((state) => state.admin.selectedId);
+  // const selectedGameId = useAppSelector((state) => state.admin.selectedGameId);
+  // const selectedTab = useAppSelector((state) => state.admin.selectedTab);
+
+  const [attributes, games] = useAppSelector(
+    (state) => [state.data.attributes, state.data.games],
+    shallowEqual
+  );
+
+  const [searchTerm, selectedId, selectedGameId, selectedTab] = useAppSelector(
+    (state) => [
+      state.admin.searchTerm,
+      state.admin.selectedId,
+      state.admin.selectedGameId,
+      state.admin.selectedTab,
+    ],
+    shallowEqual
+  );
 
   const renderedAttributes = useMemo(() => {
     return attributes
@@ -89,7 +105,7 @@ export const AttributeTab: React.FC = () => {
   };
 
   useEffect(() => {
-    if (selectedGameId === 0 || selectedTab !== AdminTabLabel.ATTRIBUTES)
+    if (selectedGameId === 0 || selectedTab !== AdminTabLabel.Attributes)
       return;
     loadAttributes();
   }, [selectedGameId, selectedTab]);

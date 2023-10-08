@@ -15,6 +15,7 @@ import { RarityGetDto } from '../../../../types/rarities';
 import { DeleteModal } from '../../../../components/modals/DeleteModal';
 import { setSelectedId } from '../../../../store/adminSlice';
 import { AdminTabLabel } from '../../../../enums/adminTabLabel';
+import { shallowEqual } from 'react-redux';
 
 const titles: string[] = ['Name', 'Game', 'Edit', 'Delete'];
 const colValue: string = '1fr ';
@@ -26,12 +27,27 @@ export const RarityTab: React.FC = () => {
   const [openDelete, { toggle: toggleDelete }] = useDisclosure();
   const [openEdit, { toggle: toggleEdit }] = useDisclosure();
 
-  const rarities = useAppSelector((state) => state.data.rarities);
-  const games = useAppSelector((state) => state.data.games);
-  const searchTerm = useAppSelector((state) => state.admin.searchTerm);
-  const selectedId = useAppSelector((state) => state.admin.selectedId);
-  const selectedGameId = useAppSelector((state) => state.admin.selectedGameId);
-  const selectedTab = useAppSelector((state) => state.admin.selectedTab);
+  // const rarities = useAppSelector((state) => state.data.rarities);
+  // const games = useAppSelector((state) => state.data.games);
+  // const searchTerm = useAppSelector((state) => state.admin.searchTerm);
+  // const selectedId = useAppSelector((state) => state.admin.selectedId);
+  // const selectedGameId = useAppSelector((state) => state.admin.selectedGameId);
+  // const selectedTab = useAppSelector((state) => state.admin.selectedTab);
+
+  const [rarities, games] = useAppSelector(
+    (state) => [state.data.rarities, state.data.games],
+    shallowEqual
+  );
+
+  const [searchTerm, selectedId, selectedGameId, selectedTab] = useAppSelector(
+    (state) => [
+      state.admin.searchTerm,
+      state.admin.selectedId,
+      state.admin.selectedGameId,
+      state.admin.selectedTab,
+    ],
+    shallowEqual
+  );
 
   const renderedRarities = useMemo(() => {
     return rarities
@@ -89,7 +105,7 @@ export const RarityTab: React.FC = () => {
   };
 
   useEffect(() => {
-    if (selectedGameId === 0 || selectedTab !== AdminTabLabel.RARITIES) return;
+    if (selectedGameId === 0 || selectedTab !== AdminTabLabel.Rarities) return;
     loadRarities();
   }, [selectedGameId, selectedTab]);
 
