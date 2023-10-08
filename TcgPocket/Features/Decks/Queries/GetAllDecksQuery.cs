@@ -28,8 +28,6 @@ public class GetAllDecksQueryHandler : IRequestHandler<GetAllDecksQuery, Respons
         var decks = await _dataContext.Set<Deck>()
             .ToListAsync(cancellationToken);
 
-        if (decks.IsNullOrEmpty()) return Error.AsResponse<List<DeckGetDto>>("Decks not found");
-
         return _mapper.Map<List<DeckGetDto>>(decks).AsResponse();
     }
 }

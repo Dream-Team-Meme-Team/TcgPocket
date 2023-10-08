@@ -27,8 +27,6 @@ public class GetAllRolesQueryHandler : IRequestHandler<GetAllRolesQuery, Respons
     {
         var roles = await _roleManager.Roles.ToListAsync(cancellationToken);
 
-        if (roles.IsNullOrEmpty()) return Error.AsResponse<List<RoleGetDto>>("Roles not found");
-
         return _mapper.Map<List<RoleGetDto>>(roles).AsResponse();
     }
 }
