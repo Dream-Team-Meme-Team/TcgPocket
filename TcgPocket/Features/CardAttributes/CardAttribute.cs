@@ -1,5 +1,4 @@
-﻿using TcgPocket.Features.Attributes;
-using TcgPocket.Features.Cards;
+﻿using TcgPocket.Features.Cards;
 using TcgPocket.Shared.Interfaces;
 using Attribute = TcgPocket.Features.Attributes.Attribute;
 
