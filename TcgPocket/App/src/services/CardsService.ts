@@ -5,7 +5,7 @@ import {
   CardFilterDto,
   CardGetDto,
 } from '../types/cards';
-import { apiCall } from './api';
+import { apiCall } from './helpers/api';
 
 type UpdateCardParams = {
   id: number;
@@ -34,7 +34,7 @@ export const CardsService = {
     return await apiCall<CardDetailDto>({
       method: 'POST',
       endpoint: apiRoutes.cards,
-      body: body,
+      data: body,
     });
   },
 
@@ -42,7 +42,7 @@ export const CardsService = {
     return await apiCall<CardGetDto>({
       method: 'PUT',
       endpoint: `${apiRoutes.cards}/${id}`,
-      body: body,
+      data: body,
     });
   },
 
