@@ -1,6 +1,5 @@
 ﻿using TcgPocket.Features.Cards;
 using TcgPocket.Features.Users;
-using TcgPocket.Shared.Dtos;
 using TcgPocket.Shared.Interfaces;
 
 namespace TcgPocket.Features.UserCards;
