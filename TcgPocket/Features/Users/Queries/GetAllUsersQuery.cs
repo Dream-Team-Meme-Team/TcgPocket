@@ -27,8 +27,6 @@ public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, Respons
     {
         var users = await _userManager.Users.ToListAsync(cancellationToken);
 
-        if (users.IsNullOrEmpty()) return Error.AsResponse<List<UserGetDto>>("Users not found");
-
         return _mapper.Map<List<UserGetDto>>(users).AsResponse();
     }
 }

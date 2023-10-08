@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, { AxiosError } from 'axios';
 import { Response } from '../../types/shared';
 axios.defaults.withCredentials = true;

@@ -28,8 +28,6 @@ public class GetAllCardTypesQueryHandler : IRequestHandler<GetAllCardTypesQuery,
         var cardTypes = await _dataContext.Set<CardType>()
             .ToListAsync(cancellationToken: cancellationToken);
 
-        if (cardTypes.IsNullOrEmpty()) return Error.AsResponse<List<CardTypeGetDto>>("Card Types not found");
-
         return _mapper.Map<List<CardTypeGetDto>>(cardTypes).AsResponse();
     }
 }

@@ -1,4 +1,5 @@
 import { Id, PageDto } from './shared';
+import { CardAttributeDto } from './card-attributes';
 
 export type CardDto = {
   name: string;
@@ -12,6 +13,10 @@ export type CardDto = {
 };
 
 export type CardGetDto = Id & CardDto;
+
+export type CardDetailDto = CardGetDto & {
+  attributes: CardAttributeDto[];
+};
 
 export type CardFilterDto = {
   id?: number;
