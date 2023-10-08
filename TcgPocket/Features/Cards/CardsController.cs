@@ -55,12 +55,12 @@ namespace TcgPocket.Features.Cards
             return response.HasErrors ? BadRequest(response) : Ok(response);
         }
 
-        [HttpGet("display")]
-        public async Task<ActionResult<Response<PagedResult<CardDisplayDto>>>> 
-            GetPagedCardsDisplayQuery([FromQuery] PagedCardFilterDto filter)
+        [HttpGet("inventory")]
+        public async Task<ActionResult<Response<PagedResult<CardDisplayDto>>>>
+            GetCurrentUserInventoryQuery([FromQuery] PagedCardFilterDto filter)
         {
             var response = await _mediator
-                .Send(new GetPagedCardsDisplayQuery { Filter = filter });
+                .Send(new GetCurrentUserInventoryQuery { Filter = filter });
 
             return response.HasErrors ? BadRequest(response) : Ok(response);
         }
