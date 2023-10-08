@@ -28,8 +28,6 @@ public class GetAllAttributesQueryHandler : IRequestHandler<GetAllAttributesQuer
 		var attributes = await _dataContext.Set<Attribute>()
 			.ToListAsync(cancellationToken: cancellationToken);
 
-		if (attributes.IsNullOrEmpty()) return Error.AsResponse<List<AttributeGetDto>>("Attributes not found");
-
 		return _mapper.Map<List<AttributeGetDto>>(attributes).AsResponse();
 	}
 }
