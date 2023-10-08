@@ -10,7 +10,7 @@ def scraper_classifier(classifier):
     if classifier == 0: 
         scraper_obj = MagicScraper()
     elif classifier == 1:
-        print('Yu-gi-oh Card')
+        pass
     else:
         scraper_obj = PokemonScraper()
 
