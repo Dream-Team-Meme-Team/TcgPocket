@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using TcgPocket.Features.UserCards;
 using TcgPocket.Features.Users.Dtos;
 using TcgPocket.Features.Users.Queries;
 
