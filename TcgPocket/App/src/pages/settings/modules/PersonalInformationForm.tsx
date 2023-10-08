@@ -29,29 +29,51 @@ export function PersonalInformationForm({
 
   const initialValues: PersonalInformationFormDto = {
     id: user.id,
-    userName: null,
-    email: null,
-    phoneNumber: null,
+    userName: '',
+    email: '',
+    phoneNumber: '',
   };
 
   const form = useForm({
     initialValues: initialValues,
     validateInputOnBlur: true,
     validate: {
-      userName: (value) =>
-        validateTextInput(value ?? '') ? 'Invalid Username' : null,
-      phoneNumber: (value) =>
-        validatePhoneNumer(value ?? '') ? 'Invalid Phone Number' : null,
-      email: (value) => (validateEmail(value ?? '') ? 'Invalid Email' : null),
+      userName: (value) => {
+        if (value === '') {
+          return null;
+        } else if (validateTextInput(value ?? '')) {
+          return 'Invalid Username';
+        } else return null;
+      },
+      phoneNumber: (value) => {
+        if (value === '') {
+          return null;
+        } else if (validatePhoneNumer(value ?? '')) {
+          return 'Invalid Phone Number';
+        } else return null;
+      },
+      email: (value) => {
+        if (value === '') {
+          return null;
+        } else if (validateEmail(value ?? '')) {
+          return 'Invalid Email';
+        } else return null;
+      },
     },
   });
 
   const handleSubmit = async (values: PersonalInformationFormDto) => {
     const userToUpdate: UserGetDto = {
       id: user.id,
-      userName: values.userName ?? user.userName,
-      email: values.email ?? user.email,
-      phoneNumber: values.phoneNumber ?? user.phoneNumber,
+      userName:
+        values.userName === '' || !values.userName
+          ? user.userName
+          : values.userName,
+      email: values.email === '' || !values.email ? user.email : values.email,
+      phoneNumber:
+        values.phoneNumber === '' || !values.phoneNumber
+          ? user.phoneNumber
+          : values.phoneNumber,
     };
 
     const { payload } = await dispatch(updateUserInformation(userToUpdate));
@@ -63,14 +85,11 @@ export function PersonalInformationForm({
       return;
     } else {
       success('User Information Updated!');
+      form.reset();
     }
   };
 
-  const determineDisabled =
-    (form.values.userName === user.userName &&
-      form.values.phoneNumber === user.phoneNumber &&
-      form.values.email === user.email) ||
-    !form.isValid();
+  const determineDisabled = !form.isDirty() || !form.isValid();
 
   return (
     <form onSubmit={form.onSubmit(handleSubmit)} onReset={form.reset}>

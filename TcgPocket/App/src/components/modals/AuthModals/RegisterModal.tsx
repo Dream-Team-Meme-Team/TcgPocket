@@ -5,12 +5,17 @@ import { SecondaryButton } from '../../buttons/SecondaryButton';
 import { useForm } from '@mantine/form';
 import { PrimaryTextInput } from '../../inputs/PrimaryTextInput';
 import { UserCreateDto } from '../../../types/users';
-import { useMemo } from 'react';
+import { CSSProperties, useMemo, useState } from 'react';
 import { dispatch, useAppSelector } from '../../../store/configureStore';
 import { registerUser } from '../../../services/AuthServices';
 import { useFormValidation } from '../../../helpers/useFormValidation';
 import { error, success } from '../../../services/notification';
 import { PrimaryPasswordInput } from '../../inputs/PrimaryPasswordInput';
+import { Popover } from '@mantine/core';
+import {
+  PasswordRequirement,
+  passwordRequirements,
+} from '../../PasswordRequirement';
 
 type RegisterModal = {
   open: boolean;
@@ -39,9 +44,11 @@ export function RegisterModal({
 
   const isLoading = useAppSelector((state) => state.user.isLoading);
 
+  const [popover, setPopover] = useState(false);
+
   const form = useForm({
     initialValues: initialValues,
-    validateInputOnChange: true,
+    validateInputOnBlur: true,
     validate: {
       userName: (value) =>
         validateTextInput(value) ? 'Invalid Username' : null,
@@ -54,6 +61,14 @@ export function RegisterModal({
         value !== values.password ? 'Passwords do not match' : null,
     },
   });
+
+  const checks = passwordRequirements.map((requirement, index) => (
+    <PasswordRequirement
+      key={index}
+      meets={requirement.re.test(form.values.password)}
+      label={requirement.label}
+    />
+  ));
 
   const disableRegister = useMemo(
     () =>
@@ -116,12 +131,23 @@ export function RegisterModal({
             {...form.getInputProps('phoneNumber')}
           />
 
-          <PrimaryPasswordInput
-            withAsterisk
-            className={classes.passwordInput}
-            label="Password"
-            {...form.getInputProps('password')}
-          />
+          <Popover opened={popover} position="bottom" width="target">
+            <Popover.Target>
+              <div
+                onFocusCapture={() => setPopover(true)}
+                onBlurCapture={() => setPopover(false)}
+              >
+                <PrimaryPasswordInput
+                  withAsterisk
+                  className={classes.passwordInput}
+                  label="Password"
+                  {...form.getInputProps('password')}
+                />
+              </div>
+            </Popover.Target>
+
+            <Popover.Dropdown style={popoverStyle}>{checks}</Popover.Dropdown>
+          </Popover>
 
           <PrimaryPasswordInput
             withAsterisk
@@ -142,3 +168,5 @@ export function RegisterModal({
     </PrimaryModal>
   );
 }
+
+const popoverStyle: CSSProperties = { backgroundColor: 'white' };
