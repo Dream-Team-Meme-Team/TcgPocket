@@ -37,12 +37,11 @@ where TFilter : PageDto
     
     public async Task<Response<PagedResult<TDto>>> Handle(TRequest request, CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(request.Filter, cancellationToken);
+        var validationResult = await ValidateRequest(request, cancellationToken);
 
-        if (!validationResult.IsValid)
+        if (validationResult.HasErrors)
         {
-            var errors = _mapper.Map<List<Error>>(validationResult.Errors);
-            return new Response<PagedResult<TDto>>{ Errors = errors };
+            return validationResult;
         }
         
         var query = GetEntities();
@@ -54,6 +53,19 @@ where TFilter : PageDto
         var result = await BeforeReturn(query, request, cancellationToken);
 
         return result.AsResponse();
+    }
+
+    protected virtual async Task<Response<PagedResult<TDto>>> ValidateRequest(TRequest request, CancellationToken cancellationToken)
+    {
+        var validationResult = await _validator.ValidateAsync(request.Filter, cancellationToken);
+
+        if (!validationResult.IsValid)
+        {
+            var errors = _mapper.Map<List<Error>>(validationResult.Errors);
+            return new Response<PagedResult<TDto>> { Errors = errors };
+        }
+
+        return new Response<PagedResult<TDto>>();
     }
 
     protected virtual IQueryable<TEntity> GetEntities()
