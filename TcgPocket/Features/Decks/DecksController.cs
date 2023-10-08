@@ -18,7 +18,7 @@ public class DecksController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<Response<List<DeckDto>>>> GetAllDecks()
+    public async Task<ActionResult<Response<List<DeckGetDto>>>> GetAllDecks()
     {
         var response = await _mediator.Send(new GetAllDecksQuery());
 
