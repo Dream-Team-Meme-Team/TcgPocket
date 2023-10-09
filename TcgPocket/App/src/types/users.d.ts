@@ -7,7 +7,10 @@ export type UserDto = {
   phoneNumber: string;
 };
 
-export type UserGetDto = Id & UserDto;
+export type UserGetDto = {
+  roles: List<RoleGetDto>;
+} & Id &
+  UserDto;
 
 export type UserCreateDto = UserDto & {
   password: string;

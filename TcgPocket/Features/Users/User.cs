@@ -3,6 +3,7 @@ using TcgPocket.Features.Decks;
 using TcgPocket.Features.UserRoles;
 using TcgPocket.Features.UserCards;
 using TcgPocket.Shared.Interfaces;
+using TcgPocket.Features.Roles;
 
 namespace TcgPocket.Features.Users;
 
@@ -19,6 +20,7 @@ public class User : IdentityUser<int>, IIdentifiable
 public class UserGetDto : UserDto
 {
     public int Id { get; set; }
+    public List<RoleGetDto> Roles { get; set; }
 }
 
 public class UserDto
