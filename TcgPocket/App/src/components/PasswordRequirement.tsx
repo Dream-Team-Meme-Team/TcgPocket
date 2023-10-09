@@ -1,7 +1,12 @@
 import { Box, createStyles, MantineTheme, rem, Text } from '@mantine/core';
 import { IconCheck, IconX } from '@tabler/icons-react';
 
-export const passwordRequirements = [
+type Requirements = {
+  re: RegExp;
+  label: string;
+};
+
+export const passwordRequirements: Requirements[] = [
   { re: /[0-9]/, label: 'Includes number' },
   { re: /[a-z]/, label: 'Includes lowercase letter' },
   { re: /[A-Z]/, label: 'Includes uppercase letter' },
