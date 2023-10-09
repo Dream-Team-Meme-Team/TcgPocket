@@ -9,6 +9,7 @@ import {
   setSelectedGameId,
 } from '../../../../store/adminSlice';
 import { AdminTabLabel } from '../../../../enums/adminTabLabel';
+import { shallowEqual } from 'react-redux';
 
 type AdminTabHeaderProps = {
   label: string;
@@ -19,9 +20,12 @@ export function AdminTabHeader({
 }: AdminTabHeaderProps): React.ReactElement {
   const { classes } = useStyles();
 
-  const searchTerm = useAppSelector((state) => state.admin.searchTerm);
-  const games = useAppSelector((state) => state.data.games);
-  const selectedGameId = useAppSelector((state) => state.admin.selectedGameId);
+  const [searchTerm, selectedGameId] = useAppSelector(
+    (state) => [state.admin.searchTerm, state.admin.selectedGameId],
+    shallowEqual
+  );
+
+  const [games] = useAppSelector((state) => [state.data.games], shallowEqual);
 
   const data = useMemo(() => {
     return games.map((game) => game.name);
@@ -47,7 +51,7 @@ export function AdminTabHeader({
     dispatch(setSelectedGameId(foundSelectedGame.id));
   };
 
-  const determineSelect = label !== AdminTabLabel.GAMES;
+  const determineSelect = label !== AdminTabLabel.Games;
 
   return (
     <div className={classes.adminTabHeaderContainer}>

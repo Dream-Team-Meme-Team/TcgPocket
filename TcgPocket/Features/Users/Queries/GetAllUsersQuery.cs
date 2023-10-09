@@ -25,9 +25,10 @@ public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, Respons
 
     public async Task<Response<List<UserGetDto>>> Handle(GetAllUsersQuery query, CancellationToken cancellationToken)
     {
-        var users = await _userManager.Users.ToListAsync(cancellationToken);
-
-        if (users.IsNullOrEmpty()) return Error.AsResponse<List<UserGetDto>>("Users not found");
+        var users = await _userManager.Users
+            .Include(x => x.UserRoles)
+            .ThenInclude(x => x.Role)
+            .ToListAsync(cancellationToken);
 
         return _mapper.Map<List<UserGetDto>>(users).AsResponse();
     }

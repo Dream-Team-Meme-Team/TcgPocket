@@ -6,8 +6,8 @@ import { dispatch } from '../../../store/configureStore';
 import { UserGetDto } from '../../../types/users';
 import { SecondaryButton } from '../../../components/buttons/SecondaryButton';
 import { PrimaryButton } from '../../../components/buttons/PrimaryButton';
-import { error, success } from '../../../services/helpers/notification';
 import { updateUserInformation } from '../../../services/AuthServices';
+import { responseWrapper } from '../../../services/helpers/responseWrapper';
 
 export type UserFormProps = {
   user: UserGetDto;
@@ -46,7 +46,7 @@ export function PersonalInformationForm({
     },
   });
 
-  const handleSubmit = async (values: PersonalInformationFormDto) => {
+  const handleSubmit = (values: PersonalInformationFormDto) => {
     const userToUpdate: UserGetDto = {
       id: user.id,
       userName: values.userName ?? user.userName,
@@ -54,16 +54,9 @@ export function PersonalInformationForm({
       phoneNumber: values.phoneNumber ?? user.phoneNumber,
     };
 
-    const { payload } = await dispatch(updateUserInformation(userToUpdate));
-
-    if (!payload) {
-      return;
-    } else if (payload.hasErrors) {
-      payload.errors.forEach((err) => error(err.message));
-      return;
-    } else {
-      success('User Information Updated!');
-    }
+    dispatch(updateUserInformation(userToUpdate)).then(({ payload }) => {
+      responseWrapper(payload, 'Account Information Updated');
+    });
   };
 
   const determineDisabled =

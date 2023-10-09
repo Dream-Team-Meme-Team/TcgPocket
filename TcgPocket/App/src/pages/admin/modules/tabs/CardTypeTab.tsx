@@ -15,6 +15,7 @@ import { CardTypeGetDto } from '../../../../types/card-types';
 import { DeleteModal } from '../../../../components/modals/DeleteModal';
 import { setSelectedId } from '../../../../store/adminSlice';
 import { AdminTabLabel } from '../../../../enums/adminTabLabel';
+import { shallowEqual } from 'react-redux';
 
 const titles: string[] = ['Name', 'Game', 'Edit', 'Delete'];
 const colValue: string = '1fr ';
@@ -26,12 +27,20 @@ export const CardTypeTab: React.FC = () => {
   const [openDelete, { toggle: toggleDelete }] = useDisclosure();
   const [openEdit, { toggle: toggleEdit }] = useDisclosure();
 
-  const cardTypes = useAppSelector((state) => state.data.cardTypes);
-  const games = useAppSelector((state) => state.data.games);
-  const searchTerm = useAppSelector((state) => state.admin.searchTerm);
-  const selectedId = useAppSelector((state) => state.admin.selectedId);
-  const selectedGameId = useAppSelector((state) => state.admin.selectedGameId);
-  const selectedTab = useAppSelector((state) => state.admin.selectedTab);
+  const [cardTypes, games] = useAppSelector(
+    (state) => [state.data.cardTypes, state.data.games],
+    shallowEqual
+  );
+
+  const [searchTerm, selectedId, selectedGameId, selectedTab] = useAppSelector(
+    (state) => [
+      state.admin.searchTerm,
+      state.admin.selectedId,
+      state.admin.selectedGameId,
+      state.admin.selectedTab,
+    ],
+    shallowEqual
+  );
 
   const renderedCardTypes = useMemo(() => {
     return cardTypes
@@ -56,13 +65,14 @@ export const CardTypeTab: React.FC = () => {
     responseWrapper(payload);
   };
 
-  const deleteSelectedCardType = async () => {
-    const { payload } = await dispatch(deleteCardType(selectedId));
-    responseWrapper(payload, 'Card Type Deleted');
+  const deleteSelectedCardType = () => {
+    dispatch(deleteCardType(selectedId)).then(({ payload }) => {
+      responseWrapper(payload, 'Card Type Deleted');
 
-    if (payload && !payload.hasErrors) {
-      loadCardTypes();
-    }
+      if (payload && !payload.hasErrors) {
+        loadCardTypes();
+      }
+    });
   };
 
   const editSelectedCardType = async (editedCardType: CardTypeGetDto) => {
@@ -72,12 +82,13 @@ export const CardTypeTab: React.FC = () => {
       gameId: selectedGameId,
     };
 
-    const { payload } = await dispatch(editCardType(updatedCardType));
-    responseWrapper(payload, 'Card Type Edited');
+    dispatch(editCardType(updatedCardType)).then(({ payload }) => {
+      responseWrapper(payload, 'Card Type Edited');
 
-    if (payload && !payload.hasErrors) {
-      loadCardTypes();
-    }
+      if (payload && !payload.hasErrors) {
+        loadCardTypes();
+      }
+    });
   };
 
   const findGame = (gameId: number) => {
@@ -87,8 +98,7 @@ export const CardTypeTab: React.FC = () => {
   };
 
   useEffect(() => {
-    if (selectedGameId === 0 || selectedTab !== AdminTabLabel.CARD_TYPES)
-      return;
+    if (selectedGameId === 0 || selectedTab !== AdminTabLabel.CardTypes) return;
     loadCardTypes();
   }, [selectedGameId, selectedTab]);
 

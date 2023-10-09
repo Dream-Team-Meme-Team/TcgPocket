@@ -4,12 +4,46 @@ import { AttributeDto, AttributeGetDto } from '../../types/attributes';
 import { apiRoutes } from '../../routes';
 import { Response } from '../../types/shared';
 
+export type AttributeServices = typeof AttributeServices;
+
+export const AttributeServices = {
+  getAll: async () => {
+    return await apiCall<AttributeGetDto[]>({
+      method: 'GET',
+      endpoint: apiRoutes.attributes,
+    });
+  },
+
+  create: async (values: AttributeDto) => {
+    return await apiCall({
+      method: 'POST',
+      endpoint: apiRoutes.attributes,
+      data: values,
+    });
+  },
+
+  delete: async (id: number) => {
+    return await apiCall({
+      method: 'DELETE',
+      endpoint: `${apiRoutes.attributes}/${id}`,
+    });
+  },
+
+  edit: async (values: AttributeGetDto) => {
+    return await apiCall({
+      method: 'PUT',
+      endpoint: `${apiRoutes.attributes}/${values.id}`,
+      data: values,
+    });
+  },
+};
+
 export const getAllAttributes = createAsyncThunk<
   Response<AttributeGetDto[]>,
   void,
   { rejectValue: Response<AttributeGetDto[]> }
 >('getAllAttributes', async () => {
-  return await apiCall<AttributeGetDto[]>('GET', apiRoutes.attributes);
+  return await AttributeServices.getAll();
 });
 
 export const createAttribute = createAsyncThunk<
@@ -17,11 +51,7 @@ export const createAttribute = createAsyncThunk<
   AttributeDto,
   { rejectValue: Response<AttributeGetDto> }
 >('createAttribute', async (newAttribute) => {
-  return await apiCall<AttributeGetDto>(
-    'POST',
-    apiRoutes.attributes,
-    newAttribute
-  );
+  return await AttributeServices.create(newAttribute);
 });
 
 export const deleteAttribute = createAsyncThunk<
@@ -29,7 +59,7 @@ export const deleteAttribute = createAsyncThunk<
   number,
   { rejectValue: Response<void> }
 >('deleteAttribute', async (id) => {
-  return await apiCall<void>('DELETE', `${apiRoutes.attributes}/${id}`);
+  return await AttributeServices.delete(id);
 });
 
 export const editAttribute = createAsyncThunk<
@@ -37,9 +67,5 @@ export const editAttribute = createAsyncThunk<
   AttributeGetDto,
   { rejectValue: Response<void> }
 >('editAttribute', async (editedAttribute) => {
-  return await apiCall<void>(
-    'PUT',
-    `${apiRoutes.attributes}/${editedAttribute.id}`,
-    editedAttribute
-  );
+  return await AttributeServices.edit(editedAttribute);
 });

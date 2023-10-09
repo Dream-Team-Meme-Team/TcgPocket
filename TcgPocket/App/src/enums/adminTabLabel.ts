@@ -1,7 +1,7 @@
 export enum AdminTabLabel {
-  GAMES = 'Games',
-  SETS = 'Sets',
-  CARD_TYPES = 'Card Types',
-  RARITIES = 'Rarities',
-  ATTRIBUTES = 'Attributes',
+  Games = 'Games',
+  Sets = 'Sets',
+  CardTypes = 'Card Types',
+  Rarities = 'Rarities',
+  Attributes = 'Attributes',
 }

@@ -29,22 +29,24 @@ export function AddGameModal(): React.ReactElement {
     form.reset();
   };
 
-  const loadGames = async () => {
-    const { payload } = await dispatch(getAllGames());
-    responseWrapper(payload);
+  const loadGames = () => {
+    dispatch(getAllGames()).then(({ payload }) => {
+      responseWrapper(payload);
 
-    if (payload && !payload.hasErrors) {
-      handleCancel();
-    }
+      if (payload && !payload.hasErrors) {
+        handleCancel();
+      }
+    });
   };
 
-  const handleAdd = async (newGame: GameDto) => {
-    const { payload } = await dispatch(createGame(newGame));
-    responseWrapper(payload, 'Successfully added game');
+  const handleAdd = (newGame: GameDto) => {
+    dispatch(createGame(newGame)).then(({ payload }) => {
+      responseWrapper(payload, 'Game Created');
 
-    if (payload && !payload.hasErrors) {
-      loadGames();
-    }
+      if (payload && !payload.hasErrors) {
+        loadGames();
+      }
+    });
   };
 
   return (

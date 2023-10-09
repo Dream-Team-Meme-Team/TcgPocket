@@ -33,12 +33,13 @@ export function AddCardTypeModal(): React.ReactElement {
   };
 
   const loadCardTypes = async () => {
-    const { payload } = await dispatch(getAllCardTypes());
-    responseWrapper(payload);
+    dispatch(getAllCardTypes()).then(({ payload }) => {
+      responseWrapper(payload);
 
-    if (payload && !payload.hasErrors) {
-      handleCancel();
-    }
+      if (payload && !payload.hasErrors) {
+        handleCancel();
+      }
+    });
   };
 
   const handleAdd = async (newCardType: CardTypeDto) => {
@@ -47,12 +48,13 @@ export function AddCardTypeModal(): React.ReactElement {
       gameId: selectGameId,
     };
 
-    const { payload } = await dispatch(createCardType(updateGameId));
-    responseWrapper(payload, 'Card Type Added');
+    dispatch(createCardType(updateGameId)).then(({ payload }) => {
+      responseWrapper(payload, 'Card Type Added');
 
-    if (payload && !payload.hasErrors) {
-      loadCardTypes();
-    }
+      if (payload && !payload.hasErrors) {
+        loadCardTypes();
+      }
+    });
   };
 
   const determineDisabled = selectGameId === 0;

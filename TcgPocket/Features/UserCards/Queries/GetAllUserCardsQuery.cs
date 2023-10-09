@@ -28,8 +28,6 @@ public class GetAllUserCardsQueryHandler : IRequestHandler<GetAllUserCardsQuery,
 		var userCards = await _dataContext.Set<UserCard>()
 			.ToListAsync(cancellationToken);
 
-		if (userCards.IsNullOrEmpty()) return Error.AsResponse<List<UserCardGetDto>>("UserCards not found.");
-
 		return _mapper.Map<List<UserCardGetDto>>(userCards).AsResponse();
     }
 }

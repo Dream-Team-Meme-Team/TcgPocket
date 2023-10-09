@@ -15,6 +15,7 @@ import { EditModal } from '../modals/EditModal';
 import { TabInfoHeader } from '../headers/TabInfoHeader';
 import { setSelectedId } from '../../../../store/adminSlice';
 import { AdminTabLabel } from '../../../../enums/adminTabLabel';
+import { shallowEqual } from 'react-redux';
 
 const titles: string[] = ['Name', 'Edit', 'Delete'];
 const colValue: string = '1fr ';
@@ -26,10 +27,16 @@ export const GameTab: React.FC = () => {
   const [openDelete, { toggle: toggleDelete }] = useDisclosure();
   const [openEdit, { toggle: toggleEdit }] = useDisclosure();
 
-  const games = useAppSelector((state) => state.data.games);
-  const searchTerm = useAppSelector((state) => state.admin.searchTerm);
-  const selectedId = useAppSelector((state) => state.admin.selectedId);
-  const selectedTab = useAppSelector((state) => state.admin.selectedTab);
+  const [games] = useAppSelector((state) => [state.data.games], shallowEqual);
+
+  const [searchTerm, selectedId, selectedTab] = useAppSelector(
+    (state) => [
+      state.admin.searchTerm,
+      state.admin.selectedId,
+      state.admin.selectedTab,
+    ],
+    shallowEqual
+  );
 
   const renderedGames = useMemo(() => {
     return games.filter((game) =>
@@ -52,26 +59,28 @@ export const GameTab: React.FC = () => {
     responseWrapper(payload);
   };
 
-  const deleteSelectedGame = async () => {
-    const { payload } = await dispatch(deleteGame(selectedId));
-    responseWrapper(payload, 'Game Deleted');
+  const deleteSelectedGame = () => {
+    dispatch(deleteGame(selectedId)).then(({ payload }) => {
+      responseWrapper(payload, 'Game Deleted');
 
-    if (payload && !payload.hasErrors) {
-      loadGames();
-    }
+      if (payload && !payload.hasErrors) {
+        loadGames();
+      }
+    });
   };
 
-  const editSelectedGame = async (editedGame: GameGetDto) => {
-    const { payload } = await dispatch(editGame(editedGame));
-    responseWrapper(payload, 'Game Edited');
+  const editSelectedGame = (editedGame: GameGetDto) => {
+    dispatch(editGame(editedGame)).then(({ payload }) => {
+      responseWrapper(payload, 'Game Edited');
 
-    if (payload && !payload.hasErrors) {
-      loadGames();
-    }
+      if (payload && !payload.hasErrors) {
+        loadGames();
+      }
+    });
   };
 
   useEffect(() => {
-    if (selectedTab !== AdminTabLabel.GAMES) return;
+    if (selectedTab !== AdminTabLabel.Games) return;
     loadGames();
   }, [selectedTab]);
 

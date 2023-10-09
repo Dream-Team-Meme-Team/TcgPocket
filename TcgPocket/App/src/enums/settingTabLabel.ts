@@ -1,3 +1,3 @@
 export enum SettingTabLabel {
-  ACCOUNT = 'Account,',
+  Account = 'Account',
 }

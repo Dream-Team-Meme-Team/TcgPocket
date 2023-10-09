@@ -15,6 +15,7 @@ import { EditModal } from '../modals/EditModal';
 import { SetGetDto } from '../../../../types/sets';
 import { setSelectedId } from '../../../../store/adminSlice';
 import { AdminTabLabel } from '../../../../enums/adminTabLabel';
+import { shallowEqual } from 'react-redux';
 
 const titles: string[] = ['Name', 'Game', 'Edit', 'Delete'];
 const colValue: string = '1fr ';
@@ -26,12 +27,20 @@ export const SetTab: React.FC = () => {
   const [openDelete, { toggle: toggleDelete }] = useDisclosure();
   const [openEdit, { toggle: toggleEdit }] = useDisclosure();
 
-  const sets = useAppSelector((state) => state.data.sets);
-  const games = useAppSelector((state) => state.data.games);
-  const searchTerm = useAppSelector((state) => state.admin.searchTerm);
-  const selectedId = useAppSelector((state) => state.admin.selectedId);
-  const selectedGameId = useAppSelector((state) => state.admin.selectedGameId);
-  const selectedTab = useAppSelector((state) => state.admin.selectedTab);
+  const [sets, games] = useAppSelector(
+    (state) => [state.data.sets, state.data.games],
+    shallowEqual
+  );
+
+  const [searchTerm, selectedId, selectedGameId, selectedTab] = useAppSelector(
+    (state) => [
+      state.admin.searchTerm,
+      state.admin.selectedId,
+      state.admin.selectedGameId,
+      state.admin.selectedTab,
+    ],
+    shallowEqual
+  );
 
   const renderedSets = useMemo(() => {
     return sets
@@ -56,28 +65,30 @@ export const SetTab: React.FC = () => {
     responseWrapper(payload);
   };
 
-  const deleteSelectedSet = async () => {
-    const { payload } = await dispatch(deleteSet(selectedId));
-    responseWrapper(payload, 'Set Deleted');
+  const deleteSelectedSet = () => {
+    dispatch(deleteSet(selectedId)).then(({ payload }) => {
+      responseWrapper(payload, 'Set Deleted');
 
-    if (payload && !payload.hasErrors) {
-      loadSets();
-    }
+      if (payload && !payload.hasErrors) {
+        loadSets();
+      }
+    });
   };
 
-  const editSelectedSet = async (editedSet: SetGetDto) => {
+  const editSelectedSet = (editedSet: SetGetDto) => {
     const updatedSet: SetGetDto = {
       id: editedSet.id,
       name: editedSet.name,
       gameId: selectedGameId,
     };
 
-    const { payload } = await dispatch(editSet(updatedSet));
-    responseWrapper(payload, 'Set Edited');
+    dispatch(editSet(updatedSet)).then(({ payload }) => {
+      responseWrapper(payload, 'Set Edited');
 
-    if (payload && !payload.hasErrors) {
-      loadSets();
-    }
+      if (payload && !payload.hasErrors) {
+        loadSets();
+      }
+    });
   };
 
   const findGame = (gameId: number) => {
@@ -87,7 +98,7 @@ export const SetTab: React.FC = () => {
   };
 
   useEffect(() => {
-    if (selectedGameId === 0 || selectedTab !== AdminTabLabel.SETS) return;
+    if (selectedGameId === 0 || selectedTab !== AdminTabLabel.Sets) return;
     loadSets();
   }, [selectedGameId, selectedTab]);
 

@@ -7,7 +7,7 @@ import { AccountTab } from './modules/tabs/AccountTab';
 
 const tabs: Tab[] = [
   {
-    label: SettingTabLabel.ACCOUNT,
+    label: SettingTabLabel.Account,
     icon: <IconUser />,
     content: AccountTab,
   },

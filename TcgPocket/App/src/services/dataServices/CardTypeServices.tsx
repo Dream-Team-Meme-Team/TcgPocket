@@ -4,24 +4,54 @@ import { CardTypeDto, CardTypeGetDto } from '../../types/card-types';
 import { apiCall } from '../helpers/api';
 import { apiRoutes } from '../../routes';
 
+export type CardTypeServices = typeof CardTypeServices;
+
+export const CardTypeServices = {
+  getAll: async () => {
+    return await apiCall<CardTypeGetDto[]>({
+      method: 'GET',
+      endpoint: apiRoutes.cardTypes,
+    });
+  },
+
+  create: async (values: CardTypeDto) => {
+    return await apiCall<CardTypeGetDto>({
+      method: 'POST',
+      endpoint: apiRoutes.cardTypes,
+      data: values,
+    });
+  },
+
+  delete: async (id: number) => {
+    return await apiCall({
+      method: 'DELETE',
+      endpoint: `${apiRoutes.cardTypes}/${id}`,
+    });
+  },
+
+  edit: async (values: CardTypeGetDto) => {
+    return await apiCall({
+      method: 'PUT',
+      endpoint: `${apiRoutes.cardTypes}/${values.id}`,
+      data: values,
+    });
+  },
+};
+
 export const getAllCardTypes = createAsyncThunk<
   Response<CardTypeGetDto[]>,
   void,
   { rejectValue: Response<CardTypeGetDto[]> }
 >('getAllCardTypes', async () => {
-  return await apiCall<CardTypeGetDto[]>('GET', apiRoutes.cardTypes);
+  return await CardTypeServices.getAll();
 });
 
 export const createCardType = createAsyncThunk<
   Response<CardTypeGetDto>,
   CardTypeDto,
   { rejectValue: Response<CardTypeGetDto> }
->('createCardType', async (newCardType) => {
-  return await apiCall<CardTypeGetDto>(
-    'POST',
-    apiRoutes.cardTypes,
-    newCardType
-  );
+>('createCardType', async (values) => {
+  return await CardTypeServices.create(values);
 });
 
 export const deleteCardType = createAsyncThunk<
@@ -29,7 +59,7 @@ export const deleteCardType = createAsyncThunk<
   number,
   { rejectValue: Response<void> }
 >('deleteCardType', async (id) => {
-  return await apiCall<void>('DELETE', `${apiRoutes.cardTypes}/${id}`);
+  return await CardTypeServices.delete(id);
 });
 
 export const editCardType = createAsyncThunk<
@@ -37,9 +67,5 @@ export const editCardType = createAsyncThunk<
   CardTypeGetDto,
   { rejectValue: Response<void> }
 >('editCardType', async (editedCardType) => {
-  return await apiCall<void>(
-    'PUT',
-    `${apiRoutes.cardTypes}/${editedCardType.id}`,
-    editedCardType
-  );
+  return await CardTypeServices.edit(editedCardType);
 });
