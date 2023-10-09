@@ -1,11 +1,16 @@
 import { Tabs, createStyles } from '@mantine/core';
 import { IconUser } from '@tabler/icons-react';
-import { AccountTab } from './modules/AccountTab';
 import { useNavbarHeight } from '../../hooks/use-navbar-height';
 import { Tab } from '../../types/tabs';
+import { SettingTabLabel } from '../../enums/settingTabLabel';
+import { AccountTab } from './modules/tabs/AccountTab';
 
 const tabs: Tab[] = [
-  { label: 'Account', icon: <IconUser />, element: <AccountTab /> },
+  {
+    label: SettingTabLabel.Account,
+    icon: <IconUser />,
+    content: AccountTab,
+  },
 ];
 
 export function SettingsPage(): React.ReactElement {
@@ -25,11 +30,15 @@ export function SettingsPage(): React.ReactElement {
         ))}
       </Tabs.List>
 
-      {tabs.map((tab, index) => (
-        <Tabs.Panel key={index} value={tab.label}>
-          {tab.element}
-        </Tabs.Panel>
-      ))}
+      {tabs.map((tab, index) => {
+        const TabContent = tab.content;
+
+        return (
+          <Tabs.Panel key={index} value={tab.label}>
+            <TabContent />
+          </Tabs.Panel>
+        );
+      })}
     </Tabs>
   );
 }

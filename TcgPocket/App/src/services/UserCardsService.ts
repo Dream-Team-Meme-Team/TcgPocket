@@ -1,6 +1,6 @@
 import { apiRoutes } from '../routes';
 import { UserCardDto, UserCardGetDto } from '../types/user-cards';
-import { apiCall } from './api';
+import { apiCall } from './helpers/api';
 
 type UpdateUserCardParams = {
   id: number;
@@ -28,7 +28,7 @@ export const UserCardsService = {
     return await apiCall<UserCardDto>({
       method: 'POST',
       endpoint: apiRoutes.userCards,
-      body: body,
+      data: body,
     });
   },
 
@@ -36,7 +36,7 @@ export const UserCardsService = {
     return await apiCall<UserCardGetDto>({
       method: 'PUT',
       endpoint: `${apiRoutes.userCards}/${id}`,
-      body: body,
+      data: body,
     });
   },
 

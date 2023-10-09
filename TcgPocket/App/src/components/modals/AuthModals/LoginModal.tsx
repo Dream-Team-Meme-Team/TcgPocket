@@ -8,7 +8,7 @@ import { SignInUserDto } from '../../../types/users';
 import { useMemo } from 'react';
 import { dispatch, useAppSelector } from '../../../store/configureStore';
 import { signInUser } from '../../../services/AuthServices';
-import { error, success } from '../../../services/notification';
+import { error, success } from '../../../services/helpers/notification';
 import { PrimaryPasswordInput } from '../../inputs/PrimaryPasswordInput';
 
 type LoginModalProps = {

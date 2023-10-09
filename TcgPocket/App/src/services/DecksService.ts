@@ -1,6 +1,6 @@
 import { apiRoutes } from '../routes';
 import { DeckDto, DeckGetDto } from '../types/decks';
-import { apiCall } from './api';
+import { apiCall } from './helpers/api';
 
 type UpdateDeckParams = {
   id: number;
@@ -28,7 +28,7 @@ export const DecksService = {
     return await apiCall<DeckGetDto>({
       method: 'POST',
       endpoint: apiRoutes.decks,
-      body: body,
+      data: body,
     });
   },
 
@@ -36,7 +36,7 @@ export const DecksService = {
     return await apiCall<DeckGetDto>({
       method: 'PUT',
       endpoint: `${apiRoutes.decks}/${id}?gameId={}`,
-      body: body,
+      data: body,
     });
   },
 

@@ -1,4 +1,4 @@
-import { error } from '../services/notification';
+import { error } from '../services/helpers/notification';
 import { Error } from '../types/shared';
 
 export const notifyErrors = (errors: Error[]) => {
