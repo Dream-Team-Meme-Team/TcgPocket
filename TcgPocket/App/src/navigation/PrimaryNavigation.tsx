@@ -47,7 +47,7 @@ export function PrimaryNavigation(): React.ReactElement {
     <>
       <Navbar height={navbarHeight} sx={navbarSx}>
         <NavButton route={routes.home} sx={logoIconSx}>
-          <Image maw={navbarHeight - 16} src="./TcgPocketLogo.svg" />
+          <Image maw={navbarHeight - 16} src="./TcgPocketLogo2.svg" />
         </NavButton>
         <Flex align={'center'} gap={25}>
           {determineUserState && (
