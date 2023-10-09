@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using System.Text.RegularExpressions;
 using TcgPocket.Features.Users.Dtos;
 
 namespace TcgPocket.Features.Users.Validators;
