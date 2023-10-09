@@ -13,9 +13,10 @@ const buttonStyling = (theme: MantineTheme): CSSObject => ({
   },
 
   ':disabled': {
-    backgroundColor: theme.colors.grayCustomColors[3],
-    color: 'black',
+    backgroundColor: theme.colors.dark[3],
+    color: theme.colors.dark[7],
     textShadow: 'none',
+    opacity: '50%',
   },
 });
 

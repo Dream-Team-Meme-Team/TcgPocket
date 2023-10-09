@@ -22,12 +22,7 @@ export function NotFoundPage(): React.ReactElement {
       <div className={classes.content}>
         <Illustration className={classes.image404} />
         <Title className={classes.title}>Page Not Found</Title>
-        <Text
-          color="black"
-          size="lg"
-          align="center"
-          className={classes.description}
-        >
+        <Text size="lg" align="center" className={classes.description}>
           The page you are trying to reach does not exist. Please check the
           address. The page may have been moved to another URL.
         </Text>
