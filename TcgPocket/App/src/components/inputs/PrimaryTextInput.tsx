@@ -1,8 +1,10 @@
 import {
   CSSObject,
   MantineTheme,
+  Styles,
   TextInput,
   TextInputProps,
+  TextInputStylesNames,
 } from '@mantine/core';
 import { InputHTMLAttributes } from 'react';
 
@@ -14,13 +16,14 @@ const inputStyling = (theme: MantineTheme): CSSObject => ({
 
   input: {
     color: theme.black,
-    background: theme.fn.lighten(theme.colors.primaryPurpleColor[0], 0.7),
-    backgroundColor: theme.fn.lighten(theme.colors.primaryPurpleColor[0], 0.7),
+    background: theme.colors.textBoxColor[0],
     borderColor: theme.colors.grape[9],
+    fontWeight: 500,
     borderWidth: 1,
 
     '::placeholder': {
       fontWeight: 400,
+      color: theme.colors.placeholderTextColor[0],
     },
 
     ':focus': {
@@ -40,18 +43,17 @@ export function PrimaryTextInput({
   ...props
 }: PrimaryTextInputProps): React.ReactElement {
   return (
-    <TextInput
-      sx={sx ?? inputStyling}
-      styles={{
-        error: {
-          fontWeight: 600,
-          fontSize: '13px',
-          textShadow: '-2px 2px 5px rgba(0,0,0,0.6)',
-        },
-      }}
-      {...props}
-    >
+    <TextInput sx={sx ?? inputStyling} styles={styles} {...props}>
       {children}
     </TextInput>
   );
 }
+
+const styles: Styles<TextInputStylesNames, Record<string, any>> = {
+  error: {
+    fontWeight: 600,
+    fontSize: '13px',
+    textShadow: '-2px 2px 5px rgba(0,0,0,0.6)',
+    color: '#fc2a1c',
+  },
+};

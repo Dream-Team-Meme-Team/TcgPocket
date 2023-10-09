@@ -2,8 +2,10 @@ import {
   ActionIcon,
   CSSObject,
   MantineTheme,
+  Styles,
   TextInput,
   TextInputProps,
+  TextInputStylesNames,
 } from '@mantine/core';
 import { IconEye, IconEyeClosed } from '@tabler/icons-react';
 import { InputHTMLAttributes, useState } from 'react';
@@ -14,9 +16,9 @@ type PrimaryPasswordInputProps = TextInputProps &
 const textInputStyling = (theme: MantineTheme): CSSObject => ({
   input: {
     color: 'black',
-    background: theme.fn.lighten(theme.colors.primaryPurpleColor[0], 0.7),
-    backgroundColor: theme.fn.lighten(theme.colors.primaryPurpleColor[0], 0.7),
+    background: theme.colors.textBoxColor[0],
     borderColor: theme.colors.grape[9],
+    fontWeight: 500,
     borderWidth: 1,
 
     ':focus': {
@@ -41,13 +43,7 @@ export function PrimaryPasswordInput({
       sx={sx ?? textInputStyling}
       type={hidden ? 'password' : ''}
       {...props}
-      styles={{
-        error: {
-          fontWeight: 600,
-          fontSize: '13px',
-          textShadow: '-2px 2px 5px rgba(0,0,0,0.6)',
-        },
-      }}
+      styles={styles}
       rightSection={
         <ActionIcon onClick={() => setHidden(!hidden)}>
           {hidden ? (
@@ -62,3 +58,12 @@ export function PrimaryPasswordInput({
     </TextInput>
   );
 }
+
+const styles: Styles<TextInputStylesNames, Record<string, any>> = {
+  error: {
+    fontWeight: 600,
+    fontSize: '13px',
+    textShadow: '-2px 2px 5px rgba(0,0,0,0.6)',
+    color: '#fc2a1c',
+  },
+};

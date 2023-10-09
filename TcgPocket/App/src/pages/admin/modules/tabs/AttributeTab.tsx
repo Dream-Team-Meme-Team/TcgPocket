@@ -164,7 +164,10 @@ const useStyles = createStyles((theme: MantineTheme, numOfCol: string) => {
       gridTemplateColumns: numOfCol,
 
       ':hover': {
-        backgroundColor: theme.colors.primaryColor[0],
+        backgroundColor: theme.fn.darken(
+          theme.colors.primaryPurpleColor[0],
+          0.2
+        ),
 
         borderRadius: 7,
         paddingLeft: 8,

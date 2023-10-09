@@ -81,7 +81,12 @@ export function AdminPage(): React.ReactElement {
     >
       <Tabs.List>
         {adminTabs.map((tab, index) => (
-          <Tabs.Tab key={index} value={tab.label} icon={tab.icon}>
+          <Tabs.Tab
+            key={index}
+            value={tab.label}
+            icon={tab.icon}
+            className={classes.tabStyle}
+          >
             {tab.label}
           </Tabs.Tab>
         ))}
@@ -110,7 +115,7 @@ export function AdminPage(): React.ReactElement {
   );
 }
 
-const useStyles = createStyles(() => {
+const useStyles = createStyles((theme) => {
   const { remainingHeight } = useNavbarHeight();
 
   return {
@@ -118,9 +123,24 @@ const useStyles = createStyles(() => {
       height: `${remainingHeight}px`,
     },
 
+    tabStyle: {
+      borderColor: `${theme.fn.lighten(
+        theme.colors.secondaryPurpleColors[0],
+        0.25
+      )} !important`,
+
+      '&:hover': {
+        backgroundColor: theme.fn.rgba(
+          theme.colors.secondaryPurpleColors[0],
+          0.25
+        ),
+      },
+    },
+
     panelContainer: {
       display: 'grid',
       gridTemplateRows: 'auto 1fr',
+      backgroundColor: theme.colors.secondaryBackgroundColor[0],
 
       padding: '8px',
     },

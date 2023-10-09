@@ -5,8 +5,8 @@ type PrimaryModalProps = ModalProps & ModalRootProps & ModalBaseSettings;
 
 const defaultProps: Partial<PrimaryModalProps> = {
   overlayProps: {
-    opacity: 0.55,
-    blur: 3,
+    opacity: 0.75,
+    blur: 4.5,
   },
   transitionProps: {
     transition: 'fade',
@@ -15,19 +15,18 @@ const defaultProps: Partial<PrimaryModalProps> = {
   },
   styles: {
     header: {
-      backgroundColor: '#28163b',
+      backgroundColor: '#170b24',
       paddingTop: '3px',
     },
     title: {
       fontSize: '20px',
-      color: 'white',
       fontWeight: 'bold',
       margin: 'auto',
       paddingTop: '20px',
     },
     body: {
       padding: '20px 20px',
-      backgroundColor: '#28163b',
+      backgroundColor: '#170b24',
     },
   },
   closeButtonProps: {

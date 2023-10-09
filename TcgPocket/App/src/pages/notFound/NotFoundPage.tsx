@@ -64,10 +64,10 @@ const useStyles = createStyles((theme) => ({
 
   image404: {
     ...theme.fn.cover(),
-    opacity: 0.3,
+    opacity: 0.9,
     margin: 'auto !important',
     position: 'absolute',
-    paddingTop: rem(75),
+    paddingTop: rem(40),
     fill: 'true',
     zIndex: -1,
   },

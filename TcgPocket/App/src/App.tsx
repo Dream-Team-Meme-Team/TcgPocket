@@ -55,7 +55,7 @@ function useContainerSx(theme: MantineTheme): CSSObject {
     boxShadow: '0px 3px 8px black',
     position: 'relative',
     minHeight: remainingHeight,
-    backgroundColor: theme.colors.secondaryBlueColors[2],
+    backgroundColor: theme.colors.backgroundColor[0],
   };
 }
 

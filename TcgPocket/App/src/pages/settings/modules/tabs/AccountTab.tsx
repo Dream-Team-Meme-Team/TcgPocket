@@ -1,9 +1,4 @@
 import { MantineTheme, createStyles } from '@mantine/core';
-import { useAppSelector } from '../../../store/configureStore';
-import { PersonalInformationForm } from './PersonalInformationForm';
-import { PasswordForm } from './PasswordForm';
-import { DeleteAccount } from './DeleteAccount';
-import { createStyles } from '@mantine/core';
 import { useAppSelector } from '../../../../store/configureStore';
 import { PersonalInformationForm } from '../PersonalInformationForm';
 import { PasswordForm } from '../PasswordForm';
@@ -38,10 +33,7 @@ const useStyles = createStyles((theme: MantineTheme) => {
     accountTabContainer: {
       display: 'flex',
       justifyContent: 'center',
-      backgroundColor: theme.fn.darken(
-        theme.colors.secondaryBlueColors[2],
-        0.15
-      ),
+      backgroundColor: theme.colors.secondaryBackgroundColor[0],
       color: theme.fn.darken(theme.white, 0.15),
       height: '100%',
     },
