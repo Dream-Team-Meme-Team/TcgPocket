@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using TcgPocket.Features.Roles;
 using TcgPocket.Features.Users;
+using TcgPocket.Shared;
 
 namespace TcgPocket.Data;
 
@@ -8,14 +9,14 @@ public static class DataSeeder
 {
     public static void Seed(this DataContext dataContext, UserManager<User> userManager, RoleManager<Role> roleManager)
     {
-        SeedUsersAndRoles(dataContext, userManager, roleManager).Wait();
+        SeedUsersAndRoles(userManager, roleManager).Wait();
 
         dataContext.SaveChanges();
     }
 
-    private static async Task SeedUsersAndRoles(DataContext dataContext, UserManager<User> userManager, RoleManager<Role> roleManager)
+    private static async Task SeedUsersAndRoles(UserManager<User> userManager, RoleManager<Role> roleManager)
     {
-        var roleNames = new List<String>{"Basic", "Admin"};
+        var roleNames = typeof(Roles).GetProperties().Select(x => x.Name).ToList();
 
         foreach (var roleName in roleNames)
         {
@@ -38,7 +39,7 @@ public static class DataSeeder
         if(devAccount is null)
         {
             await userManager.CreateAsync(devAccountUser, "Password1!");
-            userManager.AddToRoleAsync(devAccountUser, "Admin");
+            await userManager.AddToRoleAsync(devAccountUser, Roles.Admin);
         }
     }
 }

@@ -24,7 +24,7 @@ class CardClassifier(nn.Module):
         self.conv1 = nn.Sequential(
             nn.Conv2d(in_channels=3, out_channels=32, kernel_size=(3,3), stride = 3, padding=0),
             nn.ReLU(),
-            nn.MaxPool2d((3,3), stride = 3) # may want to get rid of
+            nn.MaxPool2d((3,3), stride = 3)
         )
         
         self.conv2 = nn.Sequential(

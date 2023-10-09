@@ -9,21 +9,20 @@ export type Response<T = any> = {
   hasErrors: boolean;
 };
 
-export type Response = {
-  data;
-  errors: Error[];
-  hasErrors: boolean;
-};
-
 export type Id = {
   id: number;
 };
 
 export type Fn<TValue = void, TResult = void> = (values: TValue) => TResult;
+
 export type PageDto = {
-  currentPage: number;
-  pageSize: number;
+  currentPage?: number;
+  pageSize?: number;
+  sortBy?: string;
+  orderBy?: 'asc' | 'desc';
 };
+
+export type List<T = any> = T[];
 
 export type PagedResult<TDto = any> = {
   items: List<TDto>;

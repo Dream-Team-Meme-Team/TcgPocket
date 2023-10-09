@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using TcgPocket.Features.Games.Queries;
 using TcgPocket.Features.UserCards.Commands;
 using TcgPocket.Features.UserCards.Queries;
 using TcgPocket.Shared;
@@ -19,7 +18,7 @@ public class UserCardsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<Response<List<UserCardDto>>>> GetAllUserCards()
+    public async Task<ActionResult<Response<List<UserCardGetDto>>>> GetAllUserCards()
     {
         var response = await _mediator.Send(new GetAllUserCardsQuery());
 

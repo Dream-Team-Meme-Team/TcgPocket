@@ -6,24 +6,79 @@ import {
   UserGetDto,
   UserPasswordUpdateDto,
 } from '../types/users';
-import { apiCall } from './api';
+import { apiCall } from './helpers/api';
 import { apiRoutes } from '../routes';
 import { Response } from '../types/shared';
+
+export type AuthServices = typeof AuthServices;
+
+export const AuthServices = {
+  registerUser: async (values: UserCreateDto) => {
+    return await apiCall<UserGetDto>({
+      method: 'POST',
+      endpoint: apiRoutes.users.base,
+      data: values,
+    });
+  },
+
+  signInUser: async (values: SignInUserDto) => {
+    return await apiCall({
+      method: 'POST',
+      endpoint: apiRoutes.users.signIn,
+      data: values,
+    });
+  },
+
+  getSignedInUser: async () => {
+    return await apiCall({
+      method: 'GET',
+      endpoint: apiRoutes.users.signedInUser,
+    });
+  },
+
+  signOutUser: async () => {
+    return await apiCall({ method: 'POST', endpoint: apiRoutes.users.signOut });
+  },
+
+  updateUserInformation: async (values: UserGetDto) => {
+    return await apiCall<UserGetDto>({
+      method: 'PUT',
+      endpoint: `${apiRoutes.users.base}/${values.id}`,
+      data: values,
+    });
+  },
+
+  updateUserPassword: async (values: UserPasswordUpdateDto) => {
+    return await apiCall({
+      method: 'PUT',
+      endpoint: `${apiRoutes.users.updatePassword}`,
+      data: values,
+    });
+  },
+
+  deleteUser: async (values: UserDeleteDto) => {
+    return await apiCall({
+      method: 'DELETE',
+      endpoint: `${apiRoutes.users.base}`,
+      data: values,
+    });
+  },
+};
 
 export const registerUser = createAsyncThunk<
   Response<UserGetDto>,
   UserCreateDto,
   { rejectValue: Response<UserGetDto> }
->('registerUser', async (user) => {
-  return await apiCall<UserGetDto>('POST', apiRoutes.users.base, user);
+>('registerUser', async (values) => {
+  return await AuthServices.registerUser(values);
 });
 
 export const signInUser = createAsyncThunk<
   Response<UserGetDto>,
   SignInUserDto,
   { rejectValue: Response<UserGetDto> }
->('signInUser', async (user) => {
-  return await apiCall<UserGetDto>('POST', apiRoutes.users.signIn, user);
+>('signInUser', async (values) => {
+  return await AuthServices.signInUser(values);
 });
 
 export const getSignedInUser = createAsyncThunk<
@@ -31,7 +86,7 @@ export const getSignedInUser = createAsyncThunk<
   void,
   { rejectValue: Response<UserGetDto> }
 >('getSignedInUser', async () => {
-  return await apiCall<UserGetDto>('GET', apiRoutes.users.signedInUser);
+  return await AuthServices.getSignedInUser();
 });
 
 export const signOutUser = createAsyncThunk<
@@ -39,27 +94,23 @@ export const signOutUser = createAsyncThunk<
   void,
   { rejectValue: Response<UserGetDto> }
 >('signOutUser', async () => {
-  return await apiCall<UserGetDto>('POST', apiRoutes.users.signOut);
+  return await AuthServices.signOutUser();
 });
 
 export const updateUserInformation = createAsyncThunk<
   Response<UserGetDto>,
   UserGetDto,
   { rejectValue: Response<UserGetDto> }
->('updateUserInformation', async (user) => {
-  return await apiCall<UserGetDto>(
-    'PUT',
-    `${apiRoutes.users.base}/${user.id}`,
-    user
-  );
+>('updateUserInformation', async (values) => {
+  return await AuthServices.updateUserInformation(values);
 });
 
 export const updateUserPassword = createAsyncThunk<
   Response,
   UserPasswordUpdateDto,
   { rejectValue: Response }
->('updateUserPassword', async (user) => {
-  return await apiCall('PUT', `${apiRoutes.users.updatePassword}`, user);
+>('updateUserPassword', async (values) => {
+  return await AuthServices.updateUserPassword(values);
 });
 
 export const deleteUser = createAsyncThunk<
@@ -67,5 +118,5 @@ export const deleteUser = createAsyncThunk<
   UserDeleteDto,
   { rejectValue: Response }
 >('deleteUser', async (values) => {
-  return await apiCall('DELETE', apiRoutes.users.base, values);
+  return await AuthServices.deleteUser(values);
 });
