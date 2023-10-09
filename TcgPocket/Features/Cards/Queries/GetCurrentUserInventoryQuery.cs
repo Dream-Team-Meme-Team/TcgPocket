@@ -54,6 +54,8 @@ public class GetCurrentUserInventoryQueryHandler
 
         return base.GetEntities()
             .Include(x => x.CardAttributes)
+            .ThenInclude(x => x.Attribute)
+            .ThenInclude(x => x.CardAttributes)
             .Include(x => x.Game)
             .Include(x => x.CardType)
             .Include(x => x.Rarity)

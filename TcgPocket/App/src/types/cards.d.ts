@@ -45,5 +45,5 @@ export type CardDisplayDto = Id & {
   set: SetGetDto;
   imageUrl: string;
   description: string;
-  attributes: AttributeGetDto[];
+  attributes: CardAttributeDisplayDto[];
 };

@@ -1,10 +1,12 @@
 import { apiRoutes } from '../routes';
 import {
   CardDetailDto,
+  CardDisplayDto,
   CardDto,
   CardFilterDto,
   CardGetDto,
 } from '../types/cards';
+import { PagedResult } from '../types/shared';
 import { apiCall } from './api';
 
 type UpdateCardParams = {
@@ -27,6 +29,14 @@ export const CardsService = {
     return await apiCall<CardDetailDto>({
       method: 'GET',
       endpoint: `${apiRoutes.cards}/${id}`,
+    });
+  },
+
+  getUserInventory: async (params?: CardFilterDto) => {
+    return await apiCall<PagedResult<CardDisplayDto>>({
+      method: 'GET',
+      endpoint: `${apiRoutes.cards}/inventory`,
+      params: params,
     });
   },
 

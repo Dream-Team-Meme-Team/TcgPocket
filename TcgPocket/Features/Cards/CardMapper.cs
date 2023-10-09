@@ -29,7 +29,8 @@ namespace TcgPocket.Features.Cards
                 .ForMember(dest => dest.Game, src => src.MapFrom(x => x.Game))
                 .ForMember(dest => dest.CardType, src => src.MapFrom(x => x.CardType))
                 .ForMember(dest => dest.Rarity, src => src.MapFrom(x => x.Rarity))
-                .ForMember(dest => dest.Set, src => src.MapFrom(x => x.Set));
+                .ForMember(dest => dest.Set, src => src.MapFrom(x => x.Set))
+                .ForMember(dest => dest.Attributes, src => src.MapFrom(x => x.CardAttributes.Where(y => y.CardId == x.Id)));
 
         }
     }
