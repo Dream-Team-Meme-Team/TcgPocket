@@ -7,6 +7,7 @@ type Requirements = {
 };
 
 export const passwordRequirements: Requirements[] = [
+  { re: /^.{6,}$/, label: 'Must be at least 6 characters' },
   { re: /[0-9]/, label: 'Includes number' },
   { re: /[a-z]/, label: 'Includes lowercase letter' },
   { re: /[A-Z]/, label: 'Includes uppercase letter' },
