@@ -1,3 +1,8 @@
+###################################
+''' FILTERS UNACCESSABLE IMGS IN TEST AND TRAIN SETS'''
+###################################
+
+
 # %% IMPORTS
 from torch.utils.data import Dataset
 import pandas as pd

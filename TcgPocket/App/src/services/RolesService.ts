@@ -1,6 +1,6 @@
 import { apiRoutes } from '../routes';
 import { RoleDto, RoleGetDto } from '../types/roles';
-import { apiCall } from './api';
+import { apiCall } from './helpers/api';
 
 type UpdateRoleParams = {
   id: number;
@@ -28,7 +28,7 @@ export const RolesService = {
     return await apiCall<RoleGetDto>({
       method: 'POST',
       endpoint: apiRoutes.roles.base,
-      body: body,
+      data: body,
     });
   },
 
@@ -36,7 +36,7 @@ export const RolesService = {
     return await apiCall<RoleGetDto>({
       method: 'PUT',
       endpoint: `${apiRoutes.roles.base}/${id}`,
-      body: body,
+      data: body,
     });
   },
 

@@ -6,7 +6,6 @@ import { SecondaryButton } from '../../../components/buttons/SecondaryButton';
 import { PrimaryButton } from '../../../components/buttons/PrimaryButton';
 import { dispatch } from '../../../store/configureStore';
 import { updateUserPassword } from '../../../services/AuthServices';
-import { error, success } from '../../../services/notification';
 import { PrimaryPasswordInput } from '../../../components/inputs/PrimaryPasswordInput';
 import {
   PasswordRequirement,
@@ -64,18 +63,15 @@ export function PasswordForm({ user }: PasswordFormProps): React.ReactElement {
       newPasswordConfirmation: values.newPasswordConfirmation,
     };
 
-    const { payload } = await dispatch(
-      updateUserPassword(userWithUpdatedPassword)
-    );
+    dispatch(updateUserPassword(userWithUpdatedPassword)).then(
+      ({ payload }) => {
+        responseWrapper(payload, 'Password Updated');
 
-    if (!payload) {
-      return;
-    } else if (payload.hasErrors) {
-      payload.errors.forEach((err) => error(err.message));
-    } else {
-      success('Password Updated');
-      form.reset();
-    }
+        if (payload && !payload.hasErrors) {
+          form.reset();
+        }
+      }
+    );
   };
 
   const determineDisabled = !form.isValid();

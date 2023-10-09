@@ -5,6 +5,7 @@ import { NotFoundPage } from '../pages/notFound/NotFoundPage';
 import { HomePage } from '../pages/home/HomePage';
 import { SettingsPage } from '../pages/settings/SettingsPage';
 import { useAppSelector } from '../store/configureStore';
+import { AdminPage } from '../pages/admin/AdminPage';
 
 export const AppRoutes = () => {
   const user = useAppSelector((state) => state.user.user);
@@ -20,6 +21,14 @@ export const AppRoutes = () => {
         <Route
           path={routes.settings}
           element={<SettingsPage />}
+          errorElement={<ErrorPage />}
+        />
+      )}
+      {/* will need to be for ADMINS only */}
+      {user && (
+        <Route
+          path={routes.adminPortal}
+          element={<AdminPage />}
           errorElement={<ErrorPage />}
         />
       )}

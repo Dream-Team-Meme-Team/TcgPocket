@@ -1,5 +1,5 @@
 ####################################
-''' FOR REFERENCE '''
+''' CREATION OF TEST AND TRAIN SETS '''
 ####################################
 
 # %% IMPORTS

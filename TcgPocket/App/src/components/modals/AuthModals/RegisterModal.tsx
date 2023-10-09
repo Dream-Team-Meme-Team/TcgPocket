@@ -9,7 +9,7 @@ import { CSSProperties, useMemo, useState } from 'react';
 import { dispatch, useAppSelector } from '../../../store/configureStore';
 import { registerUser } from '../../../services/AuthServices';
 import { useFormValidation } from '../../../helpers/useFormValidation';
-import { error, success } from '../../../services/notification';
+import { error, success } from '../../../services/helpers/notification';
 import { PrimaryPasswordInput } from '../../inputs/PrimaryPasswordInput';
 import { Popover } from '@mantine/core';
 import {
