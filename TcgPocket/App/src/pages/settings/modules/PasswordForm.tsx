@@ -12,6 +12,7 @@ import {
   passwordRequirements,
 } from '../../../components/PasswordRequirement';
 import { CSSProperties, useState } from 'react';
+import { responseWrapper } from '../../../services/helpers/responseWrapper';
 
 type PasswordFormProps = {
   user: UserGetDto;

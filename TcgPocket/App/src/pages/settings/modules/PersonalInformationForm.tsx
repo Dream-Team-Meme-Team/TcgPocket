@@ -15,9 +15,10 @@ export type UserFormProps = {
 
 type PersonalInformationFormDto = {
   id: number;
-  userName: string | null;
-  email: string | null;
-  phoneNumber: string | null;
+  userName: string;
+  email: string;
+  phoneNumber: string;
+  roles: string;
 };
 
 export function PersonalInformationForm({
@@ -32,6 +33,7 @@ export function PersonalInformationForm({
     userName: '',
     email: '',
     phoneNumber: '',
+    roles: user.roles,
   };
 
   const form = useForm({
@@ -41,21 +43,21 @@ export function PersonalInformationForm({
       userName: (value) => {
         if (value === '') {
           return null;
-        } else if (validateTextInput(value ?? '')) {
+        } else if (validateTextInput(value)) {
           return 'Invalid Username';
         } else return null;
       },
       phoneNumber: (value) => {
         if (value === '') {
           return null;
-        } else if (validatePhoneNumer(value ?? '')) {
+        } else if (validatePhoneNumer(value)) {
           return 'Invalid Phone Number';
         } else return null;
       },
       email: (value) => {
         if (value === '') {
           return null;
-        } else if (validateEmail(value ?? '')) {
+        } else if (validateEmail(value)) {
           return 'Invalid Email';
         } else return null;
       },
@@ -74,10 +76,15 @@ export function PersonalInformationForm({
         values.phoneNumber === '' || !values.phoneNumber
           ? user.phoneNumber
           : values.phoneNumber,
+      roles: user.roles,
     };
 
     dispatch(updateUserInformation(userToUpdate)).then(({ payload }) => {
       responseWrapper(payload, 'Account Information Updated');
+
+      if (payload && !payload.hasErrors) {
+        form.reset();
+      }
     });
   };
 
