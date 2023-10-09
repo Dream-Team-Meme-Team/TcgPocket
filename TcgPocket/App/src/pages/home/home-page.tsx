@@ -1,5 +1,5 @@
-import { HeroTitle } from './modules/HomePageHero';
-import { FeaturesCards } from './modules/HomePageFeatures';
+import { HeroTitle } from './modules/home-page-hero';
+import { FeaturesCards } from './modules/home-page-features';
 
 export function HomePage(): React.ReactElement {
   return (

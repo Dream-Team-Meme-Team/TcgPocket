@@ -13,7 +13,7 @@ import {
   Space,
   MantineTheme,
 } from '@mantine/core';
-import { Home2 } from './HomePageTwo';
+import { Home2 } from './home-page-end';
 
 const cardData = [
   {
