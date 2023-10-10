@@ -1,4 +1,4 @@
-import { createStyles } from '@mantine/core';
+import { MantineTheme, createStyles } from '@mantine/core';
 import { useAppSelector } from '../../../../store/configureStore';
 import { PersonalInformationForm } from '../PersonalInformationForm';
 import { PasswordForm } from '../PasswordForm';
@@ -28,12 +28,13 @@ export const AccountTab: React.FC = () => {
   );
 };
 
-const useStyles = createStyles(() => {
+const useStyles = createStyles((theme: MantineTheme) => {
   return {
     accountTabContainer: {
       display: 'flex',
       justifyContent: 'center',
-
+      backgroundColor: theme.colors.secondaryBackgroundColor[0],
+      color: theme.fn.darken(theme.white, 0.15),
       height: '100%',
     },
 

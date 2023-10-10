@@ -42,7 +42,9 @@ const useStyles = createStyles((theme: MantineTheme, meets: boolean) => {
       display: 'flex',
       alignItems: 'center',
       spacing: 7,
-      color: meets ? theme.colors.primaryColor[0] : theme.colors.red,
+      color: meets
+        ? theme.colors.secondaryPurpleColors[1]
+        : theme.colors.red[0],
     },
 
     icon: {

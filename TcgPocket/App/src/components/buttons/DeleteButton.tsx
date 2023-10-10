@@ -4,11 +4,11 @@ import { ButtonHTMLAttributes } from 'react';
 type DeleteButtonProps = ButtonProps & ButtonHTMLAttributes<HTMLButtonElement>;
 
 const buttonStyling = (theme: MantineTheme): CSSObject => ({
-  backgroundColor: theme.colors.red,
+  backgroundColor: theme.colors.red[0],
   color: theme.white,
 
   '&:hover': {
-    backgroundColor: 'darkred',
+    backgroundColor: theme.fn.darken(theme.colors.red[0], 0.3),
   },
 });
 

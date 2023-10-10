@@ -1,4 +1,10 @@
-import { Tabs, TabsValue, createStyles } from '@mantine/core';
+import {
+  Container,
+  ScrollArea,
+  Tabs,
+  TabsValue,
+  createStyles,
+} from '@mantine/core';
 import {
   IconCards,
   IconChartTreemap,
@@ -81,36 +87,44 @@ export function AdminPage(): React.ReactElement {
     >
       <Tabs.List>
         {adminTabs.map((tab, index) => (
-          <Tabs.Tab key={index} value={tab.label} icon={tab.icon}>
+          <Tabs.Tab
+            key={index}
+            value={tab.label}
+            icon={tab.icon}
+            className={classes.tabStyle}
+          >
             {tab.label}
           </Tabs.Tab>
         ))}
       </Tabs.List>
+      <ScrollArea className={classes.contain}>
+        {adminTabs.map((tab, index) => {
+          const TabContent = tab.content;
 
-      {adminTabs.map((tab, index) => {
-        const TabContent = tab.content;
+          return (
+            <Tabs.Panel
+              key={index}
+              value={tab.label}
+              className={classes.panelContainer}
+            >
+              <AdminTabHeader label={tab.label} />
 
-        return (
-          <Tabs.Panel
-            key={index}
-            value={tab.label}
-            className={classes.panelContainer}
-          >
-            <AdminTabHeader label={tab.label} />
-
-            {selectedGameId !== 0 || tab.label === AdminTabLabel.Games ? (
-              <TabContent />
-            ) : (
-              <div className={classes.noSelectedGame}>Please Select a Game</div>
-            )}
-          </Tabs.Panel>
-        );
-      })}
+              {selectedGameId !== 0 || tab.label === AdminTabLabel.Games ? (
+                <TabContent />
+              ) : (
+                <div className={classes.noSelectedGame}>
+                  Please Select a Game
+                </div>
+              )}
+            </Tabs.Panel>
+          );
+        })}
+      </ScrollArea>
     </Tabs>
   );
 }
 
-const useStyles = createStyles(() => {
+const useStyles = createStyles((theme) => {
   const { remainingHeight } = useNavbarHeight();
 
   return {
@@ -118,9 +132,24 @@ const useStyles = createStyles(() => {
       height: `${remainingHeight}px`,
     },
 
+    tabStyle: {
+      borderColor: `${theme.fn.lighten(
+        theme.colors.secondaryPurpleColors[0],
+        0.25
+      )} !important`,
+
+      '&:hover': {
+        backgroundColor: theme.fn.rgba(
+          theme.colors.secondaryPurpleColors[0],
+          0.25
+        ),
+      },
+    },
+
     panelContainer: {
       display: 'grid',
       gridTemplateRows: 'auto 1fr',
+      backgroundColor: theme.colors.secondaryBackgroundColor[0],
 
       padding: '8px',
     },
@@ -128,6 +157,12 @@ const useStyles = createStyles(() => {
     panelHeader: {
       display: 'flex',
       justifyContent: 'center',
+    },
+
+    contain: {
+      width: '100%',
+      height: '100%',
+      backgroundColor: theme.colors.secondaryBackgroundColor[0],
     },
 
     noSelectedGame: {

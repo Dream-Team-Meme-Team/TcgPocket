@@ -47,7 +47,7 @@ export function PrimaryNavigation(): React.ReactElement {
     <>
       <Navbar height={navbarHeight} sx={navbarSx}>
         <NavButton route={routes.home} sx={logoIconSx}>
-          <Image maw={navbarHeight - 16} src="./TcgPocketLogo.svg" />
+          <Image maw={navbarHeight - 16} src="./TcgPocketLogo2.svg" />
         </NavButton>
         <Flex align={'center'} gap={25}>
           {determineUserState && (
@@ -108,21 +108,25 @@ export function PrimaryNavigation(): React.ReactElement {
 
 function navbarSx(theme: MantineTheme): CSSObject {
   return {
-    borderBottom: `1px solid ${theme.colors.blue[3]}`,
-    boxShadow: `0px 0px 4px ${theme.colors.blue[5]}`,
+    borderBottom: `1px solid ${theme.colors.primaryPurpleColor[0]}`,
+    boxShadow: `0px 0px 4px #314652`,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: '0rem 2rem 0rem 1rem',
-    background: theme.white,
+    background: theme.colors.primaryBlueColor[0],
   };
 }
 
 function profileIconSx(theme: MantineTheme): CSSObject {
   return {
-    backgroundColor: `${theme.colors.blue[0]}`,
+    backgroundColor: theme.colors.secondaryPurpleColors[0],
+    color: 'white',
     borderRadius: '5em',
+    ':hover': {
+      backgroundColor: theme.colors.primaryPurpleColor[0],
+    },
   };
 }
 
@@ -132,7 +136,7 @@ function logoIconSx(theme: MantineTheme): CSSObject {
     borderRadius: '15px',
     transition: 'ease-in .2s',
     ':hover': {
-      backgroundColor: theme.colors.blue[1],
+      backgroundColor: theme.colors.secondaryBlueColors[2],
     },
   };
 }
