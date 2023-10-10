@@ -22,16 +22,15 @@ export const InventoryDisplay: React.FC<InventoryDisplayProps> = ({
           cards.items &&
           cards.items.map((g: CardDisplayDto) => <CardDisplay card={g} />)}
       </Group>
-      <Flex justify={'end'}>
-        <Pagination
-          color={'violet'}
-          withEdges
-          className={classes.paginationControls}
-          value={currentPage}
-          onChange={setCurrentPage}
-          total={cards.pageCount}
-        />
-      </Flex>
+      <Pagination
+        color={'violet'}
+        withEdges
+        className={classes.paginationControls}
+        value={currentPage}
+        onChange={setCurrentPage}
+        total={cards.pageCount}
+      />
+      <Flex justify={'end'}></Flex>
     </div>
   );
 };
@@ -42,7 +41,10 @@ const useStyles = createStyles(() => ({
     justifyContent: 'right',
   },
 
-  inventoryDisplayContainer: {},
+  inventoryDisplayContainer: {
+    width: 1618,
+    height: 1050,
+  },
 
   inventoryDisplayGroup: {
     backgroundColor: '#514254',
