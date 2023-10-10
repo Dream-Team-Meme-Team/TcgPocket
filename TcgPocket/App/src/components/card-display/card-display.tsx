@@ -81,7 +81,6 @@ export const CardDisplay: React.FC<CardContainerProps> = ({ card }) => {
                 gap={'.4rem'}
                 justify={'center'}
                 maw={'10rem'}
-                mih={'5rem'}
                 wrap={'wrap'}
               >
                 {card.attributes.map((cardAttributes) => (
@@ -123,9 +122,8 @@ const containerSx: CSSObject = {
 
 const attributesContainerSx: CSSObject = {
   alignContent: 'flex-start',
-  WebkitLineClamp: 3,
-  lineClamp: 3,
   maxHeight: 93,
+  minHeight: '2rem',
   overflow: 'hidden',
 };
 
