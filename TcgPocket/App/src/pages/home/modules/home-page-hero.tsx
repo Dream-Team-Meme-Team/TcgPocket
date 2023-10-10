@@ -35,9 +35,10 @@ export function HeroTitle() {
       <div className={classes.wrapper}>
         <AspectRatio
           ratio={1 / 1}
+          mt={50}
           maw={rem(2000)}
           miw={rem(50)}
-          w={rem(750)}
+          w={rem(625)}
           mx={40}
           className={classes.imageWrapper}
         >
