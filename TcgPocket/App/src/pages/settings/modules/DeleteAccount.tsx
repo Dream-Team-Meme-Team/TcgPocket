@@ -1,7 +1,6 @@
 import { useDisclosure } from '@mantine/hooks';
 import { PrimaryModal } from '../../../components/modals/PrimaryModal';
 import { deleteUser, signOutUser } from '../../../services/AuthServices';
-import { error, success } from '../../../services/notification';
 import { dispatch } from '../../../store/configureStore';
 import { useForm } from '@mantine/form';
 import { SecondaryButton } from '../../../components/buttons/SecondaryButton';
@@ -11,6 +10,7 @@ import { UserDeleteDto } from '../../../types/users';
 import { PrimaryPasswordInput } from '../../../components/inputs/PrimaryPasswordInput';
 import { useNavigate } from 'react-router-dom';
 import { routes } from '../../../routes';
+import { responseWrapper } from '../../../services/helpers/responseWrapper';
 
 type DeleteAccount = UserDeleteDto;
 
@@ -34,16 +34,14 @@ export function DeleteAccount(): React.ReactElement {
     },
   });
 
-  const handleSignOut = async () => {
-    const { payload } = await dispatch(signOutUser());
+  const handleSignOut = () => {
+    dispatch(signOutUser()).then(({ payload }) => {
+      responseWrapper(payload);
 
-    if (!payload) {
-      return;
-    } else if (payload.hasErrors) {
-      payload.errors.forEach((err) => error(err.message));
-    } else {
-      navigate(routes.home);
-    }
+      if (payload && !payload.hasErrors) {
+        navigate(routes.home);
+      }
+    });
   };
 
   const handleDelete = async (values: DeleteAccount) => {
@@ -52,16 +50,13 @@ export function DeleteAccount(): React.ReactElement {
       confirmPassword: values.confirmPassword,
     };
 
-    const { payload } = await dispatch(deleteUser(userDelete));
+    dispatch(deleteUser(userDelete)).then(({ payload }) => {
+      responseWrapper(payload, 'Account Deleted');
 
-    if (!payload) {
-      return;
-    } else if (payload.hasErrors) {
-      payload.errors.forEach((err) => error(err.message));
-    } else {
-      success('Account Deleted');
-      handleSignOut();
-    }
+      if (payload && !payload.hasErrors) {
+        handleSignOut();
+      }
+    });
   };
 
   const handleCancel = () => {

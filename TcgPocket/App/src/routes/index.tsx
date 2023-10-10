@@ -5,6 +5,7 @@ export const routes = {
   inventory: '/inventory',
   cardUpload: '/card-upload',
   deckBuilder: '/deck-builder',
+  adminPortal: '/admin-portal',
   settings: 'settings',
 };
 

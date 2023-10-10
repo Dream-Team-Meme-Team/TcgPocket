@@ -1,26 +1,26 @@
 import axios, { AxiosError } from 'axios';
-import { Response } from '../types/shared';
+import { Response } from '../../types/shared';
 axios.defaults.withCredentials = true;
 
 export type HttpMethod = 'GET' | 'POST' | 'DELETE' | 'PUT' | 'PATCH';
 
-type ApiCallParameters = {
+export type ApiCallConfig = {
   method: HttpMethod;
   endpoint: string;
-  body?: any;
+  data?: any;
   params?: any;
 };
 
 export async function apiCall<TResult = any>({
   method,
   endpoint,
-  body,
+  data,
   params,
-}: ApiCallParameters) {
+}: ApiCallConfig) {
   const response = axios<Response<TResult>>({
     method: method,
     url: endpoint,
-    data: body,
+    data: data,
     params: params,
   });
 
