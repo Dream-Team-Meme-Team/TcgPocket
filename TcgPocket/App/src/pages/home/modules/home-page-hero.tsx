@@ -97,7 +97,7 @@ export function HeroTitle() {
 
 const useStyles = createStyles((theme: MantineTheme) => ({
   wrapper: {
-    height: rem(900),
+    height: rem(700),
     display: 'flex',
     justifyContent: 'space-around',
     backgroundImage:
@@ -127,7 +127,7 @@ const useStyles = createStyles((theme: MantineTheme) => ({
   inner: {
     position: 'relative',
     alignItems: 'center',
-    paddingTop: rem(125),
+    paddingTop: rem(75),
     paddingBottom: rem(350),
     margin: 'inherit',
 
