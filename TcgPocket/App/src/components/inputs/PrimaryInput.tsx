@@ -5,14 +5,15 @@ import { InputHTMLAttributes } from 'react';
 type PrimaryInputProps = InputProps & InputHTMLAttributes<HTMLInputElement>;
 
 const inputStyling = (theme: MantineTheme): CSSObject => ({
-  input: {
-    background: theme.colors.textBoxColor[0],
-    borderColor: theme.colors.secondaryBlueColors[0],
-    borderWidth: 1,
-    backgroundColor: 'white',
+    input: {
+        background: theme.colors.textBoxColor[0],
+        borderColor: theme.colors.secondaryBlueColors[0],
+        borderWidth: 1,
+        backgroundColor: 'white',
 
-    ':focus': {
-      borderColor: theme.colors.primaryPurpleColor[0],
+        ':focus': {
+            borderColor: theme.colors.primaryPurpleColor[0],
+        },
     },
 });
 
