@@ -1,10 +1,4 @@
-import {
-  Container,
-  Flex,
-  Group,
-  Pagination,
-  createStyles,
-} from '@mantine/core';
+import { Flex, Group, Pagination, createStyles } from '@mantine/core';
 import { CardDisplay } from '../../../components/card-display/card-display';
 import { CardDisplayDto } from '../../../types/cards';
 import { PagedResult } from '../../../types/shared';
@@ -22,22 +16,22 @@ export const InventoryDisplay: React.FC<InventoryDisplayProps> = ({
 }) => {
   const { classes } = useStyles();
   return (
-    <Container className={classes.inventoryDisplayContainer} fluid>
+    <div className={classes.inventoryDisplayContainer}>
       <Group className={classes.inventoryDisplayGroup}>
         {cards &&
           cards.items &&
           cards.items.map((g: CardDisplayDto) => <CardDisplay card={g} />)}
-        <Flex justify={'end'}>
-          <Pagination
-            withEdges
-            className={classes.paginationControls}
-            value={currentPage}
-            onChange={setCurrentPage}
-            total={cards.pageCount}
-          />
-        </Flex>
       </Group>
-    </Container>
+      <Flex justify={'end'}>
+        <Pagination
+          withEdges
+          className={classes.paginationControls}
+          value={currentPage}
+          onChange={setCurrentPage}
+          total={cards.pageCount}
+        />
+      </Flex>
+    </div>
   );
 };
 
@@ -50,10 +44,13 @@ const useStyles = createStyles(() => ({
   inventoryDisplayContainer: {},
 
   inventoryDisplayGroup: {
-    backgroundColor: '#1e2e38',
-    padding: '35px',
+    backgroundColor: '#514254',
+    padding: '20px',
     display: 'flex',
-    justifyContent: 'start',
+    justifyContent: 'space-between',
     alignItems: 'start',
+    width: 1618,
+    height: 1050,
+    overflow: 'hidden',
   },
 }));

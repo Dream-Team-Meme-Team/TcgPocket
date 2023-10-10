@@ -8,6 +8,8 @@ import {
   Badge,
   CSSObject,
   createStyles,
+  Box,
+  Tooltip,
 } from '@mantine/core';
 import { CardDisplayDto } from '../../types/cards';
 import { CardImageDisplay } from './modules/card-image-display';
@@ -19,7 +21,7 @@ type CardContainerProps = {
 export const CardDisplay: React.FC<CardContainerProps> = ({ card }) => {
   const { classes } = useStyles();
   return (
-    <Paper p={10} pl={11} sx={containerSx}>
+    <Paper tabIndex={-1} p={10} pl={11} sx={containerSx}>
       <Flex columnGap={2}>
         <CardImageDisplay imageUrl={card.imageUrl} />
         <div className={classes.cardInfoDivider} />
@@ -27,38 +29,73 @@ export const CardDisplay: React.FC<CardContainerProps> = ({ card }) => {
           <Text size={'15px'} color="black" ff={'Georgia'} fw={'bold'}>
             {card.game.name}
           </Text>
-
-          <Text size={'12px'} color="black" ff={'Georgia'} fw={500}>
-            {card.set.name}
-          </Text>
-
+          <Tooltip
+            label={card.set.name}
+            position="top-start"
+            offset={-5}
+            multiline
+            w={'fit'}
+            arrowSize={4}
+          >
+            <Text
+              size={'12px'}
+              lineClamp={1}
+              color="black"
+              ff={'Georgia'}
+              fw={500}
+            >
+              {card.set.name}
+            </Text>
+          </Tooltip>
           <Space h={'2%'} />
 
           <Text size={'13px'} color="black" ff={'Georgia'} fw={500}>
             {card.rarity.name} | {card.cardNumber}
           </Text>
 
-          <Space h={'3%'} />
-          <Title color="black" ff={'Georgia'} h={52} order={4}>
-            {card.name}
-          </Title>
+          <Space h={'2%'} />
+          <Box h={52}>
+            <Tooltip
+              label={card.name}
+              position="top-start"
+              offset={-10}
+              multiline
+              w={'fit'}
+              arrowSize={4}
+            >
+              <Title lineClamp={2} color="black" ff={'Georgia'} order={4}>
+                {card.name}
+              </Title>
+            </Tooltip>
+          </Box>
+
           <Space h={'3%'} />
 
-          <Flex
-            sx={attributesContainerSx}
-            gap={'.4rem'}
-            justify={'center'}
-            maw={'10rem'}
-            mih={'5rem'}
-            wrap={'wrap'}
-          >
-            {card.attributes &&
-              card.attributes.map((x) => (
-                <Badge className={classes.badgeBackground} variant="filled">
-                  {x.attributeName}
-                </Badge>
-              ))}
-          </Flex>
+          {card.attributes && (
+            <Tooltip
+              multiline
+              label={card.attributes.flatMap((x) => x.attributeName).join(', ')}
+            >
+              <Flex
+                sx={attributesContainerSx}
+                gap={'.4rem'}
+                justify={'center'}
+                maw={'10rem'}
+                mih={'5rem'}
+                wrap={'wrap'}
+              >
+                {card.attributes.map((cardAttributes) => (
+                  <Badge
+                    size="sm"
+                    className={classes.badgeBackground}
+                    variant="filled"
+                  >
+                    {cardAttributes.attributeName}
+                  </Badge>
+                ))}
+              </Flex>
+            </Tooltip>
+          )}
         </Container>
       </Flex>
     </Paper>
@@ -66,7 +103,7 @@ export const CardDisplay: React.FC<CardContainerProps> = ({ card }) => {
 };
 
 const containerSx: CSSObject = {
-  backgroundColor: '#afaab3',
+  backgroundColor: '#c3bbc4',
   padding: '1rem',
   boxShadow:
     '0.1rem 0.2rem 0.4rem 0 rgba(0, 0, 0, .85), inset 0.5rem 1rem 3rem 0.1rem rgba(34, 22, 51, 0.32), inset -0.5rem -1rem 3rem 0.1rem rgba(34, 22, 51, 0.32)',
@@ -86,6 +123,10 @@ const containerSx: CSSObject = {
 
 const attributesContainerSx: CSSObject = {
   alignContent: 'flex-start',
+  WebkitLineClamp: 3,
+  lineClamp: 3,
+  maxHeight: 93,
+  overflow: 'hidden',
 };
 
 const useStyles = createStyles(() => ({
