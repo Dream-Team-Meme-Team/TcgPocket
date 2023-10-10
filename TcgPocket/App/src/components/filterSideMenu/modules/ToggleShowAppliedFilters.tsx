@@ -36,9 +36,10 @@ export function ToggleShowAppliedFilters({
                 in={opened && appliedFilters.length !== 0}
                 className={classes.appliedFilterBadgesContainer}
             >
-                {appliedFilters.map((filter) => {
+                {appliedFilters.map((filter, index) => {
                     return (
                         <FilterBadge
+                            key={index}
                             filter={filter}
                             handleRemoveFilter={handleRemoveFilter}
                         />

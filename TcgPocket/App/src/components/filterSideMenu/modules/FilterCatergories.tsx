@@ -1,5 +1,5 @@
-import { useSelector } from 'react-redux';
-import { AppState, dispatch } from '../../../store/configureStore';
+import { shallowEqual } from 'react-redux';
+import { dispatch, useAppSelector } from '../../../store/configureStore';
 import { MantineTheme, createStyles } from '@mantine/core';
 import { FilterSideMenuProps } from '../FilterSideMenu';
 import { RenderFilterCategoryAndOptions } from './RenderFilterCategoryAndOptions';
@@ -8,44 +8,60 @@ import { getAllCardTypes } from '../../../services/dataServices/CardTypeServices
 import { responseWrapper } from '../../../services/helpers/responseWrapper';
 import { getAllSets } from '../../../services/dataServices/SetServices';
 import { getAllRarities } from '../../../services/dataServices/RarityServices';
-import { GameGetDto } from '../../../types/games';
+import { getAllAttributes } from '../../../services/dataServices/AttributeServices';
 
 type FilterCategoriesProps = Omit<FilterSideMenuProps, 'handleRemoveFilter'> & {
-    selectedGame: GameGetDto;
+    selectedGameId: number;
 };
 
 export function FilterCategories({
     appliedFilters,
     handleSelectAllFilters,
     handleTogglingFilter,
-    selectedGame,
+    selectedGameId,
 }: FilterCategoriesProps): React.ReactElement {
     const { classes } = useStyles();
 
-    const cardTypes = useSelector((state: AppState) => state.data.cardTypes);
-    const sets = useSelector((state: AppState) => state.data.sets);
-    const rarities = useSelector((state: AppState) => state.data.rarities);
+    const [cardTypes, sets, rarities, attributes] = useAppSelector(
+        (state) => [
+            state.data.cardTypes,
+            state.data.sets,
+            state.data.rarities,
+            state.data.attributes,
+        ],
+        shallowEqual
+    );
 
-    const loadCardTypes = async () => {
-        const { payload } = await dispatch(getAllCardTypes());
-        responseWrapper(payload);
+    const loadCardTypes = () => {
+        dispatch(getAllCardTypes()).then(({ payload }) =>
+            responseWrapper(payload)
+        );
     };
 
-    const loadSets = async () => {
-        const { payload } = await dispatch(getAllSets());
-        responseWrapper(payload);
+    const loadSets = () => {
+        dispatch(getAllSets()).then(({ payload }) => responseWrapper(payload));
     };
 
-    const loadRarities = async () => {
-        const { payload } = await dispatch(getAllRarities());
-        responseWrapper(payload);
+    const loadRarities = () => {
+        dispatch(getAllRarities()).then(({ payload }) =>
+            responseWrapper(payload)
+        );
+    };
+
+    const loadAttributes = () => {
+        dispatch(getAllAttributes()).then(({ payload }) =>
+            responseWrapper(payload)
+        );
     };
 
     useEffect(() => {
+        if (selectedGameId === 0) return;
+
         loadCardTypes();
         loadSets();
         loadRarities();
-    }, [selectedGame]);
+        loadAttributes();
+    }, [selectedGameId]);
 
     return (
         <div>
@@ -56,6 +72,8 @@ export function FilterCategories({
                     appliedFilters={appliedFilters}
                     handleSelectAllFilters={handleSelectAllFilters}
                     handleTogglingFilter={handleTogglingFilter}
+                    disabled={selectedGameId === 0}
+                    selectedGameId={selectedGameId}
                 />
             </div>
             <div className={classes.filterCategoryContainer}>
@@ -65,6 +83,8 @@ export function FilterCategories({
                     appliedFilters={appliedFilters}
                     handleSelectAllFilters={handleSelectAllFilters}
                     handleTogglingFilter={handleTogglingFilter}
+                    disabled={selectedGameId === 0}
+                    selectedGameId={selectedGameId}
                 />
             </div>
             <div className={classes.filterCategoryContainer}>
@@ -74,6 +94,19 @@ export function FilterCategories({
                     appliedFilters={appliedFilters}
                     handleSelectAllFilters={handleSelectAllFilters}
                     handleTogglingFilter={handleTogglingFilter}
+                    disabled={selectedGameId === 0}
+                    selectedGameId={selectedGameId}
+                />
+            </div>
+            <div className={classes.filterCategoryContainer}>
+                <RenderFilterCategoryAndOptions
+                    filterName="Attributes"
+                    filterOptions={attributes}
+                    appliedFilters={appliedFilters}
+                    handleSelectAllFilters={handleSelectAllFilters}
+                    handleTogglingFilter={handleTogglingFilter}
+                    disabled={selectedGameId === 0}
+                    selectedGameId={selectedGameId}
                 />
             </div>
         </div>

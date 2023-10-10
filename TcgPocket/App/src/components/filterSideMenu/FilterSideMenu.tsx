@@ -29,14 +29,10 @@ export function FilterSideMenu({
 
     const games = useSelector((state: AppState) => state.data.games);
 
-    const [selectedGame, setSelectedGame] = useState<GameGetDto>({
-        id: 0,
-        name: '',
-    });
+    const [selectedGame, setSelectedGame] = useState({ id: 0, name: '' });
 
-    const loadGames = async () => {
-        const { payload } = await dispatch(getAllGames());
-        responseWrapper(payload);
+    const loadGames = () => {
+        dispatch(getAllGames()).then(({ payload }) => responseWrapper(payload));
     };
 
     const handleSelectChange = (
@@ -77,7 +73,7 @@ export function FilterSideMenu({
                 appliedFilters={appliedFilters}
                 handleSelectAllFilters={handleSelectAllFilters}
                 handleTogglingFilter={handleTogglingFilter}
-                selectedGame={selectedGame}
+                selectedGameId={selectedGame.id}
             />
         </div>
     );

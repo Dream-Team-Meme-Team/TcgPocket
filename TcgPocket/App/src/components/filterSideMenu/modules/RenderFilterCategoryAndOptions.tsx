@@ -2,22 +2,24 @@ import { Checkbox, Collapse, Text, createStyles } from '@mantine/core';
 import { defaultGap, defaultPadding } from '../../../constants/theme';
 import { useDisclosure } from '@mantine/hooks';
 import { PrimaryBadge } from '../../badges/PrimaryBadge';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { PrimaryInput } from '../../inputs/PrimaryInput';
 import {
     IconArrowBadgeDown,
     IconArrowBadgeUp,
     IconSearch,
 } from '@tabler/icons-react';
-import { GameGetDto } from '../../../types/games';
 import { FilterSideMenuProps } from '../FilterSideMenu';
+import { CardTypeGetDto } from '../../../types/card-types';
 
 type RenderFilterOptionsProps = Omit<
     FilterSideMenuProps,
     'handleRemoveFilter'
 > & {
     filterName: string;
-    filterOptions: GameGetDto[];
+    filterOptions: CardTypeGetDto[];
+    disabled?: boolean;
+    selectedGameId: number;
 };
 
 export function RenderFilterCategoryAndOptions({
@@ -26,10 +28,12 @@ export function RenderFilterCategoryAndOptions({
     appliedFilters,
     handleSelectAllFilters,
     handleTogglingFilter,
+    disabled,
+    selectedGameId,
 }: RenderFilterOptionsProps): React.ReactElement {
     const { classes } = useStyles();
 
-    const [opened, { toggle }] = useDisclosure();
+    const [opened, { toggle, close }] = useDisclosure();
     const [searchText, setSearchText] = useState('');
 
     const numOfAppliedFilters = useMemo(() => {
@@ -41,17 +45,30 @@ export function RenderFilterCategoryAndOptions({
     }, [appliedFilters]);
 
     const filteredFilterOptions = useMemo(() => {
-        return filterOptions.filter((option) =>
-            option.name.toLowerCase().includes(searchText.toLowerCase())
-        );
-    }, [searchText]);
+        return filterOptions
+            .filter((option) => option.gameId === selectedGameId)
+            .filter((option) =>
+                option.name.toLowerCase().includes(searchText.toLowerCase())
+            );
+    }, [searchText, selectedGameId]);
+
+    useEffect(() => {
+        if (disabled) {
+            close();
+        }
+    }, [disabled]);
 
     return (
         <div className={classes.renderFilterOptionsContainer}>
             <div className={classes.filterCategoryContainer}>
                 <div
-                    className={classes.filterCategoryNameContainer}
-                    onClick={toggle}
+                    aria-disabled={disabled}
+                    className={
+                        disabled
+                            ? classes.disabled
+                            : classes.filterCategoryNameContainer
+                    }
+                    onClick={() => (disabled ? undefined : toggle())}
                 >
                     {opened ? <IconArrowBadgeUp /> : <IconArrowBadgeDown />}
                     <Text>{filterName}</Text>
@@ -73,31 +90,34 @@ export function RenderFilterCategoryAndOptions({
                     />
                 </div>
 
-                {searchText === '' && (
-                    <div className={classes.selectAllContainer}>
-                        <Checkbox
-                            label="Select All"
-                            onChange={() =>
-                                handleSelectAllFilters(filterOptions)
-                            }
-                            checked={
-                                appliedFilters.length === filterOptions.length
-                            }
-                        />
-                    </div>
-                )}
+                <div className={classes.optionsContainer}>
+                    {searchText === '' && (
+                        <div className={classes.selectAllContainer}>
+                            <Checkbox
+                                label="Select All"
+                                onChange={() =>
+                                    handleSelectAllFilters(filterOptions)
+                                }
+                                checked={
+                                    appliedFilters.length ===
+                                    filterOptions.length
+                                }
+                            />
+                        </div>
+                    )}
 
-                <div className={classes.checkBoxContainer}>
-                    {filteredFilterOptions.map((option) => (
-                        <Checkbox
-                            key={option.id}
-                            label={option.name}
-                            onChange={() => handleTogglingFilter(option)}
-                            checked={appliedFilters.some(
-                                (filter) => filter.id === option.id
-                            )}
-                        />
-                    ))}
+                    <div className={classes.checkBoxContainer}>
+                        {filteredFilterOptions.map((option) => (
+                            <Checkbox
+                                key={option.id}
+                                label={option.name}
+                                onChange={() => handleTogglingFilter(option)}
+                                checked={appliedFilters.some(
+                                    (filter) => filter.id === option.id
+                                )}
+                            />
+                        ))}
+                    </div>
                 </div>
             </Collapse>
         </div>
@@ -129,6 +149,13 @@ const useStyles = createStyles(() => ({
         cursor: 'pointer',
     },
 
+    disabled: {
+        display: 'flex',
+        cursor: 'default',
+
+        color: 'gray',
+    },
+
     filterCategoryOptionsContainer: {
         display: 'grid',
 
@@ -147,12 +174,20 @@ const useStyles = createStyles(() => ({
         paddingRight: defaultPadding,
     },
 
+    optionsContainer: {
+        height: 'auto',
+        maxHeight: '45vh',
+
+        overflow: 'auto',
+    },
+
     selectAllContainer: {
         paddingBottom: defaultGap,
     },
 
     checkBoxContainer: {
         display: 'grid',
+
         gap: defaultGap,
     },
 }));
