@@ -1,4 +1,10 @@
-import { Tabs, TabsValue, createStyles } from '@mantine/core';
+import {
+  Container,
+  ScrollArea,
+  Tabs,
+  TabsValue,
+  createStyles,
+} from '@mantine/core';
 import {
   IconCards,
   IconChartTreemap,
@@ -91,26 +97,29 @@ export function AdminPage(): React.ReactElement {
           </Tabs.Tab>
         ))}
       </Tabs.List>
+      <ScrollArea className={classes.contain}>
+        {adminTabs.map((tab, index) => {
+          const TabContent = tab.content;
 
-      {adminTabs.map((tab, index) => {
-        const TabContent = tab.content;
+          return (
+            <Tabs.Panel
+              key={index}
+              value={tab.label}
+              className={classes.panelContainer}
+            >
+              <AdminTabHeader label={tab.label} />
 
-        return (
-          <Tabs.Panel
-            key={index}
-            value={tab.label}
-            className={classes.panelContainer}
-          >
-            <AdminTabHeader label={tab.label} />
-
-            {selectedGameId !== 0 || tab.label === AdminTabLabel.Games ? (
-              <TabContent />
-            ) : (
-              <div className={classes.noSelectedGame}>Please Select a Game</div>
-            )}
-          </Tabs.Panel>
-        );
-      })}
+              {selectedGameId !== 0 || tab.label === AdminTabLabel.Games ? (
+                <TabContent />
+              ) : (
+                <div className={classes.noSelectedGame}>
+                  Please Select a Game
+                </div>
+              )}
+            </Tabs.Panel>
+          );
+        })}
+      </ScrollArea>
     </Tabs>
   );
 }
@@ -148,6 +157,12 @@ const useStyles = createStyles((theme) => {
     panelHeader: {
       display: 'flex',
       justifyContent: 'center',
+    },
+
+    contain: {
+      width: '100%',
+      height: '100%',
+      backgroundColor: theme.colors.secondaryBackgroundColor[0],
     },
 
     noSelectedGame: {

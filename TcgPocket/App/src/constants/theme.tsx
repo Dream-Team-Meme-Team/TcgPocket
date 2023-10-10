@@ -9,7 +9,7 @@ export const appTheme: MantineThemeOverride = {
     primaryBlueColor: ['#13222B'],
     backgroundColor: ['#0F161C'],
     secondaryBackgroundColor: ['#0B1014'],
-    secondaryPurpleColors: ['#623990'],
+    secondaryPurpleColors: ['#623990', '#331852'],
     secondaryBlueColors: [
       '#4442AE',
       '#13222B',

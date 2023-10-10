@@ -12,11 +12,12 @@ import { useNavbarHeight } from './hooks/use-navbar-height';
 import { dispatch } from './store/configureStore';
 import { getSignedInUser } from './services/AuthServices';
 import { useAsync } from 'react-use';
+import { useLocation } from 'react-router-dom';
 
 function App() {
   const { navbarHeight, remainingHeight } = useNavbarHeight();
   const scrollAreaSx = useScrollAreaSx(navbarHeight);
-
+  let location = useLocation().pathname;
   useAsync(async () => {
     await dispatch(getSignedInUser());
   }, []);
@@ -28,7 +29,9 @@ function App() {
           <Box sx={useContainerSx}>
             <AppRoutes />
           </Box>
-          <Center sx={footerSx}>(≖ᴗ≖✿)</Center>
+          {location !== '/admin-portal' && (
+            <Center sx={footerSx}>(≖ᴗ≖✿)</Center>
+          )}
         </ScrollArea>
       </AppShell>
     </>

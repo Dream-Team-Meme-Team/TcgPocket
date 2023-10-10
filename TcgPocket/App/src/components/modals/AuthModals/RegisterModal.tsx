@@ -169,4 +169,4 @@ export function RegisterModal({
   );
 }
 
-const popoverStyle: CSSProperties = { backgroundColor: 'white' };
+const popoverStyle: CSSProperties = { backgroundColor: '#aea8b5' };

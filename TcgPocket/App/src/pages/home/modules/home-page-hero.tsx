@@ -127,7 +127,7 @@ const useStyles = createStyles((theme: MantineTheme) => ({
   inner: {
     position: 'relative',
     alignItems: 'center',
-    paddingTop: rem(225),
+    paddingTop: rem(125),
     paddingBottom: rem(350),
     margin: 'inherit',
 

@@ -23,7 +23,7 @@ export function Home2() {
             </Title>
             <Divider color="white" />
             <List p={20} icon={<IconHeart />}>
-              <List.Item className={classes.names}>Zoe</List.Item>
+              <List.Item className={classes.names}>Zoe Klein</List.Item>
               <List
                 icon={<IconChevronsRight />}
                 withPadding
@@ -34,7 +34,7 @@ export function Home2() {
                 </List.Item>
               </List>
               <List.Item pt={10} className={classes.names}>
-                Abby
+                Abby Ortego
               </List.Item>
               <List
                 icon={<IconChevronsRight />}
@@ -44,7 +44,7 @@ export function Home2() {
                 <List.Item>Senior, Computer Science</List.Item>
               </List>
               <List.Item pt={10} className={classes.names}>
-                Brandon
+                Brandon Barr
               </List.Item>
               <List
                 icon={<IconChevronsRight />}
@@ -54,7 +54,7 @@ export function Home2() {
                 <List.Item>Senior, Computer Science</List.Item>
               </List>
               <List.Item pt={10} className={classes.names}>
-                Deanna
+                Deanna Short
               </List.Item>
               <List
                 icon={<IconChevronsRight />}
@@ -64,7 +64,7 @@ export function Home2() {
                 <List.Item>Senior, Computer Science</List.Item>
               </List>
               <List.Item pt={10} className={classes.names}>
-                Gabe
+                Gabe Bradford
               </List.Item>
               <List
                 icon={<IconChevronsRight />}
