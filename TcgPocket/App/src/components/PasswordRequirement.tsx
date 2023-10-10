@@ -2,16 +2,16 @@ import { Box, createStyles, MantineTheme, rem, Text } from '@mantine/core';
 import { IconCheck, IconX } from '@tabler/icons-react';
 
 type Requirements = {
-  re: RegExp;
+  expression: RegExp;
   label: string;
 };
 
 export const passwordRequirements: Requirements[] = [
-  { re: /^.{6,}$/, label: 'Must be at least 6 characters' },
-  { re: /[0-9]/, label: 'Includes number' },
-  { re: /[a-z]/, label: 'Includes lowercase letter' },
-  { re: /[A-Z]/, label: 'Includes uppercase letter' },
-  { re: /[!@#$%^&*]/, label: 'Includes ones special character' },
+  { expression: /^.{6,}$/, label: 'Must be at least 6 characters' },
+  { expression: /[0-9]/, label: 'Includes number' },
+  { expression: /[a-z]/, label: 'Includes lowercase letter' },
+  { expression: /[A-Z]/, label: 'Includes uppercase letter' },
+  { expression: /[!@#$%^&*]/, label: 'Includes ones special character' },
 ];
 
 type PasswordRequirementProps = {

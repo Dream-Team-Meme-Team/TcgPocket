@@ -51,7 +51,7 @@ export function PasswordForm({ user }: PasswordFormProps): React.ReactElement {
   const checks = passwordRequirements.map((requirement, index) => (
     <PasswordRequirement
       key={index}
-      meets={requirement.re.test(form.values.newPassword)}
+      meets={requirement.expression.test(form.values.newPassword)}
       label={requirement.label}
     />
   ));

@@ -16,14 +16,14 @@ public static class DataSeeder
 
     private static async Task SeedUsersAndRoles(UserManager<User> userManager, RoleManager<Role> roleManager)
     {
-        var roleNames = typeof(Roles).GetProperties().Select(x => x.Name).ToList();
+        var roleNames = typeof(Roles).GetFields().ToList();
 
         foreach (var roleName in roleNames)
         {
-            var roleExists = await roleManager.RoleExistsAsync(roleName);
+            var roleExists = await roleManager.RoleExistsAsync(roleName.Name);
             if (!roleExists)
             {
-                await roleManager.CreateAsync(new Role { Name = roleName });
+                await roleManager.CreateAsync(new Role { Name = roleName.Name });
             }
         }
 

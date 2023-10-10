@@ -65,7 +65,7 @@ export function RegisterModal({
   const checks = passwordRequirements.map((requirement, index) => (
     <PasswordRequirement
       key={index}
-      meets={requirement.re.test(form.values.password)}
+      meets={requirement.expression.test(form.values.password)}
       label={requirement.label}
     />
   ));
