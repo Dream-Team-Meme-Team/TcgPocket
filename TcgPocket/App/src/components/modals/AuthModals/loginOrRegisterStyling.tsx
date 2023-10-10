@@ -7,6 +7,7 @@ export const useLoginOrRegisterStyles = createStyles(() => ({
   },
 
   bottomBtns: {
+    paddingTop: '5px',
     display: 'flex',
     justifyContent: 'flex-end',
     gap: 8,
