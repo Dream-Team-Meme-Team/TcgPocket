@@ -1,12 +1,17 @@
 import { useForm } from '@mantine/form';
 import { useFormValidation } from '../../../helpers/useFormValidation';
 import { UserGetDto, UserPasswordUpdateDto } from '../../../types/users';
-import { createStyles } from '@mantine/core';
+import { Popover, createStyles } from '@mantine/core';
 import { SecondaryButton } from '../../../components/buttons/SecondaryButton';
 import { PrimaryButton } from '../../../components/buttons/PrimaryButton';
 import { dispatch } from '../../../store/configureStore';
 import { updateUserPassword } from '../../../services/AuthServices';
 import { PrimaryPasswordInput } from '../../../components/inputs/PrimaryPasswordInput';
+import {
+  PasswordRequirement,
+  passwordRequirements,
+} from '../../../components/PasswordRequirement';
+import { CSSProperties, useState } from 'react';
 import { responseWrapper } from '../../../services/helpers/responseWrapper';
 
 type PasswordFormProps = {
@@ -25,6 +30,8 @@ export function PasswordForm({ user }: PasswordFormProps): React.ReactElement {
   const { classes } = useStyles();
   const { validatePassword } = useFormValidation();
 
+  const [popover, setPopover] = useState(false);
+
   const form = useForm({
     initialValues: initialValues,
     validateInputOnBlur: true,
@@ -41,7 +48,15 @@ export function PasswordForm({ user }: PasswordFormProps): React.ReactElement {
     },
   });
 
-  const handleSubmit = (values: PasswordForm) => {
+  const checks = passwordRequirements.map((requirement, index) => (
+    <PasswordRequirement
+      key={index}
+      meets={requirement.expression.test(form.values.newPassword)}
+      label={requirement.label}
+    />
+  ));
+
+  const handleSubmit = async (values: PasswordForm) => {
     const userWithUpdatedPassword: UserPasswordUpdateDto = {
       userName: user.userName,
       currentPassword: values.currentPassword,
@@ -73,11 +88,21 @@ export function PasswordForm({ user }: PasswordFormProps): React.ReactElement {
       />
 
       <div className={classes.newPasswordContainer}>
-        <PrimaryPasswordInput
-          className={classes.passwordInput}
-          label="New Password"
-          {...form.getInputProps('newPassword')}
-        />
+        <Popover opened={popover} position="bottom" width="target">
+          <Popover.Target>
+            <div
+              onFocusCapture={() => setPopover(true)}
+              onBlurCapture={() => setPopover(false)}
+            >
+              <PrimaryPasswordInput
+                className={classes.passwordInput}
+                label="New Password"
+                {...form.getInputProps('newPassword')}
+              />
+            </div>
+          </Popover.Target>
+          <Popover.Dropdown style={popoverStyle}>{checks}</Popover.Dropdown>
+        </Popover>
 
         <PrimaryPasswordInput
           className={classes.passwordInput}
@@ -121,3 +146,5 @@ const useStyles = createStyles(() => {
     },
   };
 });
+
+const popoverStyle: CSSProperties = { backgroundColor: 'white' };
