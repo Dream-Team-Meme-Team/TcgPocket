@@ -49,7 +49,7 @@ const useStyles = createStyles(() => ({
     padding: '20px',
     display: 'flex',
     justifyContent: 'space-between',
-    alignItems: 'start',
+    alignContent: 'baseline',
     width: 1618,
     height: 1050,
     overflow: 'hidden',
