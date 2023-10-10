@@ -33,7 +33,7 @@ public class UpdateAttributeCommandHandler : IRequestHandler<UpdateAttributeComm
 	{
 		var validationResult = await _validator.ValidateAsync(request, cancellationToken);
 
-		if (validationResult.IsValid)
+		if (!validationResult.IsValid)
 		{
 			var errors = _mapper.Map<List<Error>>(validationResult.Errors);
 			return new Response<AttributeGetDto>{Errors = errors};
