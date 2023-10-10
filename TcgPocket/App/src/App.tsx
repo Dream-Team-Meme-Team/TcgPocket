@@ -12,11 +12,12 @@ import { useNavbarHeight } from './hooks/use-navbar-height';
 import { dispatch } from './store/configureStore';
 import { getSignedInUser } from './services/AuthServices';
 import { useAsync } from 'react-use';
+import { useLocation } from 'react-router-dom';
 
 function App() {
   const { navbarHeight, remainingHeight } = useNavbarHeight();
   const scrollAreaSx = useScrollAreaSx(navbarHeight);
-
+  let location = useLocation().pathname;
   useAsync(async () => {
     await dispatch(getSignedInUser());
   }, []);
@@ -28,7 +29,9 @@ function App() {
           <Box sx={useContainerSx}>
             <AppRoutes />
           </Box>
-          <Center sx={footerSx}>(≖ᴗ≖✿)</Center>
+          {location !== '/admin-portal' && (
+            <Center sx={footerSx}>(≖ᴗ≖✿)</Center>
+          )}
         </ScrollArea>
       </AppShell>
     </>
@@ -40,7 +43,7 @@ export default App;
 function footerSx(theme: MantineTheme): CSSObject {
   return {
     height: '3.5rem',
-    background: theme.white,
+    background: theme.colors.secondaryBlueColors[3],
     position: 'sticky',
     bottom: 0,
     left: 0,
@@ -55,7 +58,7 @@ function useContainerSx(theme: MantineTheme): CSSObject {
     boxShadow: '0px 3px 8px black',
     position: 'relative',
     minHeight: remainingHeight,
-    backgroundColor: theme.white,
+    backgroundColor: theme.colors.backgroundColor[0],
   };
 }
 
