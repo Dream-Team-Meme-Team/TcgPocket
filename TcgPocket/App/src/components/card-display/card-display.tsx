@@ -72,28 +72,23 @@ export const CardDisplay: React.FC<CardContainerProps> = ({ card }) => {
           <Space h={'3%'} />
 
           {card.attributes && (
-            <Tooltip
-              multiline
-              label={card.attributes.flatMap((x) => x.attributeName).join(', ')}
+            <Flex
+              sx={attributesContainerSx}
+              gap={'.4rem'}
+              justify={'center'}
+              maw={'10rem'}
+              wrap={'wrap'}
             >
-              <Flex
-                sx={attributesContainerSx}
-                gap={'.4rem'}
-                justify={'center'}
-                maw={'10rem'}
-                wrap={'wrap'}
-              >
-                {card.attributes.map((cardAttributes) => (
-                  <Badge
-                    size="sm"
-                    className={classes.badgeBackground}
-                    variant="filled"
-                  >
-                    {cardAttributes.attributeName}
-                  </Badge>
-                ))}
-              </Flex>
-            </Tooltip>
+              {card.attributes.map((cardAttributes) => (
+                <Badge
+                  size="sm"
+                  className={classes.badgeBackground}
+                  variant="filled"
+                >
+                  {cardAttributes.attributeName}
+                </Badge>
+              ))}
+            </Flex>
           )}
         </Container>
       </Flex>

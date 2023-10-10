@@ -24,6 +24,7 @@ export const InventoryDisplay: React.FC<InventoryDisplayProps> = ({
       </Group>
       <Flex justify={'end'}>
         <Pagination
+          color={'violet'}
           withEdges
           className={classes.paginationControls}
           value={currentPage}
