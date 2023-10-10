@@ -5,6 +5,7 @@ import {
   Styles,
   Image,
   createStyles,
+  Tooltip,
 } from '@mantine/core';
 import { PrimaryModal } from '../../modals/PrimaryModal';
 import { IconAlertTriangleFilled } from '@tabler/icons-react';
@@ -21,31 +22,44 @@ export const CardImageDisplay: React.FC<{ imageUrl: string }> = ({
     url = new URL(imageUrl);
   } catch (_) {
     return (
-      <Flex className={classes.invalidUrl}>
-        <IconAlertTriangleFilled
-          size={'70px'}
-          className={classes.invalidUrlIcon}
-        />
-        <Flex className={classes.invalidUrlText}>
-          <br />
-          Image Not Found
+      <Tooltip
+        label={'No image available'}
+        offset={-100}
+        color="rgba(0,0,0,0.7)"
+      >
+        <Flex className={classes.invalidUrl}>
+          <IconAlertTriangleFilled
+            size={'70px'}
+            className={classes.invalidUrlIcon}
+          />
+          <Flex className={classes.invalidUrlText}>
+            <br />
+            Image Not Found
+          </Flex>
         </Flex>
-      </Flex>
+      </Tooltip>
     );
   }
 
   return (
     <>
-      <AspectRatio ratio={16 / 9} h={220} miw={'9.3rem'}>
-        <Image
-          onClick={() => setOpen(true)}
-          src={imageUrl}
-          fit="scale-down"
-          radius={7}
-          width={'152px'}
-          className={classes.imageHover}
-        />
-      </AspectRatio>
+      <Tooltip
+        label={'View image'}
+        position="top-end"
+        offset={-40}
+        color="rgba(0,0,0,0.7)"
+      >
+        <AspectRatio ratio={16 / 9} h={220} miw={'9.3rem'}>
+          <Image
+            onClick={() => setOpen(true)}
+            src={imageUrl}
+            fit="scale-down"
+            radius={7}
+            width={'152px'}
+            className={classes.imageHover}
+          />
+        </AspectRatio>
+      </Tooltip>
       <PrimaryModal
         styles={modalProps}
         padding={10}
