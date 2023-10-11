@@ -10,52 +10,6 @@ type InventoryDisplayProps = {
   isLoading: boolean;
 };
 
-const emptyCardDisplay: CardDisplayDto = {
-  attributes: [],
-  cardNumber: '',
-  cardType: {
-    gameId: 0,
-    id: 0,
-    name: '',
-  },
-  description: '',
-  game: {
-    id: 0,
-    name: '',
-  },
-  id: 0,
-  imageUrl: '',
-  name: '',
-  rarity: {
-    gameId: 0,
-    id: 0,
-    name: '',
-  },
-  set: {
-    gameId: 0,
-    id: 0,
-    name: '',
-  },
-};
-const emptyCards: CardDisplayDto[] = [
-  emptyCardDisplay,
-  emptyCardDisplay,
-  emptyCardDisplay,
-  emptyCardDisplay,
-  emptyCardDisplay,
-  emptyCardDisplay,
-  emptyCardDisplay,
-  emptyCardDisplay,
-  emptyCardDisplay,
-  emptyCardDisplay,
-  emptyCardDisplay,
-  emptyCardDisplay,
-  emptyCardDisplay,
-  emptyCardDisplay,
-  emptyCardDisplay,
-  emptyCardDisplay,
-];
-
 export const InventoryDisplay: React.FC<InventoryDisplayProps> = ({
   paginatedCards: cards,
   setCurrentPage,
@@ -66,18 +20,16 @@ export const InventoryDisplay: React.FC<InventoryDisplayProps> = ({
 
   return (
     <div>
-      <Group className={classes.inventoryDisplayGroup}>
-        {isLoading &&
-          emptyCards.map((cards) => (
-            <CardDisplay isLoading={isLoading} card={cards} />
-          ))}
+      <Group spacing={20} className={classes.inventoryDisplayGroup}>
         {cards?.items.map((cards: CardDisplayDto) => (
-          <CardDisplay isLoading={isLoading} card={cards} />
+          <CardDisplay key={cards.id} isLoading={isLoading} card={cards} />
         ))}
       </Group>
       <Pagination
         color={'violet'}
         withEdges
+        siblings={2}
+        boundaries={2}
         className={classes.paginationControls}
         value={currentPage}
         onChange={setCurrentPage}
@@ -102,9 +54,10 @@ const useStyles = createStyles(() => ({
 
   inventoryDisplayGroup: {
     backgroundColor: '#514254',
-    padding: '20px',
+    padding: '40px',
+    paddingTop: '10px',
     display: 'flex',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     alignContent: 'baseline',
     width: 1618,
     height: 1050,

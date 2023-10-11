@@ -51,9 +51,7 @@ export function PrimaryNavigation(): React.ReactElement {
       (r: { name: string }) => r.name === 'Admin'
     );
     return isAdmin !== -1;
-  }, [signedInUser]);
-
-  console.log(signedInUser?.roles);
+  }, [determineUserState, signedInUser?.roles]);
 
   return (
     <>

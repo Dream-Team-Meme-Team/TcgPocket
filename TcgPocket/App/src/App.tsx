@@ -18,7 +18,7 @@ import { useMemo } from 'react';
 function App() {
   const { navbarHeight, remainingHeight } = useNavbarHeight();
   const scrollAreaSx = useScrollAreaSx(navbarHeight);
-  let location = useLocation().pathname;
+  const location = useLocation().pathname;
 
   const hideFooter: boolean = useMemo(() => {
     return !(location === '/admin-portal' || location === '/inventory');

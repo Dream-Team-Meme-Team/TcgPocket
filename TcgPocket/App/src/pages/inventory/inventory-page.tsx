@@ -1,35 +1,49 @@
 import { useState } from 'react';
 import { CardsService } from '../../services/CardsService';
 import { useAppSelector } from '../../store/configureStore';
-import { CardDisplayDto, CardFilterDto } from '../../types/cards';
+import { CardFilterDto } from '../../types/cards';
 import { InventoryDisplay } from '../home/modules/inventory-display-component';
 import { useAsync } from 'react-use';
 import { error } from '../../services/helpers/notification';
-import { PagedResult } from '../../types/shared';
 import { Group, createStyles } from '@mantine/core';
 
-export function InventoryPage(): React.ReactElement {
+const paged: CardFilterDto = {
+  currentPage: 1,
+  pageSize: 16,
+  cardNumber: undefined,
+  cardTypeId: undefined,
+  description: undefined,
+  gameId: undefined,
+  id: undefined,
+  imageUrl: undefined,
+  name: undefined,
+  orderBy: 'asc',
+  rarityId: undefined,
+  setId: undefined,
+  sortBy: 'gameId',
+};
+
+type InventoryPageProps = {
+  pagedCardsRequest: CardFilterDto;
+};
+
+export const InventoryPage: React.FC<InventoryPageProps> = ({
+  pagedCardsRequest,
+}) => {
   const { classes } = useStyles();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const user = useAppSelector((state) => state.user);
 
-  const paged: CardFilterDto = {
-    currentPage: currentPage,
-    pageSize: 16,
-    cardNumber: undefined,
-    cardTypeId: undefined,
-    description: undefined,
-    gameId: undefined,
-    id: undefined,
-    imageUrl: undefined,
-    name: undefined,
-    orderBy: 'asc',
-    rarityId: undefined,
-    setId: undefined,
-    sortBy: 'gameId',
-  };
+  //to make it work for testing and PR purpuses. can be removed post pr
+  pagedCardsRequest = paged;
+
+  //things we may want to keep for consistency with presenting, like page size
+  pagedCardsRequest.currentPage = currentPage;
+  pagedCardsRequest.pageSize = 16;
+  pagedCardsRequest.orderBy = 'asc';
+
   const fetchCards = useAsync(async () => {
-    const response = await CardsService.getUserInventory(paged);
+    const response = await CardsService.getUserInventory(pagedCardsRequest);
 
     if (response.hasErrors) {
       return response.errors.forEach((err) => error(err.message));
@@ -38,27 +52,24 @@ export function InventoryPage(): React.ReactElement {
     return response;
   }, [currentPage, user]);
 
-  const pagedCards: PagedResult<CardDisplayDto> | undefined =
-    fetchCards?.value?.data;
   return (
     <div>
-      <Group className={classes.y}>
-        <div className={classes.x} />
-        {pagedCards && pagedCards.items && (
-          <InventoryDisplay
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            paginatedCards={fetchCards?.value?.data}
-            isLoading={fetchCards.loading}
-          />
-        )}
+      <Group className={classes.wrapper}>
+        {/* Used as filter placeholder*/}
+        <div className={classes.filterPlaceholder} />
+        <InventoryDisplay
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          paginatedCards={fetchCards?.value?.data}
+          isLoading={fetchCards.loading}
+        />
       </Group>
     </div>
   );
-}
+};
 
 const useStyles = createStyles(() => ({
-  x: {
+  filterPlaceholder: {
     height: 500,
     margin: 0,
     padding: 0,
@@ -66,7 +77,7 @@ const useStyles = createStyles(() => ({
     display: 'flex',
     justifyContent: 'start',
   },
-  y: {
+  wrapper: {
     display: 'flex',
     justifyContent: 'flex-start',
   },

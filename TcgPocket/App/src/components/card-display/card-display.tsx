@@ -28,7 +28,7 @@ export const CardDisplay: React.FC<CardContainerProps> = ({
   return (
     <Paper tabIndex={-1} p={10} pl={11} sx={containerSx}>
       <Flex columnGap={2}>
-        <Skeleton width={155} height={216} visible={isLoading}>
+        <Skeleton radius={7} width={152} height={220} visible={isLoading}>
           <CardImageDisplay imageUrl={card.imageUrl} />
         </Skeleton>
 
@@ -114,6 +114,7 @@ export const CardDisplay: React.FC<CardContainerProps> = ({
               >
                 {card.attributes.map((cardAttributes) => (
                   <Badge
+                    key={cardAttributes.id}
                     size="sm"
                     className={classes.badgeBackground}
                     variant="filled"

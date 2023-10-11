@@ -6,6 +6,7 @@ import {
   Image,
   createStyles,
   Tooltip,
+  Skeleton,
 } from '@mantine/core';
 import { PrimaryModal } from '../../modals/PrimaryModal';
 import { IconAlertTriangleFilled } from '@tabler/icons-react';
@@ -14,6 +15,7 @@ import { useState } from 'react';
 export const CardImageDisplay: React.FC<{ imageUrl: string }> = ({
   imageUrl,
 }) => {
+  const [isLoading, setIsLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const { classes } = useStyles();
   let url: URL;
@@ -50,14 +52,17 @@ export const CardImageDisplay: React.FC<{ imageUrl: string }> = ({
         color="rgba(0,0,0,0.7)"
       >
         <AspectRatio ratio={16 / 9} h={220} miw={'9.3rem'}>
-          <Image
-            onClick={() => setOpen(true)}
-            src={imageUrl}
-            fit="scale-down"
-            radius={7}
-            width={'152px'}
-            className={classes.imageHover}
-          />
+          <Skeleton radius={7} width={152} height={220} visible={isLoading}>
+            <Image
+              onClick={() => setOpen(true)}
+              src={imageUrl}
+              fit="scale-down"
+              radius={7}
+              width={'152px'}
+              onLoad={() => setIsLoading(false)}
+              className={classes.imageHover}
+            />
+          </Skeleton>
         </AspectRatio>
       </Tooltip>
       <PrimaryModal
