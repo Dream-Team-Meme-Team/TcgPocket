@@ -11,12 +11,12 @@ export const routes = {
 
 export const apiRoutes = {
   games: `${Env.viteApiBaseUrl}/api/games`,
+  cards: `${Env.viteApiBaseUrl}/api/cards`,
   sets: `${Env.viteApiBaseUrl}/api/sets`,
   rarities: `${Env.viteApiBaseUrl}/api/rarities`,
   cardTypes: `${Env.viteApiBaseUrl}/api/card-types`,
   attributes: `${Env.viteApiBaseUrl}/api/attributes`,
   decks: `${Env.viteApiBaseUrl}/api/decks`,
-  cards: `${Env.viteApiBaseUrl}/api/cards`,
   userCards: `${Env.viteApiBaseUrl}/api/user-cards`,
   roles: {
     base: `${Env.viteApiBaseUrl}/api/roles`,

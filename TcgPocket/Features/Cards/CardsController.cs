@@ -55,6 +55,16 @@ namespace TcgPocket.Features.Cards
             return response.HasErrors ? BadRequest(response) : Ok(response);
         }
 
+        [HttpGet("inventory")]
+        public async Task<ActionResult<Response<PagedResult<CardDisplayDto>>>>
+            GetCurrentUserInventoryQuery([FromQuery] PagedCardFilterDto filter)
+        {
+            var response = await _mediator
+                .Send(new GetCurrentUserInventoryQuery { Filter = filter });
+
+            return response.HasErrors ? BadRequest(response) : Ok(response);
+        }
+
         [HttpDelete("{id}")]
         public async Task<ActionResult<Response>> DeleteCard([FromRoute] int id)
         {

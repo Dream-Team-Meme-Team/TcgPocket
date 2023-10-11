@@ -1,10 +1,4 @@
-import {
-  Container,
-  ScrollArea,
-  Tabs,
-  TabsValue,
-  createStyles,
-} from '@mantine/core';
+import { ScrollArea, Tabs, TabsValue, createStyles } from '@mantine/core';
 import {
   IconCards,
   IconChartTreemap,

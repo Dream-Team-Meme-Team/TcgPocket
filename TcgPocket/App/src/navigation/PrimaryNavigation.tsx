@@ -43,6 +43,16 @@ export function PrimaryNavigation(): React.ReactElement {
     return signedInUser === undefined || signedInUser === null ? false : true;
   }, [signedInUser]);
 
+  const isAdmin: boolean | undefined = useMemo(() => {
+    if (!determineUserState) {
+      return false;
+    }
+    const isAdmin: number = signedInUser?.roles.findIndex(
+      (r: { name: string }) => r.name === 'Admin'
+    );
+    return isAdmin !== -1;
+  }, [determineUserState, signedInUser?.roles]);
+
   return (
     <>
       <Navbar height={navbarHeight} sx={navbarSx}>
@@ -55,7 +65,9 @@ export function PrimaryNavigation(): React.ReactElement {
               <NavButton route={routes.inventory}>Inventory</NavButton>
               <NavButton route={routes.cardUpload}>Upload Cards</NavButton>
               {/* <NavButton route={routes.deckBuilder}> Deck Builder</NavButton> */}
-              <NavButton route={routes.adminPortal}> Admin Portal </NavButton>
+              {isAdmin && (
+                <NavButton route={routes.adminPortal}> Admin Portal </NavButton>
+              )}
             </Flex>
           )}
 
