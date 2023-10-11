@@ -52,7 +52,7 @@ export function HeroTitle() {
         <Container className={classes.inner} color="blue">
           <h1 className={classes.title}>Welcome to </h1>
           <h1 className={classes.title}>
-            <Text component="span" color="#7d48b7" inherit>
+            <Text component="span" color="#B09AFF" inherit>
               TCG Pocket
             </Text>
           </h1>

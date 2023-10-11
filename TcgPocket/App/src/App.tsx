@@ -13,11 +13,17 @@ import { dispatch } from './store/configureStore';
 import { getSignedInUser } from './services/AuthServices';
 import { useAsync } from 'react-use';
 import { useLocation } from 'react-router-dom';
+import { useMemo } from 'react';
 
 function App() {
   const { navbarHeight, remainingHeight } = useNavbarHeight();
   const scrollAreaSx = useScrollAreaSx(navbarHeight);
-  let location = useLocation().pathname;
+  const location = useLocation().pathname;
+
+  const hideFooter: boolean = useMemo(() => {
+    return !(location === '/admin-portal' || location === '/inventory');
+  }, [location]);
+
   useAsync(async () => {
     await dispatch(getSignedInUser());
   }, []);
@@ -29,9 +35,7 @@ function App() {
           <Box sx={useContainerSx}>
             <AppRoutes />
           </Box>
-          {location !== '/admin-portal' && (
-            <Center sx={footerSx}>(≖ᴗ≖✿)</Center>
-          )}
+          {hideFooter && <Center sx={footerSx}>(≖ᴗ≖✿)</Center>}
         </ScrollArea>
       </AppShell>
     </>

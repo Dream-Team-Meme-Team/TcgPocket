@@ -5,4 +5,8 @@ export type CardAttributeDto = {
   attributeId: number;
 };
 
+export type CardAttributeDisplayDto = {
+  attributeName: string;
+};
+
 export type CardAttributeGetDto = Id & CardAttributeDto;

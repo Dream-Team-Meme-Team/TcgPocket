@@ -29,8 +29,8 @@ public static class DataSeeder
 
         var devAccountUser = new User
         {
-            Email = "tcg@yamomma.com",
-            UserName = "tcg@yamomma.com",
+            Email = "dev@tcgpocket.com",
+            UserName = "dev@tcgpocket.com",
             PhoneNumber = "9859859859",
         };
 

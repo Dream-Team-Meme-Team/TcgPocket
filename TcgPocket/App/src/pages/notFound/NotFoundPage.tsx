@@ -59,7 +59,7 @@ const useStyles = createStyles((theme) => ({
 
   image404: {
     ...theme.fn.cover(),
-    opacity: 0.9,
+    opacity: 0.15,
     margin: 'auto !important',
     position: 'absolute',
     paddingTop: rem(40),

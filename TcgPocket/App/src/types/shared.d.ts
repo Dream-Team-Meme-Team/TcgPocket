@@ -26,8 +26,8 @@ export type List<T = any> = T[];
 
 export type PagedResult<TDto = any> = {
   items: List<TDto>;
-  PageCount: number;
-  ItemCount: number;
-  FirstRowOnPage: number;
-  LastRowOnPage: number;
+  pageCount: number;
+  itemCount: number;
+  firstRowOnPage: number;
+  lastRowOnPage: number;
 } & PageDto;
