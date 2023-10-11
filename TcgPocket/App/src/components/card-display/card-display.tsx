@@ -10,25 +10,36 @@ import {
   createStyles,
   Box,
   Tooltip,
+  Skeleton,
 } from '@mantine/core';
 import { CardDisplayDto } from '../../types/cards';
 import { CardImageDisplay } from './modules/card-image-display';
 
 type CardContainerProps = {
   card: CardDisplayDto;
+  isLoading: boolean;
 };
 
-export const CardDisplay: React.FC<CardContainerProps> = ({ card }) => {
+export const CardDisplay: React.FC<CardContainerProps> = ({
+  card,
+  isLoading,
+}) => {
   const { classes } = useStyles();
   return (
     <Paper tabIndex={-1} p={10} pl={11} sx={containerSx}>
       <Flex columnGap={2}>
-        <CardImageDisplay imageUrl={card.imageUrl} />
+        <Skeleton width={155} height={216} visible={isLoading}>
+          <CardImageDisplay imageUrl={card.imageUrl} />
+        </Skeleton>
+
         <div className={classes.cardInfoDivider} />
         <Container className={classes.cardInfo} pr={0} pl={4}>
-          <Text size={'15px'} color="black" ff={'Georgia'} fw={'bold'}>
-            {card.game.name}
-          </Text>
+          <Skeleton width={90} height={20} visible={isLoading}>
+            <Text size={'15px'} color="black" ff={'Georgia'} fw={'bold'}>
+              {card.game.name}
+            </Text>
+          </Skeleton>
+
           <Tooltip
             label={card.set.name}
             position="top-start"
@@ -37,59 +48,82 @@ export const CardDisplay: React.FC<CardContainerProps> = ({ card }) => {
             w={'fit'}
             arrowSize={4}
           >
-            <Text
-              size={'12px'}
-              lineClamp={1}
-              color="black"
-              ff={'Georgia'}
-              fw={500}
-            >
-              {card.set.name}
-            </Text>
+            <Skeleton width={178} height={18.5} visible={isLoading}>
+              <Text
+                size={'12px'}
+                lineClamp={1}
+                color="black"
+                ff={'Georgia'}
+                fw={500}
+              >
+                {card.set.name}
+              </Text>
+            </Skeleton>
           </Tooltip>
-          <Space h={'2%'} />
-
-          <Text size={'13px'} color="black" ff={'Georgia'} fw={500}>
-            {card.rarity.name} | {card.cardNumber}
-          </Text>
 
           <Space h={'2%'} />
-          <Box h={52}>
+          <Skeleton width={178} height={20.15} visible={isLoading}>
             <Tooltip
-              label={card.name}
+              label={`${card.rarity.name} | ${card.cardNumber}`}
               position="top-start"
-              offset={-10}
+              offset={-5}
               multiline
               w={'fit'}
               arrowSize={4}
             >
-              <Title lineClamp={2} color="black" ff={'Georgia'} order={4}>
-                {card.name}
-              </Title>
+              <Text
+                lineClamp={1}
+                size={'13px'}
+                color="black"
+                ff={'Georgia'}
+                fw={500}
+              >
+                {card.rarity.name} | {card.cardNumber}
+              </Text>
             </Tooltip>
-          </Box>
+          </Skeleton>
+
+          <Space h={'2%'} />
+          <Skeleton width={178} height={52.17} visible={isLoading}>
+            <Box h={52}>
+              <Tooltip
+                label={card.name}
+                position="top-start"
+                offset={-10}
+                multiline
+                w={'fit'}
+                arrowSize={4}
+              >
+                <Title lineClamp={2} color="black" ff={'Georgia'} order={4}>
+                  {card.name}
+                </Title>
+              </Tooltip>
+            </Box>
+          </Skeleton>
 
           <Space h={'3%'} />
-
-          {card.attributes && (
-            <Flex
-              sx={attributesContainerSx}
-              gap={'.4rem'}
-              justify={'center'}
-              maw={'10rem'}
-              wrap={'wrap'}
-            >
-              {card.attributes.map((cardAttributes) => (
-                <Badge
-                  size="sm"
-                  className={classes.badgeBackground}
-                  variant="filled"
-                >
-                  {cardAttributes.attributeName}
-                </Badge>
-              ))}
-            </Flex>
-          )}
+          <Skeleton width={178} height={90} visible={isLoading}>
+            {}
+            {card.attributes && (
+              <Flex
+                sx={attributesContainerSx}
+                gap={'.4rem'}
+                justify={'center'}
+                maw={'10rem'}
+                wrap={'wrap'}
+              >
+                {card.attributes.map((cardAttributes) => (
+                  <Badge
+                    size="sm"
+                    className={classes.badgeBackground}
+                    variant="filled"
+                  >
+                    {cardAttributes.attributeName}
+                  </Badge>
+                ))}
+              </Flex>
+            )}
+          </Skeleton>
         </Container>
       </Flex>
     </Paper>
