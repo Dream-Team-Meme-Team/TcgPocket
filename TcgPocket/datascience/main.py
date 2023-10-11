@@ -1,24 +1,27 @@
 import pytesseract
 pytesseract.pytesseract.tesseract_cmd = r'C:/Program Files/Tesseract-OCR/tesseract.exe'
 
+import os
+import base64
 import torch
-import requests
 from PIL import Image
 import numpy as np
 import cv2
-from io import BytesIO, BufferedReader
+from io import BytesIO
 import torchvision.transforms as transform
-from cnn.apiKeys import IDK_API_KEY
-from cnn.model_av.card_classifier_a import CardClassifier
-from scraper.scraper_classifier import scraper_classifier
+from .cnn.model_av.card_classifier_a import CardClassifier
+from .scraper.scraper_classifier import scraper_classifier
+from sys import argv
+
 
 def all_of_it(raw_img: bytes):
     # convert to PIL Image
     raw_img = Image.open(BytesIO(raw_img))
 
     # loading up model
+    model_path = os.path.join(os.path.dirname(__file__), 'cnn/model_av/model_a_v2.pt')
     card_classify = CardClassifier()
-    card_classify.load_state_dict(torch.load('./cnn/model_av/model_a_v2.pt'))
+    card_classify.load_state_dict(torch.load(model_path))
     card_classify.eval()
     from_PIL = transform.Compose([transform.PILToTensor()])     # transformer
 
@@ -45,25 +48,6 @@ def all_of_it(raw_img: bytes):
     return json
 #
 
-cards = ['1.jpg']
-
-for card in cards:
-    try:
-        # resp = requests.get(card, headers = {'X-Api-Key': IDK_API_KEY, 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'})
-        # json = all_of_it(Image.open(BytesIO(resp.content)))
-        # json = all_of_it(resp.content)
-        with open(card, "rb") as image_file:
-            print(1)
-            # image = Image.open(image_file)
-
-            print(2)
-            byte_array = bytearray(image_file.read())
-            
-            print(3)
-            json = all_of_it(byte_array)
-
-            print(json, '\n\n')
-
-    except Exception as e:
-        # print('Could not be found.\n\n')
-        print(e)
+if __name__ == '__main__':
+    byte_array = bytearray(base64.b64decode(argv[1]))
+    all_of_it(byte_array)
