@@ -3,12 +3,12 @@ import { dispatch, useAppSelector } from '../../../store/configureStore';
 import { MantineTheme, createStyles } from '@mantine/core';
 import { FilterSideMenuProps } from '../FilterSideMenu';
 import { RenderFilterCategoryAndOptions } from './RenderFilterCategoryAndOptions';
-import { useEffect } from 'react';
 import { getAllCardTypes } from '../../../services/dataServices/CardTypeServices';
 import { responseWrapper } from '../../../services/helpers/responseWrapper';
 import { getAllSets } from '../../../services/dataServices/SetServices';
 import { getAllRarities } from '../../../services/dataServices/RarityServices';
 import { getAllAttributes } from '../../../services/dataServices/AttributeServices';
+import { useEffectOnce } from 'react-use';
 
 type FilterCategoriesProps = Omit<FilterSideMenuProps, 'handleRemoveFilter'> & {
     selectedGameId: number;
@@ -54,14 +54,12 @@ export function FilterCategories({
         );
     };
 
-    useEffect(() => {
-        if (selectedGameId === 0) return;
-
+    useEffectOnce(() => {
         loadCardTypes();
         loadSets();
         loadRarities();
         loadAttributes();
-    }, [selectedGameId]);
+    });
 
     return (
         <div>
@@ -72,7 +70,6 @@ export function FilterCategories({
                     appliedFilters={appliedFilters}
                     handleSelectAllFilters={handleSelectAllFilters}
                     handleTogglingFilter={handleTogglingFilter}
-                    disabled={selectedGameId === 0}
                     selectedGameId={selectedGameId}
                 />
             </div>
@@ -83,7 +80,6 @@ export function FilterCategories({
                     appliedFilters={appliedFilters}
                     handleSelectAllFilters={handleSelectAllFilters}
                     handleTogglingFilter={handleTogglingFilter}
-                    disabled={selectedGameId === 0}
                     selectedGameId={selectedGameId}
                 />
             </div>
@@ -94,7 +90,6 @@ export function FilterCategories({
                     appliedFilters={appliedFilters}
                     handleSelectAllFilters={handleSelectAllFilters}
                     handleTogglingFilter={handleTogglingFilter}
-                    disabled={selectedGameId === 0}
                     selectedGameId={selectedGameId}
                 />
             </div>
@@ -105,7 +100,6 @@ export function FilterCategories({
                     appliedFilters={appliedFilters}
                     handleSelectAllFilters={handleSelectAllFilters}
                     handleTogglingFilter={handleTogglingFilter}
-                    disabled={selectedGameId === 0}
                     selectedGameId={selectedGameId}
                 />
             </div>
@@ -117,6 +111,6 @@ const useStyles = createStyles((theme: MantineTheme) => ({
     filterCategoryContainer: {
         borderBottomWidth: 2,
         borderBottomStyle: 'solid',
-        borderBottomColor: theme.colors.primaryColor[0],
+        borderBottomColor: theme.colors.primaryPurpleColor[0],
     },
 }));

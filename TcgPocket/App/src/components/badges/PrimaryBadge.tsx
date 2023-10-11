@@ -4,8 +4,8 @@ import { HTMLAttributes } from 'react';
 type PrimaryBadgeProps = BadgeProps & HTMLAttributes<HTMLDivElement>;
 
 const badgeStyling = (theme: MantineTheme) => ({
-    color: theme.colors.complimentaryColors[1],
-    backgroundColor: theme.colors.blue[2],
+    color: theme.colors.primaryBlueColor[0],
+    backgroundColor: theme.colors.primaryPurpleColor[0],
 });
 
 export function PrimaryBadge({

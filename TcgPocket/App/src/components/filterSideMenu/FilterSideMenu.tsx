@@ -87,7 +87,7 @@ const useStyles = createStyles((theme: MantineTheme) => ({
 
         borderRightWidth: 2,
         borderRightStyle: 'solid',
-        borderRightColor: theme.colors.primaryColor[0],
+        borderRightColor: theme.colors.primaryPurpleColor[0],
     },
 
     gameSelectContainer: {

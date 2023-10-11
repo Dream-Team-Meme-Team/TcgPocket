@@ -1,15 +1,17 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { GameGetDto } from '../types/games';
+import { CardFilterDto } from '../types/cards';
+import { CardTypeGetDto } from '../types/card-types';
 
 export interface InventoryState {
     /** the type will need to change */
-    appliedFilters: GameGetDto[];
-    otherProperty: string;
+    appliedFilters: CardTypeGetDto[];
+    queryFilters: CardFilterDto | null;
 }
 
 const INITIAL_STATE: InventoryState = {
     appliedFilters: [],
-    otherProperty: '',
+    queryFilters: null,
 };
 
 export const inventorySlice = createSlice({

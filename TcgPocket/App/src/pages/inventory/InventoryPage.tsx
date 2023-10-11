@@ -5,9 +5,9 @@ import {
     toggleAllFiltersOnInventory,
     toggleAppliedFilterOnInventory,
 } from '../../store/inventorySlice';
-import { FilterSideMenu } from '../../components/filterSideMenu/FilterSideMenu';
-import { GameGetDto } from '../../types/games';
 import React from 'react';
+import { CardTypeGetDto } from '../../types/card-types';
+import { FilterMenu } from './modules/FilterMenu';
 
 export function InventoryPage(): React.ReactElement {
     const { classes } = useStyles();
@@ -16,26 +16,34 @@ export function InventoryPage(): React.ReactElement {
         (state) => state.inventory.appliedFilters
     );
 
-    const handleTogglingFilter = (option: GameGetDto) => {
+    const handleTogglingFilter = (option: CardTypeGetDto) => {
         dispatch(toggleAppliedFilterOnInventory(option));
     };
 
-    const handleSelectAll = (filterOptions: GameGetDto[]) => {
+    const handleSelectAll = (filterOptions: CardTypeGetDto[]) => {
         void dispatch(toggleAllFiltersOnInventory(filterOptions));
     };
 
-    const handleRemoveFilter = (filter: GameGetDto) => {
+    const handleRemoveFilter = (filter: CardTypeGetDto) => {
         dispatch(toggleAppliedFilterOnInventory(filter));
     };
 
     return (
         <div className={classes.pageContainer}>
             <div className={classes.filterAndCardContainer}>
-                <FilterSideMenu
+                {/* <FilterSideMenu
                     appliedFilters={appliedFilters}
                     handleTogglingFilter={handleTogglingFilter}
                     handleSelectAllFilters={handleSelectAll}
                     handleRemoveFilter={handleRemoveFilter}
+                /> */}
+                <FilterMenu
+                    appliedFilters={appliedFilters}
+                    actions={{
+                        handleRemoveFilter: handleRemoveFilter,
+                        handleSelectAllFilters: handleSelectAll,
+                        handleTogglingFilter: handleTogglingFilter,
+                    }}
                 />
 
                 <DisplayCards />

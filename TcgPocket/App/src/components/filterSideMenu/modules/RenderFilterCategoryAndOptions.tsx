@@ -11,6 +11,9 @@ import {
 } from '@tabler/icons-react';
 import { FilterSideMenuProps } from '../FilterSideMenu';
 import { CardTypeGetDto } from '../../../types/card-types';
+import { CardsService } from '../../../services/CardsService';
+import { responseWrapper } from '../../../services/helpers/responseWrapper';
+import { CardFilterDto } from '../../../types/cards';
 
 type RenderFilterOptionsProps = Omit<
     FilterSideMenuProps,
@@ -18,7 +21,6 @@ type RenderFilterOptionsProps = Omit<
 > & {
     filterName: string;
     filterOptions: CardTypeGetDto[];
-    disabled?: boolean;
     selectedGameId: number;
 };
 
@@ -28,7 +30,6 @@ export function RenderFilterCategoryAndOptions({
     appliedFilters,
     handleSelectAllFilters,
     handleTogglingFilter,
-    disabled,
     selectedGameId,
 }: RenderFilterOptionsProps): React.ReactElement {
     const { classes } = useStyles();
@@ -52,23 +53,42 @@ export function RenderFilterCategoryAndOptions({
             );
     }, [searchText, selectedGameId]);
 
+    const getCards = async (filterId: number) => {
+        const response = await CardsService.getAllCards({
+            gameId: selectedGameId,
+            cardTypeId: filterId,
+        });
+        responseWrapper(response);
+        console.log(response);
+    };
+
     useEffect(() => {
-        if (disabled) {
-            close();
-        }
-    }, [disabled]);
+        close();
+    }, [selectedGameId]);
+
+    useEffect(() => {
+        const foundAppliedFilter = filterOptions.find((option) => {
+            return appliedFilters.find((filter) => filter.id === option.id);
+        });
+
+        if (!foundAppliedFilter) return;
+
+        getCards(foundAppliedFilter.id);
+    }, [appliedFilters]);
 
     return (
         <div className={classes.renderFilterOptionsContainer}>
             <div className={classes.filterCategoryContainer}>
                 <div
-                    aria-disabled={disabled}
+                    aria-disabled={selectedGameId === 0}
                     className={
-                        disabled
+                        selectedGameId === 0
                             ? classes.disabled
                             : classes.filterCategoryNameContainer
                     }
-                    onClick={() => (disabled ? undefined : toggle())}
+                    onClick={() =>
+                        selectedGameId === 0 ? undefined : toggle()
+                    }
                 >
                     {opened ? <IconArrowBadgeUp /> : <IconArrowBadgeDown />}
                     <Text>{filterName}</Text>

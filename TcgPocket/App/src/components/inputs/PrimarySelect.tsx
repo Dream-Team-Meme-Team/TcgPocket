@@ -5,12 +5,14 @@ type PrimarySelectProps = SelectProps & InputHTMLAttributes<HTMLInputElement>;
 
 const selectStyling = (theme: MantineTheme): CSSObject => ({
     input: {
-        backgroundColor: 'white',
-        borderColor: theme.colors.complimentaryColors[0],
+        color: 'black',
+        background: theme.colors.textBoxColor[0],
+        borderColor: theme.colors.secondaryBlueColors[0],
+        // backgroundColor: 'white',
         borderWidth: 1,
 
         ':focus': {
-            borderColor: theme.colors.primaryColor[0],
+            borderColor: theme.colors.primaryPurpleColor[0],
         },
     },
     label: {
@@ -24,7 +26,11 @@ export function PrimarySelect({
     ...props
 }: PrimarySelectProps): React.ReactElement {
     return (
-        <Select sx={sx ?? selectStyling} {...props}>
+        <Select
+            sx={sx ?? selectStyling}
+            {...props}
+            clearButtonProps={{ style: { color: 'black' } }}
+        >
             {children}
         </Select>
     );
