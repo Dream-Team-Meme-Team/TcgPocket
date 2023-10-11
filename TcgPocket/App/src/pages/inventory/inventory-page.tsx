@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { CardsService } from '../../services/CardsService';
 import { useAppSelector } from '../../store/configureStore';
 import { CardFilterDto } from '../../types/cards';
-import { InventoryDisplay } from '../home/modules/inventory-display-component';
+import { InventoryDisplay } from './modlues/inventory-display-component';
 import { useAsync } from 'react-use';
 import { error } from '../../services/helpers/notification';
 import { Group, createStyles } from '@mantine/core';
