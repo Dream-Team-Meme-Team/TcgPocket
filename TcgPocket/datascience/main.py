@@ -48,6 +48,10 @@ def all_of_it(raw_img: bytes):
     return json
 #
 
+def base64_to_byte_array(input):
+    return bytearray(base64.b64decode(input))
+
+
 if __name__ == '__main__':
-    byte_array = bytearray(base64.b64decode(argv[1]))
+    byte_array = (argv[1])
     all_of_it(byte_array)
