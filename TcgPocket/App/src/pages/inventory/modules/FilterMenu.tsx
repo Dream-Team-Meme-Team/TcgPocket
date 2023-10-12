@@ -14,6 +14,7 @@ import { getAllSets } from '../../../services/dataServices/SetServices';
 import { FilterCategoryAndOptions } from './FilterCategoryAndOptions';
 import { useNavbarHeight } from '../../../hooks/use-navbar-height';
 import { CardTypeGetDto } from '../../../types/card-types';
+import { CardFilterDto } from '../../../types/cards';
 
 type Category = {
     label: string;
@@ -24,6 +25,8 @@ export type FilterActions = {
     handleTogglingFilter: (arg: any) => void;
     handleSelectAllFilters: (arg: any) => void;
     handleRemoveFilter: (arg: any) => void;
+    setCardFilters: (arg: any) => void;
+    cardFilters: CardFilterDto;
 };
 
 export type FilterMenuProps = {
@@ -114,7 +117,7 @@ const useStyles = createStyles((theme: MantineTheme) => {
     return {
         menu: {
             display: 'grid',
-            height: '100vh',
+            height: remainingHeight,
             alignContent: 'flex-start',
 
             borderRightWidth: 2,

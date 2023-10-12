@@ -23,6 +23,8 @@ import { GameGetDto } from '../../../types/games';
 import { FilterActions } from './FilterMenu';
 import { CardsService } from '../../../services/CardsService';
 import { responseWrapper } from '../../../services/helpers/responseWrapper';
+import { dispatch, useAppSelector } from '../../../store/configureStore';
+import { updatePagedFilters } from '../../../store/inventorySlice';
 
 export type FilterCategoryAndOptionsProps = {
     label: string;
@@ -38,8 +40,14 @@ export function FilterCategoryAndOptions({
     selectedGame,
     handleSelectAllFilters,
     handleTogglingFilter,
+    setCardFilters,
+    cardFilters,
 }: FilterCategoryAndOptionsProps): React.ReactElement {
     const { classes } = useStyles();
+
+    const pagedFilters = useAppSelector(
+        (state) => state.inventory.pagedFilters
+    );
 
     const [opened, { toggle, close }] = useDisclosure();
     const [searchText, setSearchText] = useState('');
@@ -62,36 +70,30 @@ export function FilterCategoryAndOptions({
         return foundApplied.length;
     }, [appliedFilters]);
 
-    const filterCards = async (filterId: number) => {
-        if (!selectedGame) {
-            return;
-        }
-
+    const filterCards = (filterId: number) => {
         switch (label) {
             case 'Card Type': {
-                const response = await CardsService.getAllCards({
-                    gameId: selectedGame.id,
+                setCardFilters({
+                    ...cardFilters,
                     cardTypeId: filterId,
+                    gameId: selectedGame?.id,
                 });
-                responseWrapper(response);
-                console.log(response);
                 break;
             }
             case 'Sets': {
-                const response = await CardsService.getAllCards({
-                    gameId: selectedGame.id,
+                setCardFilters({
+                    ...cardFilters,
                     setId: filterId,
+                    gameId: selectedGame?.id,
                 });
-                responseWrapper(response);
-                console.log(response);
                 break;
             }
             case 'Rarities': {
-                const response = await CardsService.getAllCards({
-                    gameId: selectedGame.id,
+                setCardFilters({
+                    ...cardFilters,
                     rarityId: filterId,
+                    gameId: selectedGame?.id,
                 });
-                responseWrapper(response);
                 break;
             }
             default:
@@ -135,7 +137,7 @@ export function FilterCategoryAndOptions({
                         onChange={(e) => setSearchText(e.target.value)}
                     />
 
-                    <ScrollArea h={'50vh'}>
+                    <ScrollArea mah={'50vh'}>
                         <Box className={classes.options}>
                             {!searchText && (
                                 <Checkbox
