@@ -1,7 +1,8 @@
 using System.Diagnostics;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
+using Azure.Storage.Sas;
 using MediatR;
-using Newtonsoft.Json.Linq;
-using Python.Runtime;
 using TcgPocket.Shared;
 
 namespace TcgPocket.Features.CardReader;
@@ -15,29 +16,30 @@ public class ReadCardRequestHandler : IRequestHandler<ReadCardRequest, Response<
 {
     public async Task<Response<string?>> Handle(ReadCardRequest request, CancellationToken cancellationToken)
     {
-        // Runtime.PythonDLL = "C:\\Users\\bbarr\\AppData\\Local\\Programs\\Python\\Python311\\python311.dll";
-        using var stream = new MemoryStream();
-        await request.Image.CopyToAsync(stream, cancellationToken);
-        var streamArg = Convert.ToBase64String(stream.ToArray());
-
-        using (Py.GIL())
-        {
-            dynamic main = Py.Import("datascience.main");
-
-            var byteArray = main.base64_to_byte_array(streamArg);
-
-            var result = main.all_of_it(byteArray);
-
-            return ((string) result.ToString()).AsResponse();
-        }
+        await using var stream = request.Image.OpenReadStream();
         
+        var connectionString = "UseDevelopmentStorage=true";
+        var containerName = "tcgpocketcontainer";
+        var contentType = request.Image.ContentType; 
+        
+        var blobServiceClient = new BlobServiceClient(connectionString);
+        var blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
 
-        // var imageBytes = stream.ToArray();
+        await blobContainerClient.CreateIfNotExistsAsync(cancellationToken: cancellationToken);
+
+        var blobName = Guid.NewGuid().ToString();
+        var blobClient = blobContainerClient.GetBlobClient(blobName);
+        var options = new BlobUploadOptions
+        {
+            HttpHeaders = new() {ContentType = contentType}
+        };
+        
+        blobClient.Upload(stream, options);
+        
         var processStartInfo = new ProcessStartInfo
         {
-            FileName = "python.exe",
-            // Arguments = $"datamodel.py {streamArg}",
-            Arguments = "datamodel.py",
+            FileName = "py.exe",
+            Arguments = $"datamodel.py {blobClient.Name}",
             RedirectStandardOutput = true,
             RedirectStandardInput = true,
             UseShellExecute = false,
@@ -48,25 +50,15 @@ public class ReadCardRequestHandler : IRequestHandler<ReadCardRequest, Response<
         process.StartInfo = processStartInfo;
         process.Start();
 
-        // await using var writeStream = process.StandardInput.BaseStream;
-        // var chunkSize = 4096;
-        // for (var i = 0; i < imageBytes.Length; i += chunkSize)
-        // {
-        //     var remaining = Math.Min(chunkSize, imageBytes.Length - i);
-        //     // var output = imageBytes.Skip(i).Take(remaining).ToString();
-        //     // process.StandardInput.Write(output);
-        //     process.StandardInput.BaseStream.Write(imageBytes, i, remaining);
-        // }
-        // process.StandardInput.WriteLine();
-        
-        // process.StandardInput.BaseStream.Write(imageBytes, 0, imageBytes.Length);
         process.StandardInput.Close();
         
-        process.WaitForExit();
+        await process.WaitForExitAsync(cancellationToken);
 
-        // var result = await process.StandardOutput.ReadToEndAsync(cancellationToken);
-
+        var result = await process.StandardOutput.ReadToEndAsync(cancellationToken);
+        
+        // await blobClient.DeleteAsync(snapshotsOption: DeleteSnapshotsOption.IncludeSnapshots, cancellationToken: cancellationToken);
+        
         // return JObject.Parse(result).AsResponse();
-        // return  result?.AsResponse();
+        return  result?.AsResponse();
     }
 }

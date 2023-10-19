@@ -12,7 +12,7 @@ if __name__ == '__main__':
             byte_array = bytearray(base64.b64decode(byte_string))
             json = jessie.all_of_it(byte_array)
 
-            print(json, '\n\n')
+            print(json)
 
     except Exception as e:
         print(e)
