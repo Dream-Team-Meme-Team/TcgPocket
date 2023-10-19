@@ -45,7 +45,10 @@ export function PrimaryPasswordInput({
       {...props}
       styles={styles}
       rightSection={
-        <ActionIcon onClick={() => setHidden(!hidden)}>
+        <ActionIcon
+          aria-label="Toggle Visible"
+          onClick={() => setHidden(!hidden)}
+        >
           {hidden ? (
             <IconEye color="#13222B" />
           ) : (

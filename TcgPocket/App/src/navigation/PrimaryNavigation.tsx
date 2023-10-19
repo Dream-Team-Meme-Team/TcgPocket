@@ -73,7 +73,7 @@ export function PrimaryNavigation(): React.ReactElement {
 
           <Menu>
             <Menu.Target>
-              <ActionIcon size={40} sx={profileIconSx}>
+              <ActionIcon size={40} aria-label="Account" sx={profileIconSx}>
                 <IconUser size={30} />
               </ActionIcon>
             </Menu.Target>
