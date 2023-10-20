@@ -1,5 +1,6 @@
 import pytesseract
-pytesseract.pytesseract.tesseract_cmd = r'C:/Program Files/Tesseract-OCR/tesseract.exe'
+# NOTE: this is here for brandon because he is dumb and will forget he needs this
+#pytesseract.pytesseract.tesseract_cmd = r'C:/Program Files/Tesseract-OCR/tesseract.exe'
 
 import os
 import base64
@@ -19,9 +20,8 @@ def all_of_it(raw_img: bytes):
     raw_img = Image.open(BytesIO(raw_img))
 
     # loading up model
-    model_path = os.path.join(os.path.dirname(__file__), 'cnn/model_av/model_a_v2.pt')
     card_classify = CardClassifier()
-    card_classify.load_state_dict(torch.load(model_path))
+    card_classify.load_state_dict(torch.load(os.path.join(os.path.dirname(__file__), 'cnn/model_av/model_a_v2.pt')))
     card_classify.eval()
     from_PIL = transform.Compose([transform.PILToTensor()])     # transformer
 
@@ -47,11 +47,3 @@ def all_of_it(raw_img: bytes):
 
     return json
 #
-
-def base64_to_byte_array(input):
-    return bytearray(base64.b64decode(input))
-
-
-if __name__ == '__main__':
-    byte_array = (argv[1])
-    all_of_it(byte_array)
