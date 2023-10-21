@@ -1,7 +1,9 @@
-﻿using System.Linq.Expressions;
+﻿using System.Collections;
+using System.Linq.Expressions;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using TcgPocket.Shared.Interfaces;
 
 namespace TcgPocket.Shared.PagedResult;
@@ -114,6 +116,9 @@ public static class QueryableExtensions
         // get object fields
         var entityFields = typeof(TEntity).GetProperties();
         var filterFields = typeof(TFilter).GetProperties();
+        
+        var entityTypeParam = Expression.Parameter(typeof(TEntity));
+        var filterTypeParam = Expression.Parameter(typeof(TFilter));
 
         // get common fields where filter value is not null 
         var commonFields = filterFields
@@ -123,31 +128,75 @@ public static class QueryableExtensions
 
         // setup predicate and type expression
         var entityTypeExpression = Expression.Parameter(typeof(TEntity));
-        Expression? expression = null;
-
+        var filterTypeExpression = Expression.Parameter(typeof(TFilter));
+        var expressions = new List<Expression>();
+        
         commonFields.ForEach(field =>
         {
+            // get filter field type and generic type arguments
+            var filterFieldExpression = Expression.PropertyOrField(filterTypeExpression, field.Name);
+            var filterType = field.PropertyType;
+            var filterGenericArguments = filterType.GetGenericArguments();
+            
             // get entity field and value
             var entityField = Expression.PropertyOrField(entityTypeExpression, field.Name);
+            var entityFieldProperty = typeof(TEntity).GetProperty(field.Name);
             var entityFieldType = entityField.Type;
 
+            // get the target type of generic args
+            var targetType = filterGenericArguments.FirstOrDefault(x => x == entityFieldType);
+
             // convert raw field value to desired type (probably not necessary but it makes me feel safe)
-            var rawFiledValue = field.GetValue(filter);
-            var convertedFieldValue = Convert.ChangeType(rawFiledValue, entityFieldType);
+            var rawFieldValue = field.GetValue(filter);
             
-            Expression filterExpression = entityFieldType == typeof(string)
-                ? Expression.Call(entityField, nameof(string.Contains), null, Expression.Constant(convertedFieldValue))
-                : Expression.Equal(entityField, Expression.Constant(convertedFieldValue, entityFieldType));
+            Expression filterExpression = null;
             
-            expression ??= filterExpression;
-            expression = Expression.AndAlso(expression, filterExpression);
+            if (filterType.GetGenericTypeDefinition() == typeof(List<>) && targetType is not null)
+            {
+                var anyMethod = typeof(Enumerable)
+                    .GetMethods()
+                    .FirstOrDefault(m => m.Name == "Any" && m.GetParameters().Length == 2)?
+                    .MakeGenericMethod(targetType);
+                
+                var entityParam = Expression.Parameter(targetType);
+                
+                var entityPropExpr = Expression.Property(entityTypeParam, entityFieldProperty);
+                var filterPropExpr = Expression.Property(filterTypeParam, field);
+                
+                var propertyMapping = Expression.Equal(entityParam, entityPropExpr);
+                
+                var lambda = Expression.Lambda(
+                    Expression.GetFuncType(targetType, typeof(bool)),
+                    propertyMapping,
+                    entityParam
+                );
+                
+                filterExpression = Expression.Call(anyMethod, filterPropExpr, lambda);
+                
+                // filterExpression = Expression.Call(filterFieldExpression, nameof(Enumerable.Any), null, anyExpression);
+            }
+            else
+            {
+                var convertedFieldValue = targetType is not null 
+                    ? Convert.ChangeType(rawFieldValue, entityFieldType)
+                    : rawFieldValue;
+                
+                filterExpression = entityFieldType == typeof(string)
+                    ? Expression.Call(entityField, nameof(string.Contains), null, Expression.Constant(convertedFieldValue))
+                    : Expression.Equal(entityField, Expression.Constant(convertedFieldValue, entityFieldType));
+            }
+            
+            expressions.Add(filterExpression);
         });
 
-        if (expression is null) return query;
+        if (expressions.IsNullOrEmpty()) return query;
         
-        var lambda = Expression.Lambda<Func<TEntity, bool>>(expression, entityTypeExpression);
-        query = query.Where(lambda);
-
+        expressions.ForEach(expression =>
+        {
+            var lambda = Expression.Lambda<Func<TEntity, bool>>(expression, entityTypeExpression);
+            query = query.Where(lambda);
+        });
+        
         return query;
     }
 }

@@ -6,7 +6,7 @@ public class PagedCardFilterDto : PageDto
 {
     public string? Name { get; set; }
     public string? CardNumber { get; set; }
-    public int? GameId { get; set; }
+    public List<int> GameId { get; set; } = new();
     public int? CardTypeId { get; set; }
     public int? RarityId { get; set; }
     public int? SetId { get; set; }
