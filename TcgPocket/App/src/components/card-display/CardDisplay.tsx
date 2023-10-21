@@ -20,10 +20,7 @@ type CardContainerProps = {
   isLoading: boolean;
 };
 
-export const CardDisplay: React.FC<CardContainerProps> = ({
-  card,
-  isLoading,
-}) => {
+export function CardDisplay({ card, isLoading }: CardContainerProps) {
   const { classes } = useStyles();
   return (
     <Paper tabIndex={-1} p={10} pl={11} sx={containerSx}>
@@ -112,16 +109,18 @@ export const CardDisplay: React.FC<CardContainerProps> = ({
                 maw={'10rem'}
                 wrap={'wrap'}
               >
-                {card.attributes.map((cardAttributes) => (
-                  <Badge
-                    key={cardAttributes.id}
-                    size="sm"
-                    className={classes.badgeBackground}
-                    variant="filled"
-                  >
-                    {cardAttributes.attributeName}
-                  </Badge>
-                ))}
+                {card.attributes.map((cardAttributes, index) => {
+                  return (
+                    <Badge
+                      key={index}
+                      size="sm"
+                      className={classes.badgeBackground}
+                      variant="filled"
+                    >
+                      {cardAttributes.attributeName}
+                    </Badge>
+                  );
+                })}
               </Flex>
             )}
           </Skeleton>
@@ -129,7 +128,7 @@ export const CardDisplay: React.FC<CardContainerProps> = ({
       </Flex>
     </Paper>
   );
-};
+}
 
 const containerSx: CSSObject = {
   backgroundColor: '#c3bbc4',

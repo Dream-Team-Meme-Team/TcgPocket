@@ -1,5 +1,5 @@
 import { Flex, Group, Pagination, createStyles } from '@mantine/core';
-import { CardDisplay } from '../../../components/card-display/card-display';
+import { CardDisplay } from '../../../components/card-display/CardDisplay';
 import { CardDisplayDto } from '../../../types/cards';
 import { PagedResult } from '../../../types/shared';
 
@@ -10,19 +10,19 @@ type InventoryDisplayProps = {
   isLoading: boolean;
 };
 
-export const InventoryDisplay: React.FC<InventoryDisplayProps> = ({
+export function InventoryDisplay({
   paginatedCards: cards,
   setCurrentPage,
   currentPage,
   isLoading,
-}) => {
+}: InventoryDisplayProps) {
   const { classes } = useStyles();
 
   return (
     <div>
       <Group spacing={20} className={classes.inventoryDisplayGroup}>
-        {cards?.items.map((cards: CardDisplayDto) => (
-          <CardDisplay key={cards.id} isLoading={isLoading} card={cards} />
+        {cards?.items.map((cards, index) => (
+          <CardDisplay key={index} isLoading={isLoading} card={cards} />
         ))}
       </Group>
       <Pagination
@@ -38,7 +38,7 @@ export const InventoryDisplay: React.FC<InventoryDisplayProps> = ({
       <Flex justify={'end'}></Flex>
     </div>
   );
-};
+}
 
 const useStyles = createStyles(() => ({
   paginationControls: {

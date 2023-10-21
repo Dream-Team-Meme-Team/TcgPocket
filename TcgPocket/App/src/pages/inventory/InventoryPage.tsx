@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { CardsService } from '../../services/CardsService';
 import { useAppSelector } from '../../store/configureStore';
 import { CardFilterDto } from '../../types/cards';
-import { InventoryDisplay } from './modlues/inventory-display-component';
+import { InventoryDisplay } from './modules/InventoryDisplay';
 import { useAsync } from 'react-use';
 import { error } from '../../services/helpers/notification';
 import { Group, createStyles } from '@mantine/core';
@@ -23,24 +23,12 @@ const paged: CardFilterDto = {
   sortBy: 'gameId',
 };
 
-type InventoryPageProps = {
-  pagedCardsRequest: CardFilterDto;
-};
-
-export const InventoryPage: React.FC<InventoryPageProps> = ({
-  pagedCardsRequest,
-}) => {
+export function InventoryPage(): React.ReactElement {
   const { classes } = useStyles();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const user = useAppSelector((state) => state.user);
 
-  //to make it work for testing and PR purpuses. can be removed post pr
-  pagedCardsRequest = paged;
-
-  //things we may want to keep for consistency with presenting, like page size
-  pagedCardsRequest.currentPage = currentPage;
-  pagedCardsRequest.pageSize = 16;
-  pagedCardsRequest.orderBy = 'asc';
+  const pagedCardsRequest = paged;
 
   const fetchCards = useAsync(async () => {
     const response = await CardsService.getUserInventory(pagedCardsRequest);
@@ -66,7 +54,7 @@ export const InventoryPage: React.FC<InventoryPageProps> = ({
       </Group>
     </div>
   );
-};
+}
 
 const useStyles = createStyles(() => ({
   filterPlaceholder: {

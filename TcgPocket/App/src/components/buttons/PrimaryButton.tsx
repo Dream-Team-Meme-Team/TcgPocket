@@ -1,5 +1,5 @@
-import { Button, ButtonProps } from '@mantine/core';
-import { CSSObject, MantineTheme } from '@mantine/styles';
+import { Button, ButtonProps, CSSObject } from '@mantine/core';
+import { MantineTheme } from '@mantine/core';
 import { ButtonHTMLAttributes } from 'react';
 import { AdjustedProps } from '../../types/adjusted-props';
 

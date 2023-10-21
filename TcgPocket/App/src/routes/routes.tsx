@@ -7,7 +7,7 @@ import { SettingsPage } from '../pages/settings/SettingsPage';
 import { useAppSelector } from '../store/configureStore';
 import { AdminPage } from '../pages/admin/AdminPage';
 import { useMemo } from 'react';
-import { InventoryPage } from '../pages/inventory/inventory-page';
+import { InventoryPage } from '../pages/inventory/InventoryPage';
 
 export const AppRoutes = () => {
   const user = useAppSelector((state) => state.user.user);
