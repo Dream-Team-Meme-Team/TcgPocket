@@ -1,8 +1,8 @@
 using System.Diagnostics;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using Azure.Storage.Sas;
 using MediatR;
+using TcgPocket.Configurations;
 using TcgPocket.Shared;
 
 namespace TcgPocket.Features.CardReader;
@@ -14,6 +14,12 @@ public class ReadCardRequest : IRequest<Response<string?>>
 
 public class ReadCardRequestHandler : IRequestHandler<ReadCardRequest, Response<string?>>
 {
+    private readonly ISettingsProvider _settingsProvider;
+
+    public ReadCardRequestHandler(ISettingsProvider settingsProvider)
+    {
+        _settingsProvider = settingsProvider;
+    }
     public async Task<Response<string?>> Handle(ReadCardRequest request, CancellationToken cancellationToken)
     {
         await using var stream = request.Image.OpenReadStream();
@@ -35,10 +41,12 @@ public class ReadCardRequestHandler : IRequestHandler<ReadCardRequest, Response<
         };
         
         blobClient.Upload(stream, options);
+
+        var pythonInterpreter = _settingsProvider.GetPythonEnvName();
         
         var processStartInfo = new ProcessStartInfo
         {
-            FileName = "py.exe",
+            FileName = pythonInterpreter,
             Arguments = $"datamodel.py {blobClient.Name}",
             RedirectStandardOutput = true,
             RedirectStandardInput = true,
