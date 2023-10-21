@@ -3,7 +3,6 @@ import pytesseract
 #pytesseract.pytesseract.tesseract_cmd = r'C:/Program Files/Tesseract-OCR/tesseract.exe'
 
 import os
-import base64
 import torch
 from PIL import Image
 import numpy as np
@@ -12,8 +11,6 @@ from io import BytesIO
 import torchvision.transforms as transform
 from .cnn.model_av.card_classifier_a import CardClassifier
 from .scraper.scraper_classifier import scraper_classifier
-from sys import argv
-
 
 def all_of_it(raw_img: bytes):
     # convert to PIL Image
@@ -42,7 +39,8 @@ def all_of_it(raw_img: bytes):
     # scrape
     scraper = scraper_classifier(classif)
     filt = scraper.apply_filter(raw_img)
-    read = scraper.read_card(filt)
+    read = scraper.read_card(filt)\
+
     json = scraper.get_json(read)
 
     return json
