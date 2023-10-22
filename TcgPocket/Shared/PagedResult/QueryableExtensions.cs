@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
@@ -83,7 +82,7 @@ public static class QueryableExtensions
         var pagedEntity = new PagedResult<TDto>
         {
             CurrentPage = 1,
-            ItemCount = entity.Count(),
+            ItemCount = entity.Count,
             Items = mapper.Map<List<TDto>>(entity),
             PageCount = 1,
             PageSize = null
@@ -100,7 +99,7 @@ public static class QueryableExtensions
         var pagedEntity = new PagedResult<TEntity>
         {
             CurrentPage = 1,
-            ItemCount = entity.Count(),
+            ItemCount = entity.Count,
             Items = entity,
             PageCount = 1,
             PageSize = null
@@ -116,9 +115,6 @@ public static class QueryableExtensions
         // get object fields
         var entityFields = typeof(TEntity).GetProperties();
         var filterFields = typeof(TFilter).GetProperties();
-        
-        var entityTypeParam = Expression.Parameter(typeof(TEntity));
-        var filterTypeParam = Expression.Parameter(typeof(TFilter));
 
         // get common fields where filter value is not null 
         var commonFields = filterFields
@@ -128,71 +124,29 @@ public static class QueryableExtensions
 
         // setup predicate and type expression
         var entityTypeExpression = Expression.Parameter(typeof(TEntity));
-        var filterTypeExpression = Expression.Parameter(typeof(TFilter));
         var expressions = new List<Expression>();
         
         commonFields.ForEach(field =>
         {
             // get filter field type and generic type arguments
-            var filterFieldExpression = Expression.PropertyOrField(filterTypeExpression, field.Name);
             var filterType = field.PropertyType;
-            var filterGenericArguments = filterType.GetGenericArguments();
+            if (filterType.IsGenericType && filterType.GetGenericTypeDefinition() == typeof(List<>))
+            {
+                return;
+            }
             
             // get entity field and value
             var entityField = Expression.PropertyOrField(entityTypeExpression, field.Name);
-            var entityFieldProperty = typeof(TEntity).GetProperty(field.Name);
             var entityFieldType = entityField.Type;
-
-            // get the target type of generic args
-            var targetType = filterGenericArguments.FirstOrDefault(x => x == entityFieldType);
-
+            
             // convert raw field value to desired type (probably not necessary but it makes me feel safe)
             var rawFieldValue = field.GetValue(filter);
-            
-            Expression filterExpression = null;
-            
-            if (filterType.GetGenericTypeDefinition() == typeof(List<>) && targetType is not null)
-            {
-                var enumerableTypeMethods = typeof(Enumerable).GetMethods();
-                var queryableTypeMethods = typeof(Queryable).GetMethods();
-                
-                var anyMethod = enumerableTypeMethods
-                    .FirstOrDefault(m => m.Name == "Any" && m.GetParameters().Length == 2)?
-                    .MakeGenericMethod(targetType);
 
-                var asQueryableMethod = queryableTypeMethods
-                    .FirstOrDefault(m => m is { Name: "AsQueryable", IsGenericMethod: true })!
-                    .MakeGenericMethod(targetType);
-                
-                var entityParam = Expression.Parameter(targetType);
-                
-                var entityPropExpr = Expression.Property(entityTypeParam, entityFieldProperty);
-                var filterPropExpr = Expression.Property(filterTypeParam, field);
-
-                var filterAsQueryableExpr = Expression.Call(asQueryableMethod, filterPropExpr);
-                
-                var propertyMapping = Expression.Equal(entityParam, entityPropExpr);
-                
-                var lambda = Expression.Lambda(
-                    Expression.GetFuncType(targetType, typeof(bool)),
-                    propertyMapping,
-                    entityParam
-                );
-                
-                filterExpression = Expression.Call(anyMethod, filterAsQueryableExpr, lambda);
-                
-                // filterExpression = Expression.Call(filterFieldExpression, nameof(Enumerable.Any), null, anyExpression);
-            }
-            else
-            {
-                var convertedFieldValue = targetType is not null 
-                    ? Convert.ChangeType(rawFieldValue, entityFieldType)
-                    : rawFieldValue;
-                
-                filterExpression = entityFieldType == typeof(string)
-                    ? Expression.Call(entityField, nameof(string.Contains), null, Expression.Constant(convertedFieldValue))
-                    : Expression.Equal(entityField, Expression.Constant(convertedFieldValue, entityFieldType));
-            }
+            var convertedFieldValue = Convert.ChangeType(rawFieldValue, entityFieldType);
+            
+            Expression filterExpression = entityFieldType == typeof(string)
+                ? Expression.Call(entityField, nameof(string.Contains), null, Expression.Constant(convertedFieldValue))
+                : Expression.Equal(entityField, Expression.Constant(convertedFieldValue, entityFieldType));
             
             expressions.Add(filterExpression);
         });
@@ -205,17 +159,6 @@ public static class QueryableExtensions
             query = query.Where(lambda);
         });
         
-        return query;
-    }
-
-    static IQueryable<TEntity> Foo<TEntity>(IQueryable<TEntity> query)
-    where TEntity: class, IEntity
-    {
-        var numbers = new List<int> { 1, 2, 3 };
-        var numbersQueryable = numbers.AsQueryable();
-
-        query = query.Where(x => numbersQueryable.Any(y => y == x.Id));
-
         return query;
     }
 }
@@ -237,5 +180,3 @@ public abstract class PagedResultBase : PageDto
     public int FirstRowOnPage { get; set; }
     public int LastRowOnPage { get; set; }
 }
-
-
