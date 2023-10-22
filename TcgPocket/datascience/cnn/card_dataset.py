@@ -12,24 +12,32 @@ from apiKeys import IDK_API_KEY
 from_PIL = transform.Compose([transform.PILToTensor()]) 
 
 class CardDataSet(Dataset):
-    """ Card Data Set """
 
     def __init__(self, csv_file):
         """
-        :param csv_file: Path to the csv file with card img URL and label
+        Args:
+            csv_file (str): contains the cards with their labels
         """
         self.df = pd.read_csv(csv_file)[:9000]
     #
 
     def __len__(self):
+        """
+        Returns:
+           (int) : length of df
+        """
         return len(self.df)
     #
 
     def __getitem__(self, indx):
+        """ Loads, Resizes, and Normalizes the card image 
+
+        Args:
+            indx (int): the cards index in the df
+
+        Returns:
+            data: card image vector
         """
-        :param indx: record to access
-        """
-        
         # get and load up card from URL
         resp = requests.get(self.df.iloc[indx, 0], headers = {'X-Api-Key': IDK_API_KEY, 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'})
         img = np.array(Image.open(BytesIO(resp.content)))
