@@ -153,15 +153,23 @@ public static class QueryableExtensions
             
             if (filterType.GetGenericTypeDefinition() == typeof(List<>) && targetType is not null)
             {
-                var anyMethod = typeof(Enumerable)
-                    .GetMethods()
+                var enumerableTypeMethods = typeof(Enumerable).GetMethods();
+                var queryableTypeMethods = typeof(Queryable).GetMethods();
+                
+                var anyMethod = enumerableTypeMethods
                     .FirstOrDefault(m => m.Name == "Any" && m.GetParameters().Length == 2)?
+                    .MakeGenericMethod(targetType);
+
+                var asQueryableMethod = queryableTypeMethods
+                    .FirstOrDefault(m => m is { Name: "AsQueryable", IsGenericMethod: true })!
                     .MakeGenericMethod(targetType);
                 
                 var entityParam = Expression.Parameter(targetType);
                 
                 var entityPropExpr = Expression.Property(entityTypeParam, entityFieldProperty);
                 var filterPropExpr = Expression.Property(filterTypeParam, field);
+
+                var filterAsQueryableExpr = Expression.Call(asQueryableMethod, filterPropExpr);
                 
                 var propertyMapping = Expression.Equal(entityParam, entityPropExpr);
                 
@@ -171,7 +179,7 @@ public static class QueryableExtensions
                     entityParam
                 );
                 
-                filterExpression = Expression.Call(anyMethod, filterPropExpr, lambda);
+                filterExpression = Expression.Call(anyMethod, filterAsQueryableExpr, lambda);
                 
                 // filterExpression = Expression.Call(filterFieldExpression, nameof(Enumerable.Any), null, anyExpression);
             }
@@ -199,7 +207,19 @@ public static class QueryableExtensions
         
         return query;
     }
+
+    static IQueryable<TEntity> Foo<TEntity>(IQueryable<TEntity> query)
+    where TEntity: class, IEntity
+    {
+        var numbers = new List<int> { 1, 2, 3 };
+        var numbersQueryable = numbers.AsQueryable();
+
+        query = query.Where(x => numbersQueryable.Any(y => y == x.Id));
+
+        return query;
+    }
 }
+
 public class PagedResult<T> : PagedResultBase
 {
     public IList<T> Items { get; set; }
@@ -217,3 +237,5 @@ public abstract class PagedResultBase : PageDto
     public int FirstRowOnPage { get; set; }
     public int LastRowOnPage { get; set; }
 }
+
+
