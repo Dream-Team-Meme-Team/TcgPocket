@@ -1,0 +1,32 @@
+import json
+import requests
+import pandas as pd
+
+
+mgc_df = pd.Dataframe()
+# resp = requests.get('https://api.scryfall.com/cards/search?q=frame:old')
+
+# while json.loads(resp.content)['has_more'] == True:
+#     print([card['image_uris']['normal'] for card in json.loads(resp.content)['data']])
+#     resp = requests.get(json.loads(resp.content)['next_page'])
+
+
+
+
+
+# with open('TcgPocket/datascience/data/ev-sets/raw-data/old_raw.json', encoding='utf-8') as magic_f:
+#     mgc_json = json.load(magic_f)['data']
+#     print(len(mgc_json))
+    # mgc_cards = [dict(card) for card in mgc_json]
+
+    # mgc_card_imgs = []
+    # for card in mgc_cards:
+    #     for key, value in card.items():
+    #         if key == 'image_uris':
+    #             mgc_card_imgs.append(card['image_uris']['normal'])
+    
+    # magic_fw = open('data-science/data/raw-data/mgc.csv', 'w')
+    # magic_fw.write('card, label\n')
+    # for img_url in mgc_card_imgs:
+    #     magic_fw.write((str(img_url) + ", 0\n"))
+    # magic_fw.close()
