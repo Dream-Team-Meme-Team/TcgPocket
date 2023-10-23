@@ -125,7 +125,7 @@ public static class QueryableExtensions
         // setup predicate and type expression
         var entityTypeExpression = Expression.Parameter(typeof(TEntity));
         var expressions = new List<Expression>();
-        
+
         commonFields.ForEach(field =>
         {
             // get filter field type and generic type arguments
@@ -134,31 +134,31 @@ public static class QueryableExtensions
             {
                 return;
             }
-            
+
             // get entity field and value
             var entityField = Expression.PropertyOrField(entityTypeExpression, field.Name);
             var entityFieldType = entityField.Type;
-            
+
             // convert raw field value to desired type (probably not necessary but it makes me feel safe)
             var rawFieldValue = field.GetValue(filter);
 
             var convertedFieldValue = Convert.ChangeType(rawFieldValue, entityFieldType);
-            
+
             Expression filterExpression = entityFieldType == typeof(string)
                 ? Expression.Call(entityField, nameof(string.Contains), null, Expression.Constant(convertedFieldValue))
                 : Expression.Equal(entityField, Expression.Constant(convertedFieldValue, entityFieldType));
-            
+
             expressions.Add(filterExpression);
         });
 
         if (expressions.IsNullOrEmpty()) return query;
-        
+
         expressions.ForEach(expression =>
         {
             var lambda = Expression.Lambda<Func<TEntity, bool>>(expression, entityTypeExpression);
             query = query.Where(lambda);
         });
-        
+
         return query;
     }
 }
