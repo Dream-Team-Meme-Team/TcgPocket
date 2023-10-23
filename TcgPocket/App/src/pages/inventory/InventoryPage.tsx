@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react';
 import { CardsService } from '../../services/CardsService';
-import { useAppSelector } from '../../store/configureStore';
 import { CardFilterDto } from '../../types/cards';
 import { InventoryDisplay } from './modules/InventoryDisplay';
 import { useAsync } from 'react-use';
@@ -27,7 +26,6 @@ const paged: CardFilterDto = {
 export function InventoryPage(): React.ReactElement {
   const { classes } = useStyles();
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const user = useAppSelector((state) => state.user.user);
 
   const pagedCardsRequest = paged;
 
@@ -39,7 +37,7 @@ export function InventoryPage(): React.ReactElement {
     }
 
     return response;
-  }, [currentPage, user]);
+  }, [currentPage]);
 
   const paginatedCards = useMemo(() => {
     return fetchCards && fetchCards.value ? fetchCards.value.data : undefined;
