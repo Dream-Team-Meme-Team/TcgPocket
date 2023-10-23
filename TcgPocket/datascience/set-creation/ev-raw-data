@@ -1,32 +1,39 @@
+###############################################
+""" Generates the initial raw data sets for EV: Retro Mgc (0), Mod Mgc (1), Ygo (2), Left Pkm (3), Right Pkm (4) """
+###############################################
+
+# %%
 import json
 import requests
 import pandas as pd
 
+# %%
+retro_mgc_df = pd.DataFrame(columns = ['card', 'label'])
 
-mgc_df = pd.Dataframe()
-# resp = requests.get('https://api.scryfall.com/cards/search?q=frame:old')
+resp = requests.get('https://api.scryfall.com/cards/search?q=frame:old')
 
-# while json.loads(resp.content)['has_more'] == True:
-#     print([card['image_uris']['normal'] for card in json.loads(resp.content)['data']])
-#     resp = requests.get(json.loads(resp.content)['next_page'])
+while json.loads(resp.content)['has_more'] == True:
+    retro_mgc_df = retro_mgc_df.append([{'card': card['image_uris']['normal'], 'label': 0} for card in json.loads(resp.content)['data']])
+    resp = requests.get(json.loads(resp.content)['next_page'])
 
+retro_mgc_df.to_csv('C:/Users/abbyo/Documents/PROJECTS/TcgPocket/TcgPocket/datascience/data/ev-sets/raw-data/mgc_retro.csv', index=False)
 
+# %%
+modern_mgc_df = pd.DataFrame(columns = ['card', 'label'])
 
+resp = requests.get('https://api.scryfall.com/cards/search?q=frame:new')
 
+while json.loads(resp.content)['has_more'] == True:
+    rows = []
+    for card in json.loads(resp.content)['data']:
+        try: 
+            rows.append({'card': card['image_uris']['normal'], 'label': 1}) 
+        except:
+            pass
+        #
+    #
+    modern_mgc_df = modern_mgc_df.append(rows)
+    resp = requests.get(json.loads(resp.content)['next_page'])
+#
 
-# with open('TcgPocket/datascience/data/ev-sets/raw-data/old_raw.json', encoding='utf-8') as magic_f:
-#     mgc_json = json.load(magic_f)['data']
-#     print(len(mgc_json))
-    # mgc_cards = [dict(card) for card in mgc_json]
-
-    # mgc_card_imgs = []
-    # for card in mgc_cards:
-    #     for key, value in card.items():
-    #         if key == 'image_uris':
-    #             mgc_card_imgs.append(card['image_uris']['normal'])
-    
-    # magic_fw = open('data-science/data/raw-data/mgc.csv', 'w')
-    # magic_fw.write('card, label\n')
-    # for img_url in mgc_card_imgs:
-    #     magic_fw.write((str(img_url) + ", 0\n"))
-    # magic_fw.close()
+modern_mgc_df.to_csv('C:/Users/abbyo/Documents/PROJECTS/TcgPocket/TcgPocket/datascience/data/ev-sets/raw-data/mgc_mod.csv', index=False)
