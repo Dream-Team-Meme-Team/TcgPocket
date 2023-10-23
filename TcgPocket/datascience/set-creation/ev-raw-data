@@ -37,3 +37,8 @@ while json.loads(resp.content)['has_more'] == True:
 #
 
 modern_mgc_df.to_csv('C:/Users/abbyo/Documents/PROJECTS/TcgPocket/TcgPocket/datascience/data/ev-sets/raw-data/mgc_mod.csv', index=False)
+
+# %%
+ygo = pd.read_csv('C:/Users/abbyo/Documents/PROJECTS/TcgPocket/TcgPocket/datascience/data/ev-sets/raw-data/ygo.csv')
+ygo = ygo.replace(1, 2)
+ygo.to_csv('C:/Users/abbyo/Documents/PROJECTS/TcgPocket/TcgPocket/datascience/data/ev-sets/raw-data/ygo.csv', index=False)
