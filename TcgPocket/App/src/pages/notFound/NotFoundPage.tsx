@@ -11,16 +11,18 @@ export function NotFoundPage(): React.ReactElement {
 
   return (
     <div className={classes.root}>
+      <Illustration className={classes.image404} />
+
       <Center>
         <Image
           src="https://mystickermania.com/cdn/stickers/pokemon/pkm-togepi-sad-512x512.png"
           className={classes.headerImage}
-          height={rem(400)}
-          width={rem(400)}
+          height={rem(250)}
+          width={rem(250)}
         />
       </Center>
+
       <div className={classes.content}>
-        <Illustration className={classes.image404} />
         <Title className={classes.title}>Page Not Found</Title>
         <Text size="lg" align="center" className={classes.description}>
           The page you are trying to reach does not exist. Please check the
@@ -45,30 +47,27 @@ export function NotFoundPage(): React.ReactElement {
 
 const useStyles = createStyles((theme) => ({
   root: {
-    paddingTop: rem(225),
-    paddingBottom: rem(80),
-    position: 'inherit',
+    height: '100vh',
+    width: '100vw',
   },
 
   headerImage: {
     display: 'flex !important',
     justifyContent: 'center !important',
-    position: 'absolute',
+    paddingTop: rem(50),
     zIndex: 1,
   },
 
   image404: {
     ...theme.fn.cover(),
     opacity: 0.15,
-    margin: 'auto !important',
-    position: 'absolute',
-    paddingTop: rem(40),
+    height: '100vh',
+    width: '100vw',
+    padding: 10,
     fill: 'true',
-    zIndex: -1,
   },
 
   content: {
-    paddingTop: rem(200),
     position: 'relative',
     zIndex: 0,
 

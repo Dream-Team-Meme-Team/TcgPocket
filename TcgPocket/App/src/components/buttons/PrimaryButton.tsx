@@ -49,10 +49,8 @@ export function PrimaryButton({
   };
 
   return (
-    <>
-      <Button {...props} {...adjustedButtonProps}>
-        {children}
-      </Button>
-    </>
+    <Button {...props} {...adjustedButtonProps}>
+      {children}
+    </Button>
   );
 }

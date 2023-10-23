@@ -1,11 +1,12 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { CardsService } from '../../services/CardsService';
 import { useAppSelector } from '../../store/configureStore';
 import { CardFilterDto } from '../../types/cards';
 import { InventoryDisplay } from './modules/InventoryDisplay';
 import { useAsync } from 'react-use';
 import { error } from '../../services/helpers/notification';
-import { Group, createStyles } from '@mantine/core';
+import { createStyles } from '@mantine/core';
+import { useNavbarHeight } from '../../hooks/use-navbar-height';
 
 const paged: CardFilterDto = {
   currentPage: 1,
@@ -26,7 +27,7 @@ const paged: CardFilterDto = {
 export function InventoryPage(): React.ReactElement {
   const { classes } = useStyles();
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const user = useAppSelector((state) => state.user);
+  const user = useAppSelector((state) => state.user.user);
 
   const pagedCardsRequest = paged;
 
@@ -40,33 +41,34 @@ export function InventoryPage(): React.ReactElement {
     return response;
   }, [currentPage, user]);
 
+  const paginatedCards = useMemo(() => {
+    return fetchCards && fetchCards.value ? fetchCards.value.data : undefined;
+  }, [fetchCards]);
+
   return (
-    <div>
-      <Group className={classes.wrapper}>
-        {/* Used as filter placeholder*/}
-        <div className={classes.filterPlaceholder} />
-        <InventoryDisplay
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          paginatedCards={fetchCards?.value?.data}
-          isLoading={fetchCards.loading}
-        />
-      </Group>
+    <div className={classes.wrapper}>
+      {/* Used as filter placeholder*/}
+      <div />
+
+      <InventoryDisplay
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        paginatedCards={paginatedCards}
+        isLoading={fetchCards.loading}
+      />
     </div>
   );
 }
 
-const useStyles = createStyles(() => ({
-  filterPlaceholder: {
-    height: 500,
-    margin: 0,
-    padding: 0,
-    width: 200,
-    display: 'flex',
-    justifyContent: 'start',
-  },
-  wrapper: {
-    display: 'flex',
-    justifyContent: 'flex-start',
-  },
-}));
+const useStyles = createStyles(() => {
+  const { remainingHeight } = useNavbarHeight();
+
+  return {
+    wrapper: {
+      display: 'grid',
+      gridTemplateColumns: 'auto 1fr',
+
+      height: remainingHeight,
+    },
+  };
+});

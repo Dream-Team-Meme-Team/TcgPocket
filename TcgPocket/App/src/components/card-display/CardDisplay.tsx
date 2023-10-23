@@ -23,7 +23,7 @@ type CardContainerProps = {
 export function CardDisplay({ card, isLoading }: CardContainerProps) {
   const { classes } = useStyles();
   return (
-    <Paper tabIndex={-1} p={10} pl={11} sx={containerSx}>
+    <Paper p={10} pl={11} sx={containerSx}>
       <Flex columnGap={2}>
         <Skeleton radius={7} width={152} height={220} visible={isLoading}>
           <CardImageDisplay imageUrl={card.imageUrl} />
@@ -100,7 +100,6 @@ export function CardDisplay({ card, isLoading }: CardContainerProps) {
 
           <Space h={'3%'} />
           <Skeleton width={178} height={90} visible={isLoading}>
-            {}
             {card.attributes && (
               <Flex
                 sx={attributesContainerSx}
