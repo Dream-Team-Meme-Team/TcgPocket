@@ -37,17 +37,17 @@ public class GetPagedCardsQueryHandler
         
         if (!request.Filter.SetIds.IsNullOrEmpty())
         {
-            query = query.Where(x => request.Filter.SetIds.Any(y => y == x.GameId));
+            query = query.Where(x => request.Filter.SetIds.Any(y => y == x.SetId));
         }
         
         if (!request.Filter.RarityIds.IsNullOrEmpty())
         {
-            query = query.Where(x => request.Filter.RarityIds.Any(y => y == x.GameId));
+            query = query.Where(x => request.Filter.RarityIds.Any(y => y == x.RarityId));
         }
         
         if (!request.Filter.CardTypeIds.IsNullOrEmpty())
         {
-            query = query.Where(x => request.Filter.CardTypeIds.Any(y => y == x.GameId));
+            query = query.Where(x => request.Filter.CardTypeIds.Any(y => y == x.CardTypeId));
         }
         
         return query;
