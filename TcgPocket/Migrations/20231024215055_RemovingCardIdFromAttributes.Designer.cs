@@ -12,8 +12,8 @@ using TcgPocket.Data;
 namespace TcgPocket.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231024180943_RemovingCardIdFromAttributesBecauseTheyAreDumbAndIHateThem")]
-    partial class RemovingCardIdFromAttributesBecauseTheyAreDumbAndIHateThem
+    [Migration("20231024215055_RemovingCardIdFromAttributes")]
+    partial class RemovingCardIdFromAttributes
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
