@@ -36,9 +36,10 @@ export function PrimaryButton({
   ) => {
     if (disabled) {
       e.preventDefault();
-    } else if (onClick) {
-      return onClick(e);
+      return;
     }
+
+    onClick && onClick(e);
   };
 
   const adjustedButtonProps: AdjustedProps = {
