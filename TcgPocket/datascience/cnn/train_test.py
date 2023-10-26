@@ -31,8 +31,17 @@ model = CardClassifier().to(device)     # cnn
 loss_fn = nn.CrossEntropyLoss()     # loss function
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)      # adam for model_av vs SGD for model 0
 
-# TRAIN & TEST FUNCTION
+# TRAIN & TEST FUNCTIONS
 def train(dataloader, model, loss_fn, optimizer):
+    """ Trains the CNN
+
+    Args:
+        dataloader : efficiently loads the TRAIN data in batches
+        model : pytorch model to be trained
+        loss_fn : function that calculates the CNN's loss
+        optimizer : changes weights and biases to reduce loss
+    """
+
     size = len(dataloader.dataset)
     model.train()
 
@@ -56,6 +65,13 @@ def train(dataloader, model, loss_fn, optimizer):
 #
 
 def test(dataloader, model, loss_fn):
+    """ Tests the CNN's accuracy
+
+    Args:
+        dataloader : efficiently loads the TEST data in batches
+        model : pytorch model to be tested
+        loss_fn : function that calculates the CNN's loss
+    """
     size = len(dataloader.dataset)
     num_batches = len(dataloader)
     model.eval()
@@ -67,12 +83,15 @@ def test(dataloader, model, loss_fn):
             pred = model(X)
             test_loss += loss_fn(pred, y).item()
             correct += (pred.argmax(1) == y).type(torch.float).sum().item()
+        #
+    #
 
     test_loss /= num_batches
     correct /= size
     print(f"Test Error: \n Accuracy: {(100*correct):>0.1f}%, Avg loss: {test_loss:>8f} \n")
+#
 
-# TRAIN MODEL
+# TRAIN & TEST MODEL
 for e in range(num_epochs):
     print(f'Epoch {e+1} ----------------------------------------------------------')
     train(train_dataloader, model, loss_fn, optimizer)
