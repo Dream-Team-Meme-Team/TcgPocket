@@ -9,6 +9,7 @@ using TcgPocket.Shared.PagedResult;
 using Microsoft.AspNetCore.Identity;
 using TcgPocket.Features.Users;
 using TcgPocket.Shared;
+using Microsoft.IdentityModel.Tokens;
 
 public class GetCurrentUserInventoryQuery : FilteredPageRequest<Card, CardDisplayDto, PagedCardFilterDto>
 {
@@ -28,6 +29,33 @@ public class GetCurrentUserInventoryQueryHandler
         _signInManager = signInManager;
         _mapper = mapper;
         _validator = validator;
+    }
+
+    protected override IQueryable<Card> FilterEntities(IQueryable<Card> query, GetCurrentUserInventoryQuery request)
+    {
+        query = base.FilterEntities(query, request);
+
+        if (!request.Filter.GameIds.IsNullOrEmpty())
+        {
+            query = query.Where(x => request.Filter.GameIds.Any(y => y == x.GameId));
+        }
+
+        if (!request.Filter.SetIds.IsNullOrEmpty())
+        {
+            query = query.Where(x => request.Filter.SetIds.Any(y => y == x.SetId));
+        }
+
+        if (!request.Filter.RarityIds.IsNullOrEmpty())
+        {
+            query = query.Where(x => request.Filter.RarityIds.Any(y => y == x.RarityId));
+        }
+
+        if (!request.Filter.CardTypeIds.IsNullOrEmpty())
+        {
+            query = query.Where(x => request.Filter.CardTypeIds.Any(y => y == x.CardTypeId));
+        }
+
+        return query;
     }
 
     protected override async Task<Response<PagedResult<CardDisplayDto>>> ValidateRequest(GetCurrentUserInventoryQuery request, CancellationToken cancellationToken)
