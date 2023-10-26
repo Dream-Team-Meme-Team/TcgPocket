@@ -35,7 +35,7 @@ export function AdminTabHeader({
     const foundGame = games.find((game) => game.id === selectedGameId);
 
     return foundGame ? foundGame.name : null;
-  }, [selectedGameId]);
+  }, [selectedGameId, games]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setAdminSearchTerm(e.target.value));
