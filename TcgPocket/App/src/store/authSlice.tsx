@@ -1,6 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { UserGetDto } from '../types/users';
 import {
+  getSignedInUser,
   registerUser,
   signInUser,
   signOutUser,
@@ -31,6 +32,13 @@ export const authSlice = createSlice({
       state.isLoading = false;
     });
     builder.addCase(signInUser.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getSignedInUser.fulfilled, (state, { payload }) => {
+      state.user = payload.data;
+      state.isLoading = false;
+    });
+    builder.addCase(getSignedInUser.pending, (state) => {
       state.isLoading = true;
     });
     builder.addCase(signOutUser.fulfilled, (state) => {

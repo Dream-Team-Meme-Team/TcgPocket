@@ -2,6 +2,7 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using TcgPocket.Shared.Interfaces;
 
 namespace TcgPocket.Shared.PagedResult;
@@ -81,7 +82,7 @@ public static class QueryableExtensions
         var pagedEntity = new PagedResult<TDto>
         {
             CurrentPage = 1,
-            ItemCount = entity.Count(),
+            ItemCount = entity.Count,
             Items = mapper.Map<List<TDto>>(entity),
             PageCount = 1,
             PageSize = null
@@ -98,7 +99,7 @@ public static class QueryableExtensions
         var pagedEntity = new PagedResult<TEntity>
         {
             CurrentPage = 1,
-            ItemCount = entity.Count(),
+            ItemCount = entity.Count,
             Items = entity,
             PageCount = 1,
             PageSize = null
@@ -123,34 +124,45 @@ public static class QueryableExtensions
 
         // setup predicate and type expression
         var entityTypeExpression = Expression.Parameter(typeof(TEntity));
-        Expression? expression = null;
+        var expressions = new List<Expression>();
 
         commonFields.ForEach(field =>
         {
+            // get filter field type and generic type arguments
+            var filterType = field.PropertyType;
+            if (filterType.IsGenericType && filterType.GetGenericTypeDefinition() == typeof(List<>))
+            {
+                return;
+            }
+
             // get entity field and value
             var entityField = Expression.PropertyOrField(entityTypeExpression, field.Name);
             var entityFieldType = entityField.Type;
 
             // convert raw field value to desired type (probably not necessary but it makes me feel safe)
-            var rawFiledValue = field.GetValue(filter);
-            var convertedFieldValue = Convert.ChangeType(rawFiledValue, entityFieldType);
-            
+            var rawFieldValue = field.GetValue(filter);
+
+            var convertedFieldValue = Convert.ChangeType(rawFieldValue, entityFieldType);
+
             Expression filterExpression = entityFieldType == typeof(string)
                 ? Expression.Call(entityField, nameof(string.Contains), null, Expression.Constant(convertedFieldValue))
                 : Expression.Equal(entityField, Expression.Constant(convertedFieldValue, entityFieldType));
-            
-            expression ??= filterExpression;
-            expression = Expression.AndAlso(expression, filterExpression);
+
+            expressions.Add(filterExpression);
         });
 
-        if (expression is null) return query;
-        
-        var lambda = Expression.Lambda<Func<TEntity, bool>>(expression, entityTypeExpression);
-        query = query.Where(lambda);
+        if (expressions.IsNullOrEmpty()) return query;
+
+        expressions.ForEach(expression =>
+        {
+            var lambda = Expression.Lambda<Func<TEntity, bool>>(expression, entityTypeExpression);
+            query = query.Where(lambda);
+        });
 
         return query;
     }
 }
+
 public class PagedResult<T> : PagedResultBase
 {
     public IList<T> Items { get; set; }
