@@ -5,9 +5,10 @@ import {
     Group,
     MantineTheme,
     ScrollArea,
-    Text,
     createStyles,
+    Text,
 } from '@mantine/core';
+import { defaultGap, defaultPadding } from '../../../constants/theme';
 import {
     IconArrowBadgeUp,
     IconArrowBadgeDown,
@@ -17,40 +18,33 @@ import { PrimaryBadge } from '../../../components/badges/PrimaryBadge';
 import { PrimaryInput } from '../../../components/inputs/PrimaryInput';
 import { useDisclosure } from '@mantine/hooks';
 import { useEffect, useMemo, useState } from 'react';
-import { defaultGap, defaultPadding } from '../../../constants/theme';
-import { CardTypeGetDto } from '../../../types/card-types';
 import { GameGetDto } from '../../../types/games';
-import { FilterActions } from './FilterMenu';
-import { CardsService } from '../../../services/CardsService';
-import { responseWrapper } from '../../../services/helpers/responseWrapper';
-import { dispatch, useAppSelector } from '../../../store/configureStore';
-import { updatePagedFilters } from '../../../store/inventorySlice';
+import { CardTypeGetDto } from '../../../types/card-types';
+import { dispatch } from '../../../store/ConfigureStore';
+import {
+    toggleCardTypeFilters,
+    toggleRarityFilters,
+    toggleSetFilters,
+} from '../../../store/inventorySlice';
+import { CategoryLabel } from '../../../enums/categoryLabel';
 
-export type FilterCategoryAndOptionsProps = {
-    label: string;
-    data: CardTypeGetDto[];
-    appliedFilters: CardTypeGetDto[];
+type CategoryAndOptionsProps = {
     selectedGame: GameGetDto | null;
-} & FilterActions;
+    label: CategoryLabel;
+    data: CardTypeGetDto[];
+    appliedFilters: number[];
+};
 
-export function FilterCategoryAndOptions({
+export function CategoryAndOptions({
+    selectedGame,
     label,
     data,
     appliedFilters,
-    selectedGame,
-    handleSelectAllFilters,
-    handleTogglingFilter,
-    setCardFilters,
-    cardFilters,
-}: FilterCategoryAndOptionsProps): React.ReactElement {
+}: CategoryAndOptionsProps): React.ReactElement {
     const { classes } = useStyles();
 
-    const pagedFilters = useAppSelector(
-        (state) => state.inventory.pagedFilters
-    );
-
     const [opened, { toggle, close }] = useDisclosure();
-    const [searchText, setSearchText] = useState('');
+    const [searchText, setSearchText] = useState<string>('');
 
     const filteredOptions = useMemo(() => {
         if (!selectedGame) return [];
@@ -60,58 +54,35 @@ export function FilterCategoryAndOptions({
             .filter((option) =>
                 option.name.toLowerCase().includes(searchText.toLowerCase())
             );
-    }, [searchText, selectedGame]);
+    }, [searchText, selectedGame, data]);
 
     const numOfAppliedFilters = useMemo(() => {
         const foundApplied = filteredOptions.filter((option) =>
-            appliedFilters.find((filter) => filter === option)
+            appliedFilters.find((filterId) => filterId === option.id)
         );
 
         return foundApplied.length;
-    }, [appliedFilters]);
+    }, [appliedFilters, filteredOptions]);
 
-    const filterCards = (filterId: number) => {
+    const handleFilters = (option: CardTypeGetDto) => {
         switch (label) {
-            case 'Card Type': {
-                setCardFilters({
-                    ...cardFilters,
-                    cardTypeId: filterId,
-                    gameId: selectedGame?.id,
-                });
-                break;
-            }
-            case 'Sets': {
-                setCardFilters({
-                    ...cardFilters,
-                    setId: filterId,
-                    gameId: selectedGame?.id,
-                });
-                break;
-            }
-            case 'Rarities': {
-                setCardFilters({
-                    ...cardFilters,
-                    rarityId: filterId,
-                    gameId: selectedGame?.id,
-                });
-                break;
-            }
+            case CategoryLabel.CardTypes:
+                dispatch(toggleCardTypeFilters(option.id));
+                return;
+            case CategoryLabel.Sets:
+                dispatch(toggleSetFilters(option.id));
+                return;
+            case CategoryLabel.Rarities:
+                dispatch(toggleRarityFilters(option.id));
+                return;
             default:
-                break;
+                return;
         }
     };
 
     useEffect(() => {
         close();
-    }, [selectedGame]);
-
-    useEffect(() => {
-        if (appliedFilters.length === 0) return;
-
-        const lastFilterApplied = appliedFilters[appliedFilters.length - 1];
-
-        filterCards(lastFilterApplied.id);
-    }, [appliedFilters]);
+    }, [close, selectedGame]);
 
     return (
         <div className={classes.category}>
@@ -139,29 +110,14 @@ export function FilterCategoryAndOptions({
 
                     <ScrollArea mah={'50vh'}>
                         <Box className={classes.options}>
-                            {!searchText && (
-                                <Checkbox
-                                    label="Select All"
-                                    onChange={() =>
-                                        handleSelectAllFilters(filteredOptions)
-                                    }
-                                    checked={
-                                        appliedFilters.length ===
-                                        filteredOptions.length
-                                    }
-                                />
-                            )}
-
                             <div className={classes.data}>
                                 {filteredOptions.map((option, index) => (
                                     <Checkbox
                                         key={index}
                                         label={option.name}
-                                        onChange={() =>
-                                            handleTogglingFilter(option)
-                                        }
+                                        onChange={() => handleFilters(option)}
                                         checked={appliedFilters.some(
-                                            (filter) => filter === option
+                                            (filter) => filter === option.id
                                         )}
                                     />
                                 ))}

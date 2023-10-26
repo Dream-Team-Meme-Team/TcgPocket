@@ -1,5 +1,4 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { apiRoutes } from '../routes';
 import {
     CardDetailDto,
     CardDisplayDto,
@@ -8,8 +7,9 @@ import {
     CardGetDto,
 } from '../types/cards';
 import { PagedResult } from '../types/shared';
-import { apiCall } from './helpers/api';
+import { apiCall } from './helpers/apiCall';
 import { Response } from '../types/shared';
+import { apiRoutes } from '../routes/Index';
 
 type UpdateCardParams = {
     id: number;
@@ -20,7 +20,7 @@ export type CardsService = typeof CardsService;
 
 export const CardsService = {
     getAllCards: async (params?: CardFilterDto) => {
-        return await apiCall<CardDetailDto[]>({
+        return await apiCall<PagedResult<CardDetailDto>>({
             method: 'GET',
             endpoint: apiRoutes.cards,
             params: params,
@@ -35,6 +35,11 @@ export const CardsService = {
     },
 
     getUserInventory: async (params?: CardFilterDto) => {
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const qs = require('qs');
+
+        console.log('runing get');
+
         return await apiCall<PagedResult<CardDisplayDto>>({
             method: 'GET',
             endpoint: `${apiRoutes.cards}/inventory`,
@@ -72,4 +77,12 @@ export const getUserInventory = createAsyncThunk<
     { rejectValue: Response<PagedResult<CardDisplayDto>> }
 >('getUserInventory', async (values) => {
     return await CardsService.getUserInventory(values);
+});
+
+export const getAllCards = createAsyncThunk<
+    Response<PagedResult<CardDetailDto>>,
+    CardFilterDto,
+    { rejectValue: Response<PagedResult<CardDetailDto>> }
+>('getAllCards', async (values) => {
+    return await CardsService.getAllCards(values);
 });

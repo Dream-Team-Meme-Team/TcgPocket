@@ -1,7 +1,7 @@
 import { MantineTheme, ScrollArea, createStyles } from '@mantine/core';
 import { PrimarySelect } from '../../../components/inputs/PrimarySelect';
-import { useState } from 'react';
-import { dispatch, useAppSelector } from '../../../store/configureStore';
+import { useEffect, useState } from 'react';
+import { dispatch, useAppSelector } from '../../../store/ConfigureStore';
 import { useEffectOnce } from 'react-use';
 import { getAllGames } from '../../../services/dataServices/GameServices';
 import { responseWrapper } from '../../../services/helpers/responseWrapper';
@@ -11,33 +11,20 @@ import { getAllAttributes } from '../../../services/dataServices/AttributeServic
 import { getAllCardTypes } from '../../../services/dataServices/CardTypeServices';
 import { getAllRarities } from '../../../services/dataServices/RarityServices';
 import { getAllSets } from '../../../services/dataServices/SetServices';
-import { FilterCategoryAndOptions } from './FilterCategoryAndOptions';
-import { useNavbarHeight } from '../../../hooks/use-navbar-height';
 import { CardTypeGetDto } from '../../../types/card-types';
+import { useNavbarHeight } from '../../../hooks/useNavbarHeight';
+import { CategoryAndOptions } from './CategoryAndOptions';
+import { getAllCards, getUserInventory } from '../../../services/CardsService';
 import { CardFilterDto } from '../../../types/cards';
+import { CategoryLabel } from '../../../enums/categoryLabel';
 
-type Category = {
-    label: string;
+export type Category = {
+    label: CategoryLabel;
     data: CardTypeGetDto[];
+    appliedFilters: number[];
 };
 
-export type FilterActions = {
-    handleTogglingFilter: (arg: any) => void;
-    handleSelectAllFilters: (arg: any) => void;
-    handleRemoveFilter: (arg: any) => void;
-    setCardFilters: (arg: any) => void;
-    cardFilters: CardFilterDto;
-};
-
-export type FilterMenuProps = {
-    actions: FilterActions;
-    appliedFilters: CardTypeGetDto[];
-};
-
-export function FilterMenu({
-    appliedFilters,
-    actions,
-}: FilterMenuProps): React.ReactElement {
+export function FilterMenu(): React.ReactElement {
     const { classes } = useStyles();
 
     const [games, cardTypes, sets, rarities, attributes] = useAppSelector(
@@ -51,11 +38,32 @@ export function FilterMenu({
         shallowEqual
     );
 
+    const [cardTypeFilters, setFilters, rarityFilters] = useAppSelector(
+        (state) => [
+            state.inventory.cardTypeFilters,
+            state.inventory.setFilters,
+            state.inventory.rarityFilters,
+        ],
+        shallowEqual
+    );
+
     const categories: Category[] = [
-        { label: 'Card Type', data: cardTypes },
-        { label: 'Sets', data: sets },
-        { label: 'Rarities', data: rarities },
-        { label: 'Attributes', data: attributes },
+        {
+            label: CategoryLabel.CardTypes,
+            data: cardTypes,
+            appliedFilters: cardTypeFilters,
+        },
+        { label: CategoryLabel.Sets, data: sets, appliedFilters: setFilters },
+        {
+            label: CategoryLabel.Rarities,
+            data: rarities,
+            appliedFilters: rarityFilters,
+        },
+        {
+            label: CategoryLabel.Attributes,
+            data: attributes,
+            appliedFilters: [],
+        },
     ];
 
     const [selectedGame, setSelectedGame] = useState<GameGetDto | null>(null);
@@ -66,6 +74,24 @@ export function FilterMenu({
         const foundGame = games.find((game) => game.name === value) ?? null;
         setSelectedGame(foundGame);
     };
+
+    useEffect(() => {
+        const gameId = selectedGame ? [selectedGame.id] : undefined;
+
+        const filtered: CardFilterDto = {
+            gameIds: gameId,
+            cardTypeIds: cardTypeFilters ?? undefined,
+            setIds: setFilters ?? undefined,
+            rarityIds: rarityFilters ?? undefined,
+        };
+
+        dispatch(getUserInventory(filtered)).then(({ payload }) =>
+            responseWrapper(payload)
+        );
+        // dispatch(getAllCards(filtered)).then(({ payload }) =>
+        //     responseWrapper(payload)
+        // );
+    }, [cardTypeFilters, setFilters, rarityFilters, selectedGame]);
 
     useEffectOnce(() => {
         dispatch(getAllGames()).then(({ payload }) => responseWrapper(payload));
@@ -91,22 +117,23 @@ export function FilterMenu({
                     label="Select Game:"
                     value={selectedGame ? selectedGame.name : ''}
                     data={games.map((game) => game.name)}
-                    labelProps={games.map((game) => game.name)}
                     onChange={handleSelectChange}
                 />
             </div>
 
-            <ScrollArea className={classes.container}>
-                {categories.map((category) => (
-                    <FilterCategoryAndOptions
-                        {...actions}
-                        label={category.label}
-                        data={category.data}
-                        appliedFilters={appliedFilters}
-                        selectedGame={selectedGame}
-                    />
-                ))}
-            </ScrollArea>
+            <div className={classes.container}>
+                <ScrollArea>
+                    {categories.map((category, index) => (
+                        <CategoryAndOptions
+                            key={index}
+                            selectedGame={selectedGame}
+                            label={category.label}
+                            data={category.data}
+                            appliedFilters={category.appliedFilters}
+                        />
+                    ))}
+                </ScrollArea>
+            </div>
         </div>
     );
 }
