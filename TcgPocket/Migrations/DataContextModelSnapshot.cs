@@ -118,9 +118,6 @@ namespace TcgPocket.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CardId")
-                        .HasColumnType("int");
-
                     b.Property<int>("GameId")
                         .HasColumnType("int");
 
@@ -129,8 +126,6 @@ namespace TcgPocket.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CardId");
 
                     b.HasIndex("GameId");
 
@@ -488,10 +483,6 @@ namespace TcgPocket.Migrations
 
             modelBuilder.Entity("TcgPocket.Features.Attributes.Attribute", b =>
                 {
-                    b.HasOne("TcgPocket.Features.Cards.Card", null)
-                        .WithMany("Attributes")
-                        .HasForeignKey("CardId");
-
                     b.HasOne("TcgPocket.Features.Games.Game", "Game")
                         .WithMany("Attributes")
                         .HasForeignKey("GameId")
@@ -649,11 +640,9 @@ namespace TcgPocket.Migrations
 
             modelBuilder.Entity("TcgPocket.Features.Cards.Card", b =>
                 {
-                    b.Navigation("UserCards");
-                    
-                    b.Navigation("Attributes");
-
                     b.Navigation("CardAttributes");
+
+                    b.Navigation("UserCards");
                 });
 
             modelBuilder.Entity("TcgPocket.Features.Games.Game", b =>

@@ -1,15 +1,15 @@
 import { PrimaryModal } from '../PrimaryModal';
-import { useLoginOrRegisterStyles } from './loginOrRegisterStyling';
+import { useLoginOrRegisterStyles } from './LoginOrRegisterStyling';
 import { PrimaryButton } from '../../buttons/PrimaryButton';
 import { SecondaryButton } from '../../buttons/SecondaryButton';
 import { useForm } from '@mantine/form';
 import { PrimaryTextInput } from '../../inputs/PrimaryTextInput';
 import { UserCreateDto } from '../../../types/users';
 import { CSSProperties, useMemo, useState } from 'react';
-import { dispatch, useAppSelector } from '../../../store/configureStore';
+import { dispatch, useAppSelector } from '../../../store/ConfigureStore';
 import { registerUser } from '../../../services/AuthServices';
 import { useFormValidation } from '../../../helpers/useFormValidation';
-import { error, success } from '../../../services/helpers/notification';
+import { error, success } from '../../../services/helpers/Notification';
 import { PrimaryPasswordInput } from '../../inputs/PrimaryPasswordInput';
 import { Popover } from '@mantine/core';
 import {

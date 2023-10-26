@@ -6,10 +6,10 @@ import {
     IconDeviceGamepad,
     IconPlayCard,
 } from '@tabler/icons-react';
-import { useNavbarHeight } from '../../hooks/use-navbar-height';
+import { useNavbarHeight } from '../../hooks/useNavbarHeight';
 import { AdminTabHeader } from './modules/headers/AdminTabHeader';
 import { Tab } from '../../types/tabs';
-import { dispatch, useAppSelector } from '../../store/configureStore';
+import { dispatch, useAppSelector } from '../../store/ConfigureStore';
 import { useEffect } from 'react';
 import {
     setAdminSearchTerm,
@@ -79,7 +79,7 @@ export function AdminPage(): React.ReactElement {
       orientation="vertical"
       className={classes.tab}
     >
-      <Tabs.List>
+      <Tabs.List tabIndex={0}>
         {adminTabs.map((tab, index) => (
           <Tabs.Tab
             key={index}

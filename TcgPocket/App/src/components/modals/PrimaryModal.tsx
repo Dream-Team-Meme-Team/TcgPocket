@@ -30,9 +30,9 @@ const defaultProps: Partial<PrimaryModalProps> = {
     },
   },
   closeButtonProps: {
+    'aria-label': 'Close',
     size: 'md',
     ml: '0',
-    tabIndex: -1,
   },
 };
 

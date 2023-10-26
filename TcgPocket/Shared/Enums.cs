@@ -3,6 +3,7 @@
 public abstract class AppSettings
 {
     public const string DefaultConnection = nameof(DefaultConnection);
+    public const string PythonEnvName = nameof(PythonEnvName);
 }
 
 public abstract class OrderBy

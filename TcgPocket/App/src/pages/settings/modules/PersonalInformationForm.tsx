@@ -2,7 +2,7 @@ import { useForm } from '@mantine/form';
 import { useFormValidation } from '../../../helpers/useFormValidation';
 import { createStyles } from '@mantine/core';
 import { PrimaryTextInput } from '../../../components/inputs/PrimaryTextInput';
-import { dispatch } from '../../../store/configureStore';
+import { dispatch } from '../../../store/ConfigureStore';
 import { UserGetDto } from '../../../types/users';
 import { SecondaryButton } from '../../../components/buttons/SecondaryButton';
 import { PrimaryButton } from '../../../components/buttons/PrimaryButton';

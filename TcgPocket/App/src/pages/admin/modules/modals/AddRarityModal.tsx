@@ -1,7 +1,7 @@
 import { IconPlus } from '@tabler/icons-react';
 import { PrimaryButton } from '../../../../components/buttons/PrimaryButton';
 import { useDisclosure } from '@mantine/hooks';
-import { dispatch, useAppSelector } from '../../../../store/configureStore';
+import { dispatch, useAppSelector } from '../../../../store/ConfigureStore';
 import { PrimaryModal } from '../../../../components/modals/PrimaryModal';
 import { useForm } from '@mantine/form';
 import { PrimaryTextInput } from '../../../../components/inputs/PrimaryTextInput';
