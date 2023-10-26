@@ -40,7 +40,6 @@ def all_of_it(raw_img: bytes):
     scraper = scraper_classifier(classif)
     filt = scraper.apply_filter(raw_img)
     read = scraper.read_card(filt)
-    query = scraper.gen_query(read)
 
-    return query
+    return scraper.gen_query(read)
 #
