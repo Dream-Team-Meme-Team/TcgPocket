@@ -4,10 +4,10 @@ import {
   ScrollArea,
   createStyles,
 } from '@mantine/core';
-import { CardDisplay } from '../../../components/card-display/CardDisplay';
 import { CardDisplayDto } from '../../../types/cards';
 import { PagedResult } from '../../../types/shared';
 import { useMemo } from 'react';
+import { CardDisplay } from '../../../components/cardDisplay/CardDisplay';
 
 type InventoryDisplayProps = {
   paginatedCards: PagedResult<CardDisplayDto> | undefined;

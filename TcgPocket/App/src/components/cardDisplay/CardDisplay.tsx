@@ -13,7 +13,7 @@ import {
   Skeleton,
 } from '@mantine/core';
 import { CardDisplayDto } from '../../types/cards';
-import { CardImageDisplay } from './modules/card-image-display';
+import { CardImageDisplay } from './modules/CardImageDisplay';
 
 type CardContainerProps = {
   card: CardDisplayDto;
