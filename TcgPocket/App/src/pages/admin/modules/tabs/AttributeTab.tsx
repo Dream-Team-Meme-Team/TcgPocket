@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { dispatch, useAppSelector } from '../../../../store/configureStore';
+import { dispatch, useAppSelector } from '../../../../store/ConfigureStore';
 import { TabInfoHeader } from '../headers/TabInfoHeader';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
 import { ActionIcon, MantineTheme, createStyles } from '@mantine/core';
@@ -13,7 +13,7 @@ import {
 } from '../../../../services/dataServices/AttributeServices';
 import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { DeleteModal } from '../../../../components/modals/DeleteModal';
-import { setSelectedId } from '../../../../store/adminSlice';
+import { setSelectedId } from '../../../../store/AdminSlice';
 import { AdminTabLabel } from '../../../../enums/adminTabLabel';
 import { shallowEqual } from 'react-redux';
 
@@ -116,11 +116,17 @@ export const AttributeTab: React.FC = () => {
 
                 <div> {findGame(attribute.gameId)} </div>
 
-                <ActionIcon onClick={() => selectAndOpenEdit(attribute)}>
+                <ActionIcon
+                  aria-label="Edit Attribute"
+                  onClick={() => selectAndOpenEdit(attribute)}
+                >
                   <IconEdit />
                 </ActionIcon>
 
-                <ActionIcon onClick={() => selectAndOpenDelete(attribute)}>
+                <ActionIcon
+                  aria-label="Delete Attribute"
+                  onClick={() => selectAndOpenDelete(attribute)}
+                >
                   <IconTrash />
                 </ActionIcon>
 

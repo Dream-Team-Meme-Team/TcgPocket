@@ -4,7 +4,7 @@ import { UserGetDto, UserPasswordUpdateDto } from '../../../types/users';
 import { Popover, createStyles } from '@mantine/core';
 import { SecondaryButton } from '../../../components/buttons/SecondaryButton';
 import { PrimaryButton } from '../../../components/buttons/PrimaryButton';
-import { dispatch } from '../../../store/configureStore';
+import { dispatch } from '../../../store/ConfigureStore';
 import { updateUserPassword } from '../../../services/AuthServices';
 import { PrimaryPasswordInput } from '../../../components/inputs/PrimaryPasswordInput';
 import {

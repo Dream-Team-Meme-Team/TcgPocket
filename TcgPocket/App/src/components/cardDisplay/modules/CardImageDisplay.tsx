@@ -12,9 +12,11 @@ import { PrimaryModal } from '../../modals/PrimaryModal';
 import { IconAlertTriangleFilled } from '@tabler/icons-react';
 import { useState } from 'react';
 
-export const CardImageDisplay: React.FC<{ imageUrl: string }> = ({
-  imageUrl,
-}) => {
+type CardImageDisplayProps = {
+  imageUrl: string;
+};
+
+export function CardImageDisplay({ imageUrl }: CardImageDisplayProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const { classes } = useStyles();
@@ -80,7 +82,7 @@ export const CardImageDisplay: React.FC<{ imageUrl: string }> = ({
       </PrimaryModal>
     </>
   );
-};
+}
 
 const modalProps: Styles<ModalBaseStylesNames> = {
   header: {

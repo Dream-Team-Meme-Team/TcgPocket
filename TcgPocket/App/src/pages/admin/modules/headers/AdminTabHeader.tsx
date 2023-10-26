@@ -1,13 +1,13 @@
 import { PrimaryTextInput } from '../../../../components/inputs/PrimaryTextInput';
 import { IconSearch } from '@tabler/icons-react';
-import { dispatch, useAppSelector } from '../../../../store/configureStore';
+import { dispatch, useAppSelector } from '../../../../store/ConfigureStore';
 import { Select, createStyles } from '@mantine/core';
 import { useMemo } from 'react';
 import { AddModalRenderer } from '../AddModalRenderer';
 import {
   setAdminSearchTerm,
   setSelectedGameId,
-} from '../../../../store/adminSlice';
+} from '../../../../store/AdminSlice';
 import { AdminTabLabel } from '../../../../enums/adminTabLabel';
 import { shallowEqual } from 'react-redux';
 
@@ -35,7 +35,7 @@ export function AdminTabHeader({
     const foundGame = games.find((game) => game.id === selectedGameId);
 
     return foundGame ? foundGame.name : null;
-  }, [selectedGameId]);
+  }, [selectedGameId, games]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setAdminSearchTerm(e.target.value));

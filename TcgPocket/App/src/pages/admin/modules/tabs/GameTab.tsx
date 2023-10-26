@@ -1,4 +1,4 @@
-import { dispatch, useAppSelector } from '../../../../store/configureStore';
+import { dispatch, useAppSelector } from '../../../../store/ConfigureStore';
 import {
   deleteGame,
   editGame,
@@ -13,7 +13,7 @@ import { DeleteModal } from '../../../../components/modals/DeleteModal';
 import { GameGetDto } from '../../../../types/games';
 import { EditModal } from '../modals/EditModal';
 import { TabInfoHeader } from '../headers/TabInfoHeader';
-import { setSelectedId } from '../../../../store/adminSlice';
+import { setSelectedId } from '../../../../store/AdminSlice';
 import { AdminTabLabel } from '../../../../enums/adminTabLabel';
 import { shallowEqual } from 'react-redux';
 
@@ -95,11 +95,17 @@ export const GameTab: React.FC = () => {
               <div key={index} className={classes.renderedGameContainer}>
                 <div>{game.name}</div>
 
-                <ActionIcon onClick={() => selectAndOpenEdit(game)}>
+                <ActionIcon
+                  aria-label="Edit Game"
+                  onClick={() => selectAndOpenEdit(game)}
+                >
                   <IconEdit />
                 </ActionIcon>
 
-                <ActionIcon onClick={() => selectAndOpenDelete(game)}>
+                <ActionIcon
+                  aria-label="Delete Game"
+                  onClick={() => selectAndOpenDelete(game)}
+                >
                   <IconTrash />
                 </ActionIcon>
 

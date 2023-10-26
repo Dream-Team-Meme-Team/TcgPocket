@@ -10,7 +10,7 @@ import {
   getAllGames,
 } from '../../../../services/dataServices/GameServices';
 import { responseWrapper } from '../../../../services/helpers/responseWrapper';
-import { dispatch } from '../../../../store/configureStore';
+import { dispatch } from '../../../../store/ConfigureStore';
 import { AdminButtons } from '../AdminButtons';
 
 const initialValues = {
