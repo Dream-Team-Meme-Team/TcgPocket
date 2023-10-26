@@ -8,4 +8,4 @@ numpy
 Pillow
 opencv_python
 pokemontcgsdk
-keras-ocr
+easyocr
