@@ -2,7 +2,7 @@ import { Route, Routes } from 'react-router-dom';
 import { routes } from '.';
 import { ErrorPage } from '../pages/error/ErrorPage';
 import { NotFoundPage } from '../pages/notFound/NotFoundPage';
-import { HomePage } from '../pages/home/home-page';
+import { HomePage } from '../pages/home/HomePage';
 import { SettingsPage } from '../pages/settings/SettingsPage';
 import { useAppSelector } from '../store/configureStore';
 import { AdminPage } from '../pages/admin/AdminPage';
