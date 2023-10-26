@@ -3,9 +3,9 @@ import { CardsService } from '../../services/CardsService';
 import { CardFilterDto } from '../../types/cards';
 import { InventoryDisplay } from './modules/InventoryDisplay';
 import { useAsync } from 'react-use';
-import { error } from '../../services/helpers/notification';
+import { error } from '../../services/helpers/Notification';
 import { createStyles } from '@mantine/core';
-import { useNavbarHeight } from '../../hooks/use-navbar-height';
+import { useNavbarHeight } from '../../hooks/useNavbarHeight';
 
 const paged: CardFilterDto = {
   currentPage: 1,

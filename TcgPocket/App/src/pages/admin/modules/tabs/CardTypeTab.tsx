@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { dispatch, useAppSelector } from '../../../../store/configureStore';
+import { dispatch, useAppSelector } from '../../../../store/ConfigureStore';
 import { TabInfoHeader } from '../headers/TabInfoHeader';
 import { ActionIcon, MantineTheme, createStyles } from '@mantine/core';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
@@ -13,7 +13,7 @@ import {
 import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { CardTypeGetDto } from '../../../../types/card-types';
 import { DeleteModal } from '../../../../components/modals/DeleteModal';
-import { setSelectedId } from '../../../../store/adminSlice';
+import { setSelectedId } from '../../../../store/AdminSlice';
 import { AdminTabLabel } from '../../../../enums/adminTabLabel';
 import { shallowEqual } from 'react-redux';
 

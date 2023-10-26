@@ -6,8 +6,8 @@ import {
   UserGetDto,
   UserPasswordUpdateDto,
 } from '../types/users';
-import { apiCall } from './helpers/api';
-import { apiRoutes } from '../routes';
+import { apiCall } from './helpers/apiCall';
+import { apiRoutes } from '../routes/Index';
 import { Response } from '../types/shared';
 
 export type AuthServices = typeof AuthServices;

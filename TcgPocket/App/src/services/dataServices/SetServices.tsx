@@ -1,8 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Response } from '../../types/shared';
 import { SetDto, SetGetDto } from '../../types/sets';
-import { apiCall } from '../helpers/api';
-import { apiRoutes } from '../../routes';
+import { apiCall } from '../helpers/apiCall';
+import { apiRoutes } from '../../routes/Index';
 
 export type SetServices = typeof SetServices;
 

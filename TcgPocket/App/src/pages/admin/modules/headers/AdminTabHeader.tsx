@@ -1,13 +1,13 @@
 import { PrimaryTextInput } from '../../../../components/inputs/PrimaryTextInput';
 import { IconSearch } from '@tabler/icons-react';
-import { dispatch, useAppSelector } from '../../../../store/configureStore';
+import { dispatch, useAppSelector } from '../../../../store/ConfigureStore';
 import { Select, createStyles } from '@mantine/core';
 import { useMemo } from 'react';
 import { AddModalRenderer } from '../AddModalRenderer';
 import {
   setAdminSearchTerm,
   setSelectedGameId,
-} from '../../../../store/adminSlice';
+} from '../../../../store/AdminSlice';
 import { AdminTabLabel } from '../../../../enums/adminTabLabel';
 import { shallowEqual } from 'react-redux';
 

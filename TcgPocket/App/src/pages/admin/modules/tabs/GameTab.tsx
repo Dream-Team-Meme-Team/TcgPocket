@@ -1,4 +1,4 @@
-import { dispatch, useAppSelector } from '../../../../store/configureStore';
+import { dispatch, useAppSelector } from '../../../../store/ConfigureStore';
 import {
   deleteGame,
   editGame,
@@ -13,7 +13,7 @@ import { DeleteModal } from '../../../../components/modals/DeleteModal';
 import { GameGetDto } from '../../../../types/games';
 import { EditModal } from '../modals/EditModal';
 import { TabInfoHeader } from '../headers/TabInfoHeader';
-import { setSelectedId } from '../../../../store/adminSlice';
+import { setSelectedId } from '../../../../store/AdminSlice';
 import { AdminTabLabel } from '../../../../enums/adminTabLabel';
 import { shallowEqual } from 'react-redux';
 

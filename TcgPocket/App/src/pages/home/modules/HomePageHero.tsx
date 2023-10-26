@@ -10,9 +10,9 @@ import {
 import { IconClick, IconHandClick } from '@tabler/icons-react';
 import { useState } from 'react';
 import { PrimaryButton } from '../../../components/buttons/PrimaryButton';
-import { LoginModal } from '../../../components/modals/AuthModals/LoginModal';
-import { RegisterModal } from '../../../components/modals/AuthModals/RegisterModal';
-import { useAppSelector } from '../../../store/configureStore';
+import { LoginModal } from '../../../components/modals/authModals/LoginModal';
+import { RegisterModal } from '../../../components/modals/authModals/RegisterModal';
+import { useAppSelector } from '../../../store/ConfigureStore';
 import { shallowEqual } from 'react-redux';
 
 export function HeroTitle() {
