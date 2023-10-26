@@ -13,14 +13,15 @@ import { PrimaryButton } from '../../../components/buttons/PrimaryButton';
 import { LoginModal } from '../../../components/modals/AuthModals/LoginModal';
 import { RegisterModal } from '../../../components/modals/AuthModals/RegisterModal';
 import { useAppSelector } from '../../../store/configureStore';
+import { shallowEqual } from 'react-redux';
 
 export function HeroTitle() {
   const { classes } = useStyles();
 
-  const [user, loading] = useAppSelector((state) => [
-    state.user.user,
-    state.user.isLoading,
-  ]);
+  const [user, loading] = useAppSelector(
+    (state) => [state.user.user, state.user.isLoading],
+    shallowEqual
+  );
 
   const [openLoginModal, setOpenLoginModal] = useState(false);
   const [openRegisterModal, setOpenRegisterModal] = useState(false);
