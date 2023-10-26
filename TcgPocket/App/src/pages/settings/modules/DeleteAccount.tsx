@@ -9,7 +9,7 @@ import { DeleteButton } from '../../../components/buttons/DeleteButton';
 import { UserDeleteDto } from '../../../types/users';
 import { PrimaryPasswordInput } from '../../../components/inputs/PrimaryPasswordInput';
 import { useNavigate } from 'react-router-dom';
-import { routes } from '../../../routes/index';
+import { routes } from '../../../routes/Index';
 import { responseWrapper } from '../../../services/helpers/responseWrapper';
 
 type DeleteAccount = UserDeleteDto;

@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
-import { routes } from './index';
+import { routes } from './Index';
 import { ErrorPage } from '../pages/error/ErrorPage';
 import { NotFoundPage } from '../pages/notFound/NotFoundPage';
 import { HomePage } from '../pages/home/HomePage';
