@@ -1,6 +1,6 @@
 import { MantineTheme, Tabs, createStyles } from '@mantine/core';
 import { IconUser } from '@tabler/icons-react';
-import { useNavbarHeight } from '../../hooks/use-navbar-height';
+import { useNavbarHeight } from '../../hooks/useNavbarHeight';
 import { Tab } from '../../types/tabs';
 import { SettingTabLabel } from '../../enums/settingTabLabel';
 import { AccountTab } from './modules/tabs/AccountTab';

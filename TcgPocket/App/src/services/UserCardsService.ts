@@ -1,6 +1,6 @@
-import { apiRoutes } from '../routes';
+import { apiRoutes } from '../routes/Index';
 import { UserCardDto, UserCardGetDto } from '../types/user-cards';
-import { apiCall } from './helpers/api';
+import { apiCall } from './helpers/apiCall';
 
 type UpdateUserCardParams = {
   id: number;

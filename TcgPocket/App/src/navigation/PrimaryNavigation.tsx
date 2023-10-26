@@ -15,15 +15,15 @@ import {
   IconUser,
 } from '@tabler/icons-react';
 import React, { useMemo } from 'react';
-import { routes } from '../routes';
 import { NavButton } from './NavButton';
-import { LoginModal } from '../components/modals/AuthModals/LoginModal';
-import { RegisterModal } from '../components/modals/AuthModals/RegisterModal';
+import { LoginModal } from '../components/modals/authModals/LoginModal';
+import { RegisterModal } from '../components/modals/authModals/RegisterModal';
 import { useDisclosure } from '@mantine/hooks';
-import { useNavbarHeight } from '../hooks/use-navbar-height';
+import { useNavbarHeight } from '../hooks/useNavbarHeight';
 import { useNavigate } from 'react-router-dom';
 import { signOutUser } from '../services/AuthServices';
-import { dispatch, useAppSelector } from '../store/configureStore';
+import { dispatch, useAppSelector } from '../store/ConfigureStore';
+import { routes } from '../routes/Index';
 
 export function PrimaryNavigation(): React.ReactElement {
   const navigate = useNavigate();
@@ -73,7 +73,7 @@ export function PrimaryNavigation(): React.ReactElement {
 
           <Menu>
             <Menu.Target>
-              <ActionIcon size={40} sx={profileIconSx}>
+              <ActionIcon size={40} aria-label="Account" sx={profileIconSx}>
                 <IconUser size={30} />
               </ActionIcon>
             </Menu.Target>

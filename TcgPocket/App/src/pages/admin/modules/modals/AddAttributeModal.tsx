@@ -1,5 +1,5 @@
 import { useDisclosure } from '@mantine/hooks';
-import { dispatch, useAppSelector } from '../../../../store/configureStore';
+import { dispatch, useAppSelector } from '../../../../store/ConfigureStore';
 import { useForm } from '@mantine/form';
 import { PrimaryButton } from '../../../../components/buttons/PrimaryButton';
 import { IconPlus } from '@tabler/icons-react';

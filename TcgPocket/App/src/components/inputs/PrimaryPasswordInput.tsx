@@ -7,8 +7,9 @@ import {
   TextInputProps,
   TextInputStylesNames,
 } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import { IconEye, IconEyeClosed } from '@tabler/icons-react';
-import { InputHTMLAttributes, useState } from 'react';
+import { InputHTMLAttributes } from 'react';
 
 type PrimaryPasswordInputProps = TextInputProps &
   InputHTMLAttributes<HTMLTextAreaElement>;
@@ -36,7 +37,7 @@ export function PrimaryPasswordInput({
   sx,
   ...props
 }: PrimaryPasswordInputProps): React.ReactElement {
-  const [hidden, setHidden] = useState(true);
+  const [hidden, { toggle: toggleHidden }] = useDisclosure();
 
   return (
     <TextInput
@@ -45,7 +46,7 @@ export function PrimaryPasswordInput({
       {...props}
       styles={styles}
       rightSection={
-        <ActionIcon onClick={() => setHidden(!hidden)}>
+        <ActionIcon aria-label="Toggle Visible" onClick={toggleHidden}>
           {hidden ? (
             <IconEye color="#13222B" />
           ) : (

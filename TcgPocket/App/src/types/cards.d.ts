@@ -36,6 +36,10 @@ export type CardFilterDto = {
   description?: string;
 } & PageDto;
 
+export type CardAttributeDisplayDto = {
+  attributeName: string;
+};
+
 export type CardDisplayDto = Id & {
   name: string;
   cardNumber: string;

@@ -1,7 +1,7 @@
 import { useDisclosure } from '@mantine/hooks';
 import { PrimaryModal } from '../../../components/modals/PrimaryModal';
 import { deleteUser, signOutUser } from '../../../services/AuthServices';
-import { dispatch } from '../../../store/configureStore';
+import { dispatch } from '../../../store/ConfigureStore';
 import { useForm } from '@mantine/form';
 import { SecondaryButton } from '../../../components/buttons/SecondaryButton';
 import { Flex, createStyles } from '@mantine/core';
@@ -9,7 +9,7 @@ import { DeleteButton } from '../../../components/buttons/DeleteButton';
 import { UserDeleteDto } from '../../../types/users';
 import { PrimaryPasswordInput } from '../../../components/inputs/PrimaryPasswordInput';
 import { useNavigate } from 'react-router-dom';
-import { routes } from '../../../routes';
+import { routes } from '../../../routes/Index';
 import { responseWrapper } from '../../../services/helpers/responseWrapper';
 
 type DeleteAccount = UserDeleteDto;

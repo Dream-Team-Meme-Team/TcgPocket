@@ -1,4 +1,4 @@
-import { apiRoutes } from '../routes';
+import { apiRoutes } from '../routes/Index';
 import {
   CardDetailDto,
   CardDisplayDto,
@@ -7,7 +7,7 @@ import {
   CardGetDto,
 } from '../types/cards';
 import { PagedResult } from '../types/shared';
-import { apiCall } from './helpers/api';
+import { apiCall } from './helpers/apiCall';
 
 type UpdateCardParams = {
   id: number;

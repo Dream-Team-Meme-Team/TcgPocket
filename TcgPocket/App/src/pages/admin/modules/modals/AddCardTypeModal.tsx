@@ -4,7 +4,7 @@ import { IconPlus } from '@tabler/icons-react';
 import { PrimaryModal } from '../../../../components/modals/PrimaryModal';
 import { useForm } from '@mantine/form';
 import { PrimaryTextInput } from '../../../../components/inputs/PrimaryTextInput';
-import { dispatch, useAppSelector } from '../../../../store/configureStore';
+import { dispatch, useAppSelector } from '../../../../store/ConfigureStore';
 import {
   createCardType,
   getAllCardTypes,

@@ -13,20 +13,17 @@ import {
   Skeleton,
 } from '@mantine/core';
 import { CardDisplayDto } from '../../types/cards';
-import { CardImageDisplay } from './modules/card-image-display';
+import { CardImageDisplay } from './modules/CardImageDisplay';
 
 type CardContainerProps = {
   card: CardDisplayDto;
   isLoading: boolean;
 };
 
-export const CardDisplay: React.FC<CardContainerProps> = ({
-  card,
-  isLoading,
-}) => {
+export function CardDisplay({ card, isLoading }: CardContainerProps) {
   const { classes } = useStyles();
   return (
-    <Paper tabIndex={-1} p={10} pl={11} sx={containerSx}>
+    <Paper p={10} pl={11} sx={containerSx}>
       <Flex columnGap={2}>
         <Skeleton radius={7} width={152} height={220} visible={isLoading}>
           <CardImageDisplay imageUrl={card.imageUrl} />
@@ -103,7 +100,6 @@ export const CardDisplay: React.FC<CardContainerProps> = ({
 
           <Space h={'3%'} />
           <Skeleton width={178} height={90} visible={isLoading}>
-            {}
             {card.attributes && (
               <Flex
                 sx={attributesContainerSx}
@@ -112,16 +108,18 @@ export const CardDisplay: React.FC<CardContainerProps> = ({
                 maw={'10rem'}
                 wrap={'wrap'}
               >
-                {card.attributes.map((cardAttributes) => (
-                  <Badge
-                    key={cardAttributes.id}
-                    size="sm"
-                    className={classes.badgeBackground}
-                    variant="filled"
-                  >
-                    {cardAttributes.attributeName}
-                  </Badge>
-                ))}
+                {card.attributes.map((cardAttributes, index) => {
+                  return (
+                    <Badge
+                      key={index}
+                      size="sm"
+                      className={classes.badgeBackground}
+                      variant="filled"
+                    >
+                      {cardAttributes.attributeName}
+                    </Badge>
+                  );
+                })}
               </Flex>
             )}
           </Skeleton>
@@ -129,7 +127,7 @@ export const CardDisplay: React.FC<CardContainerProps> = ({
       </Flex>
     </Paper>
   );
-};
+}
 
 const containerSx: CSSObject = {
   backgroundColor: '#c3bbc4',
