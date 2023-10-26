@@ -3,9 +3,13 @@ from .magic_scraper import MagicScraper
 from .pokemon_scraper import PokemonScraper
 
 def scraper_classifier(classifier):
-    """
-    :param classifier: cards classification as a pkm, mgc, or ygo card
-    :return: proper scraper class obj
+    """ Classifies the scraper to use based off the card classif
+
+    Args:
+        classifier (int): card classification 
+
+    Returns:
+        scraper: type of scraper to use
     """
     if classifier == 0: 
         scraper_obj = MagicScraper()
