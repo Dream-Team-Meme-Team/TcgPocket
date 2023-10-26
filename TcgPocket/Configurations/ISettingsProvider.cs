@@ -1,3 +1,4 @@
+using TcgPocket.Features.StorageProvider;
 using TcgPocket.Shared;
 
 namespace TcgPocket.Configurations;
@@ -5,6 +6,7 @@ namespace TcgPocket.Configurations;
 public interface ISettingsProvider
 {
     public string GetPythonEnvName();
+    public BlobSettings GetBlobSettings();
 }
 
 public class SettingsProvider : ISettingsProvider
@@ -19,5 +21,10 @@ public class SettingsProvider : ISettingsProvider
     public string GetPythonEnvName()
     {
         return _configuration[AppSettings.PythonEnvName];
+    }
+
+    public BlobSettings GetBlobSettings()
+    {
+        return _configuration.GetValue<BlobSettings>(AppSettings.BlobSettings);
     }
 }

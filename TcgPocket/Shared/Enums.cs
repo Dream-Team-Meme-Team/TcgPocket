@@ -4,6 +4,7 @@ public abstract class AppSettings
 {
     public const string DefaultConnection = nameof(DefaultConnection);
     public const string PythonEnvName = nameof(PythonEnvName);
+    public const string BlobSettings = nameof(BlobSettings);
 }
 
 public abstract class OrderBy
