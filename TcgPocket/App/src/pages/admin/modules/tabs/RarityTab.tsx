@@ -115,11 +115,17 @@ export const RarityTab: React.FC = () => {
 
                 <div> {findGame(rarity.gameId)} </div>
 
-                <ActionIcon onClick={() => selectAndOpenEdit(rarity)}>
+                <ActionIcon
+                  aria-label="Edit Rarity"
+                  onClick={() => selectAndOpenEdit(rarity)}
+                >
                   <IconEdit />
                 </ActionIcon>
 
-                <ActionIcon onClick={() => selectAndOpenDelete(rarity)}>
+                <ActionIcon
+                  aria-label="Delete Rarity"
+                  onClick={() => selectAndOpenDelete(rarity)}
+                >
                   <IconTrash />
                 </ActionIcon>
 

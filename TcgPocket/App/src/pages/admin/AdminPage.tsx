@@ -79,7 +79,7 @@ export function AdminPage(): React.ReactElement {
       orientation="vertical"
       className={classes.tab}
     >
-      <Tabs.List>
+      <Tabs.List tabIndex={0}>
         {adminTabs.map((tab, index) => (
           <Tabs.Tab
             key={index}

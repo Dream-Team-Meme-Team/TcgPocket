@@ -115,11 +115,17 @@ export const SetTab: React.FC = () => {
 
                 <div> {findGame(set.gameId)} </div>
 
-                <ActionIcon onClick={() => selectAndOpenEdit(set)}>
+                <ActionIcon
+                  aria-label="Edit Set"
+                  onClick={() => selectAndOpenEdit(set)}
+                >
                   <IconEdit />
                 </ActionIcon>
 
-                <ActionIcon onClick={() => selectAndOpenDelete(set)}>
+                <ActionIcon
+                  aria-label="Delete Set"
+                  onClick={() => selectAndOpenDelete(set)}
+                >
                   <IconTrash />
                 </ActionIcon>
 

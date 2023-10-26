@@ -116,11 +116,17 @@ export const AttributeTab: React.FC = () => {
 
                 <div> {findGame(attribute.gameId)} </div>
 
-                <ActionIcon onClick={() => selectAndOpenEdit(attribute)}>
+                <ActionIcon
+                  aria-label="Edit Attribute"
+                  onClick={() => selectAndOpenEdit(attribute)}
+                >
                   <IconEdit />
                 </ActionIcon>
 
-                <ActionIcon onClick={() => selectAndOpenDelete(attribute)}>
+                <ActionIcon
+                  aria-label="Delete Attribute"
+                  onClick={() => selectAndOpenDelete(attribute)}
+                >
                   <IconTrash />
                 </ActionIcon>
 

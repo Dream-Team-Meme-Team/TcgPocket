@@ -115,11 +115,17 @@ export const CardTypeTab: React.FC = () => {
 
                 <div> {findGame(cardType.gameId)} </div>
 
-                <ActionIcon onClick={() => selectAndOpenEdit(cardType)}>
+                <ActionIcon
+                  aria-label="Edit Card Type"
+                  onClick={() => selectAndOpenEdit(cardType)}
+                >
                   <IconEdit />
                 </ActionIcon>
 
-                <ActionIcon onClick={() => selectAndOpenDelete(cardType)}>
+                <ActionIcon
+                  aria-label="Delete Card Type"
+                  onClick={() => selectAndOpenDelete(cardType)}
+                >
                   <IconTrash />
                 </ActionIcon>
 

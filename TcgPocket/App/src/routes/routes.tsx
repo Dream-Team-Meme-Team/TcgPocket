@@ -17,7 +17,7 @@ export const AppRoutes = () => {
       return false;
     }
     const isAdmin: number = user?.roles.findIndex(
-      (r: { name: string }) => r.name === 'Basic'
+      (r: { name: string }) => r.name === 'Admin'
     );
     return isAdmin !== -1;
   }, [user]);

@@ -95,11 +95,17 @@ export const GameTab: React.FC = () => {
               <div key={index} className={classes.renderedGameContainer}>
                 <div>{game.name}</div>
 
-                <ActionIcon onClick={() => selectAndOpenEdit(game)}>
+                <ActionIcon
+                  aria-label="Edit Game"
+                  onClick={() => selectAndOpenEdit(game)}
+                >
                   <IconEdit />
                 </ActionIcon>
 
-                <ActionIcon onClick={() => selectAndOpenDelete(game)}>
+                <ActionIcon
+                  aria-label="Delete Game"
+                  onClick={() => selectAndOpenDelete(game)}
+                >
                   <IconTrash />
                 </ActionIcon>
 
