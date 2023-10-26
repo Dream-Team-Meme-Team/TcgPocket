@@ -1,5 +1,5 @@
 from .magic_scraper import MagicScraper
-from scraper.yugioh_scraper import YugiohScraper
+from .yugioh_scraper import YugiohScraper
 from .pokemon_scraper import PokemonScraper
 
 def scraper_classifier(classifier):
