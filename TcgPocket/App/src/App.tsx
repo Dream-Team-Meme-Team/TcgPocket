@@ -7,9 +7,9 @@ import {
   ScrollArea,
 } from '@mantine/core';
 import { PrimaryNavigation } from './navigation/PrimaryNavigation';
-import { AppRoutes } from './routes/routes';
-import { useNavbarHeight } from './hooks/use-navbar-height';
-import { dispatch } from './store/configureStore';
+import { AppRoutes } from './routes/AppRoutes';
+import { useNavbarHeight } from './hooks/useNavbarHeight';
+import { dispatch } from './store/ConfigureStore';
 import { getSignedInUser } from './services/AuthServices';
 import { useAsync } from 'react-use';
 import { useLocation } from 'react-router-dom';
@@ -29,16 +29,14 @@ function App() {
   }, []);
 
   return (
-    <>
-      <AppShell layout="alt" padding={0} header={<PrimaryNavigation />}>
-        <ScrollArea h={remainingHeight} sx={scrollAreaSx}>
-          <Box sx={useContainerSx}>
-            <AppRoutes />
-          </Box>
-          {hideFooter && <Center sx={footerSx}>(≖ᴗ≖✿)</Center>}
-        </ScrollArea>
-      </AppShell>
-    </>
+    <AppShell layout="alt" padding={0} header={<PrimaryNavigation />}>
+      <ScrollArea h={remainingHeight} sx={scrollAreaSx}>
+        <Box sx={useContainerSx}>
+          <AppRoutes />
+        </Box>
+        {hideFooter && <Center sx={footerSx}>(≖ᴗ≖✿)</Center>}
+      </ScrollArea>
+    </AppShell>
   );
 }
 

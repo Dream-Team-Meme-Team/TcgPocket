@@ -1,7 +1,7 @@
 import { CSSObject, MantineTheme, UnstyledButton } from '@mantine/core';
 import { useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { routes } from '../routes';
+import { routes } from '../routes/Index';
 
 export type NavButtonProps = {
   children?: JSX.Element | string;

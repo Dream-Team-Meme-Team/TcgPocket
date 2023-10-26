@@ -1,15 +1,15 @@
 import { Route, Routes } from 'react-router-dom';
-import { routes } from '.';
+import { routes } from './Index';
 import { ErrorPage } from '../pages/error/ErrorPage';
 import { NotFoundPage } from '../pages/notFound/NotFoundPage';
-import { HomePage } from '../pages/home/home-page';
+import { HomePage } from '../pages/home/HomePage';
 import { SettingsPage } from '../pages/settings/SettingsPage';
-import { useAppSelector } from '../store/configureStore';
+import { useAppSelector } from '../store/ConfigureStore';
 import { AdminPage } from '../pages/admin/AdminPage';
 import { useMemo } from 'react';
-import { InventoryPage } from '../pages/inventory/inventory-page';
+import { InventoryPage } from '../pages/inventory/InventoryPage';
 
-export const AppRoutes = () => {
+export function AppRoutes() {
   const user = useAppSelector((state) => state.user.user);
 
   const isAdmin: boolean | undefined = useMemo(() => {
@@ -17,7 +17,7 @@ export const AppRoutes = () => {
       return false;
     }
     const isAdmin: number = user?.roles.findIndex(
-      (r: { name: string }) => r.name === 'Basic'
+      (r: { name: string }) => r.name === 'Admin'
     );
     return isAdmin !== -1;
   }, [user]);
@@ -53,4 +53,4 @@ export const AppRoutes = () => {
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
-};
+}

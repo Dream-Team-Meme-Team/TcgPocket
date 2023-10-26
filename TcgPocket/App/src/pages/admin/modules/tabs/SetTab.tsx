@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { dispatch, useAppSelector } from '../../../../store/configureStore';
+import { dispatch, useAppSelector } from '../../../../store/ConfigureStore';
 import {
   deleteSet,
   editSet,
@@ -13,7 +13,7 @@ import { DeleteModal } from '../../../../components/modals/DeleteModal';
 import { useDisclosure } from '@mantine/hooks';
 import { EditModal } from '../modals/EditModal';
 import { SetGetDto } from '../../../../types/sets';
-import { setSelectedId } from '../../../../store/adminSlice';
+import { setSelectedId } from '../../../../store/AdminSlice';
 import { AdminTabLabel } from '../../../../enums/adminTabLabel';
 import { shallowEqual } from 'react-redux';
 
@@ -115,11 +115,17 @@ export const SetTab: React.FC = () => {
 
                 <div> {findGame(set.gameId)} </div>
 
-                <ActionIcon onClick={() => selectAndOpenEdit(set)}>
+                <ActionIcon
+                  aria-label="Edit Set"
+                  onClick={() => selectAndOpenEdit(set)}
+                >
                   <IconEdit />
                 </ActionIcon>
 
-                <ActionIcon onClick={() => selectAndOpenDelete(set)}>
+                <ActionIcon
+                  aria-label="Delete Set"
+                  onClick={() => selectAndOpenDelete(set)}
+                >
                   <IconTrash />
                 </ActionIcon>
 

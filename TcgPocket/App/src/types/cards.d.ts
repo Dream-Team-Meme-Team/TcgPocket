@@ -28,13 +28,17 @@ export type CardFilterDto = {
   id?: number;
   name?: string;
   cardNumber?: string;
-  gameId?: number;
-  cardTypeId?: number;
-  rarityId?: number;
-  setId?: number;
+  gameIds?: number[];
+  cardTypeIds?: number[];
+  rarityIds?: number[];
+  setIds?: number[];
   imageUrl?: string;
   description?: string;
 } & PageDto;
+
+export type CardAttributeDisplayDto = {
+  attributeName: string;
+};
 
 export type CardDisplayDto = Id & {
   name: string;

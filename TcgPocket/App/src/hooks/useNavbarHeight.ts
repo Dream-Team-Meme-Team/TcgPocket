@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
+import { useViewportSize } from '@mantine/hooks';
 import {
   ScaleSizeFactor,
   useScaledViewportSize,
-} from './use-scaled-viewport-size';
-import { useViewportSize } from '@mantine/hooks';
+} from './useScaledViewportSize';
 
 const MIN_NAV_HEIGHT = 60 as const;
 const MAX_NAV_HEIGHT = 120 as const;

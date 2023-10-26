@@ -10,14 +10,18 @@ import {
 import { IconClick, IconHandClick } from '@tabler/icons-react';
 import { useState } from 'react';
 import { PrimaryButton } from '../../../components/buttons/PrimaryButton';
-import { LoginModal } from '../../../components/modals/AuthModals/LoginModal';
-import { RegisterModal } from '../../../components/modals/AuthModals/RegisterModal';
-import { useAppSelector } from '../../../store/configureStore';
+import { LoginModal } from '../../../components/modals/authModals/LoginModal';
+import { RegisterModal } from '../../../components/modals/authModals/RegisterModal';
+import { useAppSelector } from '../../../store/ConfigureStore';
+import { shallowEqual } from 'react-redux';
 
 export function HeroTitle() {
   const { classes } = useStyles();
 
-  const user = useAppSelector((state) => state.user.user);
+  const [user, loading] = useAppSelector(
+    (state) => [state.user.user, state.user.isLoading],
+    shallowEqual
+  );
 
   const [openLoginModal, setOpenLoginModal] = useState(false);
   const [openRegisterModal, setOpenRegisterModal] = useState(false);
@@ -60,10 +64,11 @@ export function HeroTitle() {
             Presenting a trading card game inventory management system along
             with a deck builder. Just upload images of your MTG, Pokémon, and
             Yu-Gi-Oh! cards and allow our card scanner to add the cards to your
-            inventory. {!user && 'Sign up or log in to begin! (*^▽^*)'}
+            inventory.{' '}
+            {!loading && !user && 'Sign up or log in to begin! (*^▽^*)'}
           </Text>
 
-          {!user && (
+          {!loading && !user && (
             <Group className={classes.controls}>
               <PrimaryButton
                 size="xl"
