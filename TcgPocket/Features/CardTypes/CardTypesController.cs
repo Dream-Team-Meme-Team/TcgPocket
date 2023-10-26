@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using TcgPocket.Features.CardTypes.Commands;
 using TcgPocket.Features.CardTypes.Queries;
 using TcgPocket.Shared;
+using TcgPocket.Shared.PagedResult;
+using TcgPocket.Features.CardTypes.Dtos;
 
 namespace TcgPocket.Features.CardTypes;
 
@@ -32,9 +34,18 @@ public class CardTypesController : ControllerBase
         var response = await _mediator.Send(new GetCardTypeByIdQuery{Id = id});
         
         return response.HasErrors ? BadRequest(response) : Ok(response);
-
     }
-    
+
+    [HttpGet("paginated")]
+    public async Task<ActionResult<Response<PagedResult<CardTypeGetDto>>>>
+           GetAllCardTypesPaginatedQuery([FromQuery] PagedCardTypeFilterDto filter)
+    {
+        var response = await _mediator
+            .Send(new GetPagedCardTypesQuery { Filter = filter });
+
+        return response.HasErrors ? BadRequest(response) : Ok(response);
+    }
+
     [HttpPost]
     public async Task<ActionResult<Response<CardTypeGetDto>>> CreateCardType([FromBody] CardTypeDto data)
     {

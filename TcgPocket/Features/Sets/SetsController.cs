@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using TcgPocket.Features.Sets.Commands;
 using TcgPocket.Features.Sets.Queries;
 using TcgPocket.Shared;
+using TcgPocket.Shared.PagedResult;
+using TcgPocket.Features.Sets.Dtos;
 
 namespace TcgPocket.Features.Sets;
 
@@ -31,6 +33,16 @@ public class SetsController : ControllerBase
         var response = await _mediator.Send(new GetSetByIdQuery { Id = id });
 
         return response.HasErrors ? NotFound(response) : Ok(response);
+    }
+
+    [HttpGet("paginated")]
+    public async Task<ActionResult<Response<PagedResult<SetGetDto>>>>
+           GetAllSetsPaginatedQuery([FromQuery] PagedSetFilterDto filter)
+    {
+        var response = await _mediator
+            .Send(new GetPagedSetsQuery { Filter = filter });
+
+        return response.HasErrors ? BadRequest(response) : Ok(response);
     }
 
     [HttpPost]
