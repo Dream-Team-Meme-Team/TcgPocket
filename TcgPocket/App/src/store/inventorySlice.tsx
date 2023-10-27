@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { CardDetailDto, CardDisplayDto, CardFilterDto } from '../types/cards';
+import { CardDisplayDto, CardFilterDto } from '../types/cards';
 import { PagedResult } from '../types/shared';
-import { getAllCards, getUserInventory } from '../services/CardsService';
+import { getAllCards } from '../services/CardsService';
 import { GameGetDto } from '../types/games';
 import { toggleFilters } from '../helpers/toggleFilters';
 
@@ -26,7 +26,6 @@ export interface InventoryState {
     setFilters: number[];
     rarityFilters: number[];
     cards: PagedResult<CardDisplayDto> | null;
-    allCards: PagedResult<CardDetailDto> | null;
     loading: boolean;
     pagedFilters: CardFilterDto;
     selectedGame: GameGetDto | null;
@@ -34,7 +33,6 @@ export interface InventoryState {
 
 const INITIAL_STATE: InventoryState = {
     cards: null,
-    allCards: null,
     loading: false,
     pagedFilters: paged,
     selectedGame: null,
@@ -118,18 +116,15 @@ export const inventorySlice = createSlice({
         },
     },
     extraReducers: (builder) => {
-        builder.addCase(getUserInventory.fulfilled, (state, { payload }) => {
+        builder.addCase(getAllCards.fulfilled, (state, { payload }) => {
             state.cards = payload.data;
             state.loading = false;
         });
-        builder.addCase(getUserInventory.pending, (state) => {
+        builder.addCase(getAllCards.pending, (state) => {
             state.loading = true;
         });
-        builder.addCase(getUserInventory.rejected, (state) => {
+        builder.addCase(getAllCards.rejected, (state) => {
             state.loading = false;
-        });
-        builder.addCase(getAllCards.fulfilled, (state, { payload }) => {
-            state.allCards = payload.data;
         });
     },
 });

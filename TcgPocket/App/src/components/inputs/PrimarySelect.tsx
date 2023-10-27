@@ -5,14 +5,14 @@ type PrimarySelectProps = SelectProps & InputHTMLAttributes<HTMLInputElement>;
 
 const selectStyling = (theme: MantineTheme): CSSObject => ({
     input: {
-        color: 'black',
+        color: theme.white,
         background: theme.colors.textBoxColor[0],
-        borderColor: theme.colors.secondaryBlueColors[0],
-        // backgroundColor: 'white',
+        borderColor: theme.colors.primaryPurpleColor[0],
+        backgroundColor: theme.black,
         borderWidth: 1,
 
         ':focus': {
-            borderColor: theme.colors.primaryPurpleColor[0],
+            borderColor: theme.colors.secondaryBlueColors[0],
         },
     },
     label: {
@@ -29,7 +29,7 @@ export function PrimarySelect({
         <Select
             sx={sx ?? selectStyling}
             {...props}
-            clearButtonProps={{ style: { color: 'black' } }}
+            // clearButtonProps={{ style: { color: 'black' } }}
         >
             {children}
         </Select>

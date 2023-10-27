@@ -1,6 +1,5 @@
 import { MantineTheme, ScrollArea, createStyles } from '@mantine/core';
 import { PrimarySelect } from '../../../components/inputs/PrimarySelect';
-import { useEffect, useState } from 'react';
 import { dispatch, useAppSelector } from '../../../store/ConfigureStore';
 import { useEffectOnce } from 'react-use';
 import { getAllGames } from '../../../services/dataServices/GameServices';
@@ -14,8 +13,6 @@ import { getAllSets } from '../../../services/dataServices/SetServices';
 import { CardTypeGetDto } from '../../../types/card-types';
 import { useNavbarHeight } from '../../../hooks/useNavbarHeight';
 import { CategoryAndOptions } from './CategoryAndOptions';
-import { getAllCards, getUserInventory } from '../../../services/CardsService';
-import { CardFilterDto } from '../../../types/cards';
 import { CategoryLabel } from '../../../enums/categoryLabel';
 
 export type Category = {
@@ -24,7 +21,15 @@ export type Category = {
     appliedFilters: number[];
 };
 
-export function FilterMenu(): React.ReactElement {
+type FilterMenuProps = {
+    selectedGame: GameGetDto | null;
+    setSelectedGame: (arg: GameGetDto | null) => void;
+};
+
+export function FilterMenu({
+    selectedGame,
+    setSelectedGame,
+}: FilterMenuProps): React.ReactElement {
     const { classes } = useStyles();
 
     const [games, cardTypes, sets, rarities, attributes] = useAppSelector(
@@ -66,32 +71,12 @@ export function FilterMenu(): React.ReactElement {
         },
     ];
 
-    const [selectedGame, setSelectedGame] = useState<GameGetDto | null>(null);
-
     const handleSelectChange = (
         value: string | React.ChangeEvent<HTMLInputElement> | null
     ) => {
         const foundGame = games.find((game) => game.name === value) ?? null;
         setSelectedGame(foundGame);
     };
-
-    useEffect(() => {
-        const gameId = selectedGame ? [selectedGame.id] : undefined;
-
-        const filtered: CardFilterDto = {
-            gameIds: gameId,
-            cardTypeIds: cardTypeFilters ?? undefined,
-            setIds: setFilters ?? undefined,
-            rarityIds: rarityFilters ?? undefined,
-        };
-
-        dispatch(getUserInventory(filtered)).then(({ payload }) =>
-            responseWrapper(payload)
-        );
-        // dispatch(getAllCards(filtered)).then(({ payload }) =>
-        //     responseWrapper(payload)
-        // );
-    }, [cardTypeFilters, setFilters, rarityFilters, selectedGame]);
 
     useEffectOnce(() => {
         dispatch(getAllGames()).then(({ payload }) => responseWrapper(payload));

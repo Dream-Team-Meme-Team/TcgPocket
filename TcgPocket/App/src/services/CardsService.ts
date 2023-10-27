@@ -20,7 +20,7 @@ export type CardsService = typeof CardsService;
 
 export const CardsService = {
     getAllCards: async (params?: CardFilterDto) => {
-        return await apiCall<PagedResult<CardDetailDto>>({
+        return await apiCall<PagedResult<CardDisplayDto>>({
             method: 'GET',
             endpoint: apiRoutes.cards,
             params: params,
@@ -35,11 +35,6 @@ export const CardsService = {
     },
 
     getUserInventory: async (params?: CardFilterDto) => {
-        // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const qs = require('qs');
-
-        console.log('runing get');
-
         return await apiCall<PagedResult<CardDisplayDto>>({
             method: 'GET',
             endpoint: `${apiRoutes.cards}/inventory`,
@@ -80,9 +75,9 @@ export const getUserInventory = createAsyncThunk<
 });
 
 export const getAllCards = createAsyncThunk<
-    Response<PagedResult<CardDetailDto>>,
+    Response<PagedResult<CardDisplayDto>>,
     CardFilterDto,
-    { rejectValue: Response<PagedResult<CardDetailDto>> }
+    { rejectValue: Response<PagedResult<CardDisplayDto>> }
 >('getAllCards', async (values) => {
     return await CardsService.getAllCards(values);
 });

@@ -1,5 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import { Response } from '../../types/shared';
+import qs from 'qs';
+
 axios.defaults.withCredentials = true;
 
 export type HttpMethod = 'GET' | 'POST' | 'DELETE' | 'PUT' | 'PATCH';
@@ -9,7 +11,6 @@ export type ApiCallConfig = {
     endpoint: string;
     data?: any;
     params?: any;
-    paramsSerializer?: any;
 };
 
 export async function apiCall<TResult = any>({
@@ -17,16 +18,13 @@ export async function apiCall<TResult = any>({
     endpoint,
     data,
     params,
-    paramsSerializer,
 }: ApiCallConfig) {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires, no-var
-    var qs = require('qs');
-
     const response = axios<Response<TResult>>({
         method: method,
         url: endpoint,
         data: data,
         params: params,
+        paramsSerializer: (params) => qs.stringify(params),
     });
 
     return response
