@@ -4,82 +4,82 @@ import { IconPlus } from '@tabler/icons-react';
 import { PrimaryModal } from '../../../../components/modals/PrimaryModal';
 import { useForm } from '@mantine/form';
 import { PrimaryTextInput } from '../../../../components/inputs/PrimaryTextInput';
-import { dispatch, useAppSelector } from '../../../../store/ConfigureStore';
+import { dispatch, useAppSelector } from '../../../../store/configureStore';
 import {
-  createCardType,
-  getAllCardTypes,
+    createCardType,
+    getAllCardTypes,
 } from '../../../../services/dataServices/CardTypeServices';
 import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { CardTypeDto } from '../../../../types/card-types';
 import { AdminButtons } from '../AdminButtons';
 
 const initialValues = {
-  name: '',
-  gameId: 0,
+    name: '',
+    gameId: 0,
 } as const;
 
 export function AddCardTypeModal(): React.ReactElement {
-  const [open, { toggle }] = useDisclosure();
+    const [open, { toggle }] = useDisclosure();
 
-  const selectGameId = useAppSelector((state) => state.admin.selectedGameId);
+    const selectGameId = useAppSelector((state) => state.admin.selectedGameId);
 
-  const form = useForm({
-    initialValues: initialValues,
-  });
-
-  const handleCancel = () => {
-    toggle();
-    form.reset();
-  };
-
-  const loadCardTypes = async () => {
-    dispatch(getAllCardTypes()).then(({ payload }) => {
-      responseWrapper(payload);
-
-      if (payload && !payload.hasErrors) {
-        handleCancel();
-      }
+    const form = useForm({
+        initialValues: initialValues,
     });
-  };
 
-  const handleAdd = async (newCardType: CardTypeDto) => {
-    const updateGameId: CardTypeDto = {
-      name: newCardType.name,
-      gameId: selectGameId,
+    const handleCancel = () => {
+        toggle();
+        form.reset();
     };
 
-    dispatch(createCardType(updateGameId)).then(({ payload }) => {
-      responseWrapper(payload, 'Card Type Added');
+    const loadCardTypes = async () => {
+        dispatch(getAllCardTypes()).then(({ payload }) => {
+            responseWrapper(payload);
 
-      if (payload && !payload.hasErrors) {
-        loadCardTypes();
-      }
-    });
-  };
+            if (payload && !payload.hasErrors) {
+                handleCancel();
+            }
+        });
+    };
 
-  const determineDisabled = selectGameId === 0;
+    const handleAdd = async (newCardType: CardTypeDto) => {
+        const updateGameId: CardTypeDto = {
+            name: newCardType.name,
+            gameId: selectGameId,
+        };
 
-  return (
-    <div>
-      <PrimaryButton
-        leftIcon={<IconPlus />}
-        onClick={toggle}
-        disabled={determineDisabled}
-      >
-        Add Card Type
-      </PrimaryButton>
+        dispatch(createCardType(updateGameId)).then(({ payload }) => {
+            responseWrapper(payload, 'Card Type Added');
 
-      <PrimaryModal opened={open} onClose={toggle} title="Add Card Type">
-        <form onSubmit={form.onSubmit(handleAdd)}>
-          <PrimaryTextInput
-            withAsterisk
-            label="Card Type"
-            {...form.getInputProps('name')}
-          />
+            if (payload && !payload.hasErrors) {
+                loadCardTypes();
+            }
+        });
+    };
 
-          <AdminButtons handleCancel={handleCancel} />
-        </form>
-      </PrimaryModal>
-    </div>
-  );
+    const determineDisabled = selectGameId === 0;
+
+    return (
+        <div>
+            <PrimaryButton
+                leftIcon={<IconPlus />}
+                onClick={toggle}
+                disabled={determineDisabled}
+            >
+                Add Card Type
+            </PrimaryButton>
+
+            <PrimaryModal opened={open} onClose={toggle} title="Add Card Type">
+                <form onSubmit={form.onSubmit(handleAdd)}>
+                    <PrimaryTextInput
+                        withAsterisk
+                        label="Card Type"
+                        {...form.getInputProps('name')}
+                    />
+
+                    <AdminButtons handleCancel={handleCancel} />
+                </form>
+            </PrimaryModal>
+        </div>
+    );
 }

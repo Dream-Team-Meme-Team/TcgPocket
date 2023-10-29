@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useSelector } from 'react-redux';
-import { dataSlice } from './DataSlice';
+import { dataSlice } from './dataSlice';
 import { authSlice } from './authSlice';
-import { adminSlice } from './AdminSlice';
+import { adminSlice } from './adminSlice';
 import { inventorySlice } from './inventorySlice';
 
 export const appStore = configureStore({

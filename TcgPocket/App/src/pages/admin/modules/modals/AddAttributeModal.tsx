@@ -1,5 +1,5 @@
 import { useDisclosure } from '@mantine/hooks';
-import { dispatch, useAppSelector } from '../../../../store/ConfigureStore';
+import { dispatch, useAppSelector } from '../../../../store/configureStore';
 import { useForm } from '@mantine/form';
 import { PrimaryButton } from '../../../../components/buttons/PrimaryButton';
 import { IconPlus } from '@tabler/icons-react';
@@ -7,79 +7,81 @@ import { PrimaryModal } from '../../../../components/modals/PrimaryModal';
 import { PrimaryTextInput } from '../../../../components/inputs/PrimaryTextInput';
 import { AdminButtons } from '../AdminButtons';
 import {
-  createAttribute,
-  getAllAttributes,
+    createAttribute,
+    getAllAttributes,
 } from '../../../../services/dataServices/AttributeServices';
 import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { AttributeDto } from '../../../../types/attributes';
 
 const initialValues = {
-  name: '',
-  gameId: 0,
+    name: '',
+    gameId: 0,
 } as const;
 
 export function AddAttributeModal(): React.ReactElement {
-  const [open, { toggle }] = useDisclosure();
+    const [open, { toggle }] = useDisclosure();
 
-  const selectedGameId = useAppSelector((state) => state.admin.selectedGameId);
+    const selectedGameId = useAppSelector(
+        (state) => state.admin.selectedGameId
+    );
 
-  const form = useForm({
-    initialValues: initialValues,
-  });
-
-  const handleCancel = () => {
-    toggle();
-    form.reset();
-  };
-
-  const loadAttributes = async () => {
-    dispatch(getAllAttributes()).then(({ payload }) => {
-      responseWrapper(payload);
-
-      if (payload && !payload.hasErrors) {
-        handleCancel();
-      }
+    const form = useForm({
+        initialValues: initialValues,
     });
-  };
 
-  const handleAdd = async (newAttribute: AttributeDto) => {
-    const updateAttribute: AttributeDto = {
-      name: newAttribute.name,
-      gameId: selectedGameId,
+    const handleCancel = () => {
+        toggle();
+        form.reset();
     };
 
-    dispatch(createAttribute(updateAttribute)).then(({ payload }) => {
-      responseWrapper(payload, 'Successfully added Attribute');
+    const loadAttributes = async () => {
+        dispatch(getAllAttributes()).then(({ payload }) => {
+            responseWrapper(payload);
 
-      if (payload && !payload.hasErrors) {
-        loadAttributes();
-      }
-    });
-  };
+            if (payload && !payload.hasErrors) {
+                handleCancel();
+            }
+        });
+    };
 
-  const determineDisabled = selectedGameId === 0;
+    const handleAdd = async (newAttribute: AttributeDto) => {
+        const updateAttribute: AttributeDto = {
+            name: newAttribute.name,
+            gameId: selectedGameId,
+        };
 
-  return (
-    <div>
-      <PrimaryButton
-        leftIcon={<IconPlus />}
-        onClick={toggle}
-        disabled={determineDisabled}
-      >
-        Add Attribute
-      </PrimaryButton>
+        dispatch(createAttribute(updateAttribute)).then(({ payload }) => {
+            responseWrapper(payload, 'Successfully added Attribute');
 
-      <PrimaryModal opened={open} onClose={toggle} title="Add Attribute">
-        <form onSubmit={form.onSubmit(handleAdd)}>
-          <PrimaryTextInput
-            withAsterisk
-            label="Attribute"
-            {...form.getInputProps('name')}
-          />
+            if (payload && !payload.hasErrors) {
+                loadAttributes();
+            }
+        });
+    };
 
-          <AdminButtons handleCancel={handleCancel} />
-        </form>
-      </PrimaryModal>
-    </div>
-  );
+    const determineDisabled = selectedGameId === 0;
+
+    return (
+        <div>
+            <PrimaryButton
+                leftIcon={<IconPlus />}
+                onClick={toggle}
+                disabled={determineDisabled}
+            >
+                Add Attribute
+            </PrimaryButton>
+
+            <PrimaryModal opened={open} onClose={toggle} title="Add Attribute">
+                <form onSubmit={form.onSubmit(handleAdd)}>
+                    <PrimaryTextInput
+                        withAsterisk
+                        label="Attribute"
+                        {...form.getInputProps('name')}
+                    />
+
+                    <AdminButtons handleCancel={handleCancel} />
+                </form>
+            </PrimaryModal>
+        </div>
+    );
 }
