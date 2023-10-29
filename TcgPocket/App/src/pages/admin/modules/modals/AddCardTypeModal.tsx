@@ -8,7 +8,7 @@ import { dispatch, useAppSelector } from '../../../../store/configureStore';
 import {
     createCardType,
     getAllCardTypes,
-} from '../../../../services/dataServices/CardTypeServices';
+} from '../../../../services/dataServices/cardTypeServices';
 import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { CardTypeDto } from '../../../../types/card-types';
 import { AdminButtons } from '../AdminButtons';

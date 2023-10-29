@@ -73,8 +73,7 @@ export function PrimaryNavigation(): React.ReactElement {
                             {/* <NavButton route={routes.deckBuilder}> Deck Builder</NavButton> */}
                             {isAdmin && (
                                 <NavButton route={routes.adminPortal}>
-                                    {' '}
-                                    Admin Portal{' '}
+                                    Admin Portal
                                 </NavButton>
                             )}
                         </Flex>

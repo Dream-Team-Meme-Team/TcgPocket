@@ -3,11 +3,11 @@ import { dispatch, useAppSelector } from '../../../store/configureStore';
 import { MantineTheme, createStyles } from '@mantine/core';
 import { FilterSideMenuProps } from '../FilterSideMenu';
 import { RenderFilterCategoryAndOptions } from './RenderFilterCategoryAndOptions';
-import { getAllCardTypes } from '../../../services/dataServices/CardTypeServices';
+import { getAllCardTypes } from '../../../services/dataServices/cardTypeServices';
 import { responseWrapper } from '../../../services/helpers/responseWrapper';
 import { getAllSets } from '../../../services/dataServices/SetServices';
 import { getAllRarities } from '../../../services/dataServices/RarityServices';
-import { getAllAttributes } from '../../../services/dataServices/AttributeServices';
+import { getAllAttributes } from '../../../services/dataServices/attributeServices';
 import { useEffectOnce } from 'react-use';
 
 type FilterCategoriesProps = Omit<FilterSideMenuProps, 'handleRemoveFilter'> & {

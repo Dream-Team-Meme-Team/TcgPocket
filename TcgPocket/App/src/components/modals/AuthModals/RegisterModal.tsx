@@ -7,7 +7,7 @@ import { PrimaryTextInput } from '../../inputs/PrimaryTextInput';
 import { UserCreateDto } from '../../../types/users';
 import { CSSProperties, useMemo, useState } from 'react';
 import { dispatch, useAppSelector } from '../../../store/configureStore';
-import { registerUser } from '../../../services/AuthServices';
+import { registerUser } from '../../../services/authServices';
 import { useFormValidation } from '../../../helpers/useFormValidation';
 import { error, success } from '../../../services/helpers/Notification';
 import { PrimaryPasswordInput } from '../../inputs/PrimaryPasswordInput';

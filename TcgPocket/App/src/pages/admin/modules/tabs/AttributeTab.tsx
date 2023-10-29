@@ -10,7 +10,7 @@ import {
     deleteAttribute,
     editAttribute,
     getAllAttributes,
-} from '../../../../services/dataServices/AttributeServices';
+} from '../../../../services/dataServices/attributeServices';
 import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { DeleteModal } from '../../../../components/modals/DeleteModal';
 import { setSelectedId } from '../../../../store/adminSlice';

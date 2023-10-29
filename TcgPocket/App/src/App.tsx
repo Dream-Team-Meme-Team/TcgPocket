@@ -10,7 +10,7 @@ import { PrimaryNavigation } from './navigation/PrimaryNavigation';
 import { AppRoutes } from './routes/AppRoutes';
 import { useNavbarHeight } from './hooks/useNavbarHeight';
 import { dispatch } from './store/configureStore';
-import { getSignedInUser } from './services/AuthServices';
+import { getSignedInUser } from './services/authServices';
 import { useAsync } from 'react-use';
 import { useLocation } from 'react-router-dom';
 import { useMemo } from 'react';

@@ -9,7 +9,7 @@ import {
     deleteCardType,
     editCardType,
     getAllCardTypes,
-} from '../../../../services/dataServices/CardTypeServices';
+} from '../../../../services/dataServices/cardTypeServices';
 import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { CardTypeGetDto } from '../../../../types/card-types';
 import { DeleteModal } from '../../../../components/modals/DeleteModal';

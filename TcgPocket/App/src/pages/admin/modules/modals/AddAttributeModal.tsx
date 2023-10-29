@@ -9,7 +9,7 @@ import { AdminButtons } from '../AdminButtons';
 import {
     createAttribute,
     getAllAttributes,
-} from '../../../../services/dataServices/AttributeServices';
+} from '../../../../services/dataServices/attributeServices';
 import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { AttributeDto } from '../../../../types/attributes';
 

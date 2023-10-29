@@ -11,7 +11,7 @@ import {
 } from '@tabler/icons-react';
 import { FilterSideMenuProps } from '../FilterSideMenu';
 import { CardTypeGetDto } from '../../../types/card-types';
-import { CardsService } from '../../../services/CardsService';
+import { CardsService } from '../../../services/cardsService';
 import { responseWrapper } from '../../../services/helpers/responseWrapper';
 import { CardFilterDto } from '../../../types/cards';
 
