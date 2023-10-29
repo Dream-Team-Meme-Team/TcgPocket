@@ -1,6 +1,6 @@
 import { MantineTheme, ScrollArea, createStyles } from '@mantine/core';
 import { PrimarySelect } from '../../../components/inputs/PrimarySelect';
-import { dispatch, useAppSelector } from '../../../store/ConfigureStore';
+import { dispatch, useAppSelector } from '../../../store/configureStore';
 import { useEffectOnce } from 'react-use';
 import { getAllGames } from '../../../services/dataServices/GameServices';
 import { responseWrapper } from '../../../services/helpers/responseWrapper';

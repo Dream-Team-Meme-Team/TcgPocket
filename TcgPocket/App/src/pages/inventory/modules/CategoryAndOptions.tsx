@@ -15,18 +15,18 @@ import {
     IconSearch,
 } from '@tabler/icons-react';
 import { PrimaryBadge } from '../../../components/badges/PrimaryBadge';
-import { PrimaryInput } from '../../../components/inputs/PrimaryInput';
 import { useDisclosure } from '@mantine/hooks';
 import { useEffect, useMemo, useState } from 'react';
 import { GameGetDto } from '../../../types/games';
 import { CardTypeGetDto } from '../../../types/card-types';
-import { dispatch } from '../../../store/ConfigureStore';
+import { dispatch } from '../../../store/configureStore';
 import {
     toggleCardTypeFilters,
     toggleRarityFilters,
     toggleSetFilters,
 } from '../../../store/inventorySlice';
 import { CategoryLabel } from '../../../enums/categoryLabel';
+import { PrimaryTextInput } from '../../../components/inputs/PrimaryTextInput';
 
 type CategoryAndOptionsProps = {
     selectedGame: GameGetDto | null;
@@ -101,7 +101,7 @@ export function CategoryAndOptions({
 
             <Collapse in={opened}>
                 <div className={classes.collapse}>
-                    <PrimaryInput
+                    <PrimaryTextInput
                         icon={<IconSearch />}
                         placeholder="Search"
                         value={searchText}

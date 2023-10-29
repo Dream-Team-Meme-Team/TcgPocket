@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { InventoryDisplay } from './modules/InventoryDisplay';
-import { MantineTheme, Pagination, createStyles, Text } from '@mantine/core';
+import { MantineTheme, createStyles, Text } from '@mantine/core';
 import { FilterMenu } from './modules/FilterMenu';
 import { useNavbarHeight } from '../../hooks/useNavbarHeight';
-import { dispatch, useAppSelector } from '../../store/ConfigureStore';
+import { dispatch, useAppSelector } from '../../store/configureStore';
 import { shallowEqual } from 'react-redux';
 import { getAllCards } from '../../services/CardsService';
 import { responseWrapper } from '../../services/helpers/responseWrapper';
@@ -11,7 +11,9 @@ import { CardFilterDto } from '../../types/cards';
 import { GameGetDto } from '../../types/games';
 import { PrimarySelect } from '../../components/inputs/PrimarySelect';
 import { defaultGap, defaultPadding } from '../../constants/theme';
-import { IconCards } from '@tabler/icons-react';
+import { IconCards, IconSearch } from '@tabler/icons-react';
+import { PaginationSelect } from '../../components/pagination/PaginationSelect';
+import { PrimaryTextInput } from '../../components/inputs/PrimaryTextInput';
 
 const pageSizeOptions: string[] = ['15', '24', '36'];
 
@@ -84,15 +86,17 @@ export function InventoryPage(): React.ReactElement {
                         </div>
                     </div>
 
-                    <Pagination
-                        color={'violet'}
-                        withEdges
-                        siblings={2}
-                        boundaries={2}
-                        className={classes.paginationControls}
-                        value={currentPage}
-                        onChange={setCurrentPage}
+                    {/* currently we do not have any implementation in place for this. using as a placeholder */}
+                    <PrimaryTextInput
+                        icon={<IconSearch />}
+                        placeholder="Search Cards"
+                    />
+
+                    <PaginationSelect
+                        currentPage={currentPage}
+                        setCurrentPage={setCurrentPage}
                         total={cards ? cards.pageCount : 16}
+                        className={classes.paginationControls}
                     />
                 </div>
 
@@ -122,18 +126,18 @@ const useStyles = createStyles((theme: MantineTheme) => {
 
         header: {
             display: 'grid',
-            gridTemplateColumns: 'auto auto',
+            gridTemplateColumns: 'auto 1fr auto',
+            alignItems: 'center',
+            gap: defaultGap,
 
-            borderBottomWidth: 2,
+            borderBottomWidth: 1,
             borderBottomStyle: 'solid',
-            bottomBottomColor: theme.colors.primaryPurpleColor[0],
+            borderBottomColor: theme.colors.primaryPurpleColor[0],
         },
 
         pageSizeControls: {
             display: 'flex',
             alignItems: 'center',
-
-            // width: 'auto',
 
             gap: defaultGap,
             padding: defaultPadding,
@@ -153,8 +157,10 @@ const useStyles = createStyles((theme: MantineTheme) => {
         paginationControls: {
             display: 'flex',
             justifyContent: 'flex-end',
+            alignItems: 'center',
 
             padding: '10px',
+            gap: defaultGap,
         },
     };
 });
