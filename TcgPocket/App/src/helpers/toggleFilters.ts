@@ -1,13 +1,13 @@
-import { InventoryState } from '../store/inventorySlice';
-
-export function toggleFilters(state: InventoryState, payload: number) {
-    const applied = state.cardTypeFilters.some(
-        (filterId) => filterId === payload
-    );
+/**
+ * Takes in the state of the filter, which should be an array of numbers,
+ * and the filter that will be toggled. If the payload (filter) is already
+ * found in the current active filters (state), then it is removed; otherwise,
+ * the filter is added to the current filters state.
+ */
+export function toggleFilters(state: number[], payload: number) {
+    const applied = state.some((filterId) => filterId === payload);
 
     if (applied) {
-        state.cardTypeFilters = state.cardTypeFilters.filter(
-            (filter) => filter !== payload
-        );
-    } else state.cardTypeFilters.push(payload);
+        state = state.filter((filter) => filter !== payload);
+    } else state.push(payload);
 }

@@ -14,6 +14,7 @@ import { defaultGap, defaultPadding } from '../../constants/theme';
 import { IconCards, IconSearch } from '@tabler/icons-react';
 import { PaginationSelect } from '../../components/pagination/PaginationSelect';
 import { PrimaryTextInput } from '../../components/inputs/PrimaryTextInput';
+import { resetFilters } from '../../store/inventorySlice';
 
 const pageSizeOptions: string[] = ['15', '24', '36'];
 
@@ -35,6 +36,10 @@ export function InventoryPage(): React.ReactElement {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(15);
     const [selectedGame, setSelectedGame] = useState<GameGetDto | null>(null);
+
+    useEffect(() => {
+        dispatch(resetFilters());
+    }, [selectedGame]);
 
     useEffect(() => {
         const gameId = selectedGame ? [selectedGame.id] : undefined;

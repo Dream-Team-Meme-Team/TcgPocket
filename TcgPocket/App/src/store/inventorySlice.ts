@@ -45,33 +45,30 @@ export const inventorySlice = createSlice({
     name: 'Inventory',
     initialState: INITIAL_STATE,
     reducers: {
+        resetFilters(state) {
+            state.cardTypeFilters = [];
+            state.setFilters = [];
+            state.rarityFilters = [];
+        },
         toggleCardTypeFilters(
             state,
             {
                 payload,
             }: PayloadAction<InventoryState['cardTypeFilters'][number]>
         ) {
-            const applied = state.cardTypeFilters.some(
-                (filterId) => filterId === payload
-            );
-
-            if (applied) {
-                state.cardTypeFilters = state.cardTypeFilters.filter(
-                    (filter) => filter !== payload
-                );
-            } else state.cardTypeFilters.push(payload);
+            toggleFilters(state.cardTypeFilters, payload);
         },
         toggleSetFilters(
             state,
             { payload }: PayloadAction<InventoryState['setFilters'][number]>
         ) {
-            toggleFilters(state, payload);
+            toggleFilters(state.setFilters, payload);
         },
         toggleRarityFilters(
             state,
             { payload }: PayloadAction<InventoryState['rarityFilters'][number]>
         ) {
-            toggleFilters(state, payload);
+            toggleFilters(state.rarityFilters, payload);
         },
         updateSelectedGame(
             state,
@@ -79,35 +76,6 @@ export const inventorySlice = createSlice({
         ) {
             state.selectedGame = payload;
         },
-        // toggleAppliedFilterOnInventory(
-        //     state,
-        //     { payload }: PayloadAction<InventoryState['appliedFilters'][number]>
-        // ) {
-        //     const alreadyApplied = state.appliedFilters.some(
-        //         (filter) => filter.id === payload.id
-        //     );
-
-        //     if (alreadyApplied) {
-        //         state.appliedFilters = state.appliedFilters.filter(
-        //             (filter) => filter.id !== payload.id
-        //         );
-        //     } else {
-        //         state.appliedFilters.push(payload);
-        //     }
-        // },
-        // toggleAllFiltersOnInventory(
-        //     state,
-        //     { payload }: PayloadAction<InventoryState['appliedFilters']>
-        // ) {
-        //     if (state.appliedFilters.length === 0) {
-        //         payload.forEach((propery) => {
-        //             state.appliedFilters.push(propery);
-        //         });
-        //     } else state.appliedFilters = [];
-        // },
-        // removeAllFiltersOnInventory(state) {
-        //     state.appliedFilters = [];
-        // },
         updatePagedFilters(
             state,
             { payload }: PayloadAction<InventoryState['pagedFilters']>
@@ -135,4 +103,5 @@ export const {
     toggleCardTypeFilters,
     toggleRarityFilters,
     toggleSetFilters,
+    resetFilters,
 } = inventorySlice.actions;
