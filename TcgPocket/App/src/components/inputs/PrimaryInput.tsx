@@ -6,7 +6,7 @@ type PrimaryInputProps = InputProps & InputHTMLAttributes<HTMLInputElement>;
 
 const inputStyling = (theme: MantineTheme): CSSObject => ({
     input: {
-        background: theme.colors.textBoxColor[0],
+        background: theme.black,
         borderColor: theme.colors.secondaryBlueColors[0],
         borderWidth: 1,
         backgroundColor: 'white',

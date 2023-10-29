@@ -26,18 +26,13 @@ export type CardDetailDto = CardGetDto & {
 
 export type CardFilterDto = {
     id?: number;
-    // this should be searchText
     name?: string;
-    // which can include this since it's searchable
     cardNumber?: string;
-    // game id should only ever be one -- `selectedGameId`
     gameIds?: number[];
     cardTypeIds?: number[];
     rarityIds?: number[];
     setIds?: number[];
-    // why would we ever search by URL?
     imageUrl?: string;
-    // searchText
     description?: string;
 } & PageDto;
 
