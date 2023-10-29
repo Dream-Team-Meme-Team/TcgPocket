@@ -1,7 +1,3 @@
-import pytesseract
-# NOTE: this is here for brandon because he is dumb and will forget he needs this
-#pytesseract.pytesseract.tesseract_cmd = r'C:/Program Files/Tesseract-OCR/tesseract.exe'
-
 import os
 import torch
 from PIL import Image
