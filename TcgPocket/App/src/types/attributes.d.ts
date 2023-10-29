@@ -6,3 +6,9 @@ export type AttributeDto = {
 };
 
 export type AttributeGetDto = Id & AttributeDto;
+
+export type AttributeFilterDto = {
+  id?: number;
+  name?: string;
+  gameId?: number;
+} & PageDto;

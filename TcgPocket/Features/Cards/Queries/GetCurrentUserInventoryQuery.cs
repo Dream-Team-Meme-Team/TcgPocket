@@ -9,6 +9,8 @@ using TcgPocket.Shared.PagedResult;
 using Microsoft.AspNetCore.Identity;
 using TcgPocket.Features.Users;
 using TcgPocket.Shared;
+using TcgPocket.Features.UserCards;
+using Microsoft.IdentityModel.Tokens;
 
 public class GetCurrentUserInventoryQuery : FilteredPageRequest<Card, CardDisplayDto, PagedCardFilterDto>
 {
@@ -20,6 +22,7 @@ public class GetCurrentUserInventoryQueryHandler
     private readonly SignInManager<User> _signInManager;
     private readonly IMapper _mapper;
     private readonly IValidator<PagedCardFilterDto> _validator;
+    private readonly DataContext _dataContext;
 
     public GetCurrentUserInventoryQueryHandler(
         DataContext dataContext, IMapper mapper, IValidator<PagedCardFilterDto> validator, SignInManager<User> signInManager)
@@ -28,6 +31,34 @@ public class GetCurrentUserInventoryQueryHandler
         _signInManager = signInManager;
         _mapper = mapper;
         _validator = validator;
+        _dataContext = dataContext;
+    }
+
+    protected override IQueryable<Card> FilterEntities(IQueryable<Card> query, GetCurrentUserInventoryQuery request)
+    {
+        query = base.FilterEntities(query, request);
+
+        if (!request.Filter.GameIds.IsNullOrEmpty())
+        {
+            query = query.Where(x => request.Filter.GameIds.Any(y => y == x.GameId));
+        }
+
+        if (!request.Filter.SetIds.IsNullOrEmpty())
+        {
+            query = query.Where(x => request.Filter.SetIds.Any(y => y == x.SetId));
+        }
+
+        if (!request.Filter.RarityIds.IsNullOrEmpty())
+        {
+            query = query.Where(x => request.Filter.RarityIds.Any(y => y == x.RarityId));
+        }
+
+        if (!request.Filter.CardTypeIds.IsNullOrEmpty())
+        {
+            query = query.Where(x => request.Filter.CardTypeIds.Any(y => y == x.CardTypeId));
+        }
+
+        return query;
     }
 
     protected override async Task<Response<PagedResult<CardDisplayDto>>> ValidateRequest(GetCurrentUserInventoryQuery request, CancellationToken cancellationToken)
@@ -52,15 +83,19 @@ public class GetCurrentUserInventoryQueryHandler
         var user = _signInManager.GetSignedInUserAsync().Result;
         var userId = user is null ? 0 : user.Id;
 
-        return base.GetEntities()
-            .Include(x => x.CardAttributes)
-            .ThenInclude(x => x.Attribute)
+        return _dataContext.Set<UserCard>()
+            .Include(x => x.Card)
             .ThenInclude(x => x.CardAttributes)
-            .Include(x => x.Game)
-            .Include(x => x.CardType)
-            .Include(x => x.Rarity)
-            .Include(x => x.Set)
-            .Include(x => x.UserCards
-                .Where(y => y.UserId == userId));
+            .ThenInclude(x => x.Attribute)
+            .Include(x => x.Card)
+            .ThenInclude(x => x.Game)
+            .Include(x => x.Card)
+            .ThenInclude(x => x.CardType)
+            .Include(x => x.Card)
+            .ThenInclude(x => x.Rarity)
+            .Include(x => x.Card)
+            .ThenInclude(x => x.Set)
+            .Where(x => x.UserId == userId)
+            .Select(x => x.Card);
     }
 }
