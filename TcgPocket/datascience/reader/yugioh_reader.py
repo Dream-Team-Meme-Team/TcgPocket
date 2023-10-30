@@ -1,7 +1,7 @@
 import numpy as np
 import easyocr
 
-class YugiohScraper:
+class YugiohReader:
 
     reader = easyocr.Reader(['en'])
     query_base = 'https://db.ygoprodeck.com/api/v7/cardsetsinfo.php?setcode='
