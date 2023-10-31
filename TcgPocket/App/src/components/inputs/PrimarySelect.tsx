@@ -26,11 +26,7 @@ export function PrimarySelect({
     ...props
 }: PrimarySelectProps): React.ReactElement {
     return (
-        <Select
-            sx={sx ?? selectStyling}
-            {...props}
-            // clearButtonProps={{ style: { color: 'black' } }}
-        >
+        <Select sx={sx ?? selectStyling} {...props}>
             {children}
         </Select>
     );

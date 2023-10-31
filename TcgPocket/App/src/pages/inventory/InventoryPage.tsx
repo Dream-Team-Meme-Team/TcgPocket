@@ -149,7 +149,7 @@ const useStyles = createStyles((theme: MantineTheme) => {
         },
 
         select: {
-            width: 90,
+            width: 100,
         },
 
         pagination: {
