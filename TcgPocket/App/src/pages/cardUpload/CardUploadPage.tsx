@@ -44,7 +44,7 @@ export function CardUploadPage() {
           <Dropzone
             onDrop={uploadCard}
             onReject={(files) => console.log('rejected files', files)}
-            maxSize={3 * 1024 ** 2}
+            // maxSize={3 * 1024 ** 2}
             accept={IMAGE_MIME_TYPE}
           >
             <Group
