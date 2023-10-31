@@ -1,3 +1,5 @@
+import { Id } from './shared';
+
 export type RoleDto = {
   name: string;
 };
