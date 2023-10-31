@@ -29,8 +29,8 @@ def get_prices(url: str):
         soup = bs(resp.content, 'html.parser')
         card_dates = soup.find('table', class_='hoverable-rows sortable').tbody.find_all('td', class_='date')
         card_prices = soup.find('table', class_='hoverable-rows sortable').tbody.find_all('td', class_='numeric')
-        # print([date.text for date in card_dates], [price.span.text for price in card_prices])
-        print([date.text for date in card_dates])
+        
+        print(dict([(date.text, float(price.span.text.strip('$'))) for  i, (date, price) in enumerate(zip(card_dates, card_prices))]))
         # return {price.span.text for price in cards}
     except:
         pass
@@ -52,5 +52,5 @@ print(set_links)
 # %% CARD PRICES
 for set, cards in set_links.items():
     for card, link in cards.items():
-        # print(card, get_prices(link))
+        print(set_links[set][card])
         get_prices(link)
