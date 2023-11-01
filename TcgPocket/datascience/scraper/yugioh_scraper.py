@@ -1,46 +1,56 @@
 import numpy as np
-import pytesseract as tess
-import cv2
-import json
-from difflib import SequenceMatcher as sm
+import easyocr
 
 class YugiohScraper:
 
-    ygo_json = json.load(open("C:/Users/abbyo/OneDrive - selu.edu/Desktop/yugioh.json"))['data']    # also a wip
+    reader = easyocr.Reader(['en'])
+    query_base = 'https://db.ygoprodeck.com/api/v7/cardsetsinfo.php?setcode='
 
     def apply_filter(self, raw_card):
+        """ Crops the raw img key attributes >>> set code
+
+        Args:
+            raw_card (PIL): user uploaded img in original size
+
+        Returns:
+            list: the cropped key attributes 
         """
-        :param raw_card: user uploaded image of card
-        :return: one cropped img containing the unique code
-        """
+
         cropped = np.array(raw_card.resize([421,614]))[435:455, 300:385, :]
 
-        thresh = cv2.adaptiveThreshold(cv2.cvtColor(cropped, cv2.COLOR_BGR2GRAY), 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 15, 3)
-        median = cv2.medianBlur(thresh, 1)
-
-        return [median]
+        return [cropped]
     
     def read_card(self, filt_attrbs: list):
-        """
-        :param filt_cards: list of cropped images containing the values needed to be read
-        :return: the read values from list of cropped images
-        """
-        params = []
-        for attrb in filt_attrbs:
-            params.append(tess.image_to_string(attrb, config="--psm 13  -c tessedit_char_whitelist=123456789-ABCDEFGHIJKLMNOPQRSTUVWXYZ").strip('\n'))
-        
-        return params
+        """ Reads the passed attribute imgs >>> set code
 
-    def get_json(self, params):
+        Args:
+            filt_attrbs (list): cropped imgs of attributes 
+
+        Returns:
+            list: the read values from list of key attributes
         """
-        WIP
+
+        return [self.reader.readtext(attrb)[0][1] for attrb in filt_attrbs ]
+
+    def gen_query(self, params: list):
+        """ Generates the query to be passed to the backend
+
+        Args:
+            params (list): the read key attributes
+
+        Returns:
+            str: query with the set code appended
         """
-        for card in self.ygo_json:
-            try:
-                for set in card['card_sets']:
-                    if sm(None, params[0], set['set_code']).ratio() > 0.75:
-                        print(set['set_code'])
-            except:
-                pass
-            
-        return
+        
+        mod = []
+        for param in params:
+            set, num = param.split('-')
+            set = set.replace('0', 'O') if '0' in set else set    
+            num = num.replace('O', '0') if 'O' in num else num
+            mod.append(set + '-' + num)
+        #
+
+        # TODO: query
+        q = self.query_base + mod[0]
+        
+        return q

@@ -6,3 +6,9 @@ export type CardTypeDto = {
 };
 
 export type CardTypeGetDto = Id & CardTypeDto;
+
+export type CardTypeFilterDto = {
+  id?: number;
+  name?: string;
+  gameId?: number;
+} & PageDto;

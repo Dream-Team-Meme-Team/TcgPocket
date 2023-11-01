@@ -6,3 +6,9 @@ export type RarityDto = {
 };
 
 export type RarityGetDto = Id & RarityDto;
+
+export type RarityFilterDto = {
+  id?: number;
+  name?: string;
+  gameId?: number;
+} & PageDto;

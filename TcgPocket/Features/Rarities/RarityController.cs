@@ -1,8 +1,11 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using TcgPocket.Features.CardTypes.Queries;
 using TcgPocket.Features.Rarities.Commands;
+using TcgPocket.Features.Rarities.Dtos;
 using TcgPocket.Features.Rarities.Queries;
 using TcgPocket.Shared;
+using TcgPocket.Shared.PagedResult;
 
 namespace TcgPocket.Features.Rarities
 {
@@ -15,6 +18,32 @@ namespace TcgPocket.Features.Rarities
         public RarityController(IMediator mediator)
         {
             _mediator = mediator;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<Response<List<RarityGetDto>>>> GetAllRarities()
+        {
+            var response = await _mediator.Send(new GetAllRaritiesQuery { });
+
+            return response.HasErrors ? BadRequest(response) : Ok(response);
+        }
+
+        [HttpGet("{id}", Name = nameof(GetRarityById))]
+        public async Task<ActionResult<Response<RarityGetDto>>> GetRarityById([FromRoute]int id)
+        {
+            var response = await _mediator.Send(new GetRarityByIdQuery { Id = id });
+
+            return response.HasErrors ? BadRequest(response) : Ok(response);
+        }
+
+        [HttpGet("paginated")]
+        public async Task<ActionResult<Response<PagedResult<RarityGetDto>>>>
+           GetAllRaritiesPaginatedQuery([FromQuery] PagedRarityFilterDto filter)
+        {
+            var response = await _mediator
+                .Send(new GetPagedRaritiesQuery { Filter = filter });
+
+            return response.HasErrors ? BadRequest(response) : Ok(response);
         }
 
         [HttpPost]
@@ -31,22 +60,6 @@ namespace TcgPocket.Features.Rarities
         public async Task<ActionResult<Response<RarityGetDto>>> UpdateRarity([FromRoute]int id, [FromBody] RarityDto dto)
         {
             var response = await _mediator.Send(new UpdateRarityCommand { Id = id, RarityDto = dto });
-
-            return response.HasErrors ? BadRequest(response) : Ok(response);
-        }
-
-        [HttpGet("{id}", Name = nameof(GetRarityById))]
-        public async Task<ActionResult<Response<RarityGetDto>>> GetRarityById([FromRoute]int id)
-        {
-            var response = await _mediator.Send(new GetRarityByIdQuery { Id = id });
-
-            return response.HasErrors ? BadRequest(response) : Ok(response);
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<Response<List<RarityGetDto>>>> GetAllRarities()
-        {
-            var response = await _mediator.Send(new GetAllRaritiesQuery { });
 
             return response.HasErrors ? BadRequest(response) : Ok(response);
         }

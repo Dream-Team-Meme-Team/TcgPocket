@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using TcgPocket.Features.Attributes.Commands;
 using TcgPocket.Features.Attributes.Queries;
 using TcgPocket.Shared;
+using TcgPocket.Shared.PagedResult;
+using TcgPocket.Features.Attributes.Dtos;
 
 namespace TcgPocket.Features.Attributes;
 
@@ -33,7 +35,17 @@ public class AttributesController : ControllerBase
 		return response.HasErrors ? BadRequest(response) : Ok(response);
 	}
 
-	[HttpPost]
+    [HttpGet("paginated")]
+    public async Task<ActionResult<Response<PagedResult<AttributeGetDto>>>>
+            GetAllAttributesPaginatedQuery([FromQuery] PagedAttributeFilterDto filter)
+    {
+        var response = await _mediator
+            .Send(new GetPagedAttributesQuery { Filter = filter });
+
+        return response.HasErrors ? BadRequest(response) : Ok(response);
+    }
+
+    [HttpPost]
 	public async Task<ActionResult<Response<AttributeGetDto>>> CreateAttribute([FromBody] AttributeDto data)
 	{
 		var response = await _mediator.Send(new CreateAttributeCommand{Attribute = data});

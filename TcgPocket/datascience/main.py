@@ -1,7 +1,3 @@
-import pytesseract
-# NOTE: this is here for brandon because he is dumb and will forget he needs this
-#pytesseract.pytesseract.tesseract_cmd = r'C:/Program Files/Tesseract-OCR/tesseract.exe'
-
 import os
 import torch
 from PIL import Image
@@ -39,9 +35,7 @@ def all_of_it(raw_img: bytes):
     # scrape
     scraper = scraper_classifier(classif)
     filt = scraper.apply_filter(raw_img)
-    read = scraper.read_card(filt)\
+    read = scraper.read_card(filt)
 
-    json = scraper.get_json(read)
-
-    return json
+    return scraper.gen_query(read)
 #

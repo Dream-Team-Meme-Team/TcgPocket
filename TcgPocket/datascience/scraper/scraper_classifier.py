@@ -1,5 +1,5 @@
 from .magic_scraper import MagicScraper
-# from scraper.yugioh_scraper import YugiohScraper
+from .yugioh_scraper import YugiohScraper
 from .pokemon_scraper import PokemonScraper
 
 def scraper_classifier(classifier):
@@ -14,7 +14,7 @@ def scraper_classifier(classifier):
     if classifier == 0: 
         scraper_obj = MagicScraper()
     elif classifier == 1:
-        pass
+        scraper_obj = YugiohScraper()
     else:
         scraper_obj = PokemonScraper()
 
