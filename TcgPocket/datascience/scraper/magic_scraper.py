@@ -19,7 +19,7 @@ def get_cards(url: str):
     soup = bs(resp.content, 'html.parser')
     cards = soup.find('table', id='games_table').tbody.find_all('td', class_='title')
 
-    return {card.text.strip('\n'): base + card.a.get('href') for card in cards}
+    return {card.text.strip('\n, Magic '): base + card.a.get('href') for card in cards}
 #
 
 def get_prices(url: str):
@@ -30,8 +30,7 @@ def get_prices(url: str):
         card_dates = soup.find('table', class_='hoverable-rows sortable').tbody.find_all('td', class_='date')
         card_prices = soup.find('table', class_='hoverable-rows sortable').tbody.find_all('td', class_='numeric')
         
-        print(dict([(date.text, float(price.span.text.strip('$'))) for  i, (date, price) in enumerate(zip(card_dates, card_prices))]))
-        # return {price.span.text for price in cards}
+        return dict([(date.text, float(price.span.text.strip('$'))) for  i, (date, price) in enumerate(zip(card_dates, card_prices))])
     except:
         pass
     #
@@ -52,5 +51,10 @@ print(set_links)
 # %% CARD PRICES
 for set, cards in set_links.items():
     for card, link in cards.items():
-        print(set_links[set][card])
-        get_prices(link)
+        set_links[set][card] = get_prices(link)
+    #
+    print(set_links[set])
+#
+
+# %% PLAYING WITH IT
+print(set_links['Magic Wilds of Eldraine'])
