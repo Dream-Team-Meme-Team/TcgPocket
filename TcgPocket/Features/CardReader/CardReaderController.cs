@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using TcgPocket.Shared;
 
 namespace TcgPocket.Features.CardReader;
 
@@ -16,12 +17,7 @@ public class CardReaderController : ControllerBase
     }
 
     [HttpPost]
-    [RequestFormLimits(
-        ValueLengthLimit = int.MaxValue,
-        MultipartBodyLengthLimit = int.MaxValue,
-        MultipartHeadersLengthLimit = int.MaxValue)]
-    [RequestSizeLimit(int.MaxValue)]
-    public async Task<ActionResult<string>> ReadCard(IFormFile data)
+    public async Task<ActionResult<Response<MachineLearningModelData>>> ReadCard(IFormFile data)
     {
         var response = await _mediator.Send(new ReadCardRequest{ Image = data});
 

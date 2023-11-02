@@ -37,5 +37,5 @@ def all_of_it(raw_img: bytes):
     filt = scraper.apply_filter(raw_img)
     read = scraper.read_card(filt)
 
-    return scraper.gen_query(read)
+    return scraper.gen_query(read), classif
 #

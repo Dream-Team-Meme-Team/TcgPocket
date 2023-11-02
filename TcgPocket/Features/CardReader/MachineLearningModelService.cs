@@ -1,12 +1,14 @@
 using System.Diagnostics;
+using Newtonsoft.Json;
 using TcgPocket.Settings;
+using TcgPocket.Shared;
 
 namespace TcgPocket.Features.CardReader;
 
 public interface IMachineLearningModelService
 {
     public ProcessStartInfo GetProcessStartInfo(string blobName);
-    public Task<string> RunProcess(ProcessStartInfo startInfo);
+    public Task<Response<MachineLearningModelData>> RunProcess(ProcessStartInfo startInfo);
 }
 
 public class MachineLearningModelService: IMachineLearningModelService
@@ -33,17 +35,37 @@ public class MachineLearningModelService: IMachineLearningModelService
         };
     }
 
-    public async Task<string> RunProcess(ProcessStartInfo startInfo)
+    public async Task<Response<MachineLearningModelData>> RunProcess(ProcessStartInfo startInfo)
     {
-        using var process = new Process
+        try
         {
-            StartInfo = startInfo
-        };
-        
-        process.Start();
-        process.StandardInput.Close();
-        await process.WaitForExitAsync();
+            using var process = new Process
+            {
+                StartInfo = startInfo
+            };
 
-        return await process.StandardOutput.ReadToEndAsync();
+            process.Start();
+            process.StandardInput.Close();
+            await process.WaitForExitAsync();
+            var pythonResult = await process.StandardOutput.ReadToEndAsync();
+
+            return JsonConvert.DeserializeObject<Response<MachineLearningModelData>>(pythonResult);
+        }
+        catch (Exception e)
+        {
+            return Error.AsResponse<MachineLearningModelData>(e.Message, "shid borke");
+        }
     }
+}
+
+public class MachineLearningModelData
+{
+    public int CardType { get; set; }
+    public string CardUri { get; set; }
+}
+
+public enum CardTypes {
+    Magic,
+    Yugioh,
+    Pokemon
 }

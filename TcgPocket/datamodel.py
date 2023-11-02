@@ -1,7 +1,7 @@
 from sys import argv
 import datascience.main as av
 from azure.storage.blob import BlobServiceClient
-
+import json
 
 
 if __name__ == '__main__':
@@ -11,8 +11,24 @@ if __name__ == '__main__':
 
         # Download the image as a stream
         result = av.all_of_it(blob_client.download_blob().readall())
-        print(result)
+
+        response = {
+            "data" : {
+                "cardUri" : result[0],
+                "cardType" : result[1],
+            },
+            "errors" : []
+        }
+
+        print(json.dumps(response))
 
     except Exception as e:
-        print('av is sad :(')
-        print(e)
+        response = {
+            "data" : None,
+            "errors" : [{
+                "property" : "av.py",
+                "message" : e.__str__()
+            }],
+        }
+
+        print(response)
