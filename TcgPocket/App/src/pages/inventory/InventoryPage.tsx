@@ -5,7 +5,7 @@ import { FilterMenu } from './modules/FilterMenu';
 import { useNavbarHeight } from '../../hooks/useNavbarHeight';
 import { dispatch, useAppSelector } from '../../store/configureStore';
 import { shallowEqual } from 'react-redux';
-import { getAllCards } from '../../services/CardsService';
+import { getAllCards } from '../../services/cardsService';
 import { responseWrapper } from '../../services/helpers/responseWrapper';
 import { CardFilterDto } from '../../types/cards';
 import { GameGetDto } from '../../types/games';
@@ -15,6 +15,7 @@ import { IconCards, IconSearch } from '@tabler/icons-react';
 import { PaginationSelect } from '../../components/pagination/PaginationSelect';
 import { PrimaryTextInput } from '../../components/inputs/PrimaryTextInput';
 import { resetFilters } from '../../store/inventorySlice';
+import { PrimaryButton } from '../../components/buttons/PrimaryButton';
 
 const pageSizeOptions: string[] = ['15', '24', '36'];
 
@@ -36,6 +37,29 @@ export function InventoryPage(): React.ReactElement {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(15);
     const [selectedGame, setSelectedGame] = useState<GameGetDto | null>(null);
+    const [searchText, setSearchText] = useState('');
+
+    const handleSearchText = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchText(e.target.value);
+    };
+
+    const search = () => {
+        const gameId = selectedGame ? [selectedGame.id] : undefined;
+
+        const filtered: CardFilterDto = {
+            name: searchText,
+            gameIds: gameId,
+            cardTypeIds: cardTypeFilters ?? undefined,
+            setIds: setFilters ?? undefined,
+            rarityIds: rarityFilters ?? undefined,
+            currentPage: currentPage,
+            pageSize: pageSize,
+        };
+
+        dispatch(getAllCards(filtered)).then(({ payload }) =>
+            responseWrapper(payload)
+        );
+    };
 
     useEffect(() => {
         dispatch(resetFilters());
@@ -95,7 +119,11 @@ export function InventoryPage(): React.ReactElement {
                     <PrimaryTextInput
                         icon={<IconSearch />}
                         placeholder="Search Cards"
+                        value={searchText}
+                        onChange={handleSearchText}
                     />
+
+                    <PrimaryButton onClick={search}>Search</PrimaryButton>
 
                     <PaginationSelect
                         currentPage={currentPage}
@@ -131,7 +159,7 @@ const useStyles = createStyles((theme: MantineTheme) => {
 
         header: {
             display: 'grid',
-            gridTemplateColumns: 'auto 1fr auto',
+            gridTemplateColumns: 'auto 1fr auto auto',
             alignItems: 'center',
             gap: defaultGap,
 

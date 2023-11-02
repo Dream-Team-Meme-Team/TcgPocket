@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { CardDisplayDto, CardFilterDto } from '../types/cards';
 import { PagedResult } from '../types/shared';
-import { getAllCards } from '../services/CardsService';
+import { getAllCards } from '../services/cardsService';
 import { GameGetDto } from '../types/games';
 import { toggleFilters } from '../helpers/toggleFilters';
 
@@ -56,19 +56,22 @@ export const inventorySlice = createSlice({
                 payload,
             }: PayloadAction<InventoryState['cardTypeFilters'][number]>
         ) {
-            toggleFilters(state.cardTypeFilters, payload);
+            state.cardTypeFilters = toggleFilters(
+                state.cardTypeFilters,
+                payload
+            );
         },
         toggleSetFilters(
             state,
             { payload }: PayloadAction<InventoryState['setFilters'][number]>
         ) {
-            toggleFilters(state.setFilters, payload);
+            state.setFilters = toggleFilters(state.setFilters, payload);
         },
         toggleRarityFilters(
             state,
             { payload }: PayloadAction<InventoryState['rarityFilters'][number]>
         ) {
-            toggleFilters(state.rarityFilters, payload);
+            state.rarityFilters = toggleFilters(state.rarityFilters, payload);
         },
         updateSelectedGame(
             state,

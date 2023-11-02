@@ -4,10 +4,12 @@
  * found in the current active filters (state), then it is removed; otherwise,
  * the filter is added to the current filters state.
  */
-export function toggleFilters(state: number[], payload: number) {
-    const applied = state.some((filterId) => filterId === payload);
+export function toggleFilters(filterState: number[], payload: number) {
+    const applied = filterState.find((filterId) => filterId === payload);
 
     if (applied) {
-        state = state.filter((filter) => filter !== payload);
-    } else state.push(payload);
+        return filterState.filter((filter) => filter !== applied);
+    } else {
+        return filterState.concat(payload);
+    }
 }

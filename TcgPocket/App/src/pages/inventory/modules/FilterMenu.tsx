@@ -32,13 +32,12 @@ export function FilterMenu({
 }: FilterMenuProps): React.ReactElement {
     const { classes } = useStyles();
 
-    const [games, cardTypes, sets, rarities, attributes] = useAppSelector(
+    const [games, cardTypes, sets, rarities] = useAppSelector(
         (state) => [
             state.data.games,
             state.data.cardTypes,
             state.data.sets,
             state.data.rarities,
-            state.data.attributes,
         ],
         shallowEqual
     );
@@ -63,11 +62,6 @@ export function FilterMenu({
             label: CategoryLabel.Rarities,
             data: rarities,
             appliedFilters: rarityFilters,
-        },
-        {
-            label: CategoryLabel.Attributes,
-            data: attributes,
-            appliedFilters: [],
         },
     ];
 

@@ -16,7 +16,7 @@ type PrimaryPasswordInputProps = TextInputProps &
 
 const textInputStyling = (theme: MantineTheme): CSSObject => ({
     input: {
-        color: 'black',
+        color: 'white',
         background: theme.black,
         borderColor: theme.colors.grape[9],
         fontWeight: 500,
