@@ -4,7 +4,7 @@ import { apiCall } from './helpers/apiCall';
 export type CardReaderService = typeof CardReaderService;
 
 export const CardReaderService = {
-  readCard: async (file: File) => {
+  readCard: async (file: ArrayBuffer) => {
     return await apiCall<string>({
       method: 'POST',
       endpoint: apiRoutes.readCard,

@@ -5,6 +5,7 @@ import {
   rem,
   Container,
   Paper,
+  createStyles,
 } from '@mantine/core';
 import { IconUpload, IconPhoto, IconX } from '@tabler/icons-react';
 import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from '@mantine/dropzone';
@@ -14,6 +15,7 @@ import { error } from '../../services/helpers/Notification';
 
 export function CardUploadPage() {
   const theme = useMantineTheme();
+  const { classes } = useStyles();
 
   const [uploadCardState, uploadCard] = useAsyncFn(
     async (files: FileWithPath[]) => {
@@ -37,62 +39,64 @@ export function CardUploadPage() {
     }
   );
 
+  const rejectFile = () => {
+    error('File must be a png, jpg, or bmp');
+  };
+
   return (
-    <>
-      <Container sx={{ paddingTop: '50px' }}>
-        <>
-          <Dropzone
-            onDrop={uploadCard}
-            onReject={(files) => console.log('rejected files', files)}
-            // maxSize={3 * 1024 ** 2}
-            accept={IMAGE_MIME_TYPE}
-          >
-            <Group
-              position="center"
-              spacing="xl"
-              style={{ minHeight: rem(220), pointerEvents: 'none' }}
-            >
-              <Dropzone.Accept>
-                <IconUpload
-                  size="3.2rem"
-                  stroke={1.5}
-                  color={
-                    theme.colors[theme.primaryColor][
-                      theme.colorScheme === 'dark' ? 4 : 6
-                    ]
-                  }
-                />
-              </Dropzone.Accept>
-              <Dropzone.Reject>
-                <IconX
-                  size="3.2rem"
-                  stroke={1.5}
-                  color={theme.colors.red[theme.colorScheme === 'dark' ? 4 : 6]}
-                />
-              </Dropzone.Reject>
-              <Dropzone.Idle>
-                <IconPhoto size="3.2rem" stroke={1.5} />
-              </Dropzone.Idle>
+    <Container className={classes.uploadContainer}>
+      <Dropzone
+        onDrop={uploadCard}
+        onReject={rejectFile}
+        accept={IMAGE_MIME_TYPE}
+      >
+        <Group className={classes.foo} position="center" spacing="xl">
+          <Dropzone.Accept>
+            <IconUpload
+              size="3.2rem"
+              stroke={1.5}
+              color={
+                theme.colors[theme.primaryColor][
+                  theme.colorScheme === 'dark' ? 4 : 6
+                ]
+              }
+            />
+          </Dropzone.Accept>
+          <Dropzone.Reject>
+            <IconX
+              size="3.2rem"
+              stroke={1.5}
+              color={theme.colors.red[theme.colorScheme === 'dark' ? 4 : 6]}
+            />
+          </Dropzone.Reject>
+          <Dropzone.Idle>
+            <IconPhoto size="3.2rem" stroke={1.5} />
+          </Dropzone.Idle>
 
-              <div>
-                <Text size="xl" inline>
-                  Drag image here or click to select file
-                </Text>
-                <Text size="sm" color="dimmed" inline mt={7}>
-                  Attach one file ONLY one, any more and you are not invited to
-                  the mojo dojo casa house
-                </Text>
-              </div>
-            </Group>
-          </Dropzone>
+          <div>
+            <Text size="xl" inline>
+              Drag image here or click to select file
+            </Text>
+            <Text size="sm" color="dimmed" inline mt={7}>
+              Attach one file ONLY one, any more and you are not invited to the
+              mojo dojo casa house
+            </Text>
+          </div>
+        </Group>
+      </Dropzone>
 
-          {uploadCardState.value && (
-            <Container>
-              <Paper>{uploadCardState.value}</Paper>
-            </Container>
-          )}
-        </>
-      </Container>
-    </>
+      {uploadCardState.value && (
+        <Container>
+          <Paper>{uploadCardState.value}</Paper>
+        </Container>
+      )}
+    </Container>
   );
 }
+
+const useStyles = createStyles(() => ({
+  uploadContainer: {
+    paddingTop: '50px',
+  },
+  foo: { minHeight: rem(220), pointerEvents: 'none' },
+}));
