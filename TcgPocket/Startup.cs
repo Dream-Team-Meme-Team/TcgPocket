@@ -2,10 +2,12 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using TcgPocket.Configurations;
 using TcgPocket.Data;
+using TcgPocket.Features.CardReader;
 using TcgPocket.Features.Users;
 using TcgPocket.Features.Roles;
+using TcgPocket.Features.StorageProvider;
+using TcgPocket.Settings;
 
 namespace TcgPocket;
 
@@ -31,6 +33,9 @@ public class Startup
         services.AddCors();
         services.AddDbContext<DataContext>(options =>
             options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
+
+        services.AddScoped<IBlobStorageProvider, BlobStorageProvider>();
+        services.AddScoped<IMachineLearningModelService, MachineLearningModelService>();
         
         ConfigureIdentity(services);
     }
