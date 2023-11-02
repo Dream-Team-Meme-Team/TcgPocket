@@ -1,9 +1,9 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { CardDisplayDto, CardFilterDto } from '../types/cards';
 import { PagedResult } from '../types/shared';
-import { getAllCards } from '../services/cardsService';
 import { GameGetDto } from '../types/games';
 import { toggleFilters } from '../helpers/toggleFilters';
+import { getAllCards } from '../services/CardsService';
 
 const paged: CardFilterDto = {
     currentPage: 1,

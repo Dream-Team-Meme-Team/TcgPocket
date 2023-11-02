@@ -5,7 +5,7 @@ import { FilterMenu } from './modules/FilterMenu';
 import { useNavbarHeight } from '../../hooks/useNavbarHeight';
 import { dispatch, useAppSelector } from '../../store/configureStore';
 import { shallowEqual } from 'react-redux';
-import { getAllCards } from '../../services/cardsService';
+import { getAllCards } from '../../services/CardsService';
 import { responseWrapper } from '../../services/helpers/responseWrapper';
 import { CardFilterDto } from '../../types/cards';
 import { GameGetDto } from '../../types/games';
