@@ -1,8 +1,9 @@
 import numpy as np
-import pytesseract as tess
+import easyocr
 
 class PokemonScraper:
 
+    reader = easyocr.Reader(['en'])
     query_base = 'https://api.pokemontcg.io/v2/cards?q='
 
     def apply_filter(self, raw_card):
@@ -30,7 +31,7 @@ class PokemonScraper:
         """
         params = []
         for attrb in filt_attrbs:
-            params.append(tess.image_to_string(attrb).strip('\n'))
+            params.append(self.reader.readtext(attrb)[0][1].strip('\n'))
 
         return params
 
