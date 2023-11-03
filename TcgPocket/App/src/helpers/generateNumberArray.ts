@@ -6,13 +6,13 @@
  * result in an empty array being returned.
  */
 export function generateNumberArray(num: number) {
-    if (num < 1) return [];
+  if (num < 1) return [];
 
-    const result = [];
+  const result = [];
 
-    for (let i = 1; i <= num; i++) {
-        result.push(i);
-    }
+  for (let i = 1; i <= num; i++) {
+    result.push(i);
+  }
 
-    return result;
+  return result;
 }

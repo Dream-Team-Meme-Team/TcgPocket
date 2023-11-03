@@ -5,11 +5,11 @@
  * the filter is added to the current filters state.
  */
 export function toggleFilters(filterState: number[], payload: number) {
-    const applied = filterState.find((filterId) => filterId === payload);
+  const applied = filterState.find((filterId) => filterId === payload);
 
-    if (applied) {
-        return filterState.filter((filter) => filter !== applied);
-    } else {
-        return filterState.concat(payload);
-    }
+  if (applied) {
+    return filterState.filter((filter) => filter !== applied);
+  } else {
+    return filterState.concat(payload);
+  }
 }

@@ -7,9 +7,9 @@ import { useDisclosure } from '@mantine/hooks';
 import { AttributeGetDto } from '../../../../types/attributes';
 import { EditModal } from '../modals/EditModal';
 import {
-    deleteAttribute,
-    editAttribute,
-    getAllAttributes,
+  deleteAttribute,
+  editAttribute,
+  getAllAttributes,
 } from '../../../../services/dataServices/attributeServices';
 import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { DeleteModal } from '../../../../components/modals/DeleteModal';
@@ -21,169 +21,163 @@ const titles: string[] = ['Name', 'Game', 'Edit', 'Delete'];
 const colValue: string = '1fr ';
 
 export const AttributeTab: React.FC = () => {
-    const numOfCol = colValue.repeat(titles.length);
-    const { classes } = useStyles(numOfCol);
+  const numOfCol = colValue.repeat(titles.length);
+  const { classes } = useStyles(numOfCol);
 
-    const [openDelete, { toggle: toggleDelete }] = useDisclosure();
-    const [openEdit, { toggle: toggleEdit }] = useDisclosure();
+  const [openDelete, { toggle: toggleDelete }] = useDisclosure();
+  const [openEdit, { toggle: toggleEdit }] = useDisclosure();
 
-    const [attributes, games] = useAppSelector(
-        (state) => [state.data.attributes, state.data.games],
-        shallowEqual
-    );
+  const [attributes, games] = useAppSelector(
+    (state) => [state.data.attributes, state.data.games],
+    shallowEqual
+  );
 
-    const [searchTerm, selectedId, selectedGameId, selectedTab] =
-        useAppSelector(
-            (state) => [
-                state.admin.searchTerm,
-                state.admin.selectedId,
-                state.admin.selectedGameId,
-                state.admin.selectedTab,
-            ],
-            shallowEqual
-        );
+  const [searchTerm, selectedId, selectedGameId, selectedTab] = useAppSelector(
+    (state) => [
+      state.admin.searchTerm,
+      state.admin.selectedId,
+      state.admin.selectedGameId,
+      state.admin.selectedTab,
+    ],
+    shallowEqual
+  );
 
-    const renderedAttributes = useMemo(() => {
-        return attributes
-            .filter((attribute) => attribute.gameId === selectedGameId)
-            .filter((attribute) =>
-                attribute.name.toLowerCase().includes(searchTerm.toLowerCase())
-            );
-    }, [attributes, searchTerm, selectedGameId]);
+  const renderedAttributes = useMemo(() => {
+    return attributes
+      .filter((attribute) => attribute.gameId === selectedGameId)
+      .filter((attribute) =>
+        attribute.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+  }, [attributes, searchTerm, selectedGameId]);
 
-    const selectAndOpenDelete = (value: AttributeGetDto) => {
-        toggleDelete();
-        dispatch(setSelectedId(value.id));
-    };
+  const selectAndOpenDelete = (value: AttributeGetDto) => {
+    toggleDelete();
+    dispatch(setSelectedId(value.id));
+  };
 
-    const selectAndOpenEdit = (value: AttributeGetDto) => {
-        toggleEdit();
-        dispatch(setSelectedId(value.id));
-    };
+  const selectAndOpenEdit = (value: AttributeGetDto) => {
+    toggleEdit();
+    dispatch(setSelectedId(value.id));
+  };
 
-    const loadAttributes = async () => {
-        const { payload } = await dispatch(getAllAttributes());
-        responseWrapper(payload);
-    };
+  const loadAttributes = async () => {
+    const { payload } = await dispatch(getAllAttributes());
+    responseWrapper(payload);
+  };
 
-    const deleteSelectedAttribute = async () => {
-        dispatch(deleteAttribute(selectedId)).then(({ payload }) => {
-            responseWrapper(payload, 'Attribute Deleted');
+  const deleteSelectedAttribute = async () => {
+    dispatch(deleteAttribute(selectedId)).then(({ payload }) => {
+      responseWrapper(payload, 'Attribute Deleted');
 
-            if (payload && !payload.hasErrors) {
-                loadAttributes();
-            }
-        });
-    };
-
-    const editSelectedAttribute = async (editedAttribute: AttributeGetDto) => {
-        const updatedAttribute: AttributeGetDto = {
-            id: editedAttribute.id,
-            name: editedAttribute.name,
-            gameId: selectedGameId,
-        };
-
-        dispatch(editAttribute(updatedAttribute)).then(({ payload }) => {
-            responseWrapper(payload, 'Attribute Edited');
-
-            if (payload && !payload.hasErrors) {
-                loadAttributes();
-            }
-        });
-    };
-
-    const findGame = (gameId: number) => {
-        const foundGame = games.find((game) => game.id === gameId);
-
-        return foundGame ? foundGame.name : 'Unknown';
-    };
-
-    useEffect(() => {
-        if (selectedGameId === 0 || selectedTab !== AdminTabLabel.Attributes)
-            return;
+      if (payload && !payload.hasErrors) {
         loadAttributes();
-    }, [selectedGameId, selectedTab]);
+      }
+    });
+  };
 
-    return (
-        <div className={classes.attributeTabContainer}>
-            <TabInfoHeader titles={titles} />
+  const editSelectedAttribute = async (editedAttribute: AttributeGetDto) => {
+    const updatedAttribute: AttributeGetDto = {
+      id: editedAttribute.id,
+      name: editedAttribute.name,
+      gameId: selectedGameId,
+    };
 
-            {renderedAttributes.length !== 0 ? (
+    dispatch(editAttribute(updatedAttribute)).then(({ payload }) => {
+      responseWrapper(payload, 'Attribute Edited');
+
+      if (payload && !payload.hasErrors) {
+        loadAttributes();
+      }
+    });
+  };
+
+  const findGame = (gameId: number) => {
+    const foundGame = games.find((game) => game.id === gameId);
+
+    return foundGame ? foundGame.name : 'Unknown';
+  };
+
+  useEffect(() => {
+    if (selectedGameId === 0 || selectedTab !== AdminTabLabel.Attributes)
+      return;
+    loadAttributes();
+  }, [selectedGameId, selectedTab]);
+
+  return (
+    <div className={classes.attributeTabContainer}>
+      <TabInfoHeader titles={titles} />
+
+      {renderedAttributes.length !== 0 ? (
+        <div>
+          {renderedAttributes.map((attribute, index) => {
+            return (
+              <div key={index} className={classes.renderedAttributeContainer}>
+                <div> {attribute.name} </div>
+
+                <div> {findGame(attribute.gameId)} </div>
+
+                <ActionIcon
+                  aria-label="Edit Attribute"
+                  onClick={() => selectAndOpenEdit(attribute)}
+                >
+                  <IconEdit />
+                </ActionIcon>
+
+                <ActionIcon
+                  aria-label="Delete Attribute"
+                  onClick={() => selectAndOpenDelete(attribute)}
+                >
+                  <IconTrash />
+                </ActionIcon>
+
                 <div>
-                    {renderedAttributes.map((attribute, index) => {
-                        return (
-                            <div
-                                key={index}
-                                className={classes.renderedAttributeContainer}
-                            >
-                                <div> {attribute.name} </div>
-
-                                <div> {findGame(attribute.gameId)} </div>
-
-                                <ActionIcon
-                                    aria-label="Edit Attribute"
-                                    onClick={() => selectAndOpenEdit(attribute)}
-                                >
-                                    <IconEdit />
-                                </ActionIcon>
-
-                                <ActionIcon
-                                    aria-label="Delete Attribute"
-                                    onClick={() =>
-                                        selectAndOpenDelete(attribute)
-                                    }
-                                >
-                                    <IconTrash />
-                                </ActionIcon>
-
-                                <div>
-                                    {selectedId === attribute.id && (
-                                        <EditModal
-                                            open={openEdit}
-                                            setOpen={toggleEdit}
-                                            submitAction={editSelectedAttribute}
-                                            value={attribute}
-                                        />
-                                    )}
-                                </div>
-                            </div>
-                        );
-                    })}
+                  {selectedId === attribute.id && (
+                    <EditModal
+                      open={openEdit}
+                      setOpen={toggleEdit}
+                      submitAction={editSelectedAttribute}
+                      value={attribute}
+                    />
+                  )}
                 </div>
-            ) : (
-                <div className={classes.renderedAttributeContainer}>
-                    <i> No data to display </i>
-                </div>
-            )}
-
-            <DeleteModal
-                open={openDelete}
-                setOpen={toggleDelete}
-                submitAction={deleteSelectedAttribute}
-            />
+              </div>
+            );
+          })}
         </div>
-    );
+      ) : (
+        <div className={classes.renderedAttributeContainer}>
+          <i> No data to display </i>
+        </div>
+      )}
+
+      <DeleteModal
+        open={openDelete}
+        setOpen={toggleDelete}
+        submitAction={deleteSelectedAttribute}
+      />
+    </div>
+  );
 };
 
 const useStyles = createStyles((theme: MantineTheme, numOfCol: string) => {
-    return {
-        attributeTabContainer: {
-            paddingLeft: '8px',
-        },
+  return {
+    attributeTabContainer: {
+      paddingLeft: '8px',
+    },
 
-        renderedAttributeContainer: {
-            display: 'grid',
-            gridTemplateColumns: numOfCol,
+    renderedAttributeContainer: {
+      display: 'grid',
+      gridTemplateColumns: numOfCol,
 
-            ':hover': {
-                backgroundColor: theme.fn.darken(
-                    theme.colors.primaryPurpleColor[0],
-                    0.2
-                ),
+      ':hover': {
+        backgroundColor: theme.fn.darken(
+          theme.colors.primaryPurpleColor[0],
+          0.2
+        ),
 
-                borderRadius: 7,
-                paddingLeft: 8,
-            },
-        },
-    };
+        borderRadius: 7,
+        paddingLeft: 8,
+      },
+    },
+  };
 });

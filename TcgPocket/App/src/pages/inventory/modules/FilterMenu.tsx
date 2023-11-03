@@ -16,132 +16,132 @@ import { CategoryAndOptions } from './CategoryAndOptions';
 import { CategoryLabel } from '../../../enums/categoryLabel';
 
 export type Category = {
-    label: CategoryLabel;
-    data: CardTypeGetDto[];
-    appliedFilters: number[];
+  label: CategoryLabel;
+  data: CardTypeGetDto[];
+  appliedFilters: number[];
 };
 
 type FilterMenuProps = {
-    selectedGame: GameGetDto | null;
-    setSelectedGame: (arg: GameGetDto | null) => void;
+  selectedGame: GameGetDto | null;
+  setSelectedGame: (arg: GameGetDto | null) => void;
 };
 
 export function FilterMenu({
-    selectedGame,
-    setSelectedGame,
+  selectedGame,
+  setSelectedGame,
 }: FilterMenuProps): React.ReactElement {
-    const { classes } = useStyles();
+  const { classes } = useStyles();
 
-    const [games, cardTypes, sets, rarities] = useAppSelector(
-        (state) => [
-            state.data.games,
-            state.data.cardTypes,
-            state.data.sets,
-            state.data.rarities,
-        ],
-        shallowEqual
+  const [games, cardTypes, sets, rarities] = useAppSelector(
+    (state) => [
+      state.data.games,
+      state.data.cardTypes,
+      state.data.sets,
+      state.data.rarities,
+    ],
+    shallowEqual
+  );
+
+  const [cardTypeFilters, setFilters, rarityFilters] = useAppSelector(
+    (state) => [
+      state.inventory.cardTypeFilters,
+      state.inventory.setFilters,
+      state.inventory.rarityFilters,
+    ],
+    shallowEqual
+  );
+
+  const categories: Category[] = [
+    {
+      label: CategoryLabel.CardTypes,
+      data: cardTypes,
+      appliedFilters: cardTypeFilters,
+    },
+    {
+      label: CategoryLabel.Sets,
+      data: sets,
+      appliedFilters: setFilters,
+    },
+    {
+      label: CategoryLabel.Rarities,
+      data: rarities,
+      appliedFilters: rarityFilters,
+    },
+  ];
+
+  const handleSelectChange = (
+    value: string | React.ChangeEvent<HTMLInputElement> | null
+  ) => {
+    const foundGame = games.find((game) => game.name === value) ?? null;
+    setSelectedGame(foundGame);
+  };
+
+  useEffectOnce(() => {
+    dispatch(getAllGames()).then(({ payload }) => responseWrapper(payload));
+    dispatch(getAllCardTypes()).then(({ payload }) => responseWrapper(payload));
+    dispatch(getAllSets()).then(({ payload }) => responseWrapper(payload));
+    dispatch(getAllRarities()).then(({ payload }) => responseWrapper(payload));
+    dispatch(getAllAttributes()).then(({ payload }) =>
+      responseWrapper(payload)
     );
+  });
 
-    const [cardTypeFilters, setFilters, rarityFilters] = useAppSelector(
-        (state) => [
-            state.inventory.cardTypeFilters,
-            state.inventory.setFilters,
-            state.inventory.rarityFilters,
-        ],
-        shallowEqual
-    );
+  return (
+    <div className={classes.menu}>
+      <div className={classes.select}>
+        <PrimarySelect
+          clearable
+          searchable
+          withinPortal
+          label="Select Game:"
+          value={selectedGame ? selectedGame.name : ''}
+          data={games.map((game) => game.name)}
+          onChange={handleSelectChange}
+        />
+      </div>
 
-    const categories: Category[] = [
-        {
-            label: CategoryLabel.CardTypes,
-            data: cardTypes,
-            appliedFilters: cardTypeFilters,
-        },
-        { label: CategoryLabel.Sets, data: sets, appliedFilters: setFilters },
-        {
-            label: CategoryLabel.Rarities,
-            data: rarities,
-            appliedFilters: rarityFilters,
-        },
-    ];
-
-    const handleSelectChange = (
-        value: string | React.ChangeEvent<HTMLInputElement> | null
-    ) => {
-        const foundGame = games.find((game) => game.name === value) ?? null;
-        setSelectedGame(foundGame);
-    };
-
-    useEffectOnce(() => {
-        dispatch(getAllGames()).then(({ payload }) => responseWrapper(payload));
-        dispatch(getAllCardTypes()).then(({ payload }) =>
-            responseWrapper(payload)
-        );
-        dispatch(getAllSets()).then(({ payload }) => responseWrapper(payload));
-        dispatch(getAllRarities()).then(({ payload }) =>
-            responseWrapper(payload)
-        );
-        dispatch(getAllAttributes()).then(({ payload }) =>
-            responseWrapper(payload)
-        );
-    });
-
-    return (
-        <div className={classes.menu}>
-            <div className={classes.select}>
-                <PrimarySelect
-                    clearable
-                    searchable
-                    withinPortal
-                    label="Select Game:"
-                    value={selectedGame ? selectedGame.name : ''}
-                    data={games.map((game) => game.name)}
-                    onChange={handleSelectChange}
-                />
-            </div>
-
-            <div className={classes.container}>
-                <ScrollArea>
-                    {categories.map((category, index) => (
-                        <CategoryAndOptions
-                            key={index}
-                            selectedGame={selectedGame}
-                            label={category.label}
-                            data={category.data}
-                            appliedFilters={category.appliedFilters}
-                        />
-                    ))}
-                </ScrollArea>
-            </div>
-        </div>
-    );
+      <div className={classes.container}>
+        <ScrollArea>
+          {categories.map((category, index) => (
+            <CategoryAndOptions
+              key={index}
+              selectedGame={selectedGame}
+              label={category.label}
+              data={category.data}
+              appliedFilters={category.appliedFilters}
+            />
+          ))}
+        </ScrollArea>
+      </div>
+    </div>
+  );
 }
 
 const useStyles = createStyles((theme: MantineTheme) => {
-    const { remainingHeight } = useNavbarHeight();
+  const { remainingHeight } = useNavbarHeight();
 
-    return {
-        menu: {
-            display: 'grid',
-            height: remainingHeight,
-            alignContent: 'flex-start',
+  return {
+    menu: {
+      display: 'grid',
+      height: remainingHeight,
+      alignContent: 'flex-start',
 
-            borderRightWidth: 2,
-            borderRightStyle: 'solid',
-            borderRightColor: theme.colors.primaryPurpleColor[0],
-        },
+      borderRightWidth: 2,
+      borderRightStyle: 'solid',
+      borderRightColor: theme.colors.primaryPurpleColor[0],
+    },
 
-        select: {
-            display: 'flex',
-            justifyContent: 'center',
-        },
+    select: {
+      display: 'flex',
+      justifyContent: 'center',
+    },
 
-        container: {
-            display: 'grid',
-            alignContent: 'flex-start',
+    container: {
+      display: 'grid',
+      alignContent: 'flex-start',
 
-            height: remainingHeight,
-            overflow: 'auto',
-        },
-    };
+      height: remainingHeight,
+      overflow: 'auto',
+    },
+  };
 });
