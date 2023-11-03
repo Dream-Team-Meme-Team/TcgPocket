@@ -1,10 +1,10 @@
 import { useEffect, useMemo } from 'react';
-import { dispatch, useAppSelector } from '../../../../store/ConfigureStore';
+import { dispatch, useAppSelector } from '../../../../store/configureStore';
 import {
   deleteSet,
   editSet,
   getAllSets,
-} from '../../../../services/dataServices/SetServices';
+} from '../../../../services/dataServices/setServices';
 import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { TabInfoHeader } from '../headers/TabInfoHeader';
 import { ActionIcon, MantineTheme, createStyles } from '@mantine/core';
@@ -13,7 +13,7 @@ import { DeleteModal } from '../../../../components/modals/DeleteModal';
 import { useDisclosure } from '@mantine/hooks';
 import { EditModal } from '../modals/EditModal';
 import { SetGetDto } from '../../../../types/sets';
-import { setSelectedId } from '../../../../store/AdminSlice';
+import { setSelectedId } from '../../../../store/adminSlice';
 import { AdminTabLabel } from '../../../../enums/adminTabLabel';
 import { shallowEqual } from 'react-redux';
 

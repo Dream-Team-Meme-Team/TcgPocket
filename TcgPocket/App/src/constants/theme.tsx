@@ -1,5 +1,8 @@
 import { MantineThemeOverride } from '@mantine/core';
 
+export const defaultGap = '8px';
+export const defaultPadding = '10px';
+
 export const appTheme: MantineThemeOverride = {
   colorScheme: 'dark',
   colors: {
@@ -8,7 +11,6 @@ export const appTheme: MantineThemeOverride = {
     primaryPurpleColor: ['#9d65db'],
     primaryBlueColor: ['#13222B'],
     backgroundColor: ['#0F161C'],
-    inventoryBackgroundColor: ['#514254'],
     secondaryBackgroundColor: ['#0B1014'],
     secondaryPurpleColors: ['#623990', '#331852'],
     secondaryBlueColors: [

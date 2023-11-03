@@ -4,7 +4,7 @@ import { ErrorPage } from '../pages/error/ErrorPage';
 import { NotFoundPage } from '../pages/notFound/NotFoundPage';
 import { HomePage } from '../pages/home/HomePage';
 import { SettingsPage } from '../pages/settings/SettingsPage';
-import { useAppSelector } from '../store/ConfigureStore';
+import { useAppSelector } from '../store/configureStore';
 import { AdminPage } from '../pages/admin/AdminPage';
 import { useMemo } from 'react';
 import { InventoryPage } from '../pages/inventory/InventoryPage';

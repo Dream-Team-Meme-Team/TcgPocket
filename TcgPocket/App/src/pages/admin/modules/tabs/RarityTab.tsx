@@ -1,21 +1,21 @@
 import { useEffect, useMemo } from 'react';
-import { dispatch, useAppSelector } from '../../../../store/ConfigureStore';
+import { dispatch, useAppSelector } from '../../../../store/configureStore';
 import { TabInfoHeader } from '../headers/TabInfoHeader';
 import { ActionIcon, MantineTheme, createStyles } from '@mantine/core';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
 import { EditModal } from '../modals/EditModal';
 import { useDisclosure } from '@mantine/hooks';
+import { responseWrapper } from '../../../../services/helpers/responseWrapper';
+import { RarityGetDto } from '../../../../types/rarities';
+import { DeleteModal } from '../../../../components/modals/DeleteModal';
+import { setSelectedId } from '../../../../store/adminSlice';
+import { AdminTabLabel } from '../../../../enums/adminTabLabel';
+import { shallowEqual } from 'react-redux';
 import {
   deleteRarity,
   editRarity,
   getAllRarities,
-} from '../../../../services/dataServices/RarityServices';
-import { responseWrapper } from '../../../../services/helpers/responseWrapper';
-import { RarityGetDto } from '../../../../types/rarities';
-import { DeleteModal } from '../../../../components/modals/DeleteModal';
-import { setSelectedId } from '../../../../store/AdminSlice';
-import { AdminTabLabel } from '../../../../enums/adminTabLabel';
-import { shallowEqual } from 'react-redux';
+} from '../../../../services/dataServices/rarityServices';
 
 const titles: string[] = ['Name', 'Game', 'Edit', 'Delete'];
 const colValue: string = '1fr ';

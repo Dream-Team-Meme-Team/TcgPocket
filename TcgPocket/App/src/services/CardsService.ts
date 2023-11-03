@@ -1,4 +1,4 @@
-import { apiRoutes } from '../routes/Index';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
   CardDetailDto,
   CardDisplayDto,
@@ -8,6 +8,8 @@ import {
 } from '../types/cards';
 import { PagedResult } from '../types/shared';
 import { apiCall } from './helpers/apiCall';
+import { Response } from '../types/shared';
+import { apiRoutes } from '../routes/Index';
 
 type UpdateCardParams = {
   id: number;
@@ -18,7 +20,7 @@ export type CardsService = typeof CardsService;
 
 export const CardsService = {
   getAllCards: async (params?: CardFilterDto) => {
-    return await apiCall<CardDetailDto[]>({
+    return await apiCall<PagedResult<CardDisplayDto>>({
       method: 'GET',
       endpoint: apiRoutes.cards,
       params: params,
@@ -63,3 +65,19 @@ export const CardsService = {
     });
   },
 };
+
+export const getUserInventory = createAsyncThunk<
+  Response<PagedResult<CardDisplayDto>>,
+  CardFilterDto,
+  { rejectValue: Response<PagedResult<CardDisplayDto>> }
+>('getUserInventory', async (values) => {
+  return await CardsService.getUserInventory(values);
+});
+
+export const getAllCards = createAsyncThunk<
+  Response<PagedResult<CardDisplayDto>>,
+  CardFilterDto,
+  { rejectValue: Response<PagedResult<CardDisplayDto>> }
+>('getAllCards', async (values) => {
+  return await CardsService.getAllCards(values);
+});

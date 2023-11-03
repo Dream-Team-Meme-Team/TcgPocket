@@ -1,5 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import { Response } from '../../types/shared';
+import qs from 'qs';
+
 axios.defaults.withCredentials = true;
 
 export type HttpMethod = 'GET' | 'POST' | 'DELETE' | 'PUT' | 'PATCH';
@@ -22,6 +24,7 @@ export async function apiCall<TResult = any>({
     url: endpoint,
     data: data,
     params: params,
+    paramsSerializer: (params) => qs.stringify(params),
   });
 
   return response

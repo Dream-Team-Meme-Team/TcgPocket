@@ -9,7 +9,7 @@ from apiKeys import IDK_API_KEY
 from PIL import Image
 from io import BytesIO
 
-my_file = 3 # change this to be the your number
+my_file = 1 # change this to be the your number
 
 df = pd.read_csv(f'TcgPocket/datascience/data/ev-sets/to-be-classif/{my_file}/pkm_unclassif_{my_file}.csv')
 classif_f = open(f'TcgPocket/datascience/data/ev-sets/to-be-classif/{my_file}/classif_{my_file}.txt', 'a')

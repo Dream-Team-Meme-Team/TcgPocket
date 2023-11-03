@@ -1,7 +1,7 @@
 import { useDisclosure } from '@mantine/hooks';
 import { PrimaryModal } from '../../../components/modals/PrimaryModal';
-import { deleteUser, signOutUser } from '../../../services/AuthServices';
-import { dispatch } from '../../../store/ConfigureStore';
+import { deleteUser, signOutUser } from '../../../services/authServices';
+import { dispatch } from '../../../store/configureStore';
 import { useForm } from '@mantine/form';
 import { SecondaryButton } from '../../../components/buttons/SecondaryButton';
 import { Flex, createStyles } from '@mantine/core';

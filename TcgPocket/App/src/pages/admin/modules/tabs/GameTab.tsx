@@ -1,9 +1,9 @@
-import { dispatch, useAppSelector } from '../../../../store/ConfigureStore';
+import { dispatch, useAppSelector } from '../../../../store/configureStore';
 import {
   deleteGame,
   editGame,
   getAllGames,
-} from '../../../../services/dataServices/GameServices';
+} from '../../../../services/dataServices/gameServices';
 import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { ActionIcon, MantineTheme, createStyles } from '@mantine/core';
 import { useEffect, useMemo } from 'react';
@@ -13,7 +13,7 @@ import { DeleteModal } from '../../../../components/modals/DeleteModal';
 import { GameGetDto } from '../../../../types/games';
 import { EditModal } from '../modals/EditModal';
 import { TabInfoHeader } from '../headers/TabInfoHeader';
-import { setSelectedId } from '../../../../store/AdminSlice';
+import { setSelectedId } from '../../../../store/adminSlice';
 import { AdminTabLabel } from '../../../../enums/adminTabLabel';
 import { shallowEqual } from 'react-redux';
 
