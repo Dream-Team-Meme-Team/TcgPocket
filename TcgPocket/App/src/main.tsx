@@ -9,18 +9,14 @@ import { appTheme } from './constants/theme.tsx';
 import { appStore } from './store/configureStore.ts';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-    <React.StrictMode>
-        <BrowserRouter>
-            <Provider store={appStore}>
-                <MantineProvider
-                    withGlobalStyles
-                    withNormalizeCSS
-                    theme={appTheme}
-                >
-                    <Notifications />
-                    <App />
-                </MantineProvider>
-            </Provider>
-        </BrowserRouter>
-    </React.StrictMode>
+  <React.StrictMode>
+    <BrowserRouter>
+      <Provider store={appStore}>
+        <MantineProvider withGlobalStyles withNormalizeCSS theme={appTheme}>
+          <Notifications />
+          <App />
+        </MantineProvider>
+      </Provider>
+    </BrowserRouter>
+  </React.StrictMode>
 );

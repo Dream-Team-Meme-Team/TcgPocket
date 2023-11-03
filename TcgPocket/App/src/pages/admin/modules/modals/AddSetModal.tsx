@@ -5,83 +5,81 @@ import { PrimaryModal } from '../../../../components/modals/PrimaryModal';
 import { useForm } from '@mantine/form';
 import { dispatch, useAppSelector } from '../../../../store/configureStore';
 import {
-    createSet,
-    getAllSets,
-} from '../../../../services/dataServices/SetServices';
+  createSet,
+  getAllSets,
+} from '../../../../services/dataServices/setServices';
 import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { SetDto } from '../../../../types/sets';
 import { PrimaryTextInput } from '../../../../components/inputs/PrimaryTextInput';
 import { AdminButtons } from '../AdminButtons';
 
 const initialValues = {
-    name: '',
-    gameId: 0,
+  name: '',
+  gameId: 0,
 } as const;
 
 export function AddSetModal(): React.ReactElement {
-    const [open, { toggle }] = useDisclosure();
+  const [open, { toggle }] = useDisclosure();
 
-    const selectedGameId = useAppSelector(
-        (state) => state.admin.selectedGameId
-    );
+  const selectedGameId = useAppSelector((state) => state.admin.selectedGameId);
 
-    const form = useForm({
-        initialValues: initialValues,
+  const form = useForm({
+    initialValues: initialValues,
+  });
+
+  const handleCancel = () => {
+    toggle();
+    form.reset();
+  };
+
+  const loadSets = () => {
+    dispatch(getAllSets()).then(({ payload }) => {
+      responseWrapper(payload);
+
+      if (payload && !payload.hasErrors) {
+        handleCancel();
+      }
     });
+  };
 
-    const handleCancel = () => {
-        toggle();
-        form.reset();
+  const handleAdd = (newSet: SetDto) => {
+    const updateGameId: SetDto = {
+      name: newSet.name,
+      gameId: selectedGameId,
     };
 
-    const loadSets = () => {
-        dispatch(getAllSets()).then(({ payload }) => {
-            responseWrapper(payload);
+    dispatch(createSet(updateGameId)).then(({ payload }) => {
+      responseWrapper(payload, 'Set Added');
 
-            if (payload && !payload.hasErrors) {
-                handleCancel();
-            }
-        });
-    };
+      if (payload && !payload.hasErrors) {
+        loadSets();
+      }
+    });
+  };
 
-    const handleAdd = (newSet: SetDto) => {
-        const updateGameId: SetDto = {
-            name: newSet.name,
-            gameId: selectedGameId,
-        };
+  const determineDisabled = selectedGameId === 0;
 
-        dispatch(createSet(updateGameId)).then(({ payload }) => {
-            responseWrapper(payload, 'Set Added');
+  return (
+    <div>
+      <PrimaryButton
+        leftIcon={<IconPlus />}
+        onClick={toggle}
+        disabled={determineDisabled}
+      >
+        Add Set
+      </PrimaryButton>
 
-            if (payload && !payload.hasErrors) {
-                loadSets();
-            }
-        });
-    };
+      <PrimaryModal opened={open} onClose={toggle} title="Add Set">
+        <form onSubmit={form.onSubmit(handleAdd)}>
+          <PrimaryTextInput
+            withAsterisk
+            label="Set"
+            {...form.getInputProps('name')}
+          />
 
-    const determineDisabled = selectedGameId === 0;
-
-    return (
-        <div>
-            <PrimaryButton
-                leftIcon={<IconPlus />}
-                onClick={toggle}
-                disabled={determineDisabled}
-            >
-                Add Set
-            </PrimaryButton>
-
-            <PrimaryModal opened={open} onClose={toggle} title="Add Set">
-                <form onSubmit={form.onSubmit(handleAdd)}>
-                    <PrimaryTextInput
-                        withAsterisk
-                        label="Set"
-                        {...form.getInputProps('name')}
-                    />
-
-                    <AdminButtons handleCancel={handleCancel} />
-                </form>
-            </PrimaryModal>
-        </div>
-    );
+          <AdminButtons handleCancel={handleCancel} />
+        </form>
+      </PrimaryModal>
+    </div>
+  );
 }

@@ -6,12 +6,12 @@ import { adminSlice } from './adminSlice';
 import { inventorySlice } from './inventorySlice';
 
 export const appStore = configureStore({
-    reducer: {
-        user: authSlice.reducer,
-        data: dataSlice.reducer,
-        admin: adminSlice.reducer,
-        inventory: inventorySlice.reducer,
-    },
+  reducer: {
+    user: authSlice.reducer,
+    data: dataSlice.reducer,
+    admin: adminSlice.reducer,
+    inventory: inventorySlice.reducer,
+  },
 });
 
 export type AppState = ReturnType<typeof appStore.getState>;

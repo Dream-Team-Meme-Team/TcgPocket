@@ -5,26 +5,26 @@ import { InputHTMLAttributes } from 'react';
 type PrimaryInputProps = InputProps & InputHTMLAttributes<HTMLInputElement>;
 
 const inputStyling = (theme: MantineTheme): CSSObject => ({
-    input: {
-        background: theme.black,
-        borderColor: theme.colors.secondaryBlueColors[0],
-        borderWidth: 1,
-        backgroundColor: 'white',
+  input: {
+    background: theme.black,
+    borderColor: theme.colors.secondaryBlueColors[0],
+    borderWidth: 1,
+    backgroundColor: 'white',
 
-        ':focus': {
-            borderColor: theme.colors.primaryPurpleColor[0],
-        },
+    ':focus': {
+      borderColor: theme.colors.primaryPurpleColor[0],
     },
+  },
 });
 
 export function PrimaryInput({
-    children,
-    sx,
-    ...props
+  children,
+  sx,
+  ...props
 }: PrimaryInputProps): React.ReactElement {
-    return (
-        <Input sx={sx ?? inputStyling} {...props}>
-            {children}
-        </Input>
-    );
+  return (
+    <Input sx={sx ?? inputStyling} {...props}>
+      {children}
+    </Input>
+  );
 }

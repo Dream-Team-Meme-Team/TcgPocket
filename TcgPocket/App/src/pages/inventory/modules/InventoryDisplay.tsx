@@ -5,62 +5,58 @@ import { useMemo } from 'react';
 import { CardDisplay } from '../../../components/cardDisplay/CardDisplay';
 
 type InventoryDisplayProps = {
-    paginatedCards: PagedResult<CardDisplayDto> | null;
-    isLoading: boolean;
+  paginatedCards: PagedResult<CardDisplayDto> | null;
+  isLoading: boolean;
 };
 
 export function InventoryDisplay({
-    paginatedCards: cards,
-    isLoading,
+  paginatedCards: cards,
+  isLoading,
 }: InventoryDisplayProps) {
-    const { classes } = useStyles();
+  const { classes } = useStyles();
 
-    const renderCards = useMemo(() => {
-        return cards ? cards.items : [];
-    }, [cards]);
+  const renderCards = useMemo(() => {
+    return cards ? cards.items : [];
+  }, [cards]);
 
-    return (
-        <div className={classes.inventoryDisplayContainer}>
-            <ScrollArea>
-                <div className={classes.inventoryDisplayGroup}>
-                    {renderCards.map((cards, index) => (
-                        <CardDisplay
-                            key={index}
-                            isLoading={isLoading}
-                            card={cards}
-                        />
-                    ))}
-                </div>
-            </ScrollArea>
+  return (
+    <div className={classes.inventoryDisplayContainer}>
+      <ScrollArea>
+        <div className={classes.inventoryDisplayGroup}>
+          {renderCards.map((cards, index) => (
+            <CardDisplay key={index} isLoading={isLoading} card={cards} />
+          ))}
         </div>
-    );
+      </ScrollArea>
+    </div>
+  );
 }
 
 const useStyles = createStyles((theme: MantineTheme) => {
-    return {
-        paginationControls: {
-            display: 'flex',
-            justifyContent: 'flex-end',
-            padding: '10px',
-        },
+  return {
+    paginationControls: {
+      display: 'flex',
+      justifyContent: 'flex-end',
+      padding: '10px',
+    },
 
-        inventoryDisplayContainer: {
-            display: 'grid',
+    inventoryDisplayContainer: {
+      display: 'grid',
 
-            overflowY: 'hidden',
-        },
+      overflowY: 'hidden',
+    },
 
-        inventoryDisplayGroup: {
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, 368px)',
-            justifyContent: 'center',
+    inventoryDisplayGroup: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fit, 368px)',
+      justifyContent: 'center',
 
-            columnGap: '8px',
-            rowGap: '20px',
-            paddingTop: '10px',
-            paddingBottom: '10px',
+      columnGap: '8px',
+      rowGap: '20px',
+      paddingTop: '10px',
+      paddingBottom: '10px',
 
-            backgroundColor: theme.colors.inventoryBackgroundColor,
-        },
-    };
+      backgroundColor: theme.colors.inventoryBackgroundColor,
+    },
+  };
 });

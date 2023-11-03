@@ -4,30 +4,30 @@ import { InputHTMLAttributes } from 'react';
 type PrimarySelectProps = SelectProps & InputHTMLAttributes<HTMLInputElement>;
 
 const selectStyling = (theme: MantineTheme): CSSObject => ({
-    input: {
-        color: theme.white,
-        background: theme.colors.textBoxColor[0],
-        borderColor: theme.colors.primaryPurpleColor[0],
-        backgroundColor: theme.black,
-        borderWidth: 1,
+  input: {
+    color: theme.white,
+    background: theme.colors.textBoxColor[0],
+    borderColor: theme.colors.primaryPurpleColor[0],
+    backgroundColor: theme.black,
+    borderWidth: 1,
 
-        ':focus': {
-            borderColor: theme.colors.secondaryBlueColors[0],
-        },
+    ':focus': {
+      borderColor: theme.colors.secondaryBlueColors[0],
     },
-    label: {
-        fontWeight: 'bold',
-    },
+  },
+  label: {
+    fontWeight: 'bold',
+  },
 });
 
 export function PrimarySelect({
-    children,
-    sx,
-    ...props
+  children,
+  sx,
+  ...props
 }: PrimarySelectProps): React.ReactElement {
-    return (
-        <Select sx={sx ?? selectStyling} {...props}>
-            {children}
-        </Select>
-    );
+  return (
+    <Select sx={sx ?? selectStyling} {...props}>
+      {children}
+    </Select>
+  );
 }
