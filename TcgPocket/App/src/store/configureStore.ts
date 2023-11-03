@@ -4,6 +4,7 @@ import { dataSlice } from './dataSlice';
 import { authSlice } from './authSlice';
 import { adminSlice } from './adminSlice';
 import { inventorySlice } from './inventorySlice';
+import { deckBuilderSlice } from './deckBuilderSlice';
 
 export const appStore = configureStore({
     reducer: {
@@ -11,6 +12,7 @@ export const appStore = configureStore({
         data: dataSlice.reducer,
         admin: adminSlice.reducer,
         inventory: inventorySlice.reducer,
+        deckBuilder: deckBuilderSlice.reducer,
     },
 });
 

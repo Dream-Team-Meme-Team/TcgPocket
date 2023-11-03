@@ -62,7 +62,8 @@ export function PrimaryNavigation(): React.ReactElement {
                     <Image maw={navbarHeight - 16} src="./TcgPocketLogo2.svg" />
                 </NavButton>
                 <Flex align={'center'} gap={25}>
-                    {determineUserState && (
+                    {/* fix when backend is running */}
+                    {!determineUserState && (
                         <Flex gap={10}>
                             <NavButton route={routes.inventory}>
                                 Inventory
