@@ -1,21 +1,21 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { dispatch, useAppSelector } from '../../../../store/configureStore';
-import { TabInfoHeader } from '../headers/TabInfoHeader';
-import { IconEdit, IconTrash } from '@tabler/icons-react';
-import { ActionIcon, MantineTheme, createStyles } from '@mantine/core';
+import { MantineTheme, createStyles } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { AttributeGetDto } from '../../../../types/attributes';
-import { EditModal } from '../modals/EditModal';
 import {
   deleteAttribute,
   editAttribute,
   getAllAttributes,
+  getAllFilteredAttributes,
 } from '../../../../services/dataServices/attributeServices';
 import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { DeleteModal } from '../../../../components/modals/DeleteModal';
 import { setSelectedId } from '../../../../store/adminSlice';
 import { AdminTabLabel } from '../../../../enums/adminTabLabel';
 import { shallowEqual } from 'react-redux';
+import { useAsync } from 'react-use';
+import { PaginatedTable } from '../../../../components/PaginatedTable';
 
 const titles: string[] = ['Name', 'Game', 'Edit', 'Delete'];
 const colValue: string = '1fr ';
@@ -103,52 +103,37 @@ export const AttributeTab: React.FC = () => {
     loadAttributes();
   }, [selectedGameId, selectedTab]);
 
+  const [page, setPage] = useState(1);
+
+  const fetchAttributes = useAsync(async () => {
+    const { payload } = await dispatch(
+      getAllFilteredAttributes({
+        gameId: 1,
+        currentPage: page,
+        pageSize: 25,
+        name: searchTerm,
+      })
+    );
+    return payload?.data;
+  }, [page, searchTerm]);
+
+  const attributesForTable = useMemo(() => {
+    const response = fetchAttributes;
+
+    return response;
+  }, [fetchAttributes]);
+
+  console.log(attributesForTable);
+
   return (
-    <div className={classes.attributeTabContainer}>
-      <TabInfoHeader titles={titles} />
-
-      {renderedAttributes.length !== 0 ? (
-        <div>
-          {renderedAttributes.map((attribute, index) => {
-            return (
-              <div key={index} className={classes.renderedAttributeContainer}>
-                <div> {attribute.name} </div>
-
-                <div> {findGame(attribute.gameId)} </div>
-
-                <ActionIcon
-                  aria-label="Edit Attribute"
-                  onClick={() => selectAndOpenEdit(attribute)}
-                >
-                  <IconEdit />
-                </ActionIcon>
-
-                <ActionIcon
-                  aria-label="Delete Attribute"
-                  onClick={() => selectAndOpenDelete(attribute)}
-                >
-                  <IconTrash />
-                </ActionIcon>
-
-                <div>
-                  {selectedId === attribute.id && (
-                    <EditModal
-                      open={openEdit}
-                      setOpen={toggleEdit}
-                      submitAction={editSelectedAttribute}
-                      value={attribute}
-                    />
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      ) : (
-        <div className={classes.renderedAttributeContainer}>
-          <i> No data to display </i>
-        </div>
-      )}
+    <div>
+      <PaginatedTable
+        data={attributesForTable.value}
+        loading={attributesForTable.loading}
+        page={page}
+        setPage={setPage}
+        tableWidth="95%"
+      />
 
       <DeleteModal
         open={openDelete}
