@@ -46,7 +46,7 @@ namespace TcgPocket.Features.Cards
         }
 
         [HttpGet]
-        public async Task<ActionResult<Response<PagedResult<CardDetailDto>>>> 
+        public async Task<ActionResult<Response<PagedResult<CardDisplayDto>>>> 
             GetAllCardsPaginatedQuery([FromQuery] PagedCardFilterDto filter)
         {
             var response = await _mediator

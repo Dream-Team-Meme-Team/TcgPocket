@@ -572,3 +572,7 @@ packages/react-devtools-inline/dist
 packages/react-devtools-shell/dist
 packages/react-devtools-timeline/dist
 *.DotSettings
+
+# Azure
+__blobstorage__
+__azurite*

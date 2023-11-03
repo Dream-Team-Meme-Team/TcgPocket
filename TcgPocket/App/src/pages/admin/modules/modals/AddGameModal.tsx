@@ -8,9 +8,9 @@ import { GameDto } from '../../../../types/games';
 import {
   createGame,
   getAllGames,
-} from '../../../../services/dataServices/GameServices';
+} from '../../../../services/dataServices/gameServices';
 import { responseWrapper } from '../../../../services/helpers/responseWrapper';
-import { dispatch } from '../../../../store/ConfigureStore';
+import { dispatch } from '../../../../store/configureStore';
 import { AdminButtons } from '../AdminButtons';
 
 const initialValues = {

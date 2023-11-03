@@ -15,8 +15,7 @@ const inputStyling = (theme: MantineTheme): CSSObject => ({
   width: '100%',
 
   input: {
-    color: theme.black,
-    background: theme.colors.textBoxColor[0],
+    background: theme.black,
     borderColor: theme.colors.grape[9],
     fontWeight: 500,
     borderWidth: 1,

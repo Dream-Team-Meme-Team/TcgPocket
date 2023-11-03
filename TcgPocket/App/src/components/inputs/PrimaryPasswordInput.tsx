@@ -16,8 +16,8 @@ type PrimaryPasswordInputProps = TextInputProps &
 
 const textInputStyling = (theme: MantineTheme): CSSObject => ({
   input: {
-    color: 'black',
-    background: theme.colors.textBoxColor[0],
+    color: 'white',
+    background: theme.black,
     borderColor: theme.colors.grape[9],
     fontWeight: 500,
     borderWidth: 1,
@@ -37,7 +37,7 @@ export function PrimaryPasswordInput({
   sx,
   ...props
 }: PrimaryPasswordInputProps): React.ReactElement {
-  const [hidden, { toggle: toggleHidden }] = useDisclosure();
+  const [hidden, { toggle: toggleHidden }] = useDisclosure(true);
 
   return (
     <TextInput
@@ -47,11 +47,7 @@ export function PrimaryPasswordInput({
       styles={styles}
       rightSection={
         <ActionIcon aria-label="Toggle Visible" onClick={toggleHidden}>
-          {hidden ? (
-            <IconEye color="#13222B" />
-          ) : (
-            <IconEyeClosed color="#13222B" />
-          )}
+          {hidden ? <IconEye /> : <IconEyeClosed />}
         </ActionIcon>
       }
     >
