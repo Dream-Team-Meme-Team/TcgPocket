@@ -9,6 +9,7 @@ import { useMemo } from 'react';
 import { dispatch, useAppSelector } from '../../../store/configureStore';
 import { error, success } from '../../../services/helpers/Notification';
 import { PrimaryPasswordInput } from '../../inputs/PrimaryPasswordInput';
+import { signInUser } from '../../../services/authServices';
 
 type LoginModalProps = {
   open: boolean;

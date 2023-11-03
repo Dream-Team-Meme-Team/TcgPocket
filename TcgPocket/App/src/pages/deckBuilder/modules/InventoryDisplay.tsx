@@ -7,9 +7,12 @@ import { useState } from 'react';
 import { PrimaryBadge } from '../../../components/badges/PrimaryBadge';
 import { GridView } from './GridView';
 import { ViewStyle } from '../../../enums/viewStyle';
+import { useAppSelector } from '../../../store/configureStore';
 
 export function InventoryDisplay(): React.ReactElement {
   const { classes } = useStyles();
+
+  const cards = useAppSelector((state) => state.inventory.cards);
 
   const [view, setView] = useState<string>(ViewStyle.Grid);
   const [searchText, setSearchText] = useState<string>('');
