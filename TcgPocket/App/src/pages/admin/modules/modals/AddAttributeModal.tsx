@@ -1,5 +1,5 @@
 import { useDisclosure } from '@mantine/hooks';
-import { dispatch, useAppSelector } from '../../../../store/ConfigureStore';
+import { dispatch, useAppSelector } from '../../../../store/configureStore';
 import { useForm } from '@mantine/form';
 import { PrimaryButton } from '../../../../components/buttons/PrimaryButton';
 import { IconPlus } from '@tabler/icons-react';
@@ -9,7 +9,7 @@ import { AdminButtons } from '../AdminButtons';
 import {
   createAttribute,
   getAllAttributes,
-} from '../../../../services/dataServices/AttributeServices';
+} from '../../../../services/dataServices/attributeServices';
 import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { AttributeDto } from '../../../../types/attributes';
 

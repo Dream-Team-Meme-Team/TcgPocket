@@ -4,11 +4,11 @@ import { IconPlus } from '@tabler/icons-react';
 import { PrimaryModal } from '../../../../components/modals/PrimaryModal';
 import { useForm } from '@mantine/form';
 import { PrimaryTextInput } from '../../../../components/inputs/PrimaryTextInput';
-import { dispatch, useAppSelector } from '../../../../store/ConfigureStore';
+import { dispatch, useAppSelector } from '../../../../store/configureStore';
 import {
   createCardType,
   getAllCardTypes,
-} from '../../../../services/dataServices/CardTypeServices';
+} from '../../../../services/dataServices/cardTypeServices';
 import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { CardTypeDto } from '../../../../types/card-types';
 import { AdminButtons } from '../AdminButtons';

@@ -21,8 +21,8 @@ import { RegisterModal } from '../components/modals/AuthModals/RegisterModal';
 import { useDisclosure } from '@mantine/hooks';
 import { useNavbarHeight } from '../hooks/useNavbarHeight';
 import { useNavigate } from 'react-router-dom';
-import { signOutUser } from '../services/AuthServices';
-import { dispatch, useAppSelector } from '../store/ConfigureStore';
+import { signOutUser } from '../services/authServices';
+import { dispatch, useAppSelector } from '../store/configureStore';
 import { routes } from '../routes/Index';
 
 export function PrimaryNavigation(): React.ReactElement {
@@ -66,7 +66,7 @@ export function PrimaryNavigation(): React.ReactElement {
               <NavButton route={routes.cardUpload}>Upload Cards</NavButton>
               {/* <NavButton route={routes.deckBuilder}> Deck Builder</NavButton> */}
               {isAdmin && (
-                <NavButton route={routes.adminPortal}> Admin Portal </NavButton>
+                <NavButton route={routes.adminPortal}>Admin Portal</NavButton>
               )}
             </Flex>
           )}

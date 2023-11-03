@@ -12,7 +12,7 @@ import { useState } from 'react';
 import { PrimaryButton } from '../../../components/buttons/PrimaryButton';
 import { LoginModal } from '../../../components/modals/authModals/LoginModal';
 import { RegisterModal } from '../../../components/modals/authModals/RegisterModal';
-import { useAppSelector } from '../../../store/ConfigureStore';
+import { useAppSelector } from '../../../store/configureStore';
 import { shallowEqual } from 'react-redux';
 
 export function HeroTitle() {

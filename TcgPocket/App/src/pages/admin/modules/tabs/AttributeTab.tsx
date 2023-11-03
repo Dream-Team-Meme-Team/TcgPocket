@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { dispatch, useAppSelector } from '../../../../store/ConfigureStore';
+import { dispatch, useAppSelector } from '../../../../store/configureStore';
 import { TabInfoHeader } from '../headers/TabInfoHeader';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
 import { ActionIcon, MantineTheme, createStyles } from '@mantine/core';
@@ -10,10 +10,10 @@ import {
   deleteAttribute,
   editAttribute,
   getAllAttributes,
-} from '../../../../services/dataServices/AttributeServices';
+} from '../../../../services/dataServices/attributeServices';
 import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { DeleteModal } from '../../../../components/modals/DeleteModal';
-import { setSelectedId } from '../../../../store/AdminSlice';
+import { setSelectedId } from '../../../../store/adminSlice';
 import { AdminTabLabel } from '../../../../enums/adminTabLabel';
 import { shallowEqual } from 'react-redux';
 

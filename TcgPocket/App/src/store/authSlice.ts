@@ -1,12 +1,12 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { UserGetDto } from '../types/users';
 import {
-  getSignedInUser,
-  registerUser,
   signInUser,
+  getSignedInUser,
   signOutUser,
+  registerUser,
   updateUserInformation,
-} from '../services/AuthServices';
+} from '../services/authServices';
 
 type AuthState = {
   user: UserGetDto | undefined | null;

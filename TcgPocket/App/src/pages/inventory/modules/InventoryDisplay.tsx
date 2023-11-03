@@ -1,25 +1,16 @@
-import {
-  MantineTheme,
-  Pagination,
-  ScrollArea,
-  createStyles,
-} from '@mantine/core';
+import { MantineTheme, ScrollArea, createStyles } from '@mantine/core';
 import { CardDisplayDto } from '../../../types/cards';
 import { PagedResult } from '../../../types/shared';
 import { useMemo } from 'react';
 import { CardDisplay } from '../../../components/cardDisplay/CardDisplay';
 
 type InventoryDisplayProps = {
-  paginatedCards: PagedResult<CardDisplayDto> | undefined;
-  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
-  currentPage: number;
+  paginatedCards: PagedResult<CardDisplayDto> | null;
   isLoading: boolean;
 };
 
 export function InventoryDisplay({
   paginatedCards: cards,
-  setCurrentPage,
-  currentPage,
   isLoading,
 }: InventoryDisplayProps) {
   const { classes } = useStyles();
@@ -37,17 +28,6 @@ export function InventoryDisplay({
           ))}
         </div>
       </ScrollArea>
-
-      <Pagination
-        color={'violet'}
-        withEdges
-        siblings={2}
-        boundaries={2}
-        className={classes.paginationControls}
-        value={currentPage}
-        onChange={setCurrentPage}
-        total={cards ? cards.pageCount : 16}
-      />
     </div>
   );
 }
@@ -62,7 +42,6 @@ const useStyles = createStyles((theme: MantineTheme) => {
 
     inventoryDisplayContainer: {
       display: 'grid',
-      gridTemplateRows: '1fr auto',
 
       overflowY: 'hidden',
     },
