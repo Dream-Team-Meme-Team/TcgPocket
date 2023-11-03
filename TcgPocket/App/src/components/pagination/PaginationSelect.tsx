@@ -54,7 +54,7 @@ export function PaginationSelect({
     };
 
     return (
-        <div className={className ? className : classes.wrapper}>
+        <div className={className ?? classes.wrapper}>
             <PrimaryIconButton
                 className={classes.icon}
                 onClick={returnToStart}
