@@ -1,14 +1,14 @@
 import { IconPlus } from '@tabler/icons-react';
 import { PrimaryButton } from '../../../../components/buttons/PrimaryButton';
 import { useDisclosure } from '@mantine/hooks';
-import { dispatch, useAppSelector } from '../../../../store/ConfigureStore';
+import { dispatch, useAppSelector } from '../../../../store/configureStore';
 import { PrimaryModal } from '../../../../components/modals/PrimaryModal';
 import { useForm } from '@mantine/form';
 import { PrimaryTextInput } from '../../../../components/inputs/PrimaryTextInput';
 import {
   createRarity,
   getAllRarities,
-} from '../../../../services/dataServices/RarityServices';
+} from '../../../../services/dataServices/rarityServices';
 import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { RarityDto } from '../../../../types/rarities';
 import { AdminButtons } from '../AdminButtons';

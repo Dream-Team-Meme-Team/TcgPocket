@@ -1,5 +1,5 @@
 import { MantineTheme, createStyles } from '@mantine/core';
-import { useAppSelector } from '../../../../store/ConfigureStore';
+import { useAppSelector } from '../../../../store/configureStore';
 import { PersonalInformationForm } from '../PersonalInformationForm';
 import { PasswordForm } from '../PasswordForm';
 import { DeleteAccount } from '../DeleteAccount';
