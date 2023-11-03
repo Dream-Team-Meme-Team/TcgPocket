@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { Response } from '../../types/shared';
+import { OptionItemDto, Response } from '../../types/shared';
 import { SetDto, SetGetDto } from '../../types/sets';
 import { apiCall } from '../helpers/apiCall';
 import { apiRoutes } from '../../routes/Index';
@@ -36,6 +36,20 @@ export const SetServices = {
       data: values,
     });
   },
+
+  getOptions: async () => {
+    return await apiCall({
+      method: 'PUT',
+      endpoint: `${apiRoutes.sets}/options`,
+    });
+  },
+
+  getOptionsByGameId: async (gameId: number) => {
+    return await apiCall({
+      method: 'PUT',
+      endpoint: `${apiRoutes.sets}/options/${gameId}`,
+    });
+  },
 };
 
 export const getAllSets = createAsyncThunk<
@@ -68,4 +82,20 @@ export const editSet = createAsyncThunk<
   { rejectValue: Response<void> }
 >('editSet', async (editedSet) => {
   return await SetServices.editSet(editedSet);
+});
+
+export const getOptions = createAsyncThunk<
+  Response<OptionItemDto>,
+  void,
+  { rejectValue: Response<OptionItemDto> }
+>('getOptions', async () => {
+  return await SetServices.getOptions();
+});
+
+export const getOptionsByGameId = createAsyncThunk<
+  Response<OptionItemDto>,
+  number,
+  { rejectValue: Response<OptionItemDto> }
+>('getOptionsByGameId', async (gameId) => {
+  return await SetServices.getOptionsByGameId(gameId);
 });

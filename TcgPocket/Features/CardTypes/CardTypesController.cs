@@ -5,6 +5,7 @@ using TcgPocket.Features.CardTypes.Queries;
 using TcgPocket.Shared;
 using TcgPocket.Shared.PagedResult;
 using TcgPocket.Features.CardTypes.Dtos;
+using TcgPocket.Shared.Options;
 
 namespace TcgPocket.Features.CardTypes;
 
@@ -71,6 +72,29 @@ public class CardTypesController : ControllerBase
     public async Task<ActionResult<Response>> DeleteCardType([FromRoute] int id)
     {
         var response = await _mediator.Send(new DeleteCardTypeCommand{Id = id});
+        
+        return response.HasErrors ? BadRequest(response) : Ok(response);
+    }
+    
+    [HttpGet("options")]
+    public async Task<ActionResult<Response<List<OptionItemDto>>>> GetOptions()
+    {
+        var response = await _mediator.Send(new GetCardTypeOptionsRequest
+        {
+            MappingExpression = x => new OptionItemDto(x.Name, x.Id.ToString())
+        });
+        
+        return response.HasErrors ? BadRequest(response) : Ok(response);
+    }
+    
+    [HttpGet("options/{gameId}")]
+    public async Task<ActionResult<Response<List<OptionItemDto>>>> GetOptionsByGameId(int gameId)
+    {
+        var response = await _mediator.Send(new GetCardTypeOptionsRequest
+        {
+            MappingExpression = x => new OptionItemDto(x.Name, x.Id.ToString()),
+            FilterExpression = x => x.GameId == gameId
+        });
         
         return response.HasErrors ? BadRequest(response) : Ok(response);
     }
