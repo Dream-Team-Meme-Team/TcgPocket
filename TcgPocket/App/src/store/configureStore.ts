@@ -1,14 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useSelector } from 'react-redux';
-import { dataSlice } from './DataSlice';
-import { authSlice } from './AuthSlice';
-import { adminSlice } from './AdminSlice';
+import { dataSlice } from './dataSlice';
+import { authSlice } from './authSlice';
+import { adminSlice } from './adminSlice';
+import { inventorySlice } from './inventorySlice';
 
 export const appStore = configureStore({
   reducer: {
     user: authSlice.reducer,
     data: dataSlice.reducer,
     admin: adminSlice.reducer,
+    inventory: inventorySlice.reducer,
   },
 });
 

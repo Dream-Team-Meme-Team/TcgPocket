@@ -8,12 +8,12 @@ using TcgPocket.Shared.Filter;
 
 namespace TcgPocket.Features.Cards.Queries;
 
-public class GetPagedCardsQuery :  FilteredPageRequest<Card, CardDetailDto, PagedCardFilterDto>
+public class GetPagedCardsQuery :  FilteredPageRequest<Card, CardDisplayDto, PagedCardFilterDto>
 {
 }
 
 public class GetPagedCardsQueryHandler
-    : FilteredPageRequestHandler<GetPagedCardsQuery, Card, CardDetailDto, PagedCardFilterDto>
+    : FilteredPageRequestHandler<GetPagedCardsQuery, Card, CardDisplayDto, PagedCardFilterDto>
 {
     public GetPagedCardsQueryHandler(
         DataContext dataContext, IMapper mapper, IValidator<PagedCardFilterDto> validator) 
@@ -23,7 +23,12 @@ public class GetPagedCardsQueryHandler
 
     protected override IQueryable<Card> GetEntities()
     {
-        return base.GetEntities().Include(x => x.CardAttributes);
+        return base.GetEntities()
+            .Include(x => x.CardAttributes)
+            .Include(x => x.Set)
+            .Include(x => x.Rarity)
+            .Include(x => x.Game)
+            .Include(x => x.CardType);
     }
 
     protected override IQueryable<Card> FilterEntities(IQueryable<Card> query, GetPagedCardsQuery request)

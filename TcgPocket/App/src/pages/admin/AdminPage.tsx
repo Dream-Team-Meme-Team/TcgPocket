@@ -9,14 +9,14 @@ import {
 import { useNavbarHeight } from '../../hooks/useNavbarHeight';
 import { AdminTabHeader } from './modules/headers/AdminTabHeader';
 import { Tab } from '../../types/tabs';
-import { dispatch, useAppSelector } from '../../store/ConfigureStore';
+import { dispatch, useAppSelector } from '../../store/configureStore';
 import { useEffect } from 'react';
 import {
   setAdminSearchTerm,
   setSelectedAdminTab,
   setSelectedGameId,
   setSelectedId,
-} from '../../store/AdminSlice';
+} from '../../store/adminSlice';
 import { AdminTabLabel } from '../../enums/adminTabLabel';
 import { GameTab } from './modules/tabs/GameTab';
 import { SetTab } from './modules/tabs/SetTab';

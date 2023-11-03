@@ -6,8 +6,7 @@ import { PrimaryTextInput } from '../../inputs/PrimaryTextInput';
 import { SecondaryButton } from '../../buttons/SecondaryButton';
 import { SignInUserDto } from '../../../types/users';
 import { useMemo } from 'react';
-import { dispatch, useAppSelector } from '../../../store/ConfigureStore';
-import { signInUser } from '../../../services/AuthServices';
+import { dispatch, useAppSelector } from '../../../store/configureStore';
 import { error, success } from '../../../services/helpers/Notification';
 import { PrimaryPasswordInput } from '../../inputs/PrimaryPasswordInput';
 
