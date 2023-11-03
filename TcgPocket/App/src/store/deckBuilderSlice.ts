@@ -1,24 +1,24 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 export interface DeckBuilderState {
-    name: string;
+  name: string;
 }
 
 const INITIAL_STATE: DeckBuilderState = {
-    name: 'Untitled',
+  name: 'Untitled',
 };
 
 export const deckBuilderSlice = createSlice({
-    name: 'Inventory',
-    initialState: INITIAL_STATE,
-    reducers: {
-        setName(state, { payload }: PayloadAction<DeckBuilderState['name']>) {
-            state.name = payload;
-        },
+  name: 'Inventory',
+  initialState: INITIAL_STATE,
+  reducers: {
+    setName(state, { payload }: PayloadAction<DeckBuilderState['name']>) {
+      state.name = payload;
     },
-    // extraReducers: (builder) => {
+  },
+  // extraReducers: (builder) => {
 
-    // },
+  // },
 });
 
 export const { setName } = deckBuilderSlice.actions;

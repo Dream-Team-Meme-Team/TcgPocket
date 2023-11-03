@@ -6,48 +6,48 @@ import { DeckBuilderHeader } from './modules/DeckBuilderHeader';
 import { defaultGap, defaultPadding } from '../../constants/theme';
 
 export function DeckBuilder(): React.ReactElement {
-    const { classes } = useStyles();
+  const { classes } = useStyles();
 
-    return (
-        <div className={classes.container}>
-            <div className={classes.header}>
-                <DeckBuilderHeader />
-            </div>
+  return (
+    <div className={classes.container}>
+      <div className={classes.header}>
+        <DeckBuilderHeader />
+      </div>
 
-            <div className={classes.body}>
-                <InventoryDisplay />
+      <div className={classes.body}>
+        <InventoryDisplay />
 
-                <BuilderDisplay />
-            </div>
-        </div>
-    );
+        <BuilderDisplay />
+      </div>
+    </div>
+  );
 }
 
 const useStyles = createStyles((theme: MantineTheme) => {
-    const { remainingHeight } = useNavbarHeight();
+  const { remainingHeight } = useNavbarHeight();
 
-    return {
-        container: {
-            display: 'grid',
-            gridTemplateRows: 'auto 1fr',
+  return {
+    container: {
+      display: 'grid',
+      gridTemplateRows: 'auto 1fr',
 
-            height: remainingHeight,
+      height: remainingHeight,
 
-            paddingTop: defaultPadding,
-            paddingBottom: defaultPadding,
-        },
+      paddingTop: defaultPadding,
+      paddingBottom: defaultPadding,
+    },
 
-        header: {
-            display: 'flex',
-            justifyContent: 'center',
-        },
+    header: {
+      display: 'flex',
+      justifyContent: 'center',
+    },
 
-        body: {
-            display: 'grid',
-            gridTemplateColumns: '1fr 2fr',
+    body: {
+      display: 'grid',
+      gridTemplateColumns: '1fr 2fr',
 
-            gap: defaultGap,
-            margin: 20,
-        },
-    };
+      gap: defaultGap,
+      margin: 20,
+    },
+  };
 });

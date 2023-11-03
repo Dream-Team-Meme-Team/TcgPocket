@@ -11,53 +11,52 @@ import { InventoryPage } from '../pages/inventory/InventoryPage';
 import { DeckBuilder } from '../pages/deckBuilder/DeckBuilderPage';
 
 export function AppRoutes() {
-    const user = useAppSelector((state) => state.user.user);
+  const user = useAppSelector((state) => state.user.user);
 
-    const isAdmin: boolean | undefined = useMemo(() => {
-        if (!user) {
-            return false;
-        }
-        const isAdmin: number = user?.roles.findIndex(
-            (r: { name: string }) => r.name === 'Admin'
-        );
-        return isAdmin !== -1;
-    }, [user]);
-
-    return (
-        <Routes>
-            <Route
-                path={routes.home}
-                element={<HomePage />}
-                errorElement={<ErrorPage />}
-            />
-            {/* fix when backend is running */}
-            {!user && (
-                <>
-                    <Route
-                        path={routes.inventory}
-                        element={<InventoryPage />}
-                        errorElement={<ErrorPage />}
-                    />
-                    <Route
-                        path={routes.deckBuilder}
-                        element={<DeckBuilder />}
-                        errorElement={<ErrorPage />}
-                    />
-                    <Route
-                        path={routes.settings}
-                        element={<SettingsPage />}
-                        errorElement={<ErrorPage />}
-                    />
-                </>
-            )}
-            {isAdmin && (
-                <Route
-                    path={routes.adminPortal}
-                    element={<AdminPage />}
-                    errorElement={<ErrorPage />}
-                />
-            )}
-            <Route path="*" element={<NotFoundPage />} />
-        </Routes>
+  const isAdmin: boolean | undefined = useMemo(() => {
+    if (!user) {
+      return false;
+    }
+    const isAdmin: number = user?.roles.findIndex(
+      (r: { name: string }) => r.name === 'Admin'
     );
+    return isAdmin !== -1;
+  }, [user]);
+
+  return (
+    <Routes>
+      <Route
+        path={routes.home}
+        element={<HomePage />}
+        errorElement={<ErrorPage />}
+      />
+      {user && (
+        <>
+          <Route
+            path={routes.inventory}
+            element={<InventoryPage />}
+            errorElement={<ErrorPage />}
+          />
+          <Route
+            path={routes.deckBuilder}
+            element={<DeckBuilder />}
+            errorElement={<ErrorPage />}
+          />
+          <Route
+            path={routes.settings}
+            element={<SettingsPage />}
+            errorElement={<ErrorPage />}
+          />
+        </>
+      )}
+      {isAdmin && (
+        <Route
+          path={routes.adminPortal}
+          element={<AdminPage />}
+          errorElement={<ErrorPage />}
+        />
+      )}
+      <Route path="*" element={<NotFoundPage />} />
+    </Routes>
+  );
 }
