@@ -5,6 +5,7 @@ using TcgPocket.Features.Sets.Queries;
 using TcgPocket.Shared;
 using TcgPocket.Shared.PagedResult;
 using TcgPocket.Features.Sets.Dtos;
+using TcgPocket.Shared.Options;
 
 namespace TcgPocket.Features.Sets;
 
@@ -69,6 +70,29 @@ public class SetsController : ControllerBase
     {
         var response = await _mediator.Send(new DeleteSetCommand { Id = id });
 
+        return response.HasErrors ? BadRequest(response) : Ok(response);
+    }
+    
+    [HttpGet("options")]
+    public async Task<ActionResult<Response<List<OptionItemDto>>>> GetOptions()
+    {
+        var response = await _mediator.Send(new GetSetOptionsRequest
+        {
+            MappingExpression = x => new OptionItemDto(x.Name, x.Id.ToString())
+        });
+    
+        return response.HasErrors ? BadRequest(response) : Ok(response);
+    }
+
+    [HttpGet("options/{gameId}")]
+    public async Task<ActionResult<Response<List<OptionItemDto>>>> GetOptionsByGameId(int gameId)
+    {
+        var response = await _mediator.Send(new GetSetOptionsRequest
+        {
+            MappingExpression = x => new OptionItemDto(x.Name, x.Id.ToString()),
+            FilterExpression = x => x.GameId == gameId
+        });
+    
         return response.HasErrors ? BadRequest(response) : Ok(response);
     }
 }

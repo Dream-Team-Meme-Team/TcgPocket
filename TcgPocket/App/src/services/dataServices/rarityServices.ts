@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { apiCall } from '../helpers/apiCall';
 import { RarityDto, RarityGetDto } from '../../types/rarities';
 import { apiRoutes } from '../../routes/Index';
-import { Response } from '../../types/shared';
+import { OptionItemDto, Response } from '../../types/shared';
 
 export type RarityServices = typeof RarityServices;
 
@@ -34,6 +34,20 @@ export const RarityServices = {
       method: 'PUT',
       endpoint: `${apiRoutes.rarities}/${values.id}`,
       data: values,
+    });
+  },
+
+  getOptions: async () => {
+    return await apiCall({
+      method: 'PUT',
+      endpoint: `${apiRoutes.rarities}/options`,
+    });
+  },
+
+  getOptionsByGameId: async (gameId: number) => {
+    return await apiCall({
+      method: 'PUT',
+      endpoint: `${apiRoutes.rarities}/options/${gameId}`,
     });
   },
 };
@@ -68,4 +82,20 @@ export const editRarity = createAsyncThunk<
   { rejectValue: Response<void> }
 >('editRarity', async (editedRarity) => {
   return await RarityServices.edit(editedRarity);
+});
+
+export const getOptions = createAsyncThunk<
+  Response<OptionItemDto>,
+  void,
+  { rejectValue: Response<OptionItemDto> }
+>('getOptions', async () => {
+  return await RarityServices.getOptions();
+});
+
+export const getOptionsByGameId = createAsyncThunk<
+  Response<OptionItemDto>,
+  number,
+  { rejectValue: Response<OptionItemDto> }
+>('getOptionsByGameId', async (gameId) => {
+  return await RarityServices.getOptionsByGameId(gameId);
 });

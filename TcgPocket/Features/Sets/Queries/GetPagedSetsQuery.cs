@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using TcgPocket.Data;
-using TcgPocket.Features.Sets;
 using TcgPocket.Features.Sets.Dtos;
 using TcgPocket.Shared.Filter;
 
