@@ -26,11 +26,7 @@ def price_scraper(game: str):
                 data[set.text.strip('\n')][card.text.strip('\n')] = None
             #
         #
-
-        print(data[set.text.strip('\n')])
     #
 
     return data
 #
-
-print(price_scraper('magic'))
