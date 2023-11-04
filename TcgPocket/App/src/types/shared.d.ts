@@ -31,3 +31,14 @@ export type PagedResult<TDto = any> = {
   firstRowOnPage: number;
   lastRowOnPage: number;
 } & PageDto;
+
+export type OptionItemDto = {
+  text: string;
+  value: string | number;
+};
+
+export type OptionItemDto<T = any> = {
+  text: string;
+  value: string | number;
+  meta: T;
+};
