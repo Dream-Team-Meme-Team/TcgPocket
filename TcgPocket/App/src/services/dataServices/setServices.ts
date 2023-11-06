@@ -39,7 +39,7 @@ export const SetServices = {
 
   getOptions: async () => {
     return await apiCall({
-      method: 'PUT',
+      method: 'GET',
       endpoint: `${apiRoutes.sets}/options`,
     });
   },
@@ -85,17 +85,17 @@ export const editSet = createAsyncThunk<
 });
 
 export const getOptions = createAsyncThunk<
-  Response<OptionItemDto>,
+  Response<OptionItemDto[]>,
   void,
-  { rejectValue: Response<OptionItemDto> }
+  { rejectValue: Response<OptionItemDto[]> }
 >('getOptions', async () => {
   return await SetServices.getOptions();
 });
 
 export const getOptionsByGameId = createAsyncThunk<
-  Response<OptionItemDto>,
+  Response<OptionItemDto[]>,
   number,
-  { rejectValue: Response<OptionItemDto> }
+  { rejectValue: Response<OptionItemDto[]> }
 >('getOptionsByGameId', async (gameId) => {
   return await SetServices.getOptionsByGameId(gameId);
 });

@@ -19,6 +19,7 @@ import { PagedResult } from '../types/shared';
 type PaginatedTableProps = {
   data: PagedResult | undefined;
   loading: boolean;
+  titles: string[];
   page: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
   tableWidth?: string;
@@ -27,6 +28,7 @@ type PaginatedTableProps = {
 export const PaginatedTable = ({
   data,
   loading,
+  titles,
   page,
   setPage,
   tableWidth,
@@ -63,9 +65,9 @@ export const PaginatedTable = ({
               justify="space-around"
               className={classes.tableHeader}
             >
-              <div className={classes.tableColumnFirstItem}>Edit</div>
-              <div className={classes.tableColumnItem}>Name</div>
-              <div className={classes.tableColumnLastItem}>Delete</div>
+              <div className={classes.tableColumnFirstItem}>{titles[0]}</div>
+              <div className={classes.tableColumnItem}>{titles[1]}</div>
+              <div className={classes.tableColumnLastItem}>{titles[2]}</div>
             </Flex>
           </thead>
           {data && !loading ? (

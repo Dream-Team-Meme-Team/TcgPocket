@@ -64,7 +64,6 @@ export function AdminPage(): React.ReactElement {
   const handleTabChange = (value: TabsValue) => {
     dispatch(setSelectedAdminTab(value));
     dispatch(setAdminSearchTerm(''));
-    dispatch(setSelectedGameId(0));
     dispatch(setSelectedId(0));
   };
 

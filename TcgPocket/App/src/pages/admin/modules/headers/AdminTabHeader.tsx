@@ -1,8 +1,8 @@
 import { PrimaryTextInput } from '../../../../components/inputs/PrimaryTextInput';
 import { IconSearch } from '@tabler/icons-react';
 import { dispatch, useAppSelector } from '../../../../store/configureStore';
-import { Select, createStyles } from '@mantine/core';
-import { useMemo } from 'react';
+import { Select, SelectItem, createStyles } from '@mantine/core';
+import { useMemo, useState } from 'react';
 import { AddModalRenderer } from '../AddModalRenderer';
 import {
   setAdminSearchTerm,
@@ -10,6 +10,9 @@ import {
 } from '../../../../store/adminSlice';
 import { AdminTabLabel } from '../../../../enums/adminTabLabel';
 import { shallowEqual } from 'react-redux';
+import { useAsync } from 'react-use';
+import { getOptions } from '../../../../services/dataServices/gameServices';
+import { OptionItemDto } from '../../../../types/shared';
 
 type AdminTabHeaderProps = {
   label: string;
@@ -25,18 +28,19 @@ export function AdminTabHeader({
     shallowEqual
   );
 
-  const [games] = useAppSelector((state) => [state.data.games], shallowEqual);
+  const fetchGames = useAsync(async () => {
+    const { payload } = await dispatch(getOptions());
+    console.log('fdsjkhfsdk');
+    return payload?.data;
+  });
 
-  const data = useMemo(() => {
-    return games.map((game) => game.name);
-  }, [games]);
+  const games = useMemo(() => {
+    const response = fetchGames;
 
-  const selectedValue = useMemo(() => {
-    const foundGame = games.find((game) => game.id === selectedGameId);
+    return response;
+  }, [fetchGames]);
 
-    return foundGame ? foundGame.name : null;
-  }, [selectedGameId, games]);
-
+  const [game, setGame] = useState<string | undefined>();
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setAdminSearchTerm(e.target.value));
   };
@@ -44,11 +48,8 @@ export function AdminTabHeader({
   const handleSelectChange = (value: string | null) => {
     if (!value) return;
 
-    const foundSelectedGame = games.find((game) => game.name === value);
-
-    if (!foundSelectedGame) return;
-
-    dispatch(setSelectedGameId(foundSelectedGame.id));
+    setGame(value);
+    dispatch(setSelectedGameId(parseInt(value)));
   };
 
   const determineSelect = label !== AdminTabLabel.Games;
@@ -59,10 +60,10 @@ export function AdminTabHeader({
 
       <div className={classes.controlsContainer}>
         <div>
-          {determineSelect && (
+          {determineSelect && games && (
             <Select
-              data={data}
-              value={selectedValue}
+              data={games.value as SelectItem[]}
+              value={game}
               onChange={handleSelectChange}
               placeholder="Select Game"
             />

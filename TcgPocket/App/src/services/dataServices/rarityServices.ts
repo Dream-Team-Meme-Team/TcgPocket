@@ -39,7 +39,7 @@ export const RarityServices = {
 
   getOptions: async () => {
     return await apiCall({
-      method: 'PUT',
+      method: 'GET',
       endpoint: `${apiRoutes.rarities}/options`,
     });
   },

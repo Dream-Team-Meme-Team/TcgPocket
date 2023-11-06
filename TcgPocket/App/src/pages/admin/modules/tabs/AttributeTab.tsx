@@ -17,7 +17,7 @@ import { shallowEqual } from 'react-redux';
 import { useAsync } from 'react-use';
 import { PaginatedTable } from '../../../../components/PaginatedTable';
 
-const titles: string[] = ['Name', 'Game', 'Edit', 'Delete'];
+const titles: string[] = ['Edit', 'Name', 'Delete'];
 const colValue: string = '1fr ';
 
 export const AttributeTab: React.FC = () => {
@@ -108,14 +108,14 @@ export const AttributeTab: React.FC = () => {
   const fetchAttributes = useAsync(async () => {
     const { payload } = await dispatch(
       getAllFilteredAttributes({
-        gameId: 1,
+        gameId: selectedGameId,
         currentPage: page,
         pageSize: 25,
         name: searchTerm,
       })
     );
     return payload?.data;
-  }, [page, searchTerm]);
+  }, [page, selectedGameId, searchTerm]);
 
   const attributesForTable = useMemo(() => {
     const response = fetchAttributes;
@@ -123,16 +123,15 @@ export const AttributeTab: React.FC = () => {
     return response;
   }, [fetchAttributes]);
 
-  console.log(attributesForTable);
-
   return (
     <div>
       <PaginatedTable
         data={attributesForTable.value}
         loading={attributesForTable.loading}
+        titles={titles}
         page={page}
         setPage={setPage}
-        tableWidth="90%"
+        tableWidth="97%"
       />
 
       <DeleteModal

@@ -39,7 +39,7 @@ export const CardTypeServices = {
 
   getOptions: async () => {
     return await apiCall({
-      method: 'PUT',
+      method: 'GET',
       endpoint: `${apiRoutes.cardTypes}/options`,
     });
   },
