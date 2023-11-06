@@ -63,23 +63,25 @@ export const PaginatedTable = ({
               justify="space-around"
               className={classes.tableHeader}
             >
-              <div className={classes.tableColumnItem}>Edit</div>
+              <div className={classes.tableColumnFirstItem}>Edit</div>
               <div className={classes.tableColumnItem}>Name</div>
               <div className={classes.tableColumnLastItem}>Delete</div>
             </Flex>
           </thead>
           {data && !loading ? (
-            data.items.map((attribute) => {
+            data.items.map((attribute, index) => {
               return (
                 <tbody>
                   <Flex
                     dir="row"
                     gap={'lg'}
                     justify="space-around"
-                    className={classes.tableRow}
+                    className={
+                      index % 2 === 1 ? classes.tableRowOther : classes.tableRow
+                    }
                     key={attribute.id}
                   >
-                    <td className={classes.tableColumnItem}>
+                    <td className={classes.tableColumnFirstItem}>
                       <ActionIcon
                         aria-label="Edit Attribute"
                         onClick={() => selectAndOpenEdit(attribute)}
@@ -179,16 +181,37 @@ const useStyles = createStyles((theme: MantineTheme) => {
       },
     },
 
+    tableRowOther: {
+      padding: 6,
+      borderBottom: `solid 0.25px rgba(157, 101, 219, 0.25)`,
+      backgroundColor: 'rgba(117, 55, 130, 0.1)',
+      ':hover': {
+        backgroundColor: theme.fn.darken(
+          theme.colors.primaryPurpleColor[0],
+          0.2
+        ),
+      },
+    },
+
     tableHeader: {
       fontWeight: 'bold',
       padding: '7px',
-      backgroundColor: 'rgba(255,255,255,0.05)',
+      backgroundColor: 'rgba(35, 0, 43, 0.45)',
       border: `solid 1px ${theme.colors.primaryPurpleColor[0]}`,
+    },
+
+    tableColumnFirstItem: {
+      width: '30%',
+      padding: `${TableRowWidths[4] / 250}px ${TableRowWidths[4] / 25}px`,
+      display: 'flex',
+      justifyContent: 'flex-start',
+      textAlign: 'start',
+      margin: 'auto',
     },
 
     tableColumnItem: {
       width: '100%',
-      padding: `${TableRowWidths[4] / 250}px ${TableRowWidths[4] / 50}px`,
+      padding: `${TableRowWidths[4] / 250}px ${TableRowWidths[4] / 25}px`,
       display: 'flex',
       justifyContent: 'flex-start',
       textAlign: 'start',
@@ -197,7 +220,7 @@ const useStyles = createStyles((theme: MantineTheme) => {
 
     tableColumnLastItem: {
       width: '100%',
-      padding: `${TableRowWidths[4] / 250}px ${TableRowWidths[4] / 50}px`,
+      padding: `${TableRowWidths[4] / 250}px ${TableRowWidths[4] / 25}px`,
       display: 'flex',
       justifyContent: 'flex-end',
       textAlign: 'end',

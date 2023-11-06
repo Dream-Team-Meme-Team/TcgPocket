@@ -132,7 +132,7 @@ export const AttributeTab: React.FC = () => {
         loading={attributesForTable.loading}
         page={page}
         setPage={setPage}
-        tableWidth="95%"
+        tableWidth="90%"
       />
 
       <DeleteModal
