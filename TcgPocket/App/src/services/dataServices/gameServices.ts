@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { Response } from '../../types/shared';
+import { OptionItemDto, Response } from '../../types/shared';
 import { GameDto, GameGetDto } from '../../types/games';
 import { apiCall } from '../helpers/apiCall';
 import { apiRoutes } from '../../routes/Index';
@@ -36,6 +36,13 @@ export const GameServices = {
       data: values,
     });
   },
+
+  getOptions: async () => {
+    return await apiCall({
+      method: 'PUT',
+      endpoint: `${apiRoutes.games}/options`,
+    });
+  },
 };
 
 export const getAllGames = createAsyncThunk<
@@ -68,4 +75,12 @@ export const editGame = createAsyncThunk<
   { rejectValue: Response<void> }
 >('editGame', async (values) => {
   return await GameServices.editGame(values);
+});
+
+export const getOptions = createAsyncThunk<
+  Response<OptionItemDto>,
+  void,
+  { rejectValue: Response<OptionItemDto> }
+>('getOptions', async () => {
+  return await GameServices.getOptions();
 });
