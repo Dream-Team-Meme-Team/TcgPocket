@@ -7,12 +7,10 @@ import { useState } from 'react';
 import { PrimaryBadge } from '../../../components/badges/PrimaryBadge';
 import { GridView } from './GridView';
 import { ViewStyle } from '../../../enums/viewStyle';
-import { useAppSelector } from '../../../store/configureStore';
+import { ScrollArea } from '@mantine/core';
 
 export function InventoryDisplay(): React.ReactElement {
   const { classes } = useStyles();
-
-  const cards = useAppSelector((state) => state.inventory.cards);
 
   const [view, setView] = useState<string>(ViewStyle.Grid);
   const [searchText, setSearchText] = useState<string>('');
@@ -50,7 +48,9 @@ export function InventoryDisplay(): React.ReactElement {
         </div>
       </div>
 
-      <div>{view === 'Grid' ? <GridView /> : <div />}</div>
+      <ScrollArea className={classes.body}>
+        {view === 'Grid' ? <GridView /> : <div />}
+      </ScrollArea>
     </div>
   );
 }
@@ -93,6 +93,11 @@ const useStyles = createStyles((theme: MantineTheme) => {
 
     bottomRow: {
       display: 'flex',
+    },
+
+    body: {
+      // this, this is bad
+      height: '65vh',
     },
   };
 });

@@ -1,15 +1,15 @@
-import { createStyles, MantineTheme } from '@mantine/styles';
+import { createStyles } from '@mantine/styles';
 import { InventoryDisplay } from './modules/InventoryDisplay';
 import { BuilderDisplay } from './modules/DeckBuilderDisplay';
-import { useNavbarHeight } from '../../hooks/useNavbarHeight';
 import { DeckBuilderHeader } from './modules/DeckBuilderHeader';
 import { defaultGap, defaultPadding } from '../../constants/theme';
+import { ScrollArea } from '@mantine/core';
 
 export function DeckBuilder(): React.ReactElement {
   const { classes } = useStyles();
 
   return (
-    <div className={classes.container}>
+    <ScrollArea className={classes.container}>
       <div className={classes.header}>
         <DeckBuilderHeader />
       </div>
@@ -19,19 +19,17 @@ export function DeckBuilder(): React.ReactElement {
 
         <BuilderDisplay />
       </div>
-    </div>
+    </ScrollArea>
   );
 }
 
-const useStyles = createStyles((theme: MantineTheme) => {
-  const { remainingHeight } = useNavbarHeight();
-
+const useStyles = createStyles(() => {
   return {
     container: {
       display: 'grid',
       gridTemplateRows: 'auto 1fr',
 
-      height: remainingHeight,
+      height: '100vh',
 
       paddingTop: defaultPadding,
       paddingBottom: defaultPadding,
@@ -47,7 +45,7 @@ const useStyles = createStyles((theme: MantineTheme) => {
       gridTemplateColumns: '1fr 2fr',
 
       gap: defaultGap,
-      margin: 20,
+      padding: defaultPadding,
     },
   };
 });
