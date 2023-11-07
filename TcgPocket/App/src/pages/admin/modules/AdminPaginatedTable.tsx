@@ -109,7 +109,7 @@ export const AdminPaginatedTable = ({
         </Table>
       </Container>
 
-      <Flex dir="row" justify="flex-end" pb="5px" pr="25px">
+      <Flex dir="row" justify="flex-end" pb="5px" pr="35px">
         <PaginationSelect
           currentPage={page}
           setCurrentPage={setPage}
