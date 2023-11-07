@@ -29,7 +29,6 @@ type AdminTableDataTypes =
 type AdminPaginatedTableProps = {
   data: PagedResult<AdminTableDataTypes> | undefined;
   loading: boolean;
-  titles: string[];
   page: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
   editFn: (valueDto: AdminTableDataTypes) => Promise<void>;
@@ -40,7 +39,6 @@ type AdminPaginatedTableProps = {
 export const AdminPaginatedTable = ({
   data,
   loading,
-  titles,
   page,
   setPage,
   editFn,
@@ -48,7 +46,7 @@ export const AdminPaginatedTable = ({
   tableWidth,
 }: AdminPaginatedTableProps) => {
   const { classes } = useStyles();
-
+  const titles: string[] = ['Edit', 'Name', 'Delete'];
   return (
     <>
       <Container pt={'0.5%'} pb={'1%'} fluid className={classes.tableContainer}>
@@ -116,7 +114,7 @@ type TableRowProps = {
   deleteFn: () => Promise<void>;
 };
 
-const TableRow = ({ value, index, editFn, deleteFn }: TableRowProps) => {
+export const TableRow = ({ value, index, editFn, deleteFn }: TableRowProps) => {
   const { classes } = useStyles();
   const [openDelete, { toggle: toggleDelete }] = useDisclosure();
   const [openEdit, { toggle: toggleEdit }] = useDisclosure();
@@ -227,7 +225,7 @@ const useStyles = createStyles((theme: MantineTheme) => {
 
     tableColumnFirstItem: {
       width: '30%',
-      padding: '0.25em 0.25em',
+      padding: '0.1% 1.25%',
       display: 'flex',
       justifyContent: 'flex-start',
       textAlign: 'start',
@@ -236,7 +234,7 @@ const useStyles = createStyles((theme: MantineTheme) => {
 
     tableColumnItem: {
       width: '100%',
-      padding: '0.25em 0.25em',
+      padding: '0.1% 1%',
       display: 'flex',
       justifyContent: 'flex-start',
       textAlign: 'start',
@@ -245,7 +243,7 @@ const useStyles = createStyles((theme: MantineTheme) => {
 
     tableColumnLastItem: {
       width: '100%',
-      padding: '0.25em 0.25em',
+      padding: '0.1% 1.5%',
       display: 'flex',
       justifyContent: 'flex-end',
       textAlign: 'end',

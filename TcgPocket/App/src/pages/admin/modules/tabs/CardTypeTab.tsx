@@ -1,37 +1,19 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { dispatch, useAppSelector } from '../../../../store/configureStore';
-import { TabInfoHeader } from '../headers/TabInfoHeader';
-import { ActionIcon, MantineTheme, createStyles } from '@mantine/core';
-import { IconEdit, IconTrash } from '@tabler/icons-react';
-import { EditModal } from '../modals/EditModal';
-import { useDisclosure } from '@mantine/hooks';
 import {
   deleteCardType,
   editCardType,
-  getAllCardTypes,
+  getAllFilteredCardTypes,
 } from '../../../../services/dataServices/cardTypeServices';
 import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { CardTypeGetDto } from '../../../../types/card-types';
-import { DeleteModal } from '../../../../components/modals/DeleteModal';
-import { setSelectedId } from '../../../../store/adminSlice';
 import { AdminTabLabel } from '../../../../enums/adminTabLabel';
 import { shallowEqual } from 'react-redux';
-
-const titles: string[] = ['Name', 'Game', 'Edit', 'Delete'];
-const colValue: string = '1fr ';
+import { AdminPaginatedTable } from '../AdminPaginatedTable';
+import { useAsyncFn } from 'react-use';
 
 export const CardTypeTab: React.FC = () => {
-  const numOfCol = colValue.repeat(titles.length);
-  const { classes } = useStyles(numOfCol);
-
-  const [openDelete, { toggle: toggleDelete }] = useDisclosure();
-  const [openEdit, { toggle: toggleEdit }] = useDisclosure();
-
-  const [cardTypes, games] = useAppSelector(
-    (state) => [state.data.cardTypes, state.data.games],
-    shallowEqual
-  );
-
+  const [page, setPage] = useState(1);
   const [searchTerm, selectedId, selectedGameId, selectedTab] = useAppSelector(
     (state) => [
       state.admin.searchTerm,
@@ -42,35 +24,25 @@ export const CardTypeTab: React.FC = () => {
     shallowEqual
   );
 
-  const renderedCardTypes = useMemo(() => {
-    return cardTypes
-      .filter((cardType) => cardType.gameId === selectedGameId)
-      .filter((cardType) =>
-        cardType.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-  }, [cardTypes, searchTerm, selectedGameId]);
+  const [cardTypes, fetchCardTypes] = useAsyncFn(async () => {
+    const { payload } = await dispatch(
+      getAllFilteredCardTypes({
+        gameId: selectedGameId,
+        currentPage: page,
+        pageSize: 25,
+        name: searchTerm,
+      })
+    );
 
-  const selectAndOpenDelete = (value: CardTypeGetDto) => {
-    toggleDelete();
-    dispatch(setSelectedId(value.id));
-  };
+    return payload?.data;
+  }, [page, selectedGameId, searchTerm]);
 
-  const selectAndOpenEdit = (value: CardTypeGetDto) => {
-    toggleEdit();
-    dispatch(setSelectedId(value.id));
-  };
-
-  const loadCardTypes = async () => {
-    const { payload } = await dispatch(getAllCardTypes());
-    responseWrapper(payload);
-  };
-
-  const deleteSelectedCardType = () => {
+  const deleteSelectedCardType = async () => {
     dispatch(deleteCardType(selectedId)).then(({ payload }) => {
       responseWrapper(payload, 'Card Type Deleted');
 
       if (payload && !payload.hasErrors) {
-        loadCardTypes();
+        fetchCardTypes();
       }
     });
   };
@@ -86,97 +58,27 @@ export const CardTypeTab: React.FC = () => {
       responseWrapper(payload, 'Card Type Edited');
 
       if (payload && !payload.hasErrors) {
-        loadCardTypes();
+        fetchCardTypes();
       }
     });
   };
 
-  const findGame = (gameId: number) => {
-    const foundGame = games.find((game) => game.id === gameId);
-
-    return foundGame ? foundGame.name : 'Unknown';
-  };
-
   useEffect(() => {
     if (selectedGameId === 0 || selectedTab !== AdminTabLabel.CardTypes) return;
-    loadCardTypes();
-  }, [selectedGameId, selectedTab]);
+    fetchCardTypes();
+  }, [fetchCardTypes, selectedGameId, selectedTab]);
 
   return (
-    <div className={classes.cardTypeContainer}>
-      <TabInfoHeader titles={titles} />
-
-      {renderedCardTypes.length !== 0 ? (
-        <div>
-          {renderedCardTypes.map((cardType, index) => {
-            return (
-              <div key={index} className={classes.renderedCardTypeContainer}>
-                <div> {cardType.name} </div>
-
-                <div> {findGame(cardType.gameId)} </div>
-
-                <ActionIcon
-                  aria-label="Edit Card Type"
-                  onClick={() => selectAndOpenEdit(cardType)}
-                >
-                  <IconEdit />
-                </ActionIcon>
-
-                <ActionIcon
-                  aria-label="Delete Card Type"
-                  onClick={() => selectAndOpenDelete(cardType)}
-                >
-                  <IconTrash />
-                </ActionIcon>
-
-                <div>
-                  {selectedId === cardType.id && (
-                    <EditModal
-                      open={openEdit}
-                      setOpen={toggleEdit}
-                      submitAction={editSelectedCardType}
-                      value={cardType}
-                    />
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      ) : (
-        <div className={classes.renderedCardTypeContainer}>
-          <i> No data to display </i>
-        </div>
-      )}
-
-      <DeleteModal
-        open={openDelete}
-        setOpen={toggleDelete}
-        submitAction={deleteSelectedCardType}
+    <div>
+      <AdminPaginatedTable
+        data={cardTypes.value}
+        loading={cardTypes.loading}
+        page={page}
+        setPage={setPage}
+        editFn={editSelectedCardType}
+        deleteFn={deleteSelectedCardType}
+        tableWidth="97%"
       />
     </div>
   );
 };
-
-const useStyles = createStyles((theme: MantineTheme, numOfCol: string) => {
-  return {
-    cardTypeContainer: {
-      paddingLeft: '8px',
-    },
-
-    renderedCardTypeContainer: {
-      display: 'grid',
-      gridTemplateColumns: numOfCol,
-
-      ':hover': {
-        backgroundColor: theme.fn.darken(
-          theme.colors.primaryPurpleColor[0],
-          0.2
-        ),
-
-        borderRadius: 7,
-        paddingLeft: 8,
-      },
-    },
-  };
-});

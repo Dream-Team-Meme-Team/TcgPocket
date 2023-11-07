@@ -12,8 +12,6 @@ import { shallowEqual } from 'react-redux';
 import { useAsyncFn } from 'react-use';
 import { AdminPaginatedTable } from '../AdminPaginatedTable';
 
-const titles: string[] = ['Edit', 'Name', 'Delete'];
-
 export const AttributeTab: React.FC = () => {
   const [page, setPage] = useState(1);
   const [searchTerm, selectedId, selectedGameId, selectedTab] = useAppSelector(
@@ -26,7 +24,7 @@ export const AttributeTab: React.FC = () => {
     shallowEqual
   );
 
-  const [state, fetchAttributes] = useAsyncFn(async () => {
+  const [attributes, fetchAttributes] = useAsyncFn(async () => {
     const { payload } = await dispatch(
       getAllFilteredAttributes({
         gameId: selectedGameId,
@@ -74,9 +72,8 @@ export const AttributeTab: React.FC = () => {
   return (
     <div>
       <AdminPaginatedTable
-        data={state.value}
-        loading={state.loading}
-        titles={titles}
+        data={attributes.value}
+        loading={attributes.loading}
         page={page}
         setPage={setPage}
         editFn={editSelectedAttribute}

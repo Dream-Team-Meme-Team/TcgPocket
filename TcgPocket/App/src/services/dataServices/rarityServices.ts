@@ -1,8 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { apiCall } from '../helpers/apiCall';
-import { RarityDto, RarityGetDto } from '../../types/rarities';
+import { RarityDto, RarityFilterDto, RarityGetDto } from '../../types/rarities';
 import { apiRoutes } from '../../routes/Index';
-import { OptionItemDto, Response } from '../../types/shared';
+import { OptionItemDto, PagedResult, Response } from '../../types/shared';
 
 export type RarityServices = typeof RarityServices;
 
@@ -11,6 +11,14 @@ export const RarityServices = {
     return await apiCall<RarityGetDto[]>({
       method: 'GET',
       endpoint: apiRoutes.rarities,
+    });
+  },
+
+  getAllFiltered: async (params?: RarityFilterDto) => {
+    return await apiCall<PagedResult<RarityGetDto>>({
+      method: 'GET',
+      endpoint: `${apiRoutes.rarities}/paginated`,
+      params: params,
     });
   },
 
@@ -58,6 +66,14 @@ export const getAllRarities = createAsyncThunk<
   { rejectValue: Response<RarityGetDto[]> }
 >('getAllRarities', async () => {
   return await RarityServices.getAll();
+});
+
+export const getAllFilteredRarities = createAsyncThunk<
+  Response<PagedResult<RarityGetDto>>,
+  RarityFilterDto,
+  { rejectValue: Response<PagedResult<RarityGetDto>> }
+>('getAllPagedRarities', async (filter) => {
+  return await RarityServices.getAllFiltered(filter);
 });
 
 export const createRarity = createAsyncThunk<

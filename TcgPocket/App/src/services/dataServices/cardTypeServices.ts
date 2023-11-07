@@ -1,6 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { OptionItemDto, Response } from '../../types/shared';
-import { CardTypeDto, CardTypeGetDto } from '../../types/card-types';
+import { OptionItemDto, PagedResult, Response } from '../../types/shared';
+import {
+  CardTypeDto,
+  CardTypeFilterDto,
+  CardTypeGetDto,
+} from '../../types/card-types';
 import { apiCall } from '../helpers/apiCall';
 import { apiRoutes } from '../../routes/Index';
 
@@ -11,6 +15,14 @@ export const CardTypeServices = {
     return await apiCall<CardTypeGetDto[]>({
       method: 'GET',
       endpoint: apiRoutes.cardTypes,
+    });
+  },
+
+  getAllFiltered: async (params?: CardTypeFilterDto) => {
+    return await apiCall<PagedResult<CardTypeGetDto>>({
+      method: 'GET',
+      endpoint: `${apiRoutes.cardTypes}/paginated`,
+      params: params,
     });
   },
 
@@ -58,6 +70,14 @@ export const getAllCardTypes = createAsyncThunk<
   { rejectValue: Response<CardTypeGetDto[]> }
 >('getAllCardTypes', async () => {
   return await CardTypeServices.getAll();
+});
+
+export const getAllFilteredCardTypes = createAsyncThunk<
+  Response<PagedResult<CardTypeGetDto>>,
+  CardTypeFilterDto,
+  { rejectValue: Response<PagedResult<CardTypeGetDto>> }
+>('getAllPagedCardTypes', async (filter) => {
+  return await CardTypeServices.getAllFiltered(filter);
 });
 
 export const createCardType = createAsyncThunk<
