@@ -2,7 +2,7 @@ import { PrimaryTextInput } from '../../../../components/inputs/PrimaryTextInput
 import { IconSearch } from '@tabler/icons-react';
 import { dispatch, useAppSelector } from '../../../../store/configureStore';
 import { Select, SelectItem, createStyles } from '@mantine/core';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { AddModalRenderer } from '../AddModalRenderer';
 import {
   setAdminSearchTerm,
@@ -12,7 +12,6 @@ import { AdminTabLabel } from '../../../../enums/adminTabLabel';
 import { shallowEqual } from 'react-redux';
 import { useAsync } from 'react-use';
 import { getOptions } from '../../../../services/dataServices/gameServices';
-import { OptionItemDto } from '../../../../types/shared';
 
 type AdminTabHeaderProps = {
   label: string;
@@ -28,19 +27,17 @@ export function AdminTabHeader({
     shallowEqual
   );
 
-  const fetchGames = useAsync(async () => {
+  const fetchGameOptions = useAsync(async () => {
     const { payload } = await dispatch(getOptions());
-    console.log('fdsjkhfsdk');
     return payload?.data;
   });
 
-  const games = useMemo(() => {
-    const response = fetchGames;
+  const gameOptions = useMemo(() => {
+    const response = fetchGameOptions;
 
-    return response;
-  }, [fetchGames]);
+    return response.value as SelectItem[];
+  }, [fetchGameOptions]);
 
-  const [game, setGame] = useState<string | undefined>();
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setAdminSearchTerm(e.target.value));
   };
@@ -48,7 +45,6 @@ export function AdminTabHeader({
   const handleSelectChange = (value: string | null) => {
     if (!value) return;
 
-    setGame(value);
     dispatch(setSelectedGameId(parseInt(value)));
   };
 
@@ -60,10 +56,10 @@ export function AdminTabHeader({
 
       <div className={classes.controlsContainer}>
         <div>
-          {determineSelect && games && (
+          {determineSelect && gameOptions && (
             <Select
-              data={games.value as SelectItem[]}
-              value={game}
+              data={gameOptions}
+              value={selectedGameId.toString()}
               onChange={handleSelectChange}
               placeholder="Select Game"
             />

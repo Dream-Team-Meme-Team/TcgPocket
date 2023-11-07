@@ -7,12 +7,14 @@ type DeleteModalProps = {
   open: boolean;
   setOpen: () => void;
   submitAction: () => void;
+  valueName?: string;
 };
 
 export function DeleteModal({
   open,
   setOpen,
   submitAction,
+  valueName,
 }: DeleteModalProps): React.ReactElement {
   const { classes } = useStyles();
 
@@ -25,7 +27,7 @@ export function DeleteModal({
     <PrimaryModal
       opened={open}
       onClose={setOpen}
-      title={'Are you sure you want to delete?'}
+      title={`Are you sure you want to delete ${valueName ?? ''}?`}
     >
       <div className={classes.buttonsContainer}>
         <SecondaryButton onClick={setOpen}> Cancel </SecondaryButton>

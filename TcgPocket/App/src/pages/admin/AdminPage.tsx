@@ -14,7 +14,6 @@ import { useEffect } from 'react';
 import {
   setAdminSearchTerm,
   setSelectedAdminTab,
-  setSelectedGameId,
   setSelectedId,
 } from '../../store/adminSlice';
 import { AdminTabLabel } from '../../enums/adminTabLabel';
