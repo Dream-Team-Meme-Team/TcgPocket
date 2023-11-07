@@ -8,45 +8,46 @@ import {
   createStyles,
 } from '@mantine/core';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
-import { EditModal } from '../pages/admin/modules/modals/EditModal';
-import { PaginationSelect } from './pagination/PaginationSelect';
+import { EditModal } from './modals/EditModal';
+import { PaginationSelect } from '../../../components/pagination/PaginationSelect';
 import { useDisclosure } from '@mantine/hooks';
-import { dispatch } from '../store/configureStore';
-import { setSelectedId } from '../store/adminSlice';
-import { AttributeGetDto } from '../types/attributes';
-import { PagedResult } from '../types/shared';
+import { dispatch } from '../../../store/configureStore';
+import { setSelectedId } from '../../../store/adminSlice';
+import { AttributeGetDto } from '../../../types/attributes';
+import { PagedResult } from '../../../types/shared';
+import { DeleteModal } from '../../../components/modals/DeleteModal';
+import { RarityGetDto } from '../../../types/rarities';
+import { CardTypeGetDto } from '../../../types/card-types';
+import { SetGetDto } from '../../../types/sets';
 
-type PaginatedTableProps = {
-  data: PagedResult | undefined;
+type AdminTableDataTypes =
+  | AttributeGetDto
+  | RarityGetDto
+  | CardTypeGetDto
+  | SetGetDto;
+
+type AdminPaginatedTableProps = {
+  data: PagedResult<AdminTableDataTypes> | undefined;
   loading: boolean;
   titles: string[];
   page: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
+  editFn: (valueDto: AdminTableDataTypes) => Promise<void>;
+  deleteFn: () => Promise<void>;
   tableWidth?: string;
 };
 
-export const PaginatedTable = ({
+export const AdminPaginatedTable = ({
   data,
   loading,
   titles,
   page,
   setPage,
+  editFn,
+  deleteFn,
   tableWidth,
-}: PaginatedTableProps) => {
+}: AdminPaginatedTableProps) => {
   const { classes } = useStyles();
-
-  const [openDelete, { toggle: toggleDelete }] = useDisclosure();
-  const [openEdit, { toggle: toggleEdit }] = useDisclosure();
-
-  const selectAndOpenDelete = (value: AttributeGetDto) => {
-    toggleDelete();
-    dispatch(setSelectedId(value.id));
-  };
-
-  const selectAndOpenEdit = (value: AttributeGetDto) => {
-    toggleEdit();
-    dispatch(setSelectedId(value.id));
-  };
 
   return (
     <>
@@ -71,50 +72,14 @@ export const PaginatedTable = ({
             </Flex>
           </thead>
           {data && !loading ? (
-            data.items.map((attribute, index) => {
-              return (
-                <tbody>
-                  <Flex
-                    dir="row"
-                    gap={'lg'}
-                    justify="space-around"
-                    className={
-                      index % 2 === 1 ? classes.tableRowOther : classes.tableRow
-                    }
-                    key={attribute.id}
-                  >
-                    <td className={classes.tableColumnFirstItem}>
-                      <ActionIcon
-                        aria-label="Edit Attribute"
-                        onClick={() => selectAndOpenEdit(attribute)}
-                      >
-                        <IconEdit />
-                      </ActionIcon>
-                    </td>
-                    <td className={classes.tableColumnItem}>
-                      {attribute.name}
-                    </td>
-                    <td className={classes.tableColumnLastItem}>
-                      <ActionIcon
-                        aria-label="Delete Attribute"
-                        onClick={() => selectAndOpenDelete(attribute)}
-                      >
-                        <IconTrash />
-                      </ActionIcon>
-                    </td>
-
-                    {/* {selectedId === attribute.id && (
-                      <EditModal
-                        open={openEdit}
-                        setOpen={toggleEdit}
-                        submitAction={editSelectedAttribute}
-                        value={attribute}
-                      />
-                    )} */}
-                  </Flex>
-                </tbody>
-              );
-            })
+            data.items.map((value, index) => (
+              <TableRow
+                value={value}
+                index={index}
+                editFn={editFn}
+                deleteFn={deleteFn}
+              />
+            ))
           ) : (
             <div className={classes.loaderContainer}>
               <Loader size="150px" color="#9d65db" />
@@ -144,11 +109,69 @@ export const PaginatedTable = ({
   );
 };
 
-const TableRowWidths = {
-  1: 100,
-  2: 150,
-  3: 250,
-  4: 400,
+type TableRowProps = {
+  value: any;
+  index: number;
+  editFn: (valueDto: AdminTableDataTypes) => Promise<void>;
+  deleteFn: () => Promise<void>;
+};
+
+const TableRow = ({ value, index, editFn, deleteFn }: TableRowProps) => {
+  const { classes } = useStyles();
+  const [openDelete, { toggle: toggleDelete }] = useDisclosure();
+  const [openEdit, { toggle: toggleEdit }] = useDisclosure();
+
+  const selectAndOpenDelete = (value: AdminTableDataTypes) => {
+    toggleDelete();
+    dispatch(setSelectedId(value.id));
+  };
+
+  const selectAndOpenEdit = (value: AdminTableDataTypes) => {
+    toggleEdit();
+    dispatch(setSelectedId(value.id));
+  };
+
+  return (
+    <>
+      <Flex
+        dir="row"
+        gap={'lg'}
+        justify="space-around"
+        className={index % 2 === 1 ? classes.tableRowOther : classes.tableRow}
+        key={value.id}
+      >
+        <td className={classes.tableColumnFirstItem}>
+          <ActionIcon
+            aria-label="Edit Attribute"
+            onClick={() => selectAndOpenEdit(value)}
+          >
+            <IconEdit />
+          </ActionIcon>
+        </td>
+        <td className={classes.tableColumnItem}>{value.name}</td>
+        <td className={classes.tableColumnLastItem}>
+          <ActionIcon
+            aria-label="Delete Attribute"
+            onClick={() => selectAndOpenDelete(value)}
+          >
+            <IconTrash />
+          </ActionIcon>
+        </td>
+        <EditModal
+          open={openEdit}
+          setOpen={toggleEdit}
+          submitAction={editFn}
+          value={value}
+        />
+        <DeleteModal
+          open={openDelete}
+          setOpen={toggleDelete}
+          submitAction={deleteFn}
+          valueName={value.name}
+        />
+      </Flex>
+    </>
+  );
 };
 
 const useStyles = createStyles((theme: MantineTheme) => {
@@ -204,7 +227,7 @@ const useStyles = createStyles((theme: MantineTheme) => {
 
     tableColumnFirstItem: {
       width: '30%',
-      padding: `${TableRowWidths[4] / 250}px ${TableRowWidths[4] / 25}px`,
+      padding: '0.25em 0.25em',
       display: 'flex',
       justifyContent: 'flex-start',
       textAlign: 'start',
@@ -213,7 +236,7 @@ const useStyles = createStyles((theme: MantineTheme) => {
 
     tableColumnItem: {
       width: '100%',
-      padding: `${TableRowWidths[4] / 250}px ${TableRowWidths[4] / 25}px`,
+      padding: '0.25em 0.25em',
       display: 'flex',
       justifyContent: 'flex-start',
       textAlign: 'start',
@@ -222,7 +245,7 @@ const useStyles = createStyles((theme: MantineTheme) => {
 
     tableColumnLastItem: {
       width: '100%',
-      padding: `${TableRowWidths[4] / 250}px ${TableRowWidths[4] / 25}px`,
+      padding: '0.25em 0.25em',
       display: 'flex',
       justifyContent: 'flex-end',
       textAlign: 'end',
