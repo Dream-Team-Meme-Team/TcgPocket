@@ -72,12 +72,14 @@ export const AttributeTab: React.FC = () => {
   return (
     <div>
       <AdminPaginatedTable
-        data={attributes.value}
+        data={attributes.value?.items}
         loading={attributes.loading}
+        pageCount={attributes.value?.pageCount ?? 1}
         page={page}
         setPage={setPage}
         editFn={editSelectedAttribute}
         deleteFn={deleteSelectedAttribute}
+        typeName="Attribute"
         tableWidth="97%"
       />
     </div>

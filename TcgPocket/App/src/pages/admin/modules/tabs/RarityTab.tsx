@@ -71,12 +71,14 @@ export const RarityTab: React.FC = () => {
   return (
     <div>
       <AdminPaginatedTable
-        data={rarities.value}
+        data={rarities.value?.items}
         loading={rarities.loading}
+        pageCount={rarities.value?.pageCount ?? 1}
         page={page}
         setPage={setPage}
         editFn={editSelectedRarity}
         deleteFn={deleteSelectedRarity}
+        typeName="Rarity"
         tableWidth="97%"
       />
     </div>

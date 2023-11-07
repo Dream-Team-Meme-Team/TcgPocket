@@ -71,12 +71,14 @@ export const SetTab: React.FC = () => {
   return (
     <div>
       <AdminPaginatedTable
-        data={sets.value}
+        data={sets.value?.items}
         loading={sets.loading}
+        pageCount={sets.value?.pageCount ?? 1}
         page={page}
         setPage={setPage}
         editFn={editSelectedSet}
         deleteFn={deleteSelectedSet}
+        typeName="Set"
         tableWidth="97%"
       />
     </div>

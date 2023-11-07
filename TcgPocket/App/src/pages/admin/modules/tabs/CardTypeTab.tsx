@@ -71,12 +71,14 @@ export const CardTypeTab: React.FC = () => {
   return (
     <div>
       <AdminPaginatedTable
-        data={cardTypes.value}
+        data={cardTypes.value?.items}
         loading={cardTypes.loading}
+        pageCount={cardTypes.value?.pageCount ?? 1}
         page={page}
         setPage={setPage}
         editFn={editSelectedCardType}
         deleteFn={deleteSelectedCardType}
+        typeName="Card Type"
         tableWidth="97%"
       />
     </div>

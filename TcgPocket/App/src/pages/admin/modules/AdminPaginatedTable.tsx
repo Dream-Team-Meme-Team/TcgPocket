@@ -14,25 +14,35 @@ import { useDisclosure } from '@mantine/hooks';
 import { dispatch } from '../../../store/configureStore';
 import { setSelectedId } from '../../../store/adminSlice';
 import { AttributeGetDto } from '../../../types/attributes';
-import { PagedResult } from '../../../types/shared';
 import { DeleteModal } from '../../../components/modals/DeleteModal';
 import { RarityGetDto } from '../../../types/rarities';
 import { CardTypeGetDto } from '../../../types/card-types';
 import { SetGetDto } from '../../../types/sets';
+import { GameGetDto } from '../../../types/games';
 
 type AdminTableDataTypes =
   | AttributeGetDto
   | RarityGetDto
   | CardTypeGetDto
-  | SetGetDto;
+  | SetGetDto
+  | GameGetDto;
+
+type AdminTableEditTypes = AttributeGetDto &
+  RarityGetDto &
+  CardTypeGetDto &
+  SetGetDto &
+  GameGetDto;
 
 type AdminPaginatedTableProps = {
-  data: PagedResult<AdminTableDataTypes> | undefined;
+  data: AdminTableDataTypes[] | undefined;
   loading: boolean;
+  pageCount: number;
   page: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
-  editFn: (valueDto: AdminTableDataTypes) => Promise<void>;
+  editFn: (valueDto: AdminTableEditTypes) => Promise<void>;
   deleteFn: () => Promise<void>;
+  /**Name to be used in Aria Labels */
+  typeName: string;
   tableWidth?: string;
 };
 
@@ -40,9 +50,11 @@ export const AdminPaginatedTable = ({
   data,
   loading,
   page,
+  pageCount,
   setPage,
   editFn,
   deleteFn,
+  typeName: ariaLabel,
   tableWidth,
 }: AdminPaginatedTableProps) => {
   const { classes } = useStyles();
@@ -70,10 +82,11 @@ export const AdminPaginatedTable = ({
             </Flex>
           </thead>
           {data && !loading ? (
-            data.items.map((value, index) => (
+            data.map((value, index) => (
               <TableRow
                 value={value}
                 index={index}
+                typeName={ariaLabel}
                 editFn={editFn}
                 deleteFn={deleteFn}
               />
@@ -83,7 +96,7 @@ export const AdminPaginatedTable = ({
               <Loader size="150px" color="#9d65db" />
             </div>
           )}
-          {data?.items.length === 0 && !loading && (
+          {data?.length === 0 && !loading && (
             <Flex
               dir="row"
               gap={'lg'}
@@ -100,7 +113,7 @@ export const AdminPaginatedTable = ({
         <PaginationSelect
           currentPage={page}
           setCurrentPage={setPage}
-          total={data?.pageCount ?? 1}
+          total={pageCount}
         />
       </Flex>
     </>
@@ -108,13 +121,21 @@ export const AdminPaginatedTable = ({
 };
 
 type TableRowProps = {
-  value: any;
+  value: AdminTableDataTypes;
   index: number;
-  editFn: (valueDto: AdminTableDataTypes) => Promise<void>;
+  /**Name to be used in Aria Labels */
+  typeName: string;
+  editFn: (valueDto: AdminTableEditTypes) => Promise<void>;
   deleteFn: () => Promise<void>;
 };
 
-export const TableRow = ({ value, index, editFn, deleteFn }: TableRowProps) => {
+export const TableRow = ({
+  value,
+  index,
+  typeName,
+  editFn,
+  deleteFn,
+}: TableRowProps) => {
   const { classes } = useStyles();
   const [openDelete, { toggle: toggleDelete }] = useDisclosure();
   const [openEdit, { toggle: toggleEdit }] = useDisclosure();
@@ -140,7 +161,7 @@ export const TableRow = ({ value, index, editFn, deleteFn }: TableRowProps) => {
       >
         <td className={classes.tableColumnFirstItem}>
           <ActionIcon
-            aria-label="Edit Attribute"
+            aria-label={`Edit ${typeName}`}
             onClick={() => selectAndOpenEdit(value)}
           >
             <IconEdit />
@@ -149,7 +170,7 @@ export const TableRow = ({ value, index, editFn, deleteFn }: TableRowProps) => {
         <td className={classes.tableColumnItem}>{value.name}</td>
         <td className={classes.tableColumnLastItem}>
           <ActionIcon
-            aria-label="Delete Attribute"
+            aria-label={`Delete ${typeName}`}
             onClick={() => selectAndOpenDelete(value)}
           >
             <IconTrash />
