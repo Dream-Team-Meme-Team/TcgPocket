@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { dispatch, useAppSelector } from '../../../../store/configureStore';
 import { AttributeGetDto } from '../../../../types/attributes';
 import {
@@ -11,15 +11,26 @@ import { AdminTabLabel } from '../../../../enums/adminTabLabel';
 import { shallowEqual } from 'react-redux';
 import { useAsyncFn } from 'react-use';
 import { AdminPaginatedTable } from '../AdminPaginatedTable';
+import { setPageCount } from '../../../../store/adminSlice';
 
 export const AttributeTab: React.FC = () => {
-  const [page, setPage] = useState(1);
-  const [searchTerm, selectedId, selectedGameId, selectedTab] = useAppSelector(
+  const [
+    searchTerm,
+    selectedId,
+    selectedGameId,
+    selectedTab,
+    currentPage,
+    pageSize,
+    pageCount,
+  ] = useAppSelector(
     (state) => [
       state.admin.searchTerm,
-      state.admin.selectedId,
+      state.admin.selectedIdInPaginatedTable,
       state.admin.selectedGameId,
       state.admin.selectedTab,
+      state.admin.currentPage,
+      state.admin.pageSize,
+      state.admin.pageCount,
     ],
     shallowEqual
   );
@@ -28,14 +39,18 @@ export const AttributeTab: React.FC = () => {
     const { payload } = await dispatch(
       getAllFilteredAttributes({
         gameId: selectedGameId,
-        currentPage: page,
-        pageSize: 25,
+        currentPage: currentPage,
+        pageSize: pageSize,
         name: searchTerm,
       })
     );
 
+    if (payload && !payload.hasErrors) {
+      setPageCount(payload?.data.pageCount);
+    }
+
     return payload?.data;
-  }, [page, selectedGameId, searchTerm]);
+  }, [currentPage, pageSize, selectedGameId, searchTerm]);
 
   const editSelectedAttribute = async (editedAttribute: AttributeGetDto) => {
     const updatedAttribute: AttributeGetDto = {
@@ -74,9 +89,6 @@ export const AttributeTab: React.FC = () => {
       <AdminPaginatedTable
         data={attributes.value?.items}
         loading={attributes.loading}
-        pageCount={attributes.value?.pageCount ?? 1}
-        page={page}
-        setPage={setPage}
         editFn={editSelectedAttribute}
         deleteFn={deleteSelectedAttribute}
         typeName="Attribute"

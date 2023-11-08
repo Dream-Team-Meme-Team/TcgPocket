@@ -2,16 +2,22 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 type AdminState = {
   searchTerm: string;
-  selectedId: number;
+  selectedIdInPaginatedTable: number;
   selectedGameId: number;
   selectedTab: string | null;
+  currentPage: number;
+  pageSize: number;
+  pageCount: number;
 };
 
 const initialState: AdminState = {
   searchTerm: '',
-  selectedId: 0,
+  selectedIdInPaginatedTable: 0,
   selectedGameId: 0,
   selectedTab: null,
+  currentPage: 1,
+  pageSize: 10,
+  pageCount: 1,
 };
 
 export const adminSlice = createSlice({
@@ -24,8 +30,11 @@ export const adminSlice = createSlice({
     ) {
       state.searchTerm = payload;
     },
-    setSelectedId(state, { payload }: PayloadAction<AdminState['selectedId']>) {
-      state.selectedId = payload;
+    setSelectedIdInPaginatedTable(
+      state,
+      { payload }: PayloadAction<AdminState['selectedIdInPaginatedTable']>
+    ) {
+      state.selectedIdInPaginatedTable = payload;
     },
     setSelectedGameId(
       state,
@@ -39,12 +48,27 @@ export const adminSlice = createSlice({
     ) {
       state.selectedTab = payload;
     },
+    setCurrentPage(
+      state,
+      { payload }: PayloadAction<AdminState['currentPage']>
+    ) {
+      state.currentPage = payload;
+    },
+    setPageSize(state, { payload }: PayloadAction<AdminState['pageSize']>) {
+      state.pageSize = payload;
+    },
+    setPageCount(state, { payload }: PayloadAction<AdminState['pageCount']>) {
+      state.pageCount = payload;
+    },
   },
 });
 
 export const {
   setAdminSearchTerm,
-  setSelectedId,
+  setSelectedIdInPaginatedTable,
   setSelectedGameId,
   setSelectedAdminTab,
+  setCurrentPage,
+  setPageCount,
+  setPageSize,
 } = adminSlice.actions;

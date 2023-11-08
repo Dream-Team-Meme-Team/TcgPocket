@@ -17,7 +17,7 @@ export const GameTab: React.FC = () => {
   const [searchTerm, selectedId, selectedTab] = useAppSelector(
     (state) => [
       state.admin.searchTerm,
-      state.admin.selectedId,
+      state.admin.selectedIdInPaginatedTable,
       state.admin.selectedTab,
     ],
     shallowEqual

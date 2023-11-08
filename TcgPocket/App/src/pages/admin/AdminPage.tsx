@@ -13,8 +13,10 @@ import { dispatch, useAppSelector } from '../../store/configureStore';
 import { useEffect } from 'react';
 import {
   setAdminSearchTerm,
+  setCurrentPage,
+  setPageSize,
   setSelectedAdminTab,
-  setSelectedId,
+  setSelectedIdInPaginatedTable,
 } from '../../store/adminSlice';
 import { AdminTabLabel } from '../../enums/adminTabLabel';
 import { GameTab } from './modules/tabs/GameTab';
@@ -23,6 +25,11 @@ import { CardTypeTab } from './modules/tabs/CardTypeTab';
 import { RarityTab } from './modules/tabs/RarityTab';
 import { AttributeTab } from './modules/tabs/AttributeTab';
 import { shallowEqual } from 'react-redux';
+import { PaginationSelect } from '../../components/pagination/PaginationSelect';
+import { defaultGap, defaultPadding } from '../../constants/theme';
+import { PrimarySelect } from '../../components/inputs/PrimarySelect';
+
+const pageSizeOptions: string[] = ['10', '15', '30'];
 
 const adminTabs: Tab[] = [
   {
@@ -55,15 +62,31 @@ const adminTabs: Tab[] = [
 export function AdminPage(): React.ReactElement {
   const { classes } = useStyles();
 
-  const [selectedGameId, selectedTab] = useAppSelector(
-    (state) => [state.admin.selectedGameId, state.admin.selectedTab],
-    shallowEqual
-  );
+  const [selectedGameId, selectedTab, currentPage, pageSize, pageCount] =
+    useAppSelector(
+      (state) => [
+        state.admin.selectedGameId,
+        state.admin.selectedTab,
+        state.admin.currentPage,
+        state.admin.pageSize,
+        state.admin.pageCount,
+      ],
+      shallowEqual
+    );
+
+  const handleSetCurrentPage = (value: number) => {
+    dispatch(setCurrentPage(value));
+  };
+
+  const handleSetPageSize = (value: number) => {
+    dispatch(setPageSize(value));
+  };
 
   const handleTabChange = (value: TabsValue) => {
     dispatch(setSelectedAdminTab(value));
+    dispatch(setCurrentPage(1));
     dispatch(setAdminSearchTerm(''));
-    dispatch(setSelectedId(0));
+    dispatch(setSelectedIdInPaginatedTable(0));
   };
 
   useEffect(() => {
@@ -112,12 +135,37 @@ export function AdminPage(): React.ReactElement {
           );
         })}
       </ScrollArea>
+
+      <div className={classes.paginationFooter}>
+        <div className={classes.pageSizeControls}>
+          <span> Items Per Page </span>
+
+          <div className={classes.select}>
+            <PrimarySelect
+              value={pageSize.toString()}
+              data={pageSizeOptions}
+              icon={<IconCards />}
+              onChange={(value) => {
+                if (!value) return;
+
+                handleSetPageSize(parseInt(value.toString()));
+              }}
+            />
+          </div>
+        </div>
+
+        <PaginationSelect
+          currentPage={currentPage}
+          setCurrentPage={handleSetCurrentPage}
+          total={pageCount}
+        />
+      </div>
     </Tabs>
   );
 }
 
 const useStyles = createStyles((theme) => {
-  const { remainingHeight } = useNavbarHeight();
+  const { remainingHeight, navbarHeight } = useNavbarHeight();
 
   return {
     tab: {
@@ -153,7 +201,7 @@ const useStyles = createStyles((theme) => {
 
     contain: {
       width: '100%',
-      height: '100%',
+      height: remainingHeight - navbarHeight,
       backgroundColor: theme.colors.secondaryBackgroundColor[0],
     },
 
@@ -164,6 +212,42 @@ const useStyles = createStyles((theme) => {
 
       fontWeight: 'bold',
       fontSize: '20px',
+    },
+
+    display: {
+      display: 'grid',
+      gridTemplateRows: 'auto 1fr',
+
+      height: navbarHeight,
+    },
+
+    paginationFooter: {
+      display: 'grid',
+      gridTemplateColumns: 'auto 1fr auto auto',
+      alignItems: 'center',
+      gap: defaultGap,
+      height: navbarHeight,
+      position: 'absolute',
+      bottom: 0,
+      left: 0,
+      right: 0,
+      marginLeft: 124.587,
+      justifyItems: 'end',
+      borderTopWidth: 1,
+      borderTopStyle: 'solid',
+      borderTopColor: theme.colors.primaryPurpleColor[0],
+    },
+
+    pageSizeControls: {
+      display: 'flex',
+      alignItems: 'center',
+
+      gap: defaultGap,
+      padding: defaultPadding,
+    },
+
+    select: {
+      width: 100,
     },
   };
 });

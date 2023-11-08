@@ -4,15 +4,13 @@ import {
   Flex,
   Loader,
   MantineTheme,
-  Table,
   createStyles,
 } from '@mantine/core';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
 import { EditModal } from './modals/EditModal';
-import { PaginationSelect } from '../../../components/pagination/PaginationSelect';
 import { useDisclosure } from '@mantine/hooks';
 import { dispatch } from '../../../store/configureStore';
-import { setSelectedId } from '../../../store/adminSlice';
+import { setSelectedIdInPaginatedTable } from '../../../store/adminSlice';
 import { AttributeGetDto } from '../../../types/attributes';
 import { DeleteModal } from '../../../components/modals/DeleteModal';
 import { RarityGetDto } from '../../../types/rarities';
@@ -36,9 +34,6 @@ type AdminTableEditTypes = AttributeGetDto &
 type AdminPaginatedTableProps = {
   data: AdminTableDataTypes[] | undefined;
   loading: boolean;
-  pageCount: number;
-  page: number;
-  setPage: React.Dispatch<React.SetStateAction<number>>;
   editFn: (valueDto: AdminTableEditTypes) => Promise<void>;
   deleteFn: () => Promise<void>;
   /**Name to be used in Aria Labels */
@@ -49,27 +44,18 @@ type AdminPaginatedTableProps = {
 export const AdminPaginatedTable = ({
   data,
   loading,
-  page,
-  pageCount,
-  setPage,
   editFn,
   deleteFn,
   typeName: ariaLabel,
   tableWidth,
 }: AdminPaginatedTableProps) => {
-  const { classes } = useStyles();
+  const { classes } = useStyles(tableWidth);
   const titles: string[] = ['Edit', 'Name', 'Delete'];
   return (
     <>
       <Container pt={'0.5%'} pb={'1%'} fluid className={classes.tableContainer}>
-        <Table
-          mt="15px"
-          mb="5px"
-          highlightOnHover
-          className={classes.table}
-          w={tableWidth ?? '100%'}
-        >
-          <thead>
+        <div className={classes.table}>
+          <header>
             <Flex
               dir="row"
               gap={'lg'}
@@ -80,7 +66,7 @@ export const AdminPaginatedTable = ({
               <div className={classes.tableColumnItem}>{titles[1]}</div>
               <div className={classes.tableColumnLastItem}>{titles[2]}</div>
             </Flex>
-          </thead>
+          </header>
           {data && !loading ? (
             data.map((value, index) => (
               <TableRow
@@ -89,6 +75,7 @@ export const AdminPaginatedTable = ({
                 typeName={ariaLabel}
                 editFn={editFn}
                 deleteFn={deleteFn}
+                key={index}
               />
             ))
           ) : (
@@ -106,16 +93,8 @@ export const AdminPaginatedTable = ({
               <i> No data to display </i>
             </Flex>
           )}
-        </Table>
+        </div>
       </Container>
-
-      <Flex dir="row" justify="flex-end" pb="5px" pr="35px">
-        <PaginationSelect
-          currentPage={page}
-          setCurrentPage={setPage}
-          total={pageCount}
-        />
-      </Flex>
     </>
   );
 };
@@ -136,18 +115,18 @@ export const TableRow = ({
   editFn,
   deleteFn,
 }: TableRowProps) => {
-  const { classes } = useStyles();
+  const { classes } = useStyles(undefined);
   const [openDelete, { toggle: toggleDelete }] = useDisclosure();
   const [openEdit, { toggle: toggleEdit }] = useDisclosure();
 
   const selectAndOpenDelete = (value: AdminTableDataTypes) => {
     toggleDelete();
-    dispatch(setSelectedId(value.id));
+    dispatch(setSelectedIdInPaginatedTable(value.id));
   };
 
   const selectAndOpenEdit = (value: AdminTableDataTypes) => {
     toggleEdit();
-    dispatch(setSelectedId(value.id));
+    dispatch(setSelectedIdInPaginatedTable(value.id));
   };
 
   return (
@@ -159,23 +138,23 @@ export const TableRow = ({
         className={index % 2 === 1 ? classes.tableRowOther : classes.tableRow}
         key={value.id}
       >
-        <td className={classes.tableColumnFirstItem}>
+        <div className={classes.tableColumnFirstItem}>
           <ActionIcon
             aria-label={`Edit ${typeName}`}
             onClick={() => selectAndOpenEdit(value)}
           >
             <IconEdit />
           </ActionIcon>
-        </td>
-        <td className={classes.tableColumnItem}>{value.name}</td>
-        <td className={classes.tableColumnLastItem}>
+        </div>
+        <div className={classes.tableColumnItem}>{value.name}</div>
+        <div className={classes.tableColumnLastItem}>
           <ActionIcon
             aria-label={`Delete ${typeName}`}
             onClick={() => selectAndOpenDelete(value)}
           >
             <IconTrash />
           </ActionIcon>
-        </td>
+        </div>
         <EditModal
           open={openEdit}
           setOpen={toggleEdit}
@@ -193,91 +172,96 @@ export const TableRow = ({
   );
 };
 
-const useStyles = createStyles((theme: MantineTheme) => {
-  return {
-    tableContainer: {
-      backgroundColor: 'transparent',
-      justifyContent: 'center',
-      display: 'flex',
-      wrap: 'wrap',
-      margin: 'auto',
-    },
-
-    table: {
-      backgroundColor: theme.colors.secondaryBackgroundColor[0],
-      border: `solid 1px ${theme.colors.primaryPurpleColor[0]}`,
-    },
-
-    noData: {
-      padding: 15,
-      fontSize: 22,
-    },
-
-    tableRow: {
-      padding: 6,
-      borderBottom: `solid 0.25px rgba(157, 101, 219, 0.25)`,
-
-      ':hover': {
-        backgroundColor: theme.fn.darken(
-          theme.colors.primaryPurpleColor[0],
-          0.2
-        ),
+const useStyles = createStyles(
+  (theme: MantineTheme, tableWidth: string | undefined) => {
+    return {
+      tableContainer: {
+        backgroundColor: 'transparent',
+        justifyContent: 'center',
+        display: 'flex',
+        wrap: 'wrap',
+        margin: 'auto',
       },
-    },
 
-    tableRowOther: {
-      padding: 6,
-      borderBottom: `solid 0.25px rgba(157, 101, 219, 0.25)`,
-      backgroundColor: 'rgba(117, 55, 130, 0.1)',
-      ':hover': {
-        backgroundColor: theme.fn.darken(
-          theme.colors.primaryPurpleColor[0],
-          0.2
-        ),
+      table: {
+        backgroundColor: theme.colors.secondaryBackgroundColor[0],
+        border: `solid 1px ${theme.colors.primaryPurpleColor[0]}`,
+        marginTop: '15px',
+        marginBottom: '5px',
+        width: `${tableWidth ?? '100%'}`,
       },
-    },
 
-    tableHeader: {
-      fontWeight: 'bold',
-      padding: '7px',
-      backgroundColor: 'rgba(35, 0, 43, 0.45)',
-      border: `solid 1px ${theme.colors.primaryPurpleColor[0]}`,
-    },
+      noData: {
+        padding: 15,
+        fontSize: 22,
+      },
 
-    tableColumnFirstItem: {
-      width: '30%',
-      padding: '0.1% 1.25%',
-      display: 'flex',
-      justifyContent: 'flex-start',
-      textAlign: 'start',
-      margin: 'auto',
-    },
+      tableRow: {
+        padding: 6,
+        borderBottom: `solid 0.25px rgba(157, 101, 219, 0.25)`,
 
-    tableColumnItem: {
-      width: '100%',
-      padding: '0.1% 1%',
-      display: 'flex',
-      justifyContent: 'flex-start',
-      textAlign: 'start',
-      margin: 'auto',
-    },
+        ':hover': {
+          backgroundColor: theme.fn.darken(
+            theme.colors.primaryPurpleColor[0],
+            0.2
+          ),
+        },
+      },
 
-    tableColumnLastItem: {
-      width: '100%',
-      padding: '0.1% 1.5%',
-      display: 'flex',
-      justifyContent: 'flex-end',
-      textAlign: 'end',
-      margin: 'auto',
-    },
+      tableRowOther: {
+        padding: 6,
+        borderBottom: `solid 0.25px rgba(157, 101, 219, 0.25)`,
+        backgroundColor: 'rgba(117, 55, 130, 0.1)',
+        ':hover': {
+          backgroundColor: theme.fn.darken(
+            theme.colors.primaryPurpleColor[0],
+            0.2
+          ),
+        },
+      },
 
-    loaderContainer: {
-      backgroundColor: 'rgba(0,0,0,0.6)',
-      height: '1104px',
-      width: '100%',
-      display: 'flex',
-      justifyContent: 'center',
-      alignContent: 'center',
-    },
-  };
-});
+      tableHeader: {
+        fontWeight: 'bold',
+        padding: '7px',
+        backgroundColor: 'rgba(35, 0, 43, 0.45)',
+        border: `solid 1px ${theme.colors.primaryPurpleColor[0]}`,
+      },
+
+      tableColumnFirstItem: {
+        width: '30%',
+        padding: '0.1% 1.25%',
+        display: 'flex',
+        justifyContent: 'flex-start',
+        textAlign: 'start',
+        margin: 'auto',
+      },
+
+      tableColumnItem: {
+        width: '100%',
+        padding: '0.1% 1%',
+        display: 'flex',
+        justifyContent: 'flex-start',
+        textAlign: 'start',
+        margin: 'auto',
+      },
+
+      tableColumnLastItem: {
+        width: '100%',
+        padding: '0.1% 1.5%',
+        display: 'flex',
+        justifyContent: 'flex-end',
+        textAlign: 'end',
+        margin: 'auto',
+      },
+
+      loaderContainer: {
+        backgroundColor: 'rgba(0,0,0,0.6)',
+        height: '1104px',
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignContent: 'center',
+      },
+    };
+  }
+);

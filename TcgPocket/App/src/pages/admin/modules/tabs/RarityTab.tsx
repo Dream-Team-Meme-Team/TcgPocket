@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { dispatch, useAppSelector } from '../../../../store/configureStore';
 import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { RarityGetDto } from '../../../../types/rarities';
@@ -13,13 +13,21 @@ import { AdminPaginatedTable } from '../AdminPaginatedTable';
 import { useAsyncFn } from 'react-use';
 
 export const RarityTab: React.FC = () => {
-  const [page, setPage] = useState(1);
-  const [searchTerm, selectedId, selectedGameId, selectedTab] = useAppSelector(
+  const [
+    searchTerm,
+    selectedId,
+    selectedGameId,
+    selectedTab,
+    currentPage,
+    pageSize,
+  ] = useAppSelector(
     (state) => [
       state.admin.searchTerm,
-      state.admin.selectedId,
+      state.admin.selectedIdInPaginatedTable,
       state.admin.selectedGameId,
       state.admin.selectedTab,
+      state.admin.currentPage,
+      state.admin.pageSize,
     ],
     shallowEqual
   );
@@ -28,14 +36,14 @@ export const RarityTab: React.FC = () => {
     const { payload } = await dispatch(
       getAllFilteredRarities({
         gameId: selectedGameId,
-        currentPage: page,
-        pageSize: 25,
+        currentPage: currentPage,
+        pageSize: pageSize,
         name: searchTerm,
       })
     );
 
     return payload?.data;
-  }, [page, selectedGameId, searchTerm]);
+  }, [currentPage, pageSize, selectedGameId, searchTerm]);
 
   const deleteSelectedRarity = async () => {
     dispatch(deleteRarity(selectedId)).then(({ payload }) => {
@@ -73,9 +81,6 @@ export const RarityTab: React.FC = () => {
       <AdminPaginatedTable
         data={rarities.value?.items}
         loading={rarities.loading}
-        pageCount={rarities.value?.pageCount ?? 1}
-        page={page}
-        setPage={setPage}
         editFn={editSelectedRarity}
         deleteFn={deleteSelectedRarity}
         typeName="Rarity"

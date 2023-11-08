@@ -17,7 +17,7 @@ export const CardTypeTab: React.FC = () => {
   const [searchTerm, selectedId, selectedGameId, selectedTab] = useAppSelector(
     (state) => [
       state.admin.searchTerm,
-      state.admin.selectedId,
+      state.admin.selectedIdInPaginatedTable,
       state.admin.selectedGameId,
       state.admin.selectedTab,
     ],

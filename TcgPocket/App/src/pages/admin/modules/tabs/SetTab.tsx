@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { dispatch, useAppSelector } from '../../../../store/configureStore';
 import {
   deleteSet,
@@ -13,13 +13,21 @@ import { useAsyncFn } from 'react-use';
 import { AdminPaginatedTable } from '../AdminPaginatedTable';
 
 export const SetTab: React.FC = () => {
-  const [page, setPage] = useState(1);
-  const [searchTerm, selectedId, selectedGameId, selectedTab] = useAppSelector(
+  const [
+    searchTerm,
+    selectedId,
+    selectedGameId,
+    selectedTab,
+    currentPage,
+    pageSize,
+  ] = useAppSelector(
     (state) => [
       state.admin.searchTerm,
-      state.admin.selectedId,
+      state.admin.selectedIdInPaginatedTable,
       state.admin.selectedGameId,
       state.admin.selectedTab,
+      state.admin.currentPage,
+      state.admin.pageSize,
     ],
     shallowEqual
   );
@@ -28,14 +36,14 @@ export const SetTab: React.FC = () => {
     const { payload } = await dispatch(
       getAllFilteredSets({
         gameId: selectedGameId,
-        currentPage: page,
-        pageSize: 25,
+        currentPage: currentPage,
+        pageSize: pageSize,
         name: searchTerm,
       })
     );
 
     return payload?.data;
-  }, [page, selectedGameId, searchTerm]);
+  }, [pageSize, currentPage, selectedGameId, searchTerm]);
 
   const deleteSelectedSet = async () => {
     dispatch(deleteSet(selectedId)).then(({ payload }) => {
@@ -73,9 +81,6 @@ export const SetTab: React.FC = () => {
       <AdminPaginatedTable
         data={sets.value?.items}
         loading={sets.loading}
-        pageCount={sets.value?.pageCount ?? 1}
-        page={page}
-        setPage={setPage}
         editFn={editSelectedSet}
         deleteFn={deleteSelectedSet}
         typeName="Set"
