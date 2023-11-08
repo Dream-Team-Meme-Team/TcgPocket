@@ -1,31 +1,51 @@
+using AutoMapper;
 using MediatR;
-using Newtonsoft.Json;
-using TcgPocket.Features.CardReader.Dtos;
+using Microsoft.AspNetCore.Identity;
+using TcgPocket.Data;
+using TcgPocket.Features.Cards;
 using TcgPocket.Features.StorageProvider;
+using TcgPocket.Features.UserCards;
+using TcgPocket.Features.Users;
 using TcgPocket.Shared;
 
 namespace TcgPocket.Features.CardReader;
 
-public class ReadCardRequest : IRequest<Response<object>>
+public class ReadCardRequest : IRequest<Response<UserCardGetDto>>
 {
     public IFormFile Image { get; set; }
 }
 
-public class ReadCardRequestHandler : IRequestHandler<ReadCardRequest, Response<object>>
+public class ReadCardRequestHandler : IRequestHandler<ReadCardRequest, Response<UserCardGetDto>>
 {
+    private readonly DataContext _dataContext;
     private readonly IBlobStorageProvider _blobStorageProvider;
     private readonly IMachineLearningModelService _machineLearningModelService;
+    private readonly SignInManager<User> _signInManager;
+    private readonly IMapper _mapper;
 
     public ReadCardRequestHandler(
+        DataContext dataContext,
         IBlobStorageProvider blobStorageProvider,
-        IMachineLearningModelService machineLearningModelService)
+        IMachineLearningModelService machineLearningModelService,
+        SignInManager<User> signInManager,
+        IMapper mapper)
     {
+        _dataContext = dataContext;
         _blobStorageProvider = blobStorageProvider;
         _machineLearningModelService = machineLearningModelService;
+        _signInManager = signInManager;
+        _mapper = mapper;
     }
     
-    public async Task<Response<object>> Handle(ReadCardRequest request, CancellationToken cancellationToken)
+    public async Task<Response<UserCardGetDto>> Handle(ReadCardRequest request, CancellationToken cancellationToken)
     {
+        var currentUser = await _signInManager.GetSignedInUserAsync();
+
+        if (currentUser is null)
+        {
+            return Error.AsResponse<UserCardGetDto>("Must be signed in to upload cards to your inventory");
+        }
+        
         var blobName = Guid.NewGuid().ToString();
         await _blobStorageProvider.UploadAsync(request.Image, blobName);
 
@@ -34,24 +54,21 @@ public class ReadCardRequestHandler : IRequestHandler<ReadCardRequest, Response<
 
         if (result.HasErrors)
         {
-            return new Response<object> { Errors = result.Errors };
+            return new Response<UserCardGetDto> { Errors = result.Errors };
         }
 
-        using var client = new HttpClient();
+        var cardResponse = await _machineLearningModelService.GetCardFromData(result.Data);
 
-        // Send the GET request
-        var response = await client.GetAsync(result.Data.CardUri);
-
-        // Check if the request was successful (status code 200)
-        if (!response.IsSuccessStatusCode)
+        if (cardResponse.HasErrors)
         {
-            // If the request was not successful, handle the error
-            return Error.AsResponse<object>($"Request failed with status code: {response.StatusCode}");
+            return new Response<UserCardGetDto>{ Errors = cardResponse.Errors };
         }
+        
+        var userCardToAdd = new UserCard { User = currentUser, Card = cardResponse.Data };
 
-        var responseString = await response.Content.ReadAsStringAsync(); 
+        await _dataContext.Set<UserCard>().AddAsync(userCardToAdd);
+        await _dataContext.SaveChangesAsync();
 
-        // Read and display the response content
-        return ((object) JsonConvert.DeserializeObject<PokemonResponse>(responseString))!.AsResponse();
+        return _mapper.Map<UserCardGetDto>(userCardToAdd).AsResponse();
     }
 }

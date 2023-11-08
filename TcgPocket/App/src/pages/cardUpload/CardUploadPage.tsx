@@ -4,40 +4,37 @@ import {
   useMantineTheme,
   rem,
   Container,
-  Paper,
   createStyles,
 } from '@mantine/core';
 import { IconUpload, IconPhoto, IconX } from '@tabler/icons-react';
 import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { useAsyncFn } from 'react-use';
 import { CardReaderService } from '../../services/CardReaderService';
-import { error } from '../../services/helpers/Notification';
+import { error, success } from '../../services/helpers/Notification';
 
 export function CardUploadPage() {
   const theme = useMantineTheme();
   const { classes } = useStyles();
 
-  const [uploadCardState, uploadCard] = useAsyncFn(
-    async (files: FileWithPath[]) => {
-      if (!files) {
-        return;
-      }
-
-      console.log(files[0]);
-
-      const response = await CardReaderService.readCard(
-        await files[0].arrayBuffer()
-      );
-
-      if (response.hasErrors) {
-        response.errors.forEach((err) => error(err.message));
-      }
-
-      console.log(response.data);
-
-      return response.data;
+  const [, uploadCard] = useAsyncFn(async (files: FileWithPath[]) => {
+    if (!files) {
+      return;
     }
-  );
+
+    console.log(files[0]);
+
+    const response = await CardReaderService.readCard(
+      await files[0].arrayBuffer()
+    );
+
+    if (response.hasErrors) {
+      response.errors.forEach((err) => error(err.message));
+    }
+
+    success('Card Uploaded to inventory');
+
+    return response.data;
+  });
 
   const rejectFile = () => {
     error('File must be a png, jpg, or bmp');
@@ -84,12 +81,6 @@ export function CardUploadPage() {
           </div>
         </Group>
       </Dropzone>
-
-      {uploadCardState.value && (
-        <Container>
-          <Paper>{uploadCardState.value}</Paper>
-        </Container>
-      )}
     </Container>
   );
 }

@@ -24,7 +24,10 @@ if __name__ == '__main__':
 
     except Exception as e:
         response = {
-            "data" : None,
+            "data" : {
+                "cardUri": "",
+                "cardType": -1
+            },
             "errors" : [{
                 "property" : "av.py",
                 "message" : e.__str__()

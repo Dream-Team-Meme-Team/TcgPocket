@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using TcgPocket.Features.UserCards;
 using TcgPocket.Shared;
 
 namespace TcgPocket.Features.CardReader;
@@ -17,10 +18,12 @@ public class CardReaderController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Response<MachineLearningModelData>>> ReadCard(IFormFile data)
+    public async Task<ActionResult<Response<UserCardGetDto>>> ReadCard(IFormFile data)
     {
         var response = await _mediator.Send(new ReadCardRequest{ Image = data});
 
-        return response.HasErrors ? BadRequest(response) : Ok(response);
+        return response.HasErrors
+            ? BadRequest(response)
+            : Created(nameof(ReadCard), response);
     }
 }
