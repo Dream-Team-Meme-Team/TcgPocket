@@ -16,46 +16,44 @@ def price_scraper(game: str):
     data = defaultdict(dict)
 
     for set in set_resp.find('div', class_='home-box all').ul.find_all('li'):
-
+        ''' Set Name Handling '''
         # skip sets in japanese
         if 'Japanese' in set.text.strip('\n'):
             continue
         #
-        
+
         # remove tcg name in the set key
         if 'Magic ' in set.text.strip('\n'):
-            set = set.text.strip('\n').removeprefix('Magic ')
+            parsed_set = set.text.strip('\n').removeprefix('Magic ')
 
             # replace '4th' with 'Fourth' etc...
-            if set.split(' ')[0] in mgc_editions.keys():
-                set = set.replace(set.split(' ')[0], mgc_editions[set.split(' ')[0]])
+            if parsed_set.split(' ')[0] in mgc_editions.keys():
+                parsed_set = parsed_set.replace(parsed_set.split(' ')[0], mgc_editions[parsed_set.split(' ')[0]])
             #
-
         elif 'Pokemon ' in set.text.strip('\n'):
-            set = set.text.strip('\n').removeprefix('Pokemon ')
+            parsed_set = set.text.strip('\n').removeprefix('Pokemon ')
         elif 'YuGiOh ' in set.text.strip('\n'):
-            set = set.text.strip('\n').removeprefix('YuGiOh ')
+            parsed_set = set.text.strip('\n').removeprefix('YuGiOh ')
         #
 
-        print(set)
-
-    #     card_resp = bs(requests.get(base + set.a.get('href')).content, 'html.parser')
-    #     for card in card_resp.find('table', id='games_table').tbody.find_all('td', class_='title'):
-    #         prices = bs(requests.get(base + card.a.get('href')).content, 'html.parser')
+        card_resp = bs(requests.get(base + set.a.get('href')).content, 'html.parser')
+        for card in card_resp.find('table', id='games_table').tbody.find_all('td', class_='title'):
+            ''' Card Name Handling '''
+            prices = bs(requests.get(base + card.a.get('href')).content, 'html.parser')
             
-    #         try:
-    #             card_dates = prices.find('table', class_='hoverable-rows sortable').tbody.find_all('td', class_='date')
-    #             card_prices = prices.find('table', class_='hoverable-rows sortable').tbody.find_all('td', class_='numeric')
+            try:
+                card_dates = prices.find('table', class_='hoverable-rows sortable').tbody.find_all('td', class_='date')
+                card_prices = prices.find('table', class_='hoverable-rows sortable').tbody.find_all('td', class_='numeric')
 
-    #             data[set][card.text.strip('\n')] = dict([(date.text, float(price.span.text.strip('$'))) for  i, (date, price) in enumerate(zip(card_dates, card_prices))])
-    #         except:
-    #             data[set][card.text.strip('\n')] = None
-    #         #
-    #     #
-    #     print(set, data[set])
-    # #
+                data[parsed_set][card.text.strip('\n')] = dict([(date.text, float(price.span.text.strip('$'))) for  i, (date, price) in enumerate(zip(card_dates, card_prices))])
+            except:
+                data[parsed_set][card.text.strip('\n')] = None
+            #
+        #
+        print(parsed_set, data[parsed_set])
+    #
 
     return data
 #
 
-print(price_scraper('magic'))
+price_scraper('magic')
