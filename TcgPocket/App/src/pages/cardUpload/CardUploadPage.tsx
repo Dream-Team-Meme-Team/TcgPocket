@@ -16,25 +16,26 @@ export function CardUploadPage() {
   const theme = useMantineTheme();
   const { classes } = useStyles();
 
-  const [, uploadCard] = useAsyncFn(async (files: FileWithPath[]) => {
-    if (!files) {
-      return;
+  const [uploadCardState, uploadCard] = useAsyncFn(
+    async (files: FileWithPath[]) => {
+      if (!files) {
+        return;
+      }
+
+      const response = await CardReaderService.readCard(
+        await files[0].arrayBuffer()
+      );
+
+      if (response.hasErrors) {
+        response.errors.forEach((err) => error(err.message));
+        return;
+      }
+
+      success('Card Uploaded to inventory');
+
+      return response.data;
     }
-
-    console.log(files[0]);
-
-    const response = await CardReaderService.readCard(
-      await files[0].arrayBuffer()
-    );
-
-    if (response.hasErrors) {
-      response.errors.forEach((err) => error(err.message));
-    }
-
-    success('Card Uploaded to inventory');
-
-    return response.data;
-  });
+  );
 
   const rejectFile = () => {
     error('File must be a png, jpg, or bmp');
@@ -46,6 +47,7 @@ export function CardUploadPage() {
         onDrop={uploadCard}
         onReject={rejectFile}
         accept={IMAGE_MIME_TYPE}
+        loading={uploadCardState.loading}
       >
         <Group className={classes.foo} position="center" spacing="xl">
           <Dropzone.Accept>

@@ -86,13 +86,18 @@ public class MachineLearningModelService: IMachineLearningModelService
             2 => GetPokemonCard(responseString),
             _ => Error.AsResponse<ExternalCardFilterDto>("Could not classify card")
         };
-
+        
         if (cardResponse.HasErrors)
         {
             return new Response<Card> { Errors = cardResponse.Errors};
         }
 
         var cardFilter = cardResponse.Data;
+
+        if (!HasRequiredFields(cardFilter))
+        {
+            return Error.AsResponse<Card>("Error deserializing card data");
+        }
         
         var card = await _dataContext.Set<Card>()
             .FirstOrDefaultAsync(x => x.Name.ToLower() == cardFilter.Name.ToLower()
@@ -132,6 +137,16 @@ public class MachineLearningModelService: IMachineLearningModelService
         return pokemonCard is null
             ? Error.AsResponse<ExternalCardFilterDto>("Could not deserialize response")
             : _mapper.Map<ExternalCardFilterDto>(pokemonCard).AsResponse();
+    }
+
+    private bool HasRequiredFields(ExternalCardFilterDto cardFilterDto)
+    {
+        return cardFilterDto is {
+            Name: not null,
+            SetName: not null,
+            GameName: not null,
+            CardNumber: not null
+        };
     }
 }
 

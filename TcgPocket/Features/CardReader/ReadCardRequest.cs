@@ -2,7 +2,6 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using TcgPocket.Data;
-using TcgPocket.Features.Cards;
 using TcgPocket.Features.StorageProvider;
 using TcgPocket.Features.UserCards;
 using TcgPocket.Features.Users;
@@ -51,6 +50,7 @@ public class ReadCardRequestHandler : IRequestHandler<ReadCardRequest, Response<
 
         var processStartInfo = _machineLearningModelService.GetProcessStartInfo(blobName);
         var result = await _machineLearningModelService.RunProcess(processStartInfo);
+        await _blobStorageProvider.DeleteAsync(blobName);
 
         if (result.HasErrors)
         {
