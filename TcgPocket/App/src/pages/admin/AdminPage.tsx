@@ -213,6 +213,7 @@ const useStyles = createStyles((theme) => {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
+      paddingTop: '1em',
 
       fontWeight: 'bold',
       fontSize: '20px',
