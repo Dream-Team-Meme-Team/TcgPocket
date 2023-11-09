@@ -121,7 +121,6 @@ const modalProps: Styles<ModalBaseStylesNames> = {
   },
   body: {
     padding: '0px 30px',
-    color: 'orange',
     objectFit: 'scale-down',
   },
   root: {
