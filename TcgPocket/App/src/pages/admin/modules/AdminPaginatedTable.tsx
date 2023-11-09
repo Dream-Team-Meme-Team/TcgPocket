@@ -8,8 +8,8 @@ import {
 } from '@mantine/core';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
 import { EditModal } from './modals/EditModal';
-import { useDisclosure } from '@mantine/hooks';
-import { dispatch } from '../../../store/configureStore';
+import { shallowEqual, useDisclosure } from '@mantine/hooks';
+import { dispatch, useAppSelector } from '../../../store/configureStore';
 import { setSelectedIdInPaginatedTable } from '../../../store/adminSlice';
 import { AttributeGetDto } from '../../../types/attributes';
 import { DeleteModal } from '../../../components/modals/DeleteModal';
@@ -51,6 +51,7 @@ export const AdminPaginatedTable = ({
 }: AdminPaginatedTableProps) => {
   const { classes } = useStyles(tableWidth);
   const titles: string[] = ['Edit', 'Name', 'Delete'];
+
   return (
     <>
       <Container pt={'0.5%'} pb={'1%'} fluid className={classes.tableContainer}>
@@ -135,7 +136,7 @@ export const TableRow = ({
         dir="row"
         gap={'lg'}
         justify="space-around"
-        className={index % 2 === 1 ? classes.tableRowOther : classes.tableRow}
+        className={index % 2 === 1 ? classes.tableRowFilled : classes.tableRow}
         key={value.id}
       >
         <div className={classes.tableColumnFirstItem}>
@@ -174,6 +175,10 @@ export const TableRow = ({
 
 const useStyles = createStyles(
   (theme: MantineTheme, tableWidth: string | undefined) => {
+    const [pageSize] = useAppSelector(
+      (state) => [state.admin.pageSize],
+      shallowEqual
+    );
     return {
       tableContainer: {
         backgroundColor: 'transparent',
@@ -198,7 +203,10 @@ const useStyles = createStyles(
 
       tableRow: {
         padding: 6,
-        borderBottom: `solid 0.25px rgba(157, 101, 219, 0.25)`,
+        borderBottom: `solid 0.25px ${theme.fn.rgba(
+          theme.colors.primaryPurpleColor[0],
+          0.25
+        )}`,
 
         ':hover': {
           backgroundColor: theme.fn.darken(
@@ -208,10 +216,16 @@ const useStyles = createStyles(
         },
       },
 
-      tableRowOther: {
+      tableRowFilled: {
         padding: 6,
-        borderBottom: `solid 0.25px rgba(157, 101, 219, 0.25)`,
-        backgroundColor: 'rgba(117, 55, 130, 0.1)',
+        borderBottom: `solid 0.25px ${theme.fn.rgba(
+          theme.colors.primaryPurpleColor[0],
+          0.25
+        )}`,
+        backgroundColor: `${theme.fn.rgba(
+          theme.colors.secondaryPurpleColors[1],
+          0.2
+        )}`,
         ':hover': {
           backgroundColor: theme.fn.darken(
             theme.colors.primaryPurpleColor[0],
@@ -223,7 +237,10 @@ const useStyles = createStyles(
       tableHeader: {
         fontWeight: 'bold',
         padding: '7px',
-        backgroundColor: 'rgba(35, 0, 43, 0.45)',
+        backgroundColor: `${theme.fn.darken(
+          theme.colors.secondaryPurpleColors[0],
+          0.65
+        )}`,
         border: `solid 1px ${theme.colors.primaryPurpleColor[0]}`,
       },
 
@@ -255,8 +272,8 @@ const useStyles = createStyles(
       },
 
       loaderContainer: {
-        backgroundColor: 'rgba(0,0,0,0.6)',
-        height: '1104px',
+        backgroundColor: `${theme.fn.rgba(theme.colors.dark[9], 0.6)}`,
+        height: `${pageSize * 44}px`,
         width: '100%',
         display: 'flex',
         justifyContent: 'center',

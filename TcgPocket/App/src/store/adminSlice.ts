@@ -6,8 +6,8 @@ type AdminState = {
   selectedGameId: number;
   selectedTab: string | null;
   currentPage: number;
-  pageSize: number;
   pageCount: number;
+  pageSize: number;
 };
 
 const initialState: AdminState = {
@@ -16,8 +16,8 @@ const initialState: AdminState = {
   selectedGameId: 0,
   selectedTab: null,
   currentPage: 1,
-  pageSize: 10,
   pageCount: 1,
+  pageSize: 10,
 };
 
 export const adminSlice = createSlice({
@@ -54,11 +54,11 @@ export const adminSlice = createSlice({
     ) {
       state.currentPage = payload;
     },
-    setPageSize(state, { payload }: PayloadAction<AdminState['pageSize']>) {
-      state.pageSize = payload;
-    },
     setPageCount(state, { payload }: PayloadAction<AdminState['pageCount']>) {
       state.pageCount = payload;
+    },
+    setPageSize(state, { payload }: PayloadAction<AdminState['pageSize']>) {
+      state.pageSize = payload;
     },
   },
 });

@@ -21,7 +21,6 @@ export const AttributeTab: React.FC = () => {
     selectedTab,
     currentPage,
     pageSize,
-    pageCount,
   ] = useAppSelector(
     (state) => [
       state.admin.searchTerm,
@@ -30,7 +29,6 @@ export const AttributeTab: React.FC = () => {
       state.admin.selectedTab,
       state.admin.currentPage,
       state.admin.pageSize,
-      state.admin.pageCount,
     ],
     shallowEqual
   );
@@ -46,7 +44,7 @@ export const AttributeTab: React.FC = () => {
     );
 
     if (payload && !payload.hasErrors) {
-      setPageCount(payload?.data.pageCount);
+      dispatch(setPageCount(payload?.data.pageCount));
     }
 
     return payload?.data;
