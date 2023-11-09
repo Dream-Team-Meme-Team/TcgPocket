@@ -14,6 +14,7 @@ import { useEffect } from 'react';
 import {
   setAdminSearchTerm,
   setCurrentPage,
+  setPageCount,
   setPageSize,
   setSelectedAdminTab,
   setSelectedGameId,
@@ -93,6 +94,7 @@ export function AdminPage(): React.ReactElement {
   useEffect(() => {
     dispatch(setSelectedAdminTab(AdminTabLabel.Games));
     dispatch(setSelectedGameId(0));
+    dispatch(setPageCount(1));
   }, []);
 
   return (
