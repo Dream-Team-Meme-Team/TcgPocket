@@ -1,6 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using TcgPocket.Features.UserCards;
+using TcgPocket.Features.Cards.Dtos;
 using TcgPocket.Shared;
 
 namespace TcgPocket.Features.CardReader;
@@ -18,7 +18,7 @@ public class CardReaderController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Response<UserCardGetDto>>> ReadCard(IFormFile data)
+    public async Task<ActionResult<Response<CardDisplayDto>>> ReadCard(IFormFile data)
     {
         var response = await _mediator.Send(new ReadCardRequest{ Image = data});
 

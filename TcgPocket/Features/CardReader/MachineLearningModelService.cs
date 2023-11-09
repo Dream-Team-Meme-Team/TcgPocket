@@ -100,6 +100,12 @@ public class MachineLearningModelService: IMachineLearningModelService
         }
         
         var card = await _dataContext.Set<Card>()
+            .AsSplitQuery()
+            .Include(x => x.Game)
+            .Include(x => x.Set)
+            .Include(x => x.Rarity)
+            .Include(x => x.CardType)
+            .Include(x => x.CardAttributes)
             .FirstOrDefaultAsync(x => x.Name.ToLower() == cardFilter.Name.ToLower()
                 && x.CardNumber.ToLower() == cardFilter.CardNumber.ToLower()
                 && x.Game.Name == cardFilter.GameName

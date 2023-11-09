@@ -5,16 +5,23 @@ import {
   rem,
   Container,
   createStyles,
+  Divider,
+  ScrollArea,
+  Title,
 } from '@mantine/core';
 import { IconUpload, IconPhoto, IconX } from '@tabler/icons-react';
 import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { useAsyncFn } from 'react-use';
 import { CardReaderService } from '../../services/CardReaderService';
 import { error, success } from '../../services/helpers/Notification';
+import { useState } from 'react';
+import { CardDisplayDto } from '../../types/cards';
+import { CardDisplay } from '../../components/cardDisplay/CardDisplay';
 
 export function CardUploadPage() {
   const theme = useMantineTheme();
   const { classes } = useStyles();
+  const [uploadedCards, setUploadedCards] = useState<CardDisplayDto[]>([]);
 
   const [uploadCardState, uploadCard] = useAsyncFn(
     async (files: FileWithPath[]) => {
@@ -30,6 +37,8 @@ export function CardUploadPage() {
         response.errors.forEach((err) => error(err.message));
         return;
       }
+
+      setUploadedCards((state) => [...state, response.data]);
 
       success('Card Uploaded to inventory');
 
@@ -83,13 +92,53 @@ export function CardUploadPage() {
           </div>
         </Group>
       </Dropzone>
+      {uploadedCards.length > 0 && (
+        <>
+          <Divider
+            pt={10}
+            pb={10}
+            variant="dashed"
+            label={<Title>Cards Added To Inventory</Title>}
+            labelPosition={'center'}
+          />
+
+          {/*  */}
+          <div className={classes.inventoryDisplayContainer}>
+            <ScrollArea>
+              <div className={classes.inventoryDisplayGroup}>
+                {uploadedCards.map((cards, index) => (
+                  <CardDisplay key={index} isLoading={false} card={cards} />
+                ))}
+              </div>
+            </ScrollArea>
+          </div>
+        </>
+      )}
     </Container>
   );
 }
 
-const useStyles = createStyles(() => ({
+const useStyles = createStyles((theme) => ({
   uploadContainer: {
     paddingTop: '50px',
   },
   foo: { minHeight: rem(220), pointerEvents: 'none' },
+  inventoryDisplayContainer: {
+    display: 'grid',
+
+    overflowY: 'hidden',
+  },
+
+  inventoryDisplayGroup: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, 368px)',
+    justifyContent: 'center',
+
+    columnGap: '8px',
+    rowGap: '20px',
+    paddingTop: '10px',
+    paddingBottom: '10px',
+
+    backgroundColor: theme.colors.inventoryBackgroundColor,
+  },
 }));
