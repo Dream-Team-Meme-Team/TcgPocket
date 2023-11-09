@@ -16,6 +16,7 @@ import {
   setCurrentPage,
   setPageSize,
   setSelectedAdminTab,
+  setSelectedGameId,
   setSelectedIdInPaginatedTable,
 } from '../../store/adminSlice';
 import { AdminTabLabel } from '../../enums/adminTabLabel';
@@ -91,6 +92,7 @@ export function AdminPage(): React.ReactElement {
 
   useEffect(() => {
     dispatch(setSelectedAdminTab(AdminTabLabel.Games));
+    dispatch(setSelectedGameId(0));
   }, []);
 
   return (
