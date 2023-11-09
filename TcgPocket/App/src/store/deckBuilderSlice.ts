@@ -12,21 +12,25 @@ export interface DeckBuilderState {
   name: string;
   pagination: PageDto;
   selectedGame: GameGetDto | null;
+  selectedRuleSet: string;
   appliedFilters: CardFilterDto | null;
+  searchTerm: string;
 }
 
 const INITIAL_STATE: DeckBuilderState = {
   name: 'Untitled',
   pagination: defaultPagination,
   selectedGame: null,
+  selectedRuleSet: '',
   appliedFilters: null,
+  searchTerm: '',
 };
 
 export const deckBuilderSlice = createSlice({
   name: 'Inventory',
   initialState: INITIAL_STATE,
   reducers: {
-    setName(state, { payload }: PayloadAction<DeckBuilderState['name']>) {
+    setDeckName(state, { payload }: PayloadAction<DeckBuilderState['name']>) {
       state.name = payload;
     },
     setCurrentPage(
@@ -53,6 +57,18 @@ export const deckBuilderSlice = createSlice({
     ) {
       state.appliedFilters = payload;
     },
+    setDeckBuilderSearchTerm(
+      state,
+      { payload }: PayloadAction<DeckBuilderState['searchTerm']>
+    ) {
+      state.searchTerm = payload;
+    },
+    setSelectedRuleSet(
+      state,
+      { payload }: PayloadAction<DeckBuilderState['selectedRuleSet']>
+    ) {
+      state.selectedRuleSet = payload;
+    },
   },
   // extraReducers: (builder) => {
 
@@ -60,9 +76,11 @@ export const deckBuilderSlice = createSlice({
 });
 
 export const {
-  setName,
+  setDeckName,
   setCurrentPage,
   setPageSize,
   setSelectedDeckBuilderGame,
   setAppliedFilters,
+  setDeckBuilderSearchTerm,
+  setSelectedRuleSet,
 } = deckBuilderSlice.actions;

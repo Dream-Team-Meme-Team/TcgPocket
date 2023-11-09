@@ -6,64 +6,64 @@ import { IconEdit } from '@tabler/icons-react';
 import { PrimaryIconButton } from '../../../components/buttons/PrimaryIconButton';
 import { MantineTheme, Text } from '@mantine/core';
 import { dispatch, useAppSelector } from '../../../store/configureStore';
-import { setName } from '../../../store/deckBuilderSlice';
+import { setDeckName } from '../../../store/deckBuilderSlice';
 import { defaultGap } from '../../../constants/theme';
 
 export function DeckBuilderHeader(): React.ReactElement {
-    const { classes } = useStyles();
+  const { classes } = useStyles();
 
-    const name = useAppSelector((state) => state.deckBuilder.name);
+  const name = useAppSelector((state) => state.deckBuilder.name);
 
-    const [deckName, setDeckName] = useState<string>(name);
-    const [editMode, setEditMode] = useState(false);
+  const [deckName, setDeckName] = useState<string>(name);
+  const [editMode, setEditMode] = useState(false);
 
-    const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setDeckName(e.target.value);
-    };
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDeckName(e.target.value);
+  };
 
-    const handleSave = () => {
-        dispatch(setName(deckName));
-        setEditMode(false);
-    };
+  const handleSave = () => {
+    dispatch(setDeckName(deckName));
+    setEditMode(false);
+  };
 
-    return editMode ? (
-        <div className={classes.editName}>
-            <PrimaryTextInput value={deckName} onChange={handleNameChange} />
+  return editMode ? (
+    <div className={classes.editName}>
+      <PrimaryTextInput value={deckName} onChange={handleNameChange} />
 
-            <PrimaryButton onClick={handleSave}>Save</PrimaryButton>
-        </div>
-    ) : (
-        <div className={classes.displayName}>
-            <Text> {name} </Text>
+      <PrimaryButton onClick={handleSave}>Save</PrimaryButton>
+    </div>
+  ) : (
+    <div className={classes.displayName}>
+      <Text> {name} </Text>
 
-            <PrimaryIconButton onClick={() => setEditMode(true)}>
-                <IconEdit />
-            </PrimaryIconButton>
-        </div>
-    );
+      <PrimaryIconButton onClick={() => setEditMode(true)}>
+        <IconEdit />
+      </PrimaryIconButton>
+    </div>
+  );
 }
 
 const useStyles = createStyles((theme: MantineTheme) => {
-    const titleHeight = '7vh';
+  const titleHeight = '7vh';
 
-    return {
-        displayName: {
-            display: 'flex',
-            alignItems: 'center',
+  return {
+    displayName: {
+      display: 'flex',
+      alignItems: 'center',
 
-            height: titleHeight,
-            gap: defaultGap,
+      height: titleHeight,
+      gap: defaultGap,
 
-            fontSize: titleHeight,
-            fontWeight: 'bolder',
-        },
+      fontSize: titleHeight,
+      fontWeight: 'bolder',
+    },
 
-        editName: {
-            display: 'flex',
-            alignItems: 'center',
+    editName: {
+      display: 'flex',
+      alignItems: 'center',
 
-            height: titleHeight,
-            gap: defaultGap,
-        },
-    };
+      height: titleHeight,
+      gap: defaultGap,
+    },
+  };
 });

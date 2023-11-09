@@ -3,19 +3,50 @@ import { PrimaryTextInput } from '../../../components/inputs/PrimaryTextInput';
 import { defaultGap, defaultPadding } from '../../../constants/theme';
 import { IconFilter, IconSearch } from '@tabler/icons-react';
 import { PrimarySelect } from '../../../components/inputs/PrimarySelect';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { PrimaryBadge } from '../../../components/badges/PrimaryBadge';
 import { GridView } from './GridView';
 import { ViewStyle } from '../../../enums/viewStyle';
-import { ScrollArea } from '@mantine/core';
+import { Drawer, ScrollArea } from '@mantine/core';
+import { dispatch, useAppSelector } from '../../../store/configureStore';
+import { ListView } from './ListView';
+import { useEffectOnce } from 'react-use';
+import { shallowEqual } from 'react-redux';
+import { getAllCards } from '../../../services/CardsService';
+import { responseWrapper } from '../../../services/helpers/responseWrapper';
+import { CardFilterDto } from '../../../types/cards';
+import { useDisclosure } from '@mantine/hooks';
+import { FilterMenu } from '../../inventory/modules/FilterMenu';
+import { PrimaryButton } from '../../../components/buttons/PrimaryButton';
 
 export function InventoryDisplay(): React.ReactElement {
   const { classes } = useStyles();
 
+  const cards = useAppSelector((state) => state.inventory.cards);
+
+  const [pagination, selectedGame] = useAppSelector(
+    (state) => [state.deckBuilder.pagination, state.deckBuilder.selectedGame],
+    shallowEqual
+  );
+
   const [view, setView] = useState<string>(ViewStyle.Grid);
-  const [searchText, setSearchText] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState<string>('');
+
+  const [open, { toggle }] = useDisclosure();
 
   const viewStyle: string[] = [ViewStyle.Grid, ViewStyle.List];
+
+  const filteredCards = useMemo(() => {
+    if (!cards) return [];
+
+    return cards.items.filter((card) =>
+      card.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [searchTerm, cards]);
+
+  const handleSearchTerm = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
 
   const handleViewChange = (
     e: string | React.ChangeEvent<HTMLInputElement> | null
@@ -25,6 +56,24 @@ export function InventoryDisplay(): React.ReactElement {
     }
   };
 
+  const setSelectedGame = () => {
+    console.log();
+  };
+
+  useEffectOnce(() => {
+    const gameId = selectedGame ? [selectedGame.id] : undefined;
+
+    const filtered: CardFilterDto = {
+      gameIds: gameId,
+      currentPage: pagination.currentPage,
+      pageSize: pagination.pageSize,
+    };
+
+    dispatch(getAllCards(filtered)).then(({ payload }) => {
+      responseWrapper(payload);
+    });
+  });
+
   return (
     <div className={classes.container}>
       <div className={classes.header}>
@@ -32,8 +81,8 @@ export function InventoryDisplay(): React.ReactElement {
           <PrimaryTextInput
             icon={<IconSearch />}
             placeholder="Search"
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
+            value={searchTerm}
+            onChange={handleSearchTerm}
           />
 
           <PrimarySelect
@@ -44,12 +93,27 @@ export function InventoryDisplay(): React.ReactElement {
         </div>
 
         <div className={classes.bottomRow}>
-          <PrimaryBadge leftSection={<IconFilter />}>View Filters</PrimaryBadge>
+          <PrimaryButton onClick={toggle}>View Filters</PrimaryButton>
+
+          <PrimaryBadge leftSection={<IconFilter />}> Card Types </PrimaryBadge>
+          <PrimaryBadge leftSection={<IconFilter />}> Sets </PrimaryBadge>
+          <PrimaryBadge leftSection={<IconFilter />}> Rarities </PrimaryBadge>
+
+          <Drawer opened={open} onClose={toggle}>
+            <FilterMenu
+              selectedGame={selectedGame}
+              setSelectedGame={setSelectedGame}
+            />
+          </Drawer>
         </div>
       </div>
 
       <ScrollArea className={classes.body}>
-        {view === 'Grid' ? <GridView /> : <div />}
+        {view === ViewStyle.Grid ? (
+          <GridView cards={filteredCards} />
+        ) : (
+          <ListView cards={filteredCards} />
+        )}
       </ScrollArea>
     </div>
   );
@@ -93,6 +157,9 @@ const useStyles = createStyles((theme: MantineTheme) => {
 
     bottomRow: {
       display: 'flex',
+      alignItems: 'center',
+
+      gap: defaultGap,
     },
 
     body: {

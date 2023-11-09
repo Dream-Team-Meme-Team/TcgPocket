@@ -6,6 +6,10 @@ type PrimaryBadgeProps = BadgeProps & HTMLAttributes<HTMLDivElement>;
 const badgeStyling = (theme: MantineTheme) => ({
   color: theme.colors.primaryBlueColor[0],
   backgroundColor: theme.colors.primaryPurpleColor[0],
+
+  ':hover': {
+    cursor: 'pointer',
+  },
 });
 
 export function PrimaryBadge({
