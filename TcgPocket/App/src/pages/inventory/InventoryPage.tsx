@@ -14,7 +14,10 @@ import { defaultGap, defaultPadding } from '../../constants/theme';
 import { IconCards, IconSearch } from '@tabler/icons-react';
 import { PaginationSelect } from '../../components/pagination/PaginationSelect';
 import { PrimaryTextInput } from '../../components/inputs/PrimaryTextInput';
-import { resetFilters } from '../../store/inventorySlice';
+import {
+  resetFilters,
+  setSearchTextInventory,
+} from '../../store/inventorySlice';
 import { PrimaryButton } from '../../components/buttons/PrimaryButton';
 
 const pageSizeOptions: string[] = ['15', '30', '45'];
@@ -22,25 +25,31 @@ const pageSizeOptions: string[] = ['15', '30', '45'];
 export function InventoryPage(): React.ReactElement {
   const { classes } = useStyles();
 
-  const [cards, loading, cardTypeFilters, setFilters, rarityFilters] =
-    useAppSelector(
-      (state) => [
-        state.inventory.cards,
-        state.inventory.loading,
-        state.inventory.cardTypeFilters,
-        state.inventory.setFilters,
-        state.inventory.rarityFilters,
-      ],
-      shallowEqual
-    );
+  const [
+    cards,
+    loading,
+    cardTypeFilters,
+    setFilters,
+    rarityFilters,
+    searchText,
+  ] = useAppSelector(
+    (state) => [
+      state.inventory.cards,
+      state.inventory.loading,
+      state.inventory.cardTypeFilters,
+      state.inventory.setFilters,
+      state.inventory.rarityFilters,
+      state.inventory.searchText,
+    ],
+    shallowEqual
+  );
 
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(15);
   const [selectedGame, setSelectedGame] = useState<GameGetDto | null>(null);
-  const [searchText, setSearchText] = useState('');
 
   const handleSearchText = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchText(e.target.value);
+    dispatch(setSearchTextInventory(e.target.value));
   };
 
   const search = () => {
