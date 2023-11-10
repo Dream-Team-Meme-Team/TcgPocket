@@ -17,7 +17,7 @@ const initialState: AdminState = {
   selectedTab: null,
   currentPage: 1,
   pageCount: 1,
-  pageSize: 10,
+  pageSize: 15,
 };
 
 export const adminSlice = createSlice({

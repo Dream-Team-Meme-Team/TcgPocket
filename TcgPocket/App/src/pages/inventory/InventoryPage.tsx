@@ -17,7 +17,7 @@ import { PrimaryTextInput } from '../../components/inputs/PrimaryTextInput';
 import { resetFilters } from '../../store/inventorySlice';
 import { PrimaryButton } from '../../components/buttons/PrimaryButton';
 
-const pageSizeOptions: string[] = ['15', '24', '36'];
+const pageSizeOptions: string[] = ['15', '30', '45'];
 
 export function InventoryPage(): React.ReactElement {
   const { classes } = useStyles();

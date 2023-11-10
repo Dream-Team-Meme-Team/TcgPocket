@@ -32,7 +32,7 @@ import { defaultGap, defaultPadding } from '../../constants/theme';
 import { PrimarySelect } from '../../components/inputs/PrimarySelect';
 import { AddModalRenderer } from './modules/AddModalRenderer';
 
-const pageSizeOptions: string[] = ['10', '15', '30'];
+const pageSizeOptions: string[] = ['15', '30', '45'];
 
 const adminTabs: Tab[] = [
   {
