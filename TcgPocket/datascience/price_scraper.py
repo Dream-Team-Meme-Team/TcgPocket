@@ -40,8 +40,8 @@ def price_scraper(game: str):
         card_resp = bs(requests.get(base + set.a.get('href')).content, 'html.parser')
         for card in card_resp.find('table', id='games_table').tbody.find_all('td', class_='title'):
 
-            ''' Card Name Handling ''' # TODO: handle card names >>> Foil, Card Numbers, Etc...
-            if '[Foil]' in card.text.strip('\n'):
+            ''' Card Name Handling '''
+            if 'Foil' in card.text.strip('\n'):
                 continue
             #
             
@@ -61,4 +61,4 @@ def price_scraper(game: str):
     return data
 #
 
-price_scraper('magic')
+price_scraper('pokemon')
