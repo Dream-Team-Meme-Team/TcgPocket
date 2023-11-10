@@ -8,7 +8,7 @@ import { useAppSelector } from '../store/configureStore';
 import { AdminPage } from '../pages/admin/AdminPage';
 import { useMemo } from 'react';
 import { InventoryPage } from '../pages/inventory/InventoryPage';
-import { DeckBuilder } from '../pages/deckBuilder/DeckBuilderPage';
+import { DeckBuilderPage } from '../pages/deckBuilder/DeckBuilderPage';
 
 export function AppRoutes() {
   const user = useAppSelector((state) => state.user.user);
@@ -39,7 +39,7 @@ export function AppRoutes() {
           />
           <Route
             path={routes.deckBuilder}
-            element={<DeckBuilder />}
+            element={<DeckBuilderPage />}
             errorElement={<ErrorPage />}
           />
           <Route

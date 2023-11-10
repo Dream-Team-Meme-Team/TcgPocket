@@ -13,18 +13,22 @@ import {
   setSelectedDeckBuilderGame,
   setSelectedRuleSet,
 } from '../../../store/deckBuilderSlice';
-import { GameGetDto } from '../../../types/games';
 import { useFormValidation } from '../../../helpers/useFormValidation';
+import { getAllGames } from '../../../services/dataServices/gameServices';
+import { responseWrapper } from '../../../services/helpers/responseWrapper';
+import { useEffectOnce } from 'react-use';
+import { getAllCards } from '../../../services/CardsService';
+import { CardFilterDto } from '../../../types/cards';
 
-type BuildDeckRequirements = {
-  name: string;
-  game: GameGetDto | null;
+export type BuildDeckRequirements = {
+  deckName: string;
+  gameName: string;
   ruleSet: string;
 };
 
 const initialValues: BuildDeckRequirements = {
-  name: '',
-  game: null,
+  deckName: '',
+  gameName: '',
   ruleSet: 'No Rules',
 } as const;
 
@@ -42,11 +46,13 @@ export function DeckRequirementModal({
 
   const games = useAppSelector((state) => state.data.games);
 
+  const pagination = useAppSelector((state) => state.deckBuilder.pagination);
+
   const form = useForm({
     initialValues: initialValues,
     validate: {
-      name: (value) => (validateTextInput(value) ? 'Invalid Name' : null),
-      game: (value) => (!value ? 'Invalid Game' : null),
+      deckName: (value) => (validateTextInput(value) ? 'Invalid Name' : null),
+      gameName: (value) => (value === '' ? 'Invalid Game' : null),
     },
   });
 
@@ -55,11 +61,33 @@ export function DeckRequirementModal({
   };
 
   const handleSubmit = (values: BuildDeckRequirements) => {
-    dispatch(setDeckName(values.name));
-    dispatch(setSelectedDeckBuilderGame(values.game));
+    const foundGame = games.find((game) => game.name === values.gameName);
+
+    const gameId = foundGame ? [foundGame.id] : undefined;
+
+    const filtered: CardFilterDto = {
+      gameIds: gameId,
+      currentPage: pagination.currentPage,
+      pageSize: pagination.pageSize,
+    };
+
+    dispatch(setDeckName(values.deckName));
+    dispatch(setSelectedDeckBuilderGame(foundGame ? foundGame : null));
     dispatch(setSelectedRuleSet(values.ruleSet));
+    dispatch(getAllCards(filtered)).then(({ payload }) => {
+      responseWrapper(payload);
+      console.log(payload?.data);
+    });
     toggle();
   };
+
+  useEffectOnce(() => {
+    if (games.length !== 0) return;
+
+    dispatch(getAllGames()).then(({ payload }) => {
+      responseWrapper(payload);
+    });
+  });
 
   return (
     <PrimaryModal
@@ -106,13 +134,13 @@ export function DeckRequirementModal({
             <div className={classes.form}>
               <PrimaryTextInput
                 label="Deck Name"
-                {...form.getInputProps('name')}
+                {...form.getInputProps('deckName')}
               />
 
               <PrimarySelect
                 label="Game"
                 data={games.map((game) => game.name)}
-                {...form.getInputProps('game')}
+                {...form.getInputProps('gameName')}
               />
 
               <PrimarySelect

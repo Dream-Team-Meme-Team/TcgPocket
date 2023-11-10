@@ -3,29 +3,31 @@ import { PrimaryTextInput } from '../../../components/inputs/PrimaryTextInput';
 import { defaultGap, defaultPadding } from '../../../constants/theme';
 import { IconFilter, IconSearch } from '@tabler/icons-react';
 import { PrimarySelect } from '../../../components/inputs/PrimarySelect';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { PrimaryBadge } from '../../../components/badges/PrimaryBadge';
 import { GridView } from './GridView';
 import { ViewStyle } from '../../../enums/viewStyle';
 import { Drawer, ScrollArea } from '@mantine/core';
 import { dispatch, useAppSelector } from '../../../store/configureStore';
 import { ListView } from './ListView';
-import { useEffectOnce } from 'react-use';
 import { shallowEqual } from 'react-redux';
-import { getAllCards } from '../../../services/CardsService';
-import { responseWrapper } from '../../../services/helpers/responseWrapper';
-import { CardFilterDto } from '../../../types/cards';
 import { useDisclosure } from '@mantine/hooks';
 import { FilterMenu } from '../../inventory/modules/FilterMenu';
 import { PrimaryButton } from '../../../components/buttons/PrimaryButton';
+import { CardFilterDto } from '../../../types/cards';
+import { getAllCards } from '../../../services/CardsService';
+import { responseWrapper } from '../../../services/helpers/responseWrapper';
 
-export function InventoryDisplay(): React.ReactElement {
+export function DeckBuilderInventory(): React.ReactElement {
   const { classes } = useStyles();
 
-  const cards = useAppSelector((state) => state.inventory.cards);
-
-  const [pagination, selectedGame] = useAppSelector(
-    (state) => [state.deckBuilder.pagination, state.deckBuilder.selectedGame],
+  const [selectedGame, deckName, cards, pagination] = useAppSelector(
+    (state) => [
+      state.deckBuilder.selectedGame,
+      state.deckBuilder.name,
+      state.deckBuilder.cards,
+      state.deckBuilder.pagination,
+    ],
     shallowEqual
   );
 
@@ -56,11 +58,9 @@ export function InventoryDisplay(): React.ReactElement {
     }
   };
 
-  const setSelectedGame = () => {
-    console.log();
-  };
+  useEffect(() => {
+    if (deckName === 'Untitled' || !selectedGame) return;
 
-  useEffectOnce(() => {
     const gameId = selectedGame ? [selectedGame.id] : undefined;
 
     const filtered: CardFilterDto = {
@@ -72,7 +72,7 @@ export function InventoryDisplay(): React.ReactElement {
     dispatch(getAllCards(filtered)).then(({ payload }) => {
       responseWrapper(payload);
     });
-  });
+  }, [selectedGame, deckName, pagination]);
 
   return (
     <div className={classes.container}>
@@ -100,10 +100,7 @@ export function InventoryDisplay(): React.ReactElement {
           <PrimaryBadge leftSection={<IconFilter />}> Rarities </PrimaryBadge>
 
           <Drawer opened={open} onClose={toggle}>
-            <FilterMenu
-              selectedGame={selectedGame}
-              setSelectedGame={setSelectedGame}
-            />
+            <FilterMenu selectedGame={selectedGame} />
           </Drawer>
         </div>
       </div>

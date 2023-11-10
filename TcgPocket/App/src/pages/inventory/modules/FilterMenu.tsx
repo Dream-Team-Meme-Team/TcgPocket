@@ -23,7 +23,7 @@ export type Category = {
 
 type FilterMenuProps = {
   selectedGame: GameGetDto | null;
-  setSelectedGame: (arg: GameGetDto | null) => void;
+  setSelectedGame?: (arg: GameGetDto | null) => void;
 };
 
 export function FilterMenu({
@@ -72,6 +72,8 @@ export function FilterMenu({
   const handleSelectChange = (
     value: string | React.ChangeEvent<HTMLInputElement> | null
   ) => {
+    if (!setSelectedGame) return;
+
     const foundGame = games.find((game) => game.name === value) ?? null;
     setSelectedGame(foundGame);
   };
@@ -93,6 +95,7 @@ export function FilterMenu({
           clearable
           searchable
           withinPortal
+          disabled={!setSelectedGame}
           label="Select Game:"
           value={selectedGame ? selectedGame.name : ''}
           data={games.map((game) => game.name)}

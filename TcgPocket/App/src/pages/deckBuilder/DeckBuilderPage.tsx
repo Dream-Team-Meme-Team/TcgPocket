@@ -1,17 +1,31 @@
 import { createStyles } from '@mantine/styles';
-import { InventoryDisplay } from './modules/InventoryDisplay';
+import { DeckBuilderInventory } from './modules/DeckBuilderInventory';
 import { BuilderDisplay } from './modules/DeckBuilderDisplay';
 import { DeckBuilderHeader } from './modules/DeckBuilderHeader';
 import { defaultGap, defaultPadding } from '../../constants/theme';
 import { ScrollArea } from '@mantine/core';
-import { PrimaryModal } from '../../components/modals/PrimaryModal';
-import { useDisclosure } from '@mantine/hooks';
+import { shallowEqual, useDisclosure } from '@mantine/hooks';
 import { DeckRequirementModal } from './modules/DeckRequirementModal';
+import { dispatch, useAppSelector } from '../../store/configureStore';
+import { useEffect } from 'react';
+import { resetDeckBuilder } from '../../store/deckBuilderSlice';
 
-export function DeckBuilder(): React.ReactElement {
+export function DeckBuilderPage(): React.ReactElement {
   const { classes } = useStyles();
 
+  const [name, selectedGame] = useAppSelector(
+    (state) => [state.deckBuilder.name, state.deckBuilder.selectedGame],
+    shallowEqual
+  );
+
   const [open, { toggle }] = useDisclosure(true);
+
+  useEffect(() => {
+    // clean up on unmount
+    return () => {
+      dispatch(resetDeckBuilder());
+    };
+  }, []);
 
   return (
     <ScrollArea className={classes.container}>
@@ -20,12 +34,14 @@ export function DeckBuilder(): React.ReactElement {
       </div>
 
       <div className={classes.body}>
-        <InventoryDisplay />
+        <DeckBuilderInventory />
 
         <BuilderDisplay />
       </div>
 
-      <DeckRequirementModal open={open} toggle={toggle} />
+      {name === 'Untitled' && !selectedGame && (
+        <DeckRequirementModal open={open} toggle={toggle} />
+      )}
     </ScrollArea>
   );
 }
@@ -35,8 +51,6 @@ const useStyles = createStyles(() => {
     container: {
       display: 'grid',
       gridTemplateRows: 'auto 1fr auto',
-
-      height: '100vh',
 
       paddingTop: defaultPadding,
       paddingBottom: defaultPadding,

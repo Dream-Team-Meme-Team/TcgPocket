@@ -1,4 +1,4 @@
-export const alphaNumRegex = /^[a-z0-9]+$/i;
+export const alphaNumRegex = /^[a-z0-9\s]+$/i;
 export const passwordRegex =
   /^(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{6,}$/;
 export const phoneNumberRegex = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;

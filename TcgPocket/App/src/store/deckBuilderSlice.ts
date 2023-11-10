@@ -1,7 +1,8 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { PageDto } from '../types/shared';
+import { PageDto, PagedResult } from '../types/shared';
 import { GameGetDto } from '../types/games';
-import { CardFilterDto } from '../types/cards';
+import { CardDisplayDto, CardFilterDto } from '../types/cards';
+import { getAllCards } from '../services/CardsService';
 
 const defaultPagination: PageDto = {
   currentPage: 1,
@@ -15,6 +16,8 @@ export interface DeckBuilderState {
   selectedRuleSet: string;
   appliedFilters: CardFilterDto | null;
   searchTerm: string;
+  cards: PagedResult<CardDisplayDto> | null;
+  deck: CardDisplayDto[];
 }
 
 const INITIAL_STATE: DeckBuilderState = {
@@ -24,6 +27,8 @@ const INITIAL_STATE: DeckBuilderState = {
   selectedRuleSet: '',
   appliedFilters: null,
   searchTerm: '',
+  cards: null,
+  deck: [],
 };
 
 export const deckBuilderSlice = createSlice({
@@ -63,16 +68,24 @@ export const deckBuilderSlice = createSlice({
     ) {
       state.searchTerm = payload;
     },
+    setDeck(state, { payload }: PayloadAction<DeckBuilderState['deck']>) {
+      state.deck = payload;
+    },
     setSelectedRuleSet(
       state,
       { payload }: PayloadAction<DeckBuilderState['selectedRuleSet']>
     ) {
       state.selectedRuleSet = payload;
     },
+    resetDeckBuilder() {
+      return INITIAL_STATE;
+    },
   },
-  // extraReducers: (builder) => {
-
-  // },
+  extraReducers: (builder) => {
+    builder.addCase(getAllCards.fulfilled, (state, { payload }) => {
+      state.cards = payload.data;
+    });
+  },
 });
 
 export const {
@@ -83,4 +96,6 @@ export const {
   setAppliedFilters,
   setDeckBuilderSearchTerm,
   setSelectedRuleSet,
+  resetDeckBuilder,
+  setDeck,
 } = deckBuilderSlice.actions;

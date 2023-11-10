@@ -2,10 +2,11 @@ import { MantineTheme, createStyles } from '@mantine/core';
 import { PrimarySelect } from '../../../components/inputs/PrimarySelect';
 import { defaultGap, defaultPadding } from '../../../constants/theme';
 import { Text } from '@mantine/core';
-import { useState } from 'react';
-import { useAppSelector } from '../../../store/configureStore';
-import { GameGetDto } from '../../../types/games';
+import { useEffect } from 'react';
+import { dispatch, useAppSelector } from '../../../store/configureStore';
 import { ViewStyle } from '../../../enums/viewStyle';
+import { useForm } from '@mantine/form';
+import { setSelectedDeckBuilderGame } from '../../../store/deckBuilderSlice';
 
 const cardTypes = [
   'Commander',
@@ -15,63 +16,53 @@ const cardTypes = [
   'Fairy',
 ] as const;
 
-const ruleSets = ['Any', 'Tournament', 'Standard', 'Etc'] as const;
-
 export function BuilderDisplay(): React.ReactElement {
   const { classes } = useStyles();
 
   const games = useAppSelector((state) => state.data.games);
 
-  const [view, setView] = useState<string>(ViewStyle.List);
-  const [ruleSet, setRuleSet] = useState<string>(ruleSets[0]);
-  const [selectedGame, setSelectedGame] = useState<GameGetDto | null>();
+  const selectedGame = useAppSelector(
+    (state) => state.deckBuilder.selectedGame
+  );
+
+  const form = useForm({
+    initialValues: {
+      gameName: '',
+      ruleSet: 'No Rules',
+      view: ViewStyle.List,
+    },
+  });
 
   const viewStyle: string[] = [ViewStyle.Grid, ViewStyle.List];
 
-  const handleViewChange = (
-    e: string | React.ChangeEvent<HTMLInputElement> | null
-  ) => {
-    if (typeof e === 'string') {
-      setView(e);
-    }
-  };
+  useEffect(() => {
+    const foundGame = games.find((game) => game.name === form.values.gameName);
 
-  const handleRuleSetChange = (
-    e: string | React.ChangeEvent<HTMLInputElement> | null
-  ) => {
-    if (typeof e === 'string') {
-      setRuleSet(e);
-    }
-  };
+    dispatch(setSelectedDeckBuilderGame(foundGame ? foundGame : null));
+  }, [form.values.gameName, games]);
 
-  const handleGameChange = (
-    e: string | React.ChangeEvent<HTMLInputElement> | null
-  ) => {
-    const foundGame = games.find((game) => game.name === e) ?? null;
-    setSelectedGame(foundGame);
-  };
+  useEffect(() => {
+    const name = selectedGame ? selectedGame.name : '';
+    form.setValues({ gameName: name });
+    // disabled because we DONT want to re-render when the form changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedGame]);
 
   return (
     <div className={classes.container}>
       <div className={classes.header}>
-        <PrimarySelect
-          value={view}
-          data={viewStyle}
-          onChange={handleViewChange}
-        />
+        <PrimarySelect data={viewStyle} {...form.getInputProps('view')} />
 
-        {/* game */}
         <PrimarySelect
-          value={selectedGame ? selectedGame.name : ''}
+          disabled={selectedGame !== null}
           data={games.map((game) => game.name)}
-          onChange={handleGameChange}
+          {...form.getInputProps('gameName')}
         />
 
-        {/* rule set */}
         <PrimarySelect
-          value={ruleSet}
-          data={ruleSets}
-          onChange={handleRuleSetChange}
+          disabled
+          data={['No Rules']}
+          {...form.getInputProps('ruleSet')}
         />
       </div>
 
