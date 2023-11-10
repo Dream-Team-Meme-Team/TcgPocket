@@ -16,6 +16,7 @@ def price_scraper(game: str):
     data = defaultdict(dict)
 
     for set in set_resp.find('div', class_='home-box all').ul.find_all('li'):
+        
         ''' Set Name Handling '''
         # skip sets in japanese
         if 'Japanese' in set.text.strip('\n'):
@@ -38,9 +39,13 @@ def price_scraper(game: str):
 
         card_resp = bs(requests.get(base + set.a.get('href')).content, 'html.parser')
         for card in card_resp.find('table', id='games_table').tbody.find_all('td', class_='title'):
-            ''' Card Name Handling '''
-            prices = bs(requests.get(base + card.a.get('href')).content, 'html.parser')
+
+            ''' Card Name Handling ''' # TODO: handle card names >>> Foil, Card Numbers, Etc...
+            if '[Foil]' in card.text.strip('\n'):
+                continue
+            #
             
+            prices = bs(requests.get(base + card.a.get('href')).content, 'html.parser')
             try:
                 card_dates = prices.find('table', class_='hoverable-rows sortable').tbody.find_all('td', class_='date')
                 card_prices = prices.find('table', class_='hoverable-rows sortable').tbody.find_all('td', class_='numeric')
