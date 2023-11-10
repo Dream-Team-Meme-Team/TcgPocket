@@ -84,7 +84,7 @@ export const SetTab: React.FC = () => {
         editFn={editSelectedSet}
         deleteFn={deleteSelectedSet}
         typeName="Set"
-        tableWidth="97%"
+        tableWidth="100%"
       />
     </div>
   );

@@ -84,7 +84,7 @@ export const RarityTab: React.FC = () => {
         editFn={editSelectedRarity}
         deleteFn={deleteSelectedRarity}
         typeName="Rarity"
-        tableWidth="97%"
+        tableWidth="100%"
       />
     </div>
   );

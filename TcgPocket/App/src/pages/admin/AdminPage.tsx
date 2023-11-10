@@ -1,4 +1,4 @@
-import { ScrollArea, Tabs, TabsValue, createStyles } from '@mantine/core';
+import { Flex, ScrollArea, Tabs, TabsValue, createStyles } from '@mantine/core';
 import {
   IconCards,
   IconChartTreemap,
@@ -30,6 +30,7 @@ import { shallowEqual } from 'react-redux';
 import { PaginationSelect } from '../../components/pagination/PaginationSelect';
 import { defaultGap, defaultPadding } from '../../constants/theme';
 import { PrimarySelect } from '../../components/inputs/PrimarySelect';
+import { AddModalRenderer } from './modules/AddModalRenderer';
 
 const pageSizeOptions: string[] = ['10', '15', '30'];
 
@@ -126,10 +127,23 @@ export function AdminPage(): React.ReactElement {
               value={tab.label}
               className={classes.panelContainer}
             >
-              <AdminTabHeader label={tab.label} />
-
               {selectedGameId !== 0 || tab.label === AdminTabLabel.Games ? (
-                <TabContent />
+                <>
+                  <Flex
+                    align="center"
+                    justify={'space-between'}
+                    className={classes.tabHeader}
+                  >
+                    <h3 className={classes.tabHeaderFont}>
+                      Modify {tab.label}
+                    </h3>
+                    <text className={classes.addButton}>
+                      <AddModalRenderer label={tab.label} />
+                    </text>
+                  </Flex>
+
+                  <TabContent />
+                </>
               ) : (
                 <div className={classes.noSelectedGame}>
                   Please Select a Game
@@ -140,7 +154,7 @@ export function AdminPage(): React.ReactElement {
         })}
       </ScrollArea>
 
-      <div className={classes.paginationFooter}>
+      <div className={classes.paginationHeader}>
         <div className={classes.pageSizeControls}>
           <span> Items Per Page </span>
 
@@ -157,6 +171,7 @@ export function AdminPage(): React.ReactElement {
             />
           </div>
         </div>
+        <AdminTabHeader label={selectedTab ?? ''} />
 
         <PaginationSelect
           currentPage={currentPage}
@@ -190,6 +205,24 @@ const useStyles = createStyles((theme) => {
       },
     },
 
+    addButton: {
+      justifyContent: 'flex-end',
+    },
+
+    tabHeader: {
+      paddingLeft: '1em',
+      paddingRight: '1em',
+      paddingTop: '1em',
+      paddingBottom: 0,
+      margin: 0,
+    },
+
+    tabHeaderFont: {
+      fontSize: '26px',
+      padding: 0,
+      margin: 0,
+    },
+
     panelContainer: {
       display: 'grid',
       gridTemplateRows: 'auto 1fr',
@@ -205,6 +238,8 @@ const useStyles = createStyles((theme) => {
 
     contain: {
       width: '100%',
+      paddingLeft: '0.5em',
+      top: navbarHeight,
       height: remainingHeight - navbarHeight,
       backgroundColor: theme.colors.secondaryBackgroundColor[0],
     },
@@ -226,21 +261,21 @@ const useStyles = createStyles((theme) => {
       height: navbarHeight,
     },
 
-    paginationFooter: {
+    paginationHeader: {
       display: 'grid',
       gridTemplateColumns: 'auto 1fr auto auto',
       alignItems: 'center',
       gap: defaultGap,
       height: navbarHeight,
       position: 'absolute',
-      bottom: 0,
       left: 0,
       right: 0,
+      top: 0,
       marginLeft: 124.587,
       justifyItems: 'end',
-      borderTopWidth: 1,
-      borderTopStyle: 'solid',
-      borderTopColor: theme.colors.primaryPurpleColor[0],
+      borderBottomWidth: 1,
+      borderBottomStyle: 'solid',
+      borderBottomColor: theme.colors.primaryPurpleColor[0],
     },
 
     pageSizeControls: {

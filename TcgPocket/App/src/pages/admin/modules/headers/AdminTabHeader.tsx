@@ -3,7 +3,6 @@ import { IconSearch } from '@tabler/icons-react';
 import { dispatch, useAppSelector } from '../../../../store/configureStore';
 import { Select, SelectItem, createStyles } from '@mantine/core';
 import { useMemo } from 'react';
-import { AddModalRenderer } from '../AddModalRenderer';
 import {
   setAdminSearchTerm,
   setSelectedGameId,
@@ -52,8 +51,6 @@ export function AdminTabHeader({
 
   return (
     <div className={classes.adminTabHeaderContainer}>
-      <h3> Modify {label} </h3>
-
       <div className={classes.controlsContainer}>
         <div>
           {determineSelect && gameOptions && (
@@ -72,8 +69,6 @@ export function AdminTabHeader({
           value={searchTerm}
           onChange={handleInputChange}
         />
-
-        <AddModalRenderer label={label} />
       </div>
     </div>
   );
@@ -84,6 +79,8 @@ const useStyles = createStyles(() => {
     adminTabHeaderContainer: {
       display: 'grid',
       gridTemplateRows: 'auto auto auto',
+      paddingLeft: '0.5em',
+      width: '100%',
     },
 
     controlsContainer: {

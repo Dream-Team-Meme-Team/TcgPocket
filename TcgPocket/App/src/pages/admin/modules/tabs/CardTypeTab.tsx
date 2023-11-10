@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { dispatch, useAppSelector } from '../../../../store/configureStore';
 import {
   deleteCardType,
@@ -13,13 +13,21 @@ import { AdminPaginatedTable } from '../AdminPaginatedTable';
 import { useAsyncFn } from 'react-use';
 
 export const CardTypeTab: React.FC = () => {
-  const [page, setPage] = useState(1);
-  const [searchTerm, selectedId, selectedGameId, selectedTab] = useAppSelector(
+  const [
+    searchTerm,
+    selectedId,
+    selectedGameId,
+    selectedTab,
+    currentPage,
+    pageSize,
+  ] = useAppSelector(
     (state) => [
       state.admin.searchTerm,
       state.admin.selectedIdInPaginatedTable,
       state.admin.selectedGameId,
       state.admin.selectedTab,
+      state.admin.currentPage,
+      state.admin.pageSize,
     ],
     shallowEqual
   );
@@ -28,14 +36,14 @@ export const CardTypeTab: React.FC = () => {
     const { payload } = await dispatch(
       getAllFilteredCardTypes({
         gameId: selectedGameId,
-        currentPage: page,
-        pageSize: 25,
+        currentPage: currentPage,
+        pageSize: pageSize,
         name: searchTerm,
       })
     );
 
     return payload?.data;
-  }, [page, selectedGameId, searchTerm]);
+  }, [currentPage, pageSize, selectedGameId, searchTerm]);
 
   const deleteSelectedCardType = async () => {
     dispatch(deleteCardType(selectedId)).then(({ payload }) => {
@@ -73,13 +81,10 @@ export const CardTypeTab: React.FC = () => {
       <AdminPaginatedTable
         data={cardTypes.value?.items}
         loading={cardTypes.loading}
-        pageCount={cardTypes.value?.pageCount ?? 1}
-        page={page}
-        setPage={setPage}
         editFn={editSelectedCardType}
         deleteFn={deleteSelectedCardType}
         typeName="Card Type"
-        tableWidth="97%"
+        tableWidth="100%"
       />
     </div>
   );

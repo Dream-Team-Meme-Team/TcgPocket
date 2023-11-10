@@ -90,7 +90,7 @@ export const AttributeTab: React.FC = () => {
         editFn={editSelectedAttribute}
         deleteFn={deleteSelectedAttribute}
         typeName="Attribute"
-        tableWidth="97%"
+        tableWidth="100%"
       />
     </div>
   );

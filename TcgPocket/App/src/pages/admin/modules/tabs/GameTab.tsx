@@ -64,13 +64,10 @@ export const GameTab: React.FC = () => {
       <AdminPaginatedTable
         data={renderedGames}
         loading={false}
-        pageCount={1}
-        page={1}
-        setPage={() => {}}
         editFn={editSelectedGame}
         deleteFn={deleteSelectedGame}
         typeName="Game"
-        tableWidth="97%"
+        tableWidth="100%"
       />
     </div>
   );
