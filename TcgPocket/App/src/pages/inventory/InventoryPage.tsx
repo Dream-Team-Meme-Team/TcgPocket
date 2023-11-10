@@ -72,6 +72,7 @@ export function InventoryPage(): React.ReactElement {
 
   useEffect(() => {
     dispatch(resetFilters());
+    dispatch(setSearchTextInventory(''));
   }, [selectedGame]);
 
   useEffect(() => {
