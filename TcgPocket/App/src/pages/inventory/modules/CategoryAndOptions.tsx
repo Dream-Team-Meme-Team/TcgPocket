@@ -21,6 +21,7 @@ import { GameGetDto } from '../../../types/games';
 import { CardTypeGetDto } from '../../../types/card-types';
 import { dispatch } from '../../../store/configureStore';
 import {
+  setCurrentPage,
   setSearchTextInventory,
   toggleCardTypeFilters,
   toggleRarityFilters,
@@ -67,6 +68,7 @@ export function CategoryAndOptions({
 
   const handleFilters = (option: CardTypeGetDto) => {
     dispatch(setSearchTextInventory(''));
+    dispatch(setCurrentPage(1));
     switch (label) {
       case CategoryLabel.CardTypes:
         dispatch(toggleCardTypeFilters(option.id));

@@ -28,6 +28,7 @@ export const adminSlice = createSlice({
       state,
       { payload }: PayloadAction<AdminState['searchTerm']>
     ) {
+      state.currentPage = 1;
       state.searchTerm = payload;
     },
     setSelectedIdInPaginatedTable(

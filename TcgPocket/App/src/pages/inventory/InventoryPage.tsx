@@ -16,6 +16,7 @@ import { PaginationSelect } from '../../components/pagination/PaginationSelect';
 import { PrimaryTextInput } from '../../components/inputs/PrimaryTextInput';
 import {
   resetFilters,
+  setCurrentPage,
   setSearchTextInventory,
 } from '../../store/inventorySlice';
 import { PrimaryButton } from '../../components/buttons/PrimaryButton';
@@ -32,6 +33,7 @@ export function InventoryPage(): React.ReactElement {
     setFilters,
     rarityFilters,
     searchText,
+    currentPage,
   ] = useAppSelector(
     (state) => [
       state.inventory.cards,
@@ -40,15 +42,16 @@ export function InventoryPage(): React.ReactElement {
       state.inventory.setFilters,
       state.inventory.rarityFilters,
       state.inventory.searchText,
+      state.inventory.currentPage,
     ],
     shallowEqual
   );
 
-  const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(15);
   const [selectedGame, setSelectedGame] = useState<GameGetDto | null>(null);
 
   const handleSearchText = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setCurrentPage(1));
     dispatch(setSearchTextInventory(e.target.value));
   };
 
@@ -73,6 +76,7 @@ export function InventoryPage(): React.ReactElement {
   useEffect(() => {
     dispatch(resetFilters());
     dispatch(setSearchTextInventory(''));
+    dispatch(setCurrentPage(1));
   }, [selectedGame]);
 
   useEffect(() => {
@@ -125,7 +129,6 @@ export function InventoryPage(): React.ReactElement {
             </div>
           </div>
 
-          {/* currently we do not have any implementation in place for this. using as a placeholder */}
           <PrimaryTextInput
             icon={<IconSearch />}
             placeholder="Search Cards"
@@ -137,7 +140,7 @@ export function InventoryPage(): React.ReactElement {
 
           <PaginationSelect
             currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
+            setCurrentPage={(arg) => dispatch(setCurrentPage(arg))}
             total={cards ? cards.pageCount : 16}
             className={classes.paginationControls}
           />
