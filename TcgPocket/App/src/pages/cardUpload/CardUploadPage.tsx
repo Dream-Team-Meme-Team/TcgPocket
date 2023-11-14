@@ -58,7 +58,7 @@ export function CardUploadPage() {
         accept={IMAGE_MIME_TYPE}
         loading={uploadCardState.loading}
       >
-        <Group className={classes.foo} position="center" spacing="xl">
+        <Group className={classes.internalUploadContainer} position="center" spacing="xl">
           <Dropzone.Accept>
             <IconUpload
               size="3.2rem"
@@ -102,7 +102,6 @@ export function CardUploadPage() {
             labelPosition={'center'}
           />
 
-          {/*  */}
           <div className={classes.inventoryDisplayContainer}>
             <ScrollArea>
               <div className={classes.inventoryDisplayGroup}>
@@ -122,7 +121,7 @@ const useStyles = createStyles((theme) => ({
   uploadContainer: {
     paddingTop: '50px',
   },
-  foo: { minHeight: rem(220), pointerEvents: 'none' },
+  internalUploadContainer: { minHeight: rem(220), pointerEvents: 'none' },
   inventoryDisplayContainer: {
     display: 'grid',
 
