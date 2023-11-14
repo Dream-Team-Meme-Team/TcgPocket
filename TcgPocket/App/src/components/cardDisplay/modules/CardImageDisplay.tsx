@@ -7,8 +7,9 @@ import {
   createStyles,
   Tooltip,
   Skeleton,
+  Modal,
+  Grid,
 } from '@mantine/core';
-import { PrimaryModal } from '../../modals/PrimaryModal';
 import { IconAlertTriangleFilled } from '@tabler/icons-react';
 import { useState } from 'react';
 
@@ -67,46 +68,63 @@ export function CardImageDisplay({ imageUrl }: CardImageDisplayProps) {
           </Skeleton>
         </AspectRatio>
       </Tooltip>
-      <PrimaryModal
-        styles={modalProps}
+      <Modal.Root
         padding={10}
         radius={10}
         centered
-        size={550}
         opened={open}
         onClose={() => setOpen(false)}
+        styles={modalProps}
       >
-        <AspectRatio ratio={63 / 88} h={715}>
-          <img className={classes.modalImageStyling} src={imageUrl} />
-        </AspectRatio>
-      </PrimaryModal>
+        <Modal.Overlay />
+        <Modal.Content p={10}>
+          <Flex h="3.5%" align={'flex-end'}>
+            <Modal.CloseButton />
+          </Flex>
+          <Modal.Body h="92%">
+            <Grid m="auto" h="100%" align="center" justify="center">
+              <Grid.Col span={10}>
+                <AspectRatio ratio={63 / 88}>
+                  <img className={classes.modalImageStyling} src={imageUrl} />
+                </AspectRatio>
+              </Grid.Col>
+            </Grid>
+          </Modal.Body>
+        </Modal.Content>
+      </Modal.Root>
     </>
   );
 }
 
 const modalProps: Styles<ModalBaseStylesNames> = {
+  content: {
+    backgroundColor: 'rgba(225,225,225,0.65)',
+    padding: 0,
+    overflow: 'hidden',
+    height: '80%',
+    maxHeight: '700px !important',
+  },
   header: {
-    backgroundColor: 'rgba(35, 27, 54,0.8)',
     display: 'flex',
     justifyContent: 'right',
     textAlign: 'right',
-    height: '40px',
   },
   close: {
     color: 'white',
     zIndex: 5,
-    position: 'fixed',
     scale: '1.5',
     borderRadius: '5px',
-    transform: 'translateY(5px) translateX(-5px)',
+    transform: 'translateY(0.1em) translateX(-0.2em)',
     ':focus': {
-      transform: 'translateY(5px) translateX(-5px)',
+      transform: 'translateY(0.1em) translateX(-0.2em)',
     },
   },
   body: {
-    padding: '30px 30px',
-    backgroundColor: 'rgba(35, 27, 54,0.8)',
+    padding: '0px 30px',
     objectFit: 'scale-down',
+  },
+  root: {
+    height: 2000,
   },
 };
 
@@ -141,10 +159,11 @@ const useStyles = createStyles(() => ({
   },
 
   modalImageStyling: {
+    scale: '1.4',
     display: 'flex',
     margin: 'auto',
     objectFit: 'scale-down',
-    borderRadius: '0.75rem',
+    borderRadius: '1.5rem',
     boxShadow: '0rem .2rem 0.5rem 0 rgba(0, 0, 0, .5)',
   },
 }));
