@@ -1,16 +1,22 @@
 import { PrimaryTextInput } from '../../../../components/inputs/PrimaryTextInput';
-import { IconSearch } from '@tabler/icons-react';
+import { IconCards, IconSearch } from '@tabler/icons-react';
 import { dispatch, useAppSelector } from '../../../../store/configureStore';
-import { Select, SelectItem, createStyles } from '@mantine/core';
+import { MantineTheme, Select, SelectItem, createStyles } from '@mantine/core';
 import { useMemo } from 'react';
 import {
   setAdminSearchTerm,
+  setCurrentPage,
+  setPageSize,
   setSelectedGameId,
 } from '../../../../store/adminSlice';
 import { AdminTabLabel } from '../../../../enums/adminTabLabel';
 import { shallowEqual } from 'react-redux';
 import { useAsync } from 'react-use';
 import { getOptions } from '../../../../services/dataServices/gameServices';
+import { PaginationSelect } from '../../../../components/pagination/PaginationSelect';
+import { defaultGap, defaultPadding } from '../../../../constants/theme';
+import { PrimarySelect } from '../../../../components/inputs/PrimarySelect';
+import { useNavbarHeight } from '../../../../hooks/useNavbarHeight';
 
 type AdminTabHeaderProps = {
   label: string;
@@ -21,10 +27,17 @@ export function AdminTabHeader({
 }: AdminTabHeaderProps): React.ReactElement {
   const { classes } = useStyles();
 
-  const [searchTerm, selectedGameId] = useAppSelector(
-    (state) => [state.admin.searchTerm, state.admin.selectedGameId],
-    shallowEqual
-  );
+  const [searchTerm, selectedGameId, pageCount, pageSize, currentPage] =
+    useAppSelector(
+      (state) => [
+        state.admin.searchTerm,
+        state.admin.selectedGameId,
+        state.admin.pageCount,
+        state.admin.pageSize,
+        state.admin.currentPage,
+      ],
+      shallowEqual
+    );
 
   const fetchGameOptions = useAsync(async () => {
     const { payload } = await dispatch(getOptions());
@@ -49,46 +62,114 @@ export function AdminTabHeader({
 
   const determineSelect = label !== AdminTabLabel.Games;
 
-  return (
-    <div className={classes.adminTabHeaderContainer}>
-      <div className={classes.controlsContainer}>
-        <div>
-          {determineSelect && gameOptions && (
-            <Select
-              data={gameOptions}
-              value={selectedGameId.toString()}
-              onChange={handleSelectChange}
-              placeholder="Select Game"
-            />
-          )}
-        </div>
+  const handleSetCurrentPage = (value: number) => {
+    dispatch(setCurrentPage(value));
+  };
 
-        <PrimaryTextInput
-          icon={<IconSearch />}
-          placeholder="Search"
-          value={searchTerm}
-          onChange={handleInputChange}
-        />
+  const handleSetPageSize = (value: number) => {
+    dispatch(setPageSize(value));
+  };
+
+  return (
+    <div className={classes.paginationHeader}>
+      <div className={classes.pageSizeControls}>
+        <span> Items Per Page </span>
+
+        <div className={classes.select}>
+          <PrimarySelect
+            value={pageSize.toString()}
+            data={pageSizeOptions}
+            icon={<IconCards />}
+            onChange={(value) => {
+              if (!value) return;
+
+              handleSetPageSize(parseInt(value.toString()));
+            }}
+          />
+        </div>
       </div>
+
+      <div className={classes.adminTabHeaderContainer}>
+        <div className={classes.controlsContainer}>
+          <div>
+            {determineSelect && gameOptions && (
+              <Select
+                pl="4px"
+                data={gameOptions}
+                value={selectedGameId.toString()}
+                onChange={handleSelectChange}
+                placeholder="Select Game"
+              />
+            )}
+          </div>
+
+          <PrimaryTextInput
+            icon={<IconSearch />}
+            placeholder="Search"
+            value={searchTerm}
+            onChange={handleInputChange}
+          />
+        </div>
+      </div>
+      <PaginationSelect
+        currentPage={currentPage}
+        setCurrentPage={handleSetCurrentPage}
+        total={pageCount}
+      />
     </div>
   );
 }
 
-const useStyles = createStyles(() => {
+const pageSizeOptions: string[] = ['15', '30', '45'];
+
+const useStyles = createStyles((theme: MantineTheme) => {
+  const { navbarHeight } = useNavbarHeight();
+
   return {
     adminTabHeaderContainer: {
       display: 'grid',
       gridTemplateRows: 'auto auto auto',
-      paddingLeft: '0.5em',
       width: '100%',
+      paddingRight: defaultGap,
     },
 
     controlsContainer: {
       display: 'grid',
       gridTemplateColumns: 'auto 1fr auto',
 
-      gap: '8px',
-      paddingRight: '2rem',
+      gap: defaultGap,
+    },
+
+    paginationHeader: {
+      display: 'grid',
+      gridTemplateColumns: 'auto 1fr auto auto',
+      alignItems: 'center',
+      gap: defaultGap,
+      paddingLeft: defaultGap,
+      paddingRight: defaultGap,
+
+      height: navbarHeight,
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      top: 0,
+      marginLeft: 124.587,
+      justifyItems: 'end',
+      borderBottomWidth: 1,
+      borderBottomStyle: 'solid',
+      borderBottomColor: theme.colors.primaryPurpleColor[0],
+    },
+
+    pageSizeControls: {
+      display: 'flex',
+      alignItems: 'center',
+
+      gap: defaultGap,
+      padding: defaultPadding,
+    },
+
+    select: {
+      width: 100,
     },
   };
 });

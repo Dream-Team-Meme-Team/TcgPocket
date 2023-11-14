@@ -15,7 +15,6 @@ import {
   setAdminSearchTerm,
   setCurrentPage,
   setPageCount,
-  setPageSize,
   setSelectedAdminTab,
   setSelectedGameId,
   setSelectedIdInPaginatedTable,
@@ -27,12 +26,7 @@ import { CardTypeTab } from './modules/tabs/CardTypeTab';
 import { RarityTab } from './modules/tabs/RarityTab';
 import { AttributeTab } from './modules/tabs/AttributeTab';
 import { shallowEqual } from 'react-redux';
-import { PaginationSelect } from '../../components/pagination/PaginationSelect';
-import { defaultGap, defaultPadding } from '../../constants/theme';
-import { PrimarySelect } from '../../components/inputs/PrimarySelect';
 import { AddModalRenderer } from './modules/AddModalRenderer';
-
-const pageSizeOptions: string[] = ['15', '30', '45'];
 
 const adminTabs: Tab[] = [
   {
@@ -65,25 +59,10 @@ const adminTabs: Tab[] = [
 export function AdminPage(): React.ReactElement {
   const { classes } = useStyles();
 
-  const [selectedGameId, selectedTab, currentPage, pageSize, pageCount] =
-    useAppSelector(
-      (state) => [
-        state.admin.selectedGameId,
-        state.admin.selectedTab,
-        state.admin.currentPage,
-        state.admin.pageSize,
-        state.admin.pageCount,
-      ],
-      shallowEqual
-    );
-
-  const handleSetCurrentPage = (value: number) => {
-    dispatch(setCurrentPage(value));
-  };
-
-  const handleSetPageSize = (value: number) => {
-    dispatch(setPageSize(value));
-  };
+  const [selectedGameId, selectedTab] = useAppSelector(
+    (state) => [state.admin.selectedGameId, state.admin.selectedTab],
+    shallowEqual
+  );
 
   const handleTabChange = (value: TabsValue) => {
     dispatch(setSelectedAdminTab(value));
@@ -137,9 +116,9 @@ export function AdminPage(): React.ReactElement {
                     <h3 className={classes.tabHeaderFont}>
                       Modify {tab.label}
                     </h3>
-                    <text className={classes.addButton}>
+                    <div className={classes.addButton}>
                       <AddModalRenderer label={tab.label} />
-                    </text>
+                    </div>
                   </Flex>
 
                   <TabContent />
@@ -154,31 +133,7 @@ export function AdminPage(): React.ReactElement {
         })}
       </ScrollArea>
 
-      <div className={classes.paginationHeader}>
-        <div className={classes.pageSizeControls}>
-          <span> Items Per Page </span>
-
-          <div className={classes.select}>
-            <PrimarySelect
-              value={pageSize.toString()}
-              data={pageSizeOptions}
-              icon={<IconCards />}
-              onChange={(value) => {
-                if (!value) return;
-
-                handleSetPageSize(parseInt(value.toString()));
-              }}
-            />
-          </div>
-        </div>
-        <AdminTabHeader label={selectedTab ?? ''} />
-
-        <PaginationSelect
-          currentPage={currentPage}
-          setCurrentPage={handleSetCurrentPage}
-          total={pageCount}
-        />
-      </div>
+      <AdminTabHeader label={selectedTab ?? ''} />
     </Tabs>
   );
 }
@@ -259,35 +214,6 @@ const useStyles = createStyles((theme) => {
       gridTemplateRows: 'auto 1fr',
 
       height: navbarHeight,
-    },
-
-    paginationHeader: {
-      display: 'grid',
-      gridTemplateColumns: 'auto 1fr auto auto',
-      alignItems: 'center',
-      gap: defaultGap,
-      height: navbarHeight,
-      position: 'absolute',
-      left: 0,
-      right: 0,
-      top: 0,
-      marginLeft: 124.587,
-      justifyItems: 'end',
-      borderBottomWidth: 1,
-      borderBottomStyle: 'solid',
-      borderBottomColor: theme.colors.primaryPurpleColor[0],
-    },
-
-    pageSizeControls: {
-      display: 'flex',
-      alignItems: 'center',
-
-      gap: defaultGap,
-      padding: defaultPadding,
-    },
-
-    select: {
-      width: 100,
     },
   };
 });
