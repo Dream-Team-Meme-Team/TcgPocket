@@ -1,7 +1,7 @@
 import { PrimaryTextInput } from '../../../../components/inputs/PrimaryTextInput';
 import { IconCards, IconSearch } from '@tabler/icons-react';
 import { dispatch, useAppSelector } from '../../../../store/configureStore';
-import { MantineTheme, Select, SelectItem, createStyles } from '@mantine/core';
+import { MantineTheme, SelectItem, createStyles } from '@mantine/core';
 import { useMemo } from 'react';
 import {
   setAdminSearchTerm,
@@ -93,11 +93,11 @@ export function AdminTabHeader({
         <div className={classes.controlsContainer}>
           <div>
             {determineSelect && gameOptions && (
-              <Select
+              <PrimarySelect
                 pl="4px"
                 data={gameOptions}
                 value={selectedGameId.toString()}
-                onChange={handleSelectChange}
+                onChange={(value) => handleSelectChange(value as string)}
                 placeholder="Select Game"
               />
             )}
