@@ -44,7 +44,7 @@ export const AttributeTab: React.FC = () => {
     );
 
     if (payload && !payload.hasErrors) {
-      dispatch(setPageCount(payload?.data.pageCount));
+      dispatch(setPageCount(payload.data.pageCount));
     }
 
     return payload?.data;

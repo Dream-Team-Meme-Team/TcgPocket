@@ -11,6 +11,7 @@ import { AdminTabLabel } from '../../../../enums/adminTabLabel';
 import { shallowEqual } from 'react-redux';
 import { AdminPaginatedTable } from '../AdminPaginatedTable';
 import { useAsyncFn } from 'react-use';
+import { setPageCount } from '../../../../store/adminSlice';
 
 export const CardTypeTab: React.FC = () => {
   const [
@@ -41,6 +42,10 @@ export const CardTypeTab: React.FC = () => {
         name: searchTerm,
       })
     );
+
+    if (payload && !payload.hasErrors) {
+      dispatch(setPageCount(payload.data.pageCount));
+    }
 
     return payload?.data;
   }, [currentPage, pageSize, selectedGameId, searchTerm]);

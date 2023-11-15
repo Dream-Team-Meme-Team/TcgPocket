@@ -10,6 +10,7 @@ import { GameGetDto } from '../../../../types/games';
 import { AdminTabLabel } from '../../../../enums/adminTabLabel';
 import { shallowEqual } from 'react-redux';
 import { AdminPaginatedTable } from '../AdminPaginatedTable';
+import { setPageCount } from '../../../../store/adminSlice';
 
 export const GameTab: React.FC = () => {
   const [games] = useAppSelector((state) => [state.data.games], shallowEqual);
@@ -57,6 +58,7 @@ export const GameTab: React.FC = () => {
   useEffect(() => {
     if (selectedTab !== AdminTabLabel.Games) return;
     loadGames();
+    dispatch(setPageCount(1));
   }, [selectedTab]);
 
   return (
