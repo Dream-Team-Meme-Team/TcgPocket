@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using TcgPocket.Features.Games.Commands;
 using TcgPocket.Features.Games.Queries;
 using TcgPocket.Shared;
+using TcgPocket.Shared.Options;
 
 namespace TcgPocket.Features.Games;
 
@@ -56,6 +57,17 @@ public class GamesController : ControllerBase
     public async Task<ActionResult<Response>> DeleteGame([FromRoute] int id)
     {
         var response = await _mediator.Send(new DeleteGameCommand{Id = id});
+        
+        return response.HasErrors ? BadRequest(response) : Ok(response);
+    }
+
+    [HttpGet("options")]
+    public async Task<ActionResult<Response<List<OptionItemDto>>>> GetOptions()
+    {
+        var response = await _mediator.Send(new GetGameOptionsRequest
+        {
+            MappingExpression = x => new OptionItemDto(x.Name, x.Id.ToString())
+        });
         
         return response.HasErrors ? BadRequest(response) : Ok(response);
     }

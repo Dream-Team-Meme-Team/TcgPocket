@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { Response } from '../../types/shared';
+import { OptionItemDto, Response } from '../../types/shared';
 import { CardTypeDto, CardTypeGetDto } from '../../types/card-types';
 import { apiCall } from '../helpers/apiCall';
 import { apiRoutes } from '../../routes/index';
@@ -36,6 +36,20 @@ export const CardTypeServices = {
       data: values,
     });
   },
+
+  getOptions: async () => {
+    return await apiCall({
+      method: 'PUT',
+      endpoint: `${apiRoutes.cardTypes}/options`,
+    });
+  },
+
+  getOptionsByGameId: async (gameId: number) => {
+    return await apiCall({
+      method: 'PUT',
+      endpoint: `${apiRoutes.cardTypes}/options/${gameId}`,
+    });
+  },
 };
 
 export const getAllCardTypes = createAsyncThunk<
@@ -68,4 +82,20 @@ export const editCardType = createAsyncThunk<
   { rejectValue: Response<void> }
 >('editCardType', async (editedCardType) => {
   return await CardTypeServices.edit(editedCardType);
+});
+
+export const getOptions = createAsyncThunk<
+  Response<OptionItemDto>,
+  void,
+  { rejectValue: Response<OptionItemDto> }
+>('getOptions', async () => {
+  return await CardTypeServices.getOptions();
+});
+
+export const getOptionsByGameId = createAsyncThunk<
+  Response<OptionItemDto>,
+  number,
+  { rejectValue: Response<OptionItemDto> }
+>('getOptionsByGameId', async (gameId) => {
+  return await CardTypeServices.getOptionsByGameId(gameId);
 });

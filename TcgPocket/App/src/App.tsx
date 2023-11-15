@@ -12,8 +12,8 @@ import { useNavbarHeight } from './hooks/useNavbarHeight';
 import { dispatch } from './store/configureStore';
 import { getSignedInUser } from './services/authServices';
 import { useAsync } from 'react-use';
-import { useLocation } from 'react-router-dom';
-import { useMemo } from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
+import { CSSProperties, useMemo } from 'react';
 
 function App() {
   const { navbarHeight, remainingHeight } = useNavbarHeight();
@@ -32,13 +32,20 @@ function App() {
     await dispatch(getSignedInUser());
   }, []);
 
+  const sphealingGood = () => {
+    window.open('https://youtu.be/AEM_J2G2urI?si=fn1mOFyi5ZxzY-GU', '_blank');
+  };
   return (
     <AppShell layout="alt" padding={0} header={<PrimaryNavigation />}>
       <ScrollArea h={remainingHeight} sx={scrollAreaSx}>
         <Box sx={useContainerSx}>
           <AppRoutes />
         </Box>
-        {hideFooter && <Center sx={footerSx}>(≖ᴗ≖✿)</Center>}
+        {hideFooter && (
+          <NavLink style={navLinkStyle} onClick={() => sphealingGood()} to={''}>
+            <Center sx={footerSx}>(≖ᴗ≖✿)</Center>
+          </NavLink>
+        )}
       </ScrollArea>
     </AppShell>
   );
@@ -73,3 +80,9 @@ function useScrollAreaSx(navbarHeight: number): CSSObject {
     top: navbarHeight,
   };
 }
+
+const navLinkStyle: CSSProperties = {
+  fontStyle: 'unset',
+  color: 'white',
+  textDecoration: 'none',
+};
