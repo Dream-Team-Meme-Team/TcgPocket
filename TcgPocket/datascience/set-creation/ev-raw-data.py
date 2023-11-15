@@ -76,7 +76,7 @@ left_pkm_df = pd.DataFrame(columns = ['card', 'label'])
 
 for set in left_pkm_set_list:
     
-    resp = requests.get(set, headers = {'X-Api-Key': '7ccb4c32-6299-4533-bf47-36f4d2a95117', 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'})
+    resp = requests.get(set, headers = {'X-Api-Key': 'API KEY', 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'})
 
     for card in json.loads(resp.content)['data']:
         rows = []
