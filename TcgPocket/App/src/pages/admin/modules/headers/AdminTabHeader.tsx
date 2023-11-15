@@ -2,7 +2,7 @@ import { PrimaryTextInput } from '../../../../components/inputs/PrimaryTextInput
 import { IconCards, IconSearch } from '@tabler/icons-react';
 import { dispatch, useAppSelector } from '../../../../store/configureStore';
 import { MantineTheme, SelectItem, createStyles } from '@mantine/core';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   setAdminSearchTerm,
   setCurrentPage,
@@ -17,6 +17,7 @@ import { PaginationSelect } from '../../../../components/pagination/PaginationSe
 import { defaultGap, defaultPadding } from '../../../../constants/theme';
 import { PrimarySelect } from '../../../../components/inputs/PrimarySelect';
 import { useNavbarHeight } from '../../../../hooks/useNavbarHeight';
+import useDebounce from '../../../../hooks/useDebounce';
 
 type AdminTabHeaderProps = {
   label: string;
@@ -26,18 +27,18 @@ export function AdminTabHeader({
   label,
 }: AdminTabHeaderProps): React.ReactElement {
   const { classes } = useStyles();
+  const [searchTerm, setSearchTerm] = useState('');
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
-  const [searchTerm, selectedGameId, pageCount, pageSize, currentPage] =
-    useAppSelector(
-      (state) => [
-        state.admin.searchTerm,
-        state.admin.selectedGameId,
-        state.admin.pageCount,
-        state.admin.pageSize,
-        state.admin.currentPage,
-      ],
-      shallowEqual
-    );
+  const [selectedGameId, pageCount, pageSize, currentPage] = useAppSelector(
+    (state) => [
+      state.admin.selectedGameId,
+      state.admin.pageCount,
+      state.admin.pageSize,
+      state.admin.currentPage,
+    ],
+    shallowEqual
+  );
 
   const fetchGameOptions = useAsync(async () => {
     const { payload } = await dispatch(getOptions());
@@ -51,7 +52,7 @@ export function AdminTabHeader({
   }, [fetchGameOptions]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setAdminSearchTerm(e.target.value));
+    setSearchTerm(e.target.value);
   };
 
   const handleSelectChange = (value: string | null) => {
@@ -69,6 +70,10 @@ export function AdminTabHeader({
   const handleSetPageSize = (value: number) => {
     dispatch(setPageSize(value));
   };
+
+  useEffect(() => {
+    dispatch(setAdminSearchTerm(debouncedSearchTerm));
+  }, [debouncedSearchTerm]);
 
   return (
     <div className={classes.paginationHeader}>
