@@ -1,9 +1,9 @@
 ###############################################
-""" Generates the initial raw data sets for EV: Retro Mgc (0), Mod Mgc (1), Ygo (2), Left Pkm (3), Right Pkm (4) """
-'''
+""" 
+Generates the initial raw data sets for EV: Retro Mgc (0), Mod Mgc (1), Ygo (2), Left Pkm (3), Right Pkm (4) 
 https://github.com/PokemonTCG/pokemon-tcg-sdk-python
 https://docs.pokemontcg.io/api-reference/cards/search-cards          
-'''
+"""
 ###############################################
 
 # %%
