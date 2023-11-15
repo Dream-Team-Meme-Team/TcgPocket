@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Response } from '../../types/shared';
 import { GameDto, GameGetDto } from '../../types/games';
 import { apiCall } from '../helpers/apiCall';
-import { apiRoutes } from '../../routes/Index';
+import { apiRoutes } from '../../routes/index';
 
 export type GameServices = typeof GameServices;
 
@@ -39,9 +39,9 @@ export const GameServices = {
 };
 
 export const getAllGames = createAsyncThunk<
-    Response<GameGetDto[]>,
-    void,
-    { rejectValue: Response<GameGetDto[]> }
+  Response<GameGetDto[]>,
+  void,
+  { rejectValue: Response<GameGetDto[]> }
 >('getAllGames', async () => {
   return await GameServices.getAllGames();
 });
@@ -55,9 +55,9 @@ export const createGame = createAsyncThunk<
 });
 
 export const deleteGame = createAsyncThunk<
-    Response<void>,
-    number,
-    { rejectValue: Response<void> }
+  Response<void>,
+  number,
+  { rejectValue: Response<void> }
 >('deleteGame', async (id) => {
   return await GameServices.deleteGame(id);
 });

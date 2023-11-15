@@ -23,7 +23,7 @@ import { useNavbarHeight } from '../hooks/useNavbarHeight';
 import { useNavigate } from 'react-router-dom';
 import { signOutUser } from '../services/authServices';
 import { dispatch, useAppSelector } from '../store/configureStore';
-import { routes } from '../routes/Index';
+import { routes } from '../routes/index';
 
 export function PrimaryNavigation(): React.ReactElement {
   const navigate = useNavigate();

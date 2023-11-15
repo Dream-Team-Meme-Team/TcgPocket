@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { apiCall } from '../helpers/apiCall';
 import { AttributeDto, AttributeGetDto } from '../../types/attributes';
-import { apiRoutes } from '../../routes/Index';
+import { apiRoutes } from '../../routes/index';
 import { Response } from '../../types/shared';
 
 export type AttributeServices = typeof AttributeServices;

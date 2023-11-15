@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { InventoryDisplay } from './modules/InventoryDisplay';
 import { MantineTheme, createStyles, Text } from '@mantine/core';
-import { FilterMenu } from './modules/FilterMenu';
+import { FilterMenu } from '../../components/filterMenu/FilterMenu';
 import { useNavbarHeight } from '../../hooks/useNavbarHeight';
 import { dispatch, useAppSelector } from '../../store/configureStore';
 import { shallowEqual } from 'react-redux';
@@ -14,7 +14,13 @@ import { defaultGap, defaultPadding } from '../../constants/theme';
 import { IconCards, IconSearch } from '@tabler/icons-react';
 import { PaginationSelect } from '../../components/pagination/PaginationSelect';
 import { PrimaryTextInput } from '../../components/inputs/PrimaryTextInput';
-import { resetFilters } from '../../store/inventorySlice';
+import {
+  resetFilters,
+  resetInventorySlice,
+  toggleCardTypeFilters,
+  toggleRarityFilters,
+  toggleSetFilters,
+} from '../../store/inventorySlice';
 import { PrimaryButton } from '../../components/buttons/PrimaryButton';
 
 const pageSizeOptions: string[] = ['15', '24', '36'];
@@ -61,6 +67,18 @@ export function InventoryPage(): React.ReactElement {
     );
   };
 
+  const toggleCardTypes = (id: number) => {
+    dispatch(toggleCardTypeFilters(id));
+  };
+
+  const toggleSets = (id: number) => {
+    dispatch(toggleSetFilters(id));
+  };
+
+  const toggleRarities = (id: number) => {
+    dispatch(toggleRarityFilters(id));
+  };
+
   useEffect(() => {
     dispatch(resetFilters());
   }, [selectedGame]);
@@ -89,11 +107,29 @@ export function InventoryPage(): React.ReactElement {
     pageSize,
   ]);
 
+  useEffect(() => {
+    return () => {
+      dispatch(resetInventorySlice());
+    };
+  }, []);
+
   return (
     <div className={classes.wrapper}>
       <FilterMenu
         selectedGame={selectedGame}
         setSelectedGame={setSelectedGame}
+        // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
+        filters={{
+          cardTypeFilters: cardTypeFilters,
+          setFilters: setFilters,
+          rarityFilters: rarityFilters,
+        }}
+        // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
+        actions={{
+          toggleCardTypes: toggleCardTypes,
+          toggleSets: toggleSets,
+          toggleRarities: toggleRarities,
+        }}
       />
 
       <div className={classes.display}>
