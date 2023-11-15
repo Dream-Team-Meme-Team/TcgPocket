@@ -10,13 +10,15 @@ import {
   Title,
 } from '@mantine/core';
 import { IconUpload, IconPhoto, IconX } from '@tabler/icons-react';
-import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from '@mantine/dropzone';
+import { Dropzone, FileWithPath } from '@mantine/dropzone';
 import { useAsyncFn } from 'react-use';
 import { CardReaderService } from '../../services/CardReaderService';
 import { error, success } from '../../services/helpers/Notification';
 import { useState } from 'react';
 import { CardDisplayDto } from '../../types/cards';
 import { CardDisplay } from '../../components/cardDisplay/CardDisplay';
+
+const IMAGE_MIME_TYPES = { 'image/*': ['.png', '.jpeg'] };
 
 export function CardUploadPage() {
   const theme = useMantineTheme();
@@ -47,7 +49,7 @@ export function CardUploadPage() {
   );
 
   const rejectFile = () => {
-    error('File must be a png, jpg, or bmp');
+    error('File must be a png or jpg');
   };
 
   return (
@@ -55,10 +57,14 @@ export function CardUploadPage() {
       <Dropzone
         onDrop={uploadCard}
         onReject={rejectFile}
-        accept={IMAGE_MIME_TYPE}
+        accept={IMAGE_MIME_TYPES}
         loading={uploadCardState.loading}
       >
-        <Group className={classes.internalUploadContainer} position="center" spacing="xl">
+        <Group
+          className={classes.internalUploadContainer}
+          position="center"
+          spacing="xl"
+        >
           <Dropzone.Accept>
             <IconUpload
               size="3.2rem"
@@ -87,7 +93,7 @@ export function CardUploadPage() {
             </Text>
             <Text size="sm" color="dimmed" inline mt={7}>
               Attach one file ONLY one, any more and you are not invited to the
-              mojo dojo casa house
+              mojo dojo casa house. Must be a .png or .jpeg.
             </Text>
           </div>
         </Group>
