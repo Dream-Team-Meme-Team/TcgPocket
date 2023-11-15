@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { OptionItemDto, Response } from '../../types/shared';
 import { CardTypeDto, CardTypeGetDto } from '../../types/card-types';
 import { apiCall } from '../helpers/apiCall';
-import { apiRoutes } from '../../routes/index';
+import { apiRoutes } from '../../routes/Index';
 
 export type CardTypeServices = typeof CardTypeServices;
 
