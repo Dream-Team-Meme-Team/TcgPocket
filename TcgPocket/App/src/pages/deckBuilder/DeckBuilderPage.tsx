@@ -8,7 +8,8 @@ import { shallowEqual, useDisclosure } from '@mantine/hooks';
 import { DeckRequirementModal } from './modules/DeckRequirementModal';
 import { dispatch, useAppSelector } from '../../store/configureStore';
 import { useEffect } from 'react';
-import { resetDeckBuilder } from '../../store/deckBuilderSlice';
+import { resetDeckBuilder, untitledName } from '../../store/deckBuilderSlice';
+import { resetInventorySlice } from '../../store/inventorySlice';
 
 export function DeckBuilderPage(): React.ReactElement {
   const { classes } = useStyles();
@@ -20,10 +21,15 @@ export function DeckBuilderPage(): React.ReactElement {
 
   const [open, { toggle }] = useDisclosure(true);
 
+  /**
+   * resetting for now but ideally the user should be able
+   * to navigate away and come back to the deck to continue
+   * where they left off
+   */
   useEffect(() => {
-    // clean up on unmount
     return () => {
       dispatch(resetDeckBuilder());
+      dispatch(resetInventorySlice());
     };
   }, []);
 
@@ -39,7 +45,7 @@ export function DeckBuilderPage(): React.ReactElement {
         <BuilderDisplay />
       </div>
 
-      {name === 'Untitled' && !selectedGame && (
+      {name === untitledName && !selectedGame && (
         <DeckRequirementModal open={open} toggle={toggle} />
       )}
     </ScrollArea>

@@ -1,10 +1,9 @@
 import { MantineTheme, createStyles } from '@mantine/styles';
 import { PrimaryTextInput } from '../../../components/inputs/PrimaryTextInput';
 import { defaultGap, defaultPadding } from '../../../constants/theme';
-import { IconFilter, IconSearch } from '@tabler/icons-react';
+import { IconCards, IconSearch } from '@tabler/icons-react';
 import { PrimarySelect } from '../../../components/inputs/PrimarySelect';
 import { useEffect, useMemo, useState } from 'react';
-import { PrimaryBadge } from '../../../components/badges/PrimaryBadge';
 import { GridView } from './GridView';
 import { ViewStyle } from '../../../enums/viewStyle';
 import { Drawer, ScrollArea } from '@mantine/core';
@@ -12,27 +11,43 @@ import { dispatch, useAppSelector } from '../../../store/configureStore';
 import { ListView } from './ListView';
 import { shallowEqual } from 'react-redux';
 import { useDisclosure } from '@mantine/hooks';
-import { FilterMenu } from '../../inventory/modules/FilterMenu';
+import { FilterMenu } from '../../../components/filterMenu/FilterMenu';
 import { PrimaryButton } from '../../../components/buttons/PrimaryButton';
 import { CardFilterDto } from '../../../types/cards';
 import { getAllCards } from '../../../services/CardsService';
 import { responseWrapper } from '../../../services/helpers/responseWrapper';
+import { PaginationSelect } from '../../../components/pagination/PaginationSelect';
+import {
+  toggleDeckBuilderCardTypeFilters,
+  toggleDeckBuilderRarityFilters,
+  toggleDeckBuilderSetFilters,
+} from '../../../store/deckBuilderSlice';
+import { AppliedFilterBadges } from './AppliedFilterBadges';
+
+const pageSizeOptions: string[] = ['15', '30', '45'];
 
 export function DeckBuilderInventory(): React.ReactElement {
   const { classes } = useStyles();
 
-  const [selectedGame, deckName, cards, pagination] = useAppSelector(
+  const [selectedGame, deckName] = useAppSelector(
+    (state) => [state.deckBuilder.selectedGame, state.deckBuilder.name],
+    shallowEqual
+  );
+
+  const [cards, cardTypeFilters, setFilters, rarityFilters] = useAppSelector(
     (state) => [
-      state.deckBuilder.selectedGame,
-      state.deckBuilder.name,
       state.deckBuilder.cards,
-      state.deckBuilder.pagination,
+      state.deckBuilder.cardTypeFilters,
+      state.deckBuilder.setFilters,
+      state.deckBuilder.rarityFilters,
     ],
     shallowEqual
   );
 
   const [view, setView] = useState<string>(ViewStyle.Grid);
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(15);
 
   const [open, { toggle }] = useDisclosure();
 
@@ -58,6 +73,18 @@ export function DeckBuilderInventory(): React.ReactElement {
     }
   };
 
+  const toggleCardTypes = (id: number) => {
+    dispatch(toggleDeckBuilderCardTypeFilters(id));
+  };
+
+  const toggleSets = (id: number) => {
+    dispatch(toggleDeckBuilderSetFilters(id));
+  };
+
+  const toggleRarities = (id: number) => {
+    dispatch(toggleDeckBuilderRarityFilters(id));
+  };
+
   useEffect(() => {
     if (deckName === 'Untitled' || !selectedGame) return;
 
@@ -65,14 +92,25 @@ export function DeckBuilderInventory(): React.ReactElement {
 
     const filtered: CardFilterDto = {
       gameIds: gameId,
-      currentPage: pagination.currentPage,
-      pageSize: pagination.pageSize,
+      cardTypeIds: cardTypeFilters ?? undefined,
+      setIds: setFilters ?? undefined,
+      rarityIds: rarityFilters ?? undefined,
+      currentPage: currentPage,
+      pageSize: pageSize,
     };
 
     dispatch(getAllCards(filtered)).then(({ payload }) => {
       responseWrapper(payload);
     });
-  }, [selectedGame, deckName, pagination]);
+  }, [
+    selectedGame,
+    deckName,
+    currentPage,
+    pageSize,
+    cardTypeFilters,
+    setFilters,
+    rarityFilters,
+  ]);
 
   return (
     <div className={classes.container}>
@@ -92,16 +130,47 @@ export function DeckBuilderInventory(): React.ReactElement {
           />
         </div>
 
-        <div className={classes.bottomRow}>
+        <div className={classes.middleRow}>
           <PrimaryButton onClick={toggle}>View Filters</PrimaryButton>
 
-          <PrimaryBadge leftSection={<IconFilter />}> Card Types </PrimaryBadge>
-          <PrimaryBadge leftSection={<IconFilter />}> Sets </PrimaryBadge>
-          <PrimaryBadge leftSection={<IconFilter />}> Rarities </PrimaryBadge>
+          <PrimarySelect
+            value={pageSize.toString()}
+            data={pageSizeOptions}
+            icon={<IconCards />}
+            onChange={(value) => {
+              if (!value) return;
 
-          <Drawer opened={open} onClose={toggle}>
-            <FilterMenu selectedGame={selectedGame} />
+              setPageSize(parseInt(value.toString()));
+            }}
+          />
+
+          <PaginationSelect
+            currentPage={currentPage}
+            total={cards?.pageCount ?? 1}
+            setCurrentPage={setCurrentPage}
+          />
+
+          <Drawer opened={open} onClose={toggle} padding={0}>
+            <FilterMenu
+              selectedGame={selectedGame}
+              // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
+              filters={{
+                cardTypeFilters: cardTypeFilters,
+                setFilters: setFilters,
+                rarityFilters: rarityFilters,
+              }}
+              // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
+              actions={{
+                toggleCardTypes: toggleCardTypes,
+                toggleSets: toggleSets,
+                toggleRarities: toggleRarities,
+              }}
+            />
           </Drawer>
+        </div>
+
+        <div className={classes.bottomRow}>
+          <AppliedFilterBadges />
         </div>
       </div>
 
@@ -152,9 +221,16 @@ const useStyles = createStyles((theme: MantineTheme) => {
       gap: defaultGap,
     },
 
+    middleRow: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+
+      gap: defaultGap,
+    },
+
     bottomRow: {
       display: 'flex',
-      alignItems: 'center',
 
       gap: defaultGap,
     },

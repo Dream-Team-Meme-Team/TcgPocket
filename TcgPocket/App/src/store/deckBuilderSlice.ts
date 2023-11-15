@@ -1,34 +1,36 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { PageDto, PagedResult } from '../types/shared';
 import { GameGetDto } from '../types/games';
-import { CardDisplayDto, CardFilterDto } from '../types/cards';
+import { CardDisplayDto } from '../types/cards';
+import { toggleFilters } from '../helpers/toggleFilters';
+import { PagedResult } from '../types/shared';
 import { getAllCards } from '../services/CardsService';
 
-const defaultPagination: PageDto = {
-  currentPage: 1,
-  pageSize: 16,
-};
+export const untitledName: string = 'Untitled';
 
 export interface DeckBuilderState {
   name: string;
-  pagination: PageDto;
   selectedGame: GameGetDto | null;
   selectedRuleSet: string;
-  appliedFilters: CardFilterDto | null;
   searchTerm: string;
   cards: PagedResult<CardDisplayDto> | null;
+  loading: boolean;
   deck: CardDisplayDto[];
+  cardTypeFilters: number[];
+  setFilters: number[];
+  rarityFilters: number[];
 }
 
 const INITIAL_STATE: DeckBuilderState = {
-  name: 'Untitled',
-  pagination: defaultPagination,
+  name: untitledName,
   selectedGame: null,
   selectedRuleSet: '',
-  appliedFilters: null,
   searchTerm: '',
   cards: null,
+  loading: false,
   deck: [],
+  cardTypeFilters: [],
+  setFilters: [],
+  rarityFilters: [],
 };
 
 export const deckBuilderSlice = createSlice({
@@ -38,29 +40,11 @@ export const deckBuilderSlice = createSlice({
     setDeckName(state, { payload }: PayloadAction<DeckBuilderState['name']>) {
       state.name = payload;
     },
-    setCurrentPage(
-      state,
-      { payload }: PayloadAction<DeckBuilderState['pagination']['currentPage']>
-    ) {
-      state.pagination.currentPage = payload;
-    },
-    setPageSize(
-      state,
-      { payload }: PayloadAction<DeckBuilderState['pagination']['pageSize']>
-    ) {
-      state.pagination.pageSize = payload;
-    },
     setSelectedDeckBuilderGame(
       state,
       { payload }: PayloadAction<DeckBuilderState['selectedGame']>
     ) {
       state.selectedGame = payload;
-    },
-    setAppliedFilters(
-      state,
-      { payload }: PayloadAction<DeckBuilderState['appliedFilters']>
-    ) {
-      state.appliedFilters = payload;
     },
     setDeckBuilderSearchTerm(
       state,
@@ -77,6 +61,24 @@ export const deckBuilderSlice = createSlice({
     ) {
       state.selectedRuleSet = payload;
     },
+    toggleDeckBuilderCardTypeFilters(
+      state,
+      { payload }: PayloadAction<DeckBuilderState['cardTypeFilters'][number]>
+    ) {
+      state.cardTypeFilters = toggleFilters(state.cardTypeFilters, payload);
+    },
+    toggleDeckBuilderSetFilters(
+      state,
+      { payload }: PayloadAction<DeckBuilderState['setFilters'][number]>
+    ) {
+      state.setFilters = toggleFilters(state.setFilters, payload);
+    },
+    toggleDeckBuilderRarityFilters(
+      state,
+      { payload }: PayloadAction<DeckBuilderState['rarityFilters'][number]>
+    ) {
+      state.rarityFilters = toggleFilters(state.rarityFilters, payload);
+    },
     resetDeckBuilder() {
       return INITIAL_STATE;
     },
@@ -84,18 +86,25 @@ export const deckBuilderSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getAllCards.fulfilled, (state, { payload }) => {
       state.cards = payload.data;
+      state.loading = false;
+    });
+    builder.addCase(getAllCards.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getAllCards.rejected, (state) => {
+      state.loading = false;
     });
   },
 });
 
 export const {
   setDeckName,
-  setCurrentPage,
-  setPageSize,
   setSelectedDeckBuilderGame,
-  setAppliedFilters,
   setDeckBuilderSearchTerm,
   setSelectedRuleSet,
   resetDeckBuilder,
   setDeck,
+  toggleDeckBuilderCardTypeFilters,
+  toggleDeckBuilderSetFilters,
+  toggleDeckBuilderRarityFilters,
 } = deckBuilderSlice.actions;

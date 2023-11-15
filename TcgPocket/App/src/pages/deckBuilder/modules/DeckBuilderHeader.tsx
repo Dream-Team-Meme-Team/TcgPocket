@@ -9,6 +9,7 @@ import { dispatch, useAppSelector } from '../../../store/configureStore';
 import { resetDeckBuilder, setDeckName } from '../../../store/deckBuilderSlice';
 import { defaultGap } from '../../../constants/theme';
 import { ConfirmDeletionModal } from './ConfirmDeletionModal';
+import { resetInventorySlice } from '../../../store/inventorySlice';
 
 export function DeckBuilderHeader(): React.ReactElement {
   const { classes } = useStyles();
@@ -38,6 +39,7 @@ export function DeckBuilderHeader(): React.ReactElement {
 
   const handleConfirm = () => {
     dispatch(resetDeckBuilder());
+    dispatch(resetInventorySlice());
   };
 
   return editMode ? (

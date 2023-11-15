@@ -46,8 +46,6 @@ export function DeckRequirementModal({
 
   const games = useAppSelector((state) => state.data.games);
 
-  const pagination = useAppSelector((state) => state.deckBuilder.pagination);
-
   const form = useForm({
     initialValues: initialValues,
     validate: {
@@ -67,8 +65,8 @@ export function DeckRequirementModal({
 
     const filtered: CardFilterDto = {
       gameIds: gameId,
-      currentPage: pagination.currentPage,
-      pageSize: pagination.pageSize,
+      currentPage: 1,
+      pageSize: 15,
     };
 
     dispatch(setDeckName(values.deckName));
@@ -76,7 +74,6 @@ export function DeckRequirementModal({
     dispatch(setSelectedRuleSet(values.ruleSet));
     dispatch(getAllCards(filtered)).then(({ payload }) => {
       responseWrapper(payload);
-      console.log(payload?.data);
     });
     toggle();
   };
