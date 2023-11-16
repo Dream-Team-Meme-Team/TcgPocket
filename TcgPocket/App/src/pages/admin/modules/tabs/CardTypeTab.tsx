@@ -12,6 +12,7 @@ import { shallowEqual } from 'react-redux';
 import { AdminPaginatedTable } from '../AdminPaginatedTable';
 import { useAsyncFn } from 'react-use';
 import { setPageCount } from '../../../../store/adminSlice';
+import eventBus from '../../../../helpers/eventBus';
 
 export const CardTypeTab: React.FC = () => {
   const [
@@ -79,6 +80,14 @@ export const CardTypeTab: React.FC = () => {
   useEffect(() => {
     if (selectedGameId === 0 || selectedTab !== AdminTabLabel.CardTypes) return;
     fetchCardTypes();
+
+    const subscription = eventBus.subscribe('cardTypeAdded', () => {
+      fetchCardTypes();
+    });
+
+    return () => {
+      eventBus.unsubscribe('cardTypeAdded', subscription);
+    };
   }, [fetchCardTypes, selectedGameId, selectedTab]);
 
   return (

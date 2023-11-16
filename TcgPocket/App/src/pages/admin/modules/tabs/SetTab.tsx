@@ -12,6 +12,7 @@ import { shallowEqual } from 'react-redux';
 import { useAsyncFn } from 'react-use';
 import { AdminPaginatedTable } from '../AdminPaginatedTable';
 import { setPageCount } from '../../../../store/adminSlice';
+import eventBus from '../../../../helpers/eventBus';
 
 export const SetTab: React.FC = () => {
   const [
@@ -79,6 +80,14 @@ export const SetTab: React.FC = () => {
   useEffect(() => {
     if (selectedGameId === 0 || selectedTab !== AdminTabLabel.Sets) return;
     fetchSets();
+
+    const subscription = eventBus.subscribe('setAdded', () => {
+      fetchSets();
+    });
+
+    return () => {
+      eventBus.unsubscribe('setAdded', subscription);
+    };
   }, [fetchSets, selectedGameId, selectedTab]);
 
   return (

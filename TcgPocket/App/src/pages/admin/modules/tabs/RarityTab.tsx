@@ -12,6 +12,7 @@ import {
 import { AdminPaginatedTable } from '../AdminPaginatedTable';
 import { useAsyncFn } from 'react-use';
 import { setPageCount } from '../../../../store/adminSlice';
+import eventBus from '../../../../helpers/eventBus';
 
 export const RarityTab: React.FC = () => {
   const [
@@ -79,6 +80,14 @@ export const RarityTab: React.FC = () => {
   useEffect(() => {
     if (selectedGameId === 0 || selectedTab !== AdminTabLabel.Rarities) return;
     fetchRarities();
+
+    const subscription = eventBus.subscribe('rarityAdded', () => {
+      fetchRarities();
+    });
+
+    return () => {
+      eventBus.unsubscribe('rarityAdded', subscription);
+    };
   }, [fetchRarities, selectedGameId, selectedTab]);
 
   return (

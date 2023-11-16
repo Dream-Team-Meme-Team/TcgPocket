@@ -12,6 +12,7 @@ import { shallowEqual } from 'react-redux';
 import { useAsyncFn } from 'react-use';
 import { AdminPaginatedTable } from '../AdminPaginatedTable';
 import { setPageCount } from '../../../../store/adminSlice';
+import eventBus from '../../../../helpers/eventBus';
 
 export const AttributeTab: React.FC = () => {
   const [
@@ -80,6 +81,14 @@ export const AttributeTab: React.FC = () => {
     if (selectedGameId === 0 || selectedTab !== AdminTabLabel.Attributes)
       return;
     fetchAttributes();
+
+    const subscription = eventBus.subscribe('attributeAdded', () => {
+      fetchAttributes();
+    });
+
+    return () => {
+      eventBus.unsubscribe('attributeAdded', subscription);
+    };
   }, [fetchAttributes, selectedGameId, selectedTab]);
 
   return (
