@@ -1,7 +1,7 @@
 import numpy as np
 import easyocr
 
-class MagicScraper:
+class MagicReader:
     
     reader = easyocr.Reader(['en'])
     query_base = 'https://api.scryfall.com/cards/search?q='

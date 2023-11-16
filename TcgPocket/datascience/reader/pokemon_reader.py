@@ -1,7 +1,7 @@
 import numpy as np
 import easyocr
 
-class PokemonScraper:
+class PokemonReader:
 
     reader = easyocr.Reader(['en'])
     query_base = 'https://api.pokemontcg.io/v2/cards?q='
