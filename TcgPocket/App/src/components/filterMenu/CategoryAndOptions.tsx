@@ -62,6 +62,8 @@ export function CategoryAndOptions({
   }, [appliedFilters, filteredOptions]);
 
   const handleFilters = (option: CardTypeGetDto) => {
+    dispatch(setSearchTextInventory(''));
+    dispatch(setCurrentPage(1));
     switch (label) {
       case CategoryLabel.CardTypes:
         actions.toggleCardTypes(option.id);

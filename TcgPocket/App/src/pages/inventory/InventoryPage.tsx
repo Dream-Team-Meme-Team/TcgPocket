@@ -25,27 +25,34 @@ import { PrimaryButton } from '../../components/buttons/PrimaryButton';
 import { AppliedFilters } from '../../types/applied-filters';
 import { FilterActions } from '../../types/filter-actions';
 
-const pageSizeOptions: string[] = ['15', '24', '36'];
+const pageSizeOptions: string[] = ['15', '30', '45'];
 
 export function InventoryPage(): React.ReactElement {
   const { classes } = useStyles();
 
-  const [cards, loading, cardTypeFilters, setFilters, rarityFilters] =
-    useAppSelector(
-      (state) => [
-        state.inventory.cards,
-        state.inventory.loading,
-        state.inventory.cardTypeFilters,
-        state.inventory.setFilters,
-        state.inventory.rarityFilters,
-      ],
-      shallowEqual
-    );
+  const [
+    cards,
+    loading,
+    cardTypeFilters,
+    setFilters,
+    rarityFilters,
+    searchText,
+    currentPage,
+  ] = useAppSelector(
+    (state) => [
+      state.inventory.cards,
+      state.inventory.loading,
+      state.inventory.cardTypeFilters,
+      state.inventory.setFilters,
+      state.inventory.rarityFilters,
+      state.inventory.searchText,
+      state.inventory.currentPage,
+    ],
+    shallowEqual
+  );
 
-  const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(15);
   const [selectedGame, setSelectedGame] = useState<GameGetDto | null>(null);
-  const [searchText, setSearchText] = useState('');
 
   const appliedFilters: AppliedFilters = useMemo(() => {
     return {
@@ -56,7 +63,8 @@ export function InventoryPage(): React.ReactElement {
   }, [cardTypeFilters, rarityFilters, setFilters]);
 
   const handleSearchText = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchText(e.target.value);
+    dispatch(setCurrentPage(1));
+    dispatch(setSearchTextInventory(e.target.value));
   };
 
   const search = () => {
@@ -99,6 +107,8 @@ export function InventoryPage(): React.ReactElement {
 
   useEffect(() => {
     dispatch(resetFilters());
+    dispatch(setSearchTextInventory(''));
+    dispatch(setCurrentPage(1));
   }, [selectedGame]);
 
   useEffect(() => {
@@ -170,7 +180,7 @@ export function InventoryPage(): React.ReactElement {
 
           <PaginationSelect
             currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
+            setCurrentPage={(arg) => dispatch(setCurrentPage(arg))}
             total={cards ? cards.pageCount : 16}
             className={classes.paginationControls}
           />

@@ -1,4 +1,4 @@
-import { Id } from './shared';
+import { Id, PageDto } from './shared';
 
 export type AttributeDto = {
   name: string;

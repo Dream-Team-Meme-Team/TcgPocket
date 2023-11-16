@@ -6,6 +6,8 @@ import { toggleFilters } from '../helpers/toggleFilters';
 import { getAllCards } from '../services/CardsService';
 
 export interface InventoryState {
+  searchText: string;
+  currentPage: number;
   cardTypeFilters: number[];
   setFilters: number[];
   rarityFilters: number[];
@@ -15,6 +17,8 @@ export interface InventoryState {
 }
 
 const INITIAL_STATE: InventoryState = {
+  searchText: '',
+  currentPage: 1,
   cards: null,
   loading: false,
   selectedGame: null,

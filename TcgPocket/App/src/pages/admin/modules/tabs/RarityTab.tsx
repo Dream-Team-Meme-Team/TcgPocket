@@ -1,81 +1,67 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { dispatch, useAppSelector } from '../../../../store/configureStore';
-import { TabInfoHeader } from '../headers/TabInfoHeader';
-import { ActionIcon, MantineTheme, createStyles } from '@mantine/core';
-import { IconEdit, IconTrash } from '@tabler/icons-react';
-import { EditModal } from '../modals/EditModal';
-import { useDisclosure } from '@mantine/hooks';
 import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { RarityGetDto } from '../../../../types/rarities';
-import { DeleteModal } from '../../../../components/modals/DeleteModal';
-import { setSelectedId } from '../../../../store/adminSlice';
 import { AdminTabLabel } from '../../../../enums/adminTabLabel';
 import { shallowEqual } from 'react-redux';
 import {
   deleteRarity,
   editRarity,
-  getAllRarities,
+  getAllFilteredRarities,
 } from '../../../../services/dataServices/rarityServices';
-
-const titles: string[] = ['Name', 'Game', 'Edit', 'Delete'];
-const colValue: string = '1fr ';
+import { AdminPaginatedTable } from '../AdminPaginatedTable';
+import { useAsyncFn } from 'react-use';
+import { setPageCount } from '../../../../store/adminSlice';
+import eventBus from '../../../../helpers/eventBus';
 
 export const RarityTab: React.FC = () => {
-  const numOfCol = colValue.repeat(titles.length);
-  const { classes } = useStyles(numOfCol);
-
-  const [openDelete, { toggle: toggleDelete }] = useDisclosure();
-  const [openEdit, { toggle: toggleEdit }] = useDisclosure();
-
-  const [rarities, games] = useAppSelector(
-    (state) => [state.data.rarities, state.data.games],
-    shallowEqual
-  );
-
-  const [searchTerm, selectedId, selectedGameId, selectedTab] = useAppSelector(
+  const [
+    searchTerm,
+    selectedId,
+    selectedGameId,
+    selectedTab,
+    currentPage,
+    pageSize,
+  ] = useAppSelector(
     (state) => [
       state.admin.searchTerm,
-      state.admin.selectedId,
+      state.admin.selectedIdInPaginatedTable,
       state.admin.selectedGameId,
       state.admin.selectedTab,
+      state.admin.currentPage,
+      state.admin.pageSize,
     ],
     shallowEqual
   );
 
-  const renderedRarities = useMemo(() => {
-    return rarities
-      .filter((rarity) => rarity.gameId === selectedGameId)
-      .filter((rarity) =>
-        rarity.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-  }, [rarities, searchTerm, selectedGameId]);
+  const [rarities, fetchRarities] = useAsyncFn(async () => {
+    const { payload } = await dispatch(
+      getAllFilteredRarities({
+        gameId: selectedGameId,
+        currentPage: currentPage,
+        pageSize: pageSize,
+        name: searchTerm,
+      })
+    );
 
-  const selectAndOpenDelete = (value: RarityGetDto) => {
-    toggleDelete();
-    dispatch(setSelectedId(value.id));
-  };
+    if (payload && !payload.hasErrors) {
+      dispatch(setPageCount(payload.data.pageCount));
+    }
 
-  const selectAndOpenEdit = (value: RarityGetDto) => {
-    toggleEdit();
-    dispatch(setSelectedId(value.id));
-  };
+    return payload?.data;
+  }, [currentPage, pageSize, selectedGameId, searchTerm]);
 
-  const loadRarities = async () => {
-    const { payload } = await dispatch(getAllRarities());
-    responseWrapper(payload);
-  };
-
-  const deleteSelectedRarity = () => {
+  const deleteSelectedRarity = async () => {
     dispatch(deleteRarity(selectedId)).then(({ payload }) => {
       responseWrapper(payload, 'Rarity Deleted');
 
       if (payload && !payload.hasErrors) {
-        loadRarities();
+        fetchRarities();
       }
     });
   };
 
-  const editSelectedRarity = (editedRarity: RarityGetDto) => {
+  const editSelectedRarity = async (editedRarity: RarityGetDto) => {
     const updatedRarity: RarityGetDto = {
       id: editedRarity.id,
       name: editedRarity.name,
@@ -86,97 +72,34 @@ export const RarityTab: React.FC = () => {
       responseWrapper(payload, 'Rarity Edited');
 
       if (payload && !payload.hasErrors) {
-        loadRarities();
+        fetchRarities();
       }
     });
   };
 
-  const findGame = (gameId: number) => {
-    const foundGame = games.find((game) => game.id === gameId);
-
-    return foundGame ? foundGame.name : 'Unknown';
-  };
-
   useEffect(() => {
     if (selectedGameId === 0 || selectedTab !== AdminTabLabel.Rarities) return;
-    loadRarities();
-  }, [selectedGameId, selectedTab]);
+    fetchRarities();
+
+    const subscription = eventBus.subscribe('rarityAdded', () => {
+      fetchRarities();
+    });
+
+    return () => {
+      eventBus.unsubscribe('rarityAdded', subscription);
+    };
+  }, [fetchRarities, selectedGameId, selectedTab]);
 
   return (
-    <div className={classes.rarityTabContainer}>
-      <TabInfoHeader titles={titles} />
-
-      {renderedRarities.length !== 0 ? (
-        <div>
-          {renderedRarities.map((rarity, index) => {
-            return (
-              <div key={index} className={classes.renderedRarityContainer}>
-                <div> {rarity.name} </div>
-
-                <div> {findGame(rarity.gameId)} </div>
-
-                <ActionIcon
-                  aria-label="Edit Rarity"
-                  onClick={() => selectAndOpenEdit(rarity)}
-                >
-                  <IconEdit />
-                </ActionIcon>
-
-                <ActionIcon
-                  aria-label="Delete Rarity"
-                  onClick={() => selectAndOpenDelete(rarity)}
-                >
-                  <IconTrash />
-                </ActionIcon>
-
-                <div>
-                  {selectedId === rarity.id && (
-                    <EditModal
-                      open={openEdit}
-                      setOpen={toggleEdit}
-                      submitAction={editSelectedRarity}
-                      value={rarity}
-                    />
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      ) : (
-        <div className={classes.renderedRarityContainer}>
-          <i> No data to display </i>
-        </div>
-      )}
-
-      <DeleteModal
-        open={openDelete}
-        setOpen={toggleDelete}
-        submitAction={deleteSelectedRarity}
+    <div>
+      <AdminPaginatedTable
+        data={rarities.value?.items}
+        loading={rarities.loading}
+        editFn={editSelectedRarity}
+        deleteFn={deleteSelectedRarity}
+        typeName="Rarity"
+        tableWidth="100%"
       />
     </div>
   );
 };
-
-const useStyles = createStyles((theme: MantineTheme, numOfCol: string) => {
-  return {
-    rarityTabContainer: {
-      paddingLeft: '8px',
-    },
-
-    renderedRarityContainer: {
-      display: 'grid',
-      gridTemplateColumns: numOfCol,
-
-      ':hover': {
-        backgroundColor: theme.fn.darken(
-          theme.colors.primaryPurpleColor[0],
-          0.2
-        ),
-
-        borderRadius: 7,
-        paddingLeft: 8,
-      },
-    },
-  };
-});
