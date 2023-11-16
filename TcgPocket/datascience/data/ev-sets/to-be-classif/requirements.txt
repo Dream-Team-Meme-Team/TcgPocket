@@ -8,3 +8,4 @@ Pillow
 opencv_python
 pokemontcgsdk
 easyocr
+bs4
