@@ -5,13 +5,11 @@ import { PrimaryModal } from '../../../../components/modals/PrimaryModal';
 import { useForm } from '@mantine/form';
 import { PrimaryTextInput } from '../../../../components/inputs/PrimaryTextInput';
 import { dispatch, useAppSelector } from '../../../../store/configureStore';
-import {
-  createCardType,
-  getAllCardTypes,
-} from '../../../../services/dataServices/cardTypeServices';
+import { createCardType } from '../../../../services/dataServices/cardTypeServices';
 import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { CardTypeDto } from '../../../../types/card-types';
 import { AdminButtons } from '../AdminButtons';
+import eventBus from '../../../../helpers/eventBus';
 
 const initialValues = {
   name: '',
@@ -32,16 +30,6 @@ export function AddCardTypeModal(): React.ReactElement {
     form.reset();
   };
 
-  const loadCardTypes = async () => {
-    dispatch(getAllCardTypes()).then(({ payload }) => {
-      responseWrapper(payload);
-
-      if (payload && !payload.hasErrors) {
-        handleCancel();
-      }
-    });
-  };
-
   const handleAdd = async (newCardType: CardTypeDto) => {
     const updateGameId: CardTypeDto = {
       name: newCardType.name,
@@ -52,7 +40,8 @@ export function AddCardTypeModal(): React.ReactElement {
       responseWrapper(payload, 'Card Type Added');
 
       if (payload && !payload.hasErrors) {
-        loadCardTypes();
+        eventBus.publish('cardTypeAdded', payload);
+        handleCancel();
       }
     });
   };

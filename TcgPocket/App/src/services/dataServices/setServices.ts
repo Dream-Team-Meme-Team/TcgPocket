@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { OptionItemDto, Response } from '../../types/shared';
-import { SetDto, SetGetDto } from '../../types/sets';
+import { OptionItemDto, PagedResult, Response } from '../../types/shared';
+import { SetDto, SetFilterDto, SetGetDto } from '../../types/sets';
 import { apiCall } from '../helpers/apiCall';
 import { apiRoutes } from '../../routes/Index';
 
@@ -11,6 +11,14 @@ export const SetServices = {
     return await apiCall<SetGetDto[]>({
       method: 'GET',
       endpoint: apiRoutes.sets,
+    });
+  },
+
+  getAllFiltered: async (params?: SetFilterDto) => {
+    return await apiCall<PagedResult<SetGetDto>>({
+      method: 'GET',
+      endpoint: `${apiRoutes.sets}/paginated`,
+      params: params,
     });
   },
 
@@ -39,7 +47,7 @@ export const SetServices = {
 
   getOptions: async () => {
     return await apiCall({
-      method: 'PUT',
+      method: 'GET',
       endpoint: `${apiRoutes.sets}/options`,
     });
   },
@@ -58,6 +66,14 @@ export const getAllSets = createAsyncThunk<
   { rejectValue: Response<SetGetDto[]> }
 >('getAllSets', async () => {
   return await SetServices.getAllSets();
+});
+
+export const getAllFilteredSets = createAsyncThunk<
+  Response<PagedResult<SetGetDto>>,
+  SetFilterDto,
+  { rejectValue: Response<PagedResult<SetGetDto>> }
+>('getAllPagedSets', async (filter) => {
+  return await SetServices.getAllFiltered(filter);
 });
 
 export const createSet = createAsyncThunk<
@@ -85,17 +101,17 @@ export const editSet = createAsyncThunk<
 });
 
 export const getOptions = createAsyncThunk<
-  Response<OptionItemDto>,
+  Response<OptionItemDto[]>,
   void,
-  { rejectValue: Response<OptionItemDto> }
+  { rejectValue: Response<OptionItemDto[]> }
 >('getOptions', async () => {
   return await SetServices.getOptions();
 });
 
 export const getOptionsByGameId = createAsyncThunk<
-  Response<OptionItemDto>,
+  Response<OptionItemDto[]>,
   number,
-  { rejectValue: Response<OptionItemDto> }
+  { rejectValue: Response<OptionItemDto[]> }
 >('getOptionsByGameId', async (gameId) => {
   return await SetServices.getOptionsByGameId(gameId);
 });

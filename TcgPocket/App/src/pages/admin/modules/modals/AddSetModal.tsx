@@ -4,14 +4,12 @@ import { IconPlus } from '@tabler/icons-react';
 import { PrimaryModal } from '../../../../components/modals/PrimaryModal';
 import { useForm } from '@mantine/form';
 import { dispatch, useAppSelector } from '../../../../store/configureStore';
-import {
-  createSet,
-  getAllSets,
-} from '../../../../services/dataServices/setServices';
+import { createSet } from '../../../../services/dataServices/setServices';
 import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { SetDto } from '../../../../types/sets';
 import { PrimaryTextInput } from '../../../../components/inputs/PrimaryTextInput';
 import { AdminButtons } from '../AdminButtons';
+import eventBus from '../../../../helpers/eventBus';
 
 const initialValues = {
   name: '',
@@ -32,16 +30,6 @@ export function AddSetModal(): React.ReactElement {
     form.reset();
   };
 
-  const loadSets = () => {
-    dispatch(getAllSets()).then(({ payload }) => {
-      responseWrapper(payload);
-
-      if (payload && !payload.hasErrors) {
-        handleCancel();
-      }
-    });
-  };
-
   const handleAdd = (newSet: SetDto) => {
     const updateGameId: SetDto = {
       name: newSet.name,
@@ -52,7 +40,8 @@ export function AddSetModal(): React.ReactElement {
       responseWrapper(payload, 'Set Added');
 
       if (payload && !payload.hasErrors) {
-        loadSets();
+        eventBus.publish('setAdded', payload);
+        handleCancel();
       }
     });
   };

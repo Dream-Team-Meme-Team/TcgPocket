@@ -6,12 +6,10 @@ import { IconPlus } from '@tabler/icons-react';
 import { PrimaryModal } from '../../../../components/modals/PrimaryModal';
 import { PrimaryTextInput } from '../../../../components/inputs/PrimaryTextInput';
 import { AdminButtons } from '../AdminButtons';
-import {
-  createAttribute,
-  getAllAttributes,
-} from '../../../../services/dataServices/attributeServices';
+import { createAttribute } from '../../../../services/dataServices/attributeServices';
 import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { AttributeDto } from '../../../../types/attributes';
+import eventBus from '../../../../helpers/eventBus';
 
 const initialValues = {
   name: '',
@@ -32,16 +30,6 @@ export function AddAttributeModal(): React.ReactElement {
     form.reset();
   };
 
-  const loadAttributes = async () => {
-    dispatch(getAllAttributes()).then(({ payload }) => {
-      responseWrapper(payload);
-
-      if (payload && !payload.hasErrors) {
-        handleCancel();
-      }
-    });
-  };
-
   const handleAdd = async (newAttribute: AttributeDto) => {
     const updateAttribute: AttributeDto = {
       name: newAttribute.name,
@@ -52,7 +40,8 @@ export function AddAttributeModal(): React.ReactElement {
       responseWrapper(payload, 'Successfully added Attribute');
 
       if (payload && !payload.hasErrors) {
-        loadAttributes();
+        eventBus.publish('attributeAdded', payload);
+        handleCancel();
       }
     });
   };
