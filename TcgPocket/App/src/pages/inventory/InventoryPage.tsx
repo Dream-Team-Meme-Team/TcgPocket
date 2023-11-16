@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { InventoryDisplay } from './modules/InventoryDisplay';
 import { MantineTheme, createStyles, Text } from '@mantine/core';
 import { FilterMenu } from '../../components/filterMenu/FilterMenu';
@@ -22,6 +22,8 @@ import {
   toggleSetFilters,
 } from '../../store/inventorySlice';
 import { PrimaryButton } from '../../components/buttons/PrimaryButton';
+import { AppliedFilters } from '../../types/applied-filters';
+import { FilterActions } from '../../types/filter-actions';
 
 const pageSizeOptions: string[] = ['15', '24', '36'];
 
@@ -44,6 +46,14 @@ export function InventoryPage(): React.ReactElement {
   const [pageSize, setPageSize] = useState<number>(15);
   const [selectedGame, setSelectedGame] = useState<GameGetDto | null>(null);
   const [searchText, setSearchText] = useState('');
+
+  const appliedFilters: AppliedFilters = useMemo(() => {
+    return {
+      cardTypeFilters: cardTypeFilters,
+      rarityFilters: rarityFilters,
+      setFilters: setFilters,
+    };
+  }, [cardTypeFilters, rarityFilters, setFilters]);
 
   const handleSearchText = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value);
@@ -78,6 +88,14 @@ export function InventoryPage(): React.ReactElement {
   const toggleRarities = (id: number) => {
     dispatch(toggleRarityFilters(id));
   };
+
+  const filterActions: FilterActions = useMemo(() => {
+    return {
+      toggleCardTypes: toggleCardTypes,
+      toggleRarities: toggleRarities,
+      toggleSets: toggleSets,
+    };
+  }, []);
 
   useEffect(() => {
     dispatch(resetFilters());
@@ -118,18 +136,8 @@ export function InventoryPage(): React.ReactElement {
       <FilterMenu
         selectedGame={selectedGame}
         setSelectedGame={setSelectedGame}
-        // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
-        filters={{
-          cardTypeFilters: cardTypeFilters,
-          setFilters: setFilters,
-          rarityFilters: rarityFilters,
-        }}
-        // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
-        actions={{
-          toggleCardTypes: toggleCardTypes,
-          toggleSets: toggleSets,
-          toggleRarities: toggleRarities,
-        }}
+        filters={appliedFilters}
+        actions={filterActions}
       />
 
       <div className={classes.display}>
@@ -151,7 +159,6 @@ export function InventoryPage(): React.ReactElement {
             </div>
           </div>
 
-          {/* currently we do not have any implementation in place for this. using as a placeholder */}
           <PrimaryTextInput
             icon={<IconSearch />}
             placeholder="Search Cards"

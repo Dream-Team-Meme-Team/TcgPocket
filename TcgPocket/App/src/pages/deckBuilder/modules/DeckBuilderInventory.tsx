@@ -21,8 +21,11 @@ import {
   toggleDeckBuilderCardTypeFilters,
   toggleDeckBuilderRarityFilters,
   toggleDeckBuilderSetFilters,
+  untitledName,
 } from '../../../store/deckBuilderSlice';
 import { AppliedFilterBadges } from './AppliedFilterBadges';
+import { AppliedFilters } from '../../../types/applied-filters';
+import { FilterActions } from '../../../types/filter-actions';
 
 const pageSizeOptions: string[] = ['15', '30', '45'];
 
@@ -61,6 +64,14 @@ export function DeckBuilderInventory(): React.ReactElement {
     );
   }, [searchTerm, cards]);
 
+  const appliedFilters: AppliedFilters = useMemo(() => {
+    return {
+      cardTypeFilters: cardTypeFilters,
+      rarityFilters: rarityFilters,
+      setFilters: setFilters,
+    };
+  }, [cardTypeFilters, rarityFilters, setFilters]);
+
   const handleSearchTerm = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
@@ -85,8 +96,16 @@ export function DeckBuilderInventory(): React.ReactElement {
     dispatch(toggleDeckBuilderRarityFilters(id));
   };
 
+  const filterActions: FilterActions = useMemo(() => {
+    return {
+      toggleCardTypes: toggleCardTypes,
+      toggleRarities: toggleRarities,
+      toggleSets: toggleSets,
+    };
+  }, []);
+
   useEffect(() => {
-    if (deckName === 'Untitled' || !selectedGame) return;
+    if (deckName === untitledName || !selectedGame) return;
 
     const gameId = selectedGame ? [selectedGame.id] : undefined;
 
@@ -153,18 +172,8 @@ export function DeckBuilderInventory(): React.ReactElement {
           <Drawer opened={open} onClose={toggle} padding={0}>
             <FilterMenu
               selectedGame={selectedGame}
-              // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
-              filters={{
-                cardTypeFilters: cardTypeFilters,
-                setFilters: setFilters,
-                rarityFilters: rarityFilters,
-              }}
-              // eslint-disable-next-line react-perf/jsx-no-new-object-as-prop
-              actions={{
-                toggleCardTypes: toggleCardTypes,
-                toggleSets: toggleSets,
-                toggleRarities: toggleRarities,
-              }}
+              filters={appliedFilters}
+              actions={filterActions}
             />
           </Drawer>
         </div>

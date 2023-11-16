@@ -15,18 +15,8 @@ import { getAllAttributes } from '../../services/dataServices/attributeServices'
 import { getAllRarities } from '../../services/dataServices/rarityServices';
 import { getAllSets } from '../../services/dataServices/setServices';
 import { Category } from '../../types/category';
-
-export type FilterActions = {
-  toggleCardTypes: (arg: number) => void;
-  toggleSets: (arg: number) => void;
-  toggleRarities: (arg: number) => void;
-};
-
-type AppliedFilters = {
-  cardTypeFilters: number[];
-  setFilters: number[];
-  rarityFilters: number[];
-};
+import { AppliedFilters } from '../../types/applied-filters';
+import { FilterActions } from '../../types/filter-actions';
 
 type FilterMenuProps = {
   selectedGame: GameGetDto | null;
