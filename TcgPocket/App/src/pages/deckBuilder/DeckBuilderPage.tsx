@@ -9,7 +9,6 @@ import { DeckRequirementModal } from './modules/DeckRequirementModal';
 import { dispatch, useAppSelector } from '../../store/configureStore';
 import { useEffect } from 'react';
 import { resetDeckBuilder, untitledName } from '../../store/deckBuilderSlice';
-import { resetInventorySlice } from '../../store/inventorySlice';
 
 export function DeckBuilderPage(): React.ReactElement {
   const { classes } = useStyles();
@@ -29,7 +28,6 @@ export function DeckBuilderPage(): React.ReactElement {
   useEffect(() => {
     return () => {
       dispatch(resetDeckBuilder());
-      dispatch(resetInventorySlice());
     };
   }, []);
 

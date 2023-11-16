@@ -2,7 +2,7 @@ import { createStyles } from '@mantine/styles';
 import { CardDisplayDto } from '../../../types/cards';
 import { CardImageDisplay } from '../../../components/cardDisplay/modules/CardImageDisplay';
 import { defaultGap } from '../../../constants/theme';
-import { HoverCard, Popover, Text } from '@mantine/core';
+import { HoverCard, Text } from '@mantine/core';
 
 export type ViewProps = {
   cards: CardDisplayDto[];
