@@ -8,13 +8,17 @@ import { getAllCards } from '../services/CardsService';
 export const untitledName: string = 'Untitled';
 
 export interface DeckBuilderState {
+  deck: CardDisplayDto[];
+  /** deck dto things */
   name: string;
-  selectedGame: GameGetDto | null;
-  selectedRuleSet: string;
-  searchTerm: string;
   cards: PagedResult<CardDisplayDto> | null;
   loading: boolean;
-  deck: CardDisplayDto[];
+  selectedGame: GameGetDto | null;
+  selectedRuleSet: string;
+  /** deck builder inventory */
+  searchTerm: string;
+  currentPage: number;
+  pageSize: number;
   cardTypeFilters: number[];
   setFilters: number[];
   rarityFilters: number[];
@@ -31,6 +35,8 @@ const INITIAL_STATE: DeckBuilderState = {
   cardTypeFilters: [],
   setFilters: [],
   rarityFilters: [],
+  currentPage: 1,
+  pageSize: 15,
 };
 
 export const deckBuilderSlice = createSlice({
@@ -51,6 +57,18 @@ export const deckBuilderSlice = createSlice({
       { payload }: PayloadAction<DeckBuilderState['searchTerm']>
     ) {
       state.searchTerm = payload;
+    },
+    setDeckBuilderCurrentPage(
+      state,
+      { payload }: PayloadAction<DeckBuilderState['currentPage']>
+    ) {
+      state.currentPage = payload;
+    },
+    setDeckBuilderPageSize(
+      state,
+      { payload }: PayloadAction<DeckBuilderState['pageSize']>
+    ) {
+      state.pageSize = payload;
     },
     setDeck(state, { payload }: PayloadAction<DeckBuilderState['deck']>) {
       state.deck = payload;
@@ -107,4 +125,6 @@ export const {
   toggleDeckBuilderCardTypeFilters,
   toggleDeckBuilderSetFilters,
   toggleDeckBuilderRarityFilters,
+  setDeckBuilderCurrentPage,
+  setDeckBuilderPageSize,
 } = deckBuilderSlice.actions;

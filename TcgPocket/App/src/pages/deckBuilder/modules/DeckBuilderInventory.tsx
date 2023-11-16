@@ -18,6 +18,9 @@ import { getAllCards } from '../../../services/CardsService';
 import { responseWrapper } from '../../../services/helpers/responseWrapper';
 import { PaginationSelect } from '../../../components/pagination/PaginationSelect';
 import {
+  setDeckBuilderCurrentPage,
+  setDeckBuilderPageSize,
+  setDeckBuilderSearchTerm,
   toggleDeckBuilderCardTypeFilters,
   toggleDeckBuilderRarityFilters,
   toggleDeckBuilderSetFilters,
@@ -37,20 +40,28 @@ export function DeckBuilderInventory(): React.ReactElement {
     shallowEqual
   );
 
-  const [cards, cardTypeFilters, setFilters, rarityFilters] = useAppSelector(
+  const [
+    cards,
+    cardTypeFilters,
+    setFilters,
+    rarityFilters,
+    searchTerm,
+    currentPage,
+    pageSize,
+  ] = useAppSelector(
     (state) => [
       state.deckBuilder.cards,
       state.deckBuilder.cardTypeFilters,
       state.deckBuilder.setFilters,
       state.deckBuilder.rarityFilters,
+      state.deckBuilder.searchTerm,
+      state.deckBuilder.currentPage,
+      state.deckBuilder.pageSize,
     ],
     shallowEqual
   );
 
   const [view, setView] = useState<string>(ViewStyle.Grid);
-  const [searchTerm, setSearchTerm] = useState<string>('');
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(15);
 
   const [open, { toggle }] = useDisclosure();
 
@@ -73,7 +84,7 @@ export function DeckBuilderInventory(): React.ReactElement {
   }, [cardTypeFilters, rarityFilters, setFilters]);
 
   const handleSearchTerm = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
+    dispatch(setDeckBuilderSearchTerm(e.target.value));
   };
 
   const handleViewChange = (
@@ -94,6 +105,10 @@ export function DeckBuilderInventory(): React.ReactElement {
 
   const toggleRarities = (id: number) => {
     dispatch(toggleDeckBuilderRarityFilters(id));
+  };
+
+  const setCurrentPage = (page: number) => {
+    dispatch(setDeckBuilderCurrentPage(page));
   };
 
   const filterActions: FilterActions = useMemo(() => {
@@ -159,7 +174,7 @@ export function DeckBuilderInventory(): React.ReactElement {
             onChange={(value) => {
               if (!value) return;
 
-              setPageSize(parseInt(value.toString()));
+              dispatch(setDeckBuilderPageSize(parseInt(value.toString())));
             }}
           />
 
