@@ -8,9 +8,11 @@ import numpy as np
 # %% 
 resp = requests.get('https://images.pokemontcg.io/swsh6/233_hires.png', headers = {'X-Api-Key': IDK_API_KEY, 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36'})
 card = Image.open(BytesIO(resp.content))
-card.show()
+# card.show()
 
 # %%
-print(card.size)
-card = np.array(card.convert('RGB').resize((421, 614)))
-print(card.shape)
+print(np.array(card).shape)
+card = card.convert('RGB').resize((421, 614))   # it works!
+print(np.array(card).shape)
+
+#TODO: integrate into card_dataset
