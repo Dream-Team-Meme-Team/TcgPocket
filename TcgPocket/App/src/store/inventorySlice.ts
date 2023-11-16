@@ -22,6 +22,8 @@ const paged: CardFilterDto = {
 };
 
 export interface InventoryState {
+  searchText: string;
+  currentPage: number;
   cardTypeFilters: number[];
   setFilters: number[];
   rarityFilters: number[];
@@ -32,6 +34,8 @@ export interface InventoryState {
 }
 
 const INITIAL_STATE: InventoryState = {
+  searchText: '',
+  currentPage: 1,
   cards: null,
   loading: false,
   pagedFilters: paged,
@@ -49,6 +53,18 @@ export const inventorySlice = createSlice({
       state.cardTypeFilters = [];
       state.setFilters = [];
       state.rarityFilters = [];
+    },
+    setSearchTextInventory(
+      state,
+      { payload }: PayloadAction<InventoryState['searchText']>
+    ) {
+      state.searchText = payload;
+    },
+    setCurrentPage(
+      state,
+      { payload }: PayloadAction<InventoryState['currentPage']>
+    ) {
+      state.currentPage = payload;
     },
     toggleCardTypeFilters(
       state,
@@ -96,6 +112,8 @@ export const inventorySlice = createSlice({
 });
 
 export const {
+  setSearchTextInventory,
+  setCurrentPage,
   updatePagedFilters,
   updateSelectedGame,
   toggleCardTypeFilters,
