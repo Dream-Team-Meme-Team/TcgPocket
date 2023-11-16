@@ -33,12 +33,12 @@ export type PagedResult<TDto = any> = {
 } & PageDto;
 
 export type OptionItemDto = {
-  text: string;
+  label: string;
   value: string | number;
 };
 
 export type OptionItemDto<T = any> = {
-  text: string;
+  label: string;
   value: string | number;
   meta: T;
 };

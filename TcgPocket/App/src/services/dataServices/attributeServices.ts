@@ -1,8 +1,12 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { apiCall } from '../helpers/apiCall';
-import { AttributeDto, AttributeGetDto } from '../../types/attributes';
+import {
+  AttributeDto,
+  AttributeFilterDto,
+  AttributeGetDto,
+} from '../../types/attributes';
 import { apiRoutes } from '../../routes/Index';
-import { Response } from '../../types/shared';
+import { PagedResult, Response } from '../../types/shared';
 
 export type AttributeServices = typeof AttributeServices;
 
@@ -11,6 +15,14 @@ export const AttributeServices = {
     return await apiCall<AttributeGetDto[]>({
       method: 'GET',
       endpoint: apiRoutes.attributes,
+    });
+  },
+
+  getAllFiltered: async (params?: AttributeFilterDto) => {
+    return await apiCall<PagedResult<AttributeGetDto>>({
+      method: 'GET',
+      endpoint: `${apiRoutes.attributes}/paginated`,
+      params: params,
     });
   },
 
@@ -44,6 +56,14 @@ export const getAllAttributes = createAsyncThunk<
   { rejectValue: Response<AttributeGetDto[]> }
 >('getAllAttributes', async () => {
   return await AttributeServices.getAll();
+});
+
+export const getAllFilteredAttributes = createAsyncThunk<
+  Response<PagedResult<AttributeGetDto>>,
+  AttributeFilterDto,
+  { rejectValue: Response<PagedResult<AttributeGetDto>> }
+>('getAllPagedAttributes', async (filter) => {
+  return await AttributeServices.getAllFiltered(filter);
 });
 
 export const createAttribute = createAsyncThunk<

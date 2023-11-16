@@ -1,4 +1,4 @@
-import { ScrollArea, Tabs, TabsValue, createStyles } from '@mantine/core';
+import { Flex, ScrollArea, Tabs, TabsValue, createStyles } from '@mantine/core';
 import {
   IconCards,
   IconChartTreemap,
@@ -13,9 +13,11 @@ import { dispatch, useAppSelector } from '../../store/configureStore';
 import { useEffect } from 'react';
 import {
   setAdminSearchTerm,
+  setCurrentPage,
+  setPageCount,
   setSelectedAdminTab,
   setSelectedGameId,
-  setSelectedId,
+  setSelectedIdInPaginatedTable,
 } from '../../store/adminSlice';
 import { AdminTabLabel } from '../../enums/adminTabLabel';
 import { GameTab } from './modules/tabs/GameTab';
@@ -24,6 +26,7 @@ import { CardTypeTab } from './modules/tabs/CardTypeTab';
 import { RarityTab } from './modules/tabs/RarityTab';
 import { AttributeTab } from './modules/tabs/AttributeTab';
 import { shallowEqual } from 'react-redux';
+import { AddModalRenderer } from './modules/AddModalRenderer';
 
 const adminTabs: Tab[] = [
   {
@@ -63,13 +66,15 @@ export function AdminPage(): React.ReactElement {
 
   const handleTabChange = (value: TabsValue) => {
     dispatch(setSelectedAdminTab(value));
+    dispatch(setCurrentPage(1));
     dispatch(setAdminSearchTerm(''));
-    dispatch(setSelectedGameId(0));
-    dispatch(setSelectedId(0));
+    dispatch(setSelectedIdInPaginatedTable(0));
   };
 
   useEffect(() => {
     dispatch(setSelectedAdminTab(AdminTabLabel.Games));
+    dispatch(setSelectedGameId(0));
+    dispatch(setPageCount(1));
   }, []);
 
   return (
@@ -101,10 +106,23 @@ export function AdminPage(): React.ReactElement {
               value={tab.label}
               className={classes.panelContainer}
             >
-              <AdminTabHeader label={tab.label} />
-
               {selectedGameId !== 0 || tab.label === AdminTabLabel.Games ? (
-                <TabContent />
+                <>
+                  <Flex
+                    align="center"
+                    justify={'space-between'}
+                    className={classes.tabHeader}
+                  >
+                    <h3 className={classes.tabHeaderFont}>
+                      Modify {tab.label}
+                    </h3>
+                    <div className={classes.addButton}>
+                      <AddModalRenderer label={tab.label} />
+                    </div>
+                  </Flex>
+
+                  <TabContent />
+                </>
               ) : (
                 <div className={classes.noSelectedGame}>
                   Please Select a Game
@@ -114,12 +132,14 @@ export function AdminPage(): React.ReactElement {
           );
         })}
       </ScrollArea>
+
+      <AdminTabHeader label={selectedTab ?? ''} />
     </Tabs>
   );
 }
 
 const useStyles = createStyles((theme) => {
-  const { remainingHeight } = useNavbarHeight();
+  const { remainingHeight, navbarHeight } = useNavbarHeight();
 
   return {
     tab: {
@@ -140,6 +160,24 @@ const useStyles = createStyles((theme) => {
       },
     },
 
+    addButton: {
+      justifyContent: 'flex-end',
+    },
+
+    tabHeader: {
+      paddingLeft: '1em',
+      paddingRight: '1em',
+      paddingTop: '1em',
+      paddingBottom: 0,
+      margin: 0,
+    },
+
+    tabHeaderFont: {
+      fontSize: '26px',
+      padding: 0,
+      margin: 0,
+    },
+
     panelContainer: {
       display: 'grid',
       gridTemplateRows: 'auto 1fr',
@@ -155,7 +193,9 @@ const useStyles = createStyles((theme) => {
 
     contain: {
       width: '100%',
-      height: '100%',
+      paddingLeft: '0.5em',
+      top: navbarHeight,
+      height: remainingHeight - navbarHeight,
       backgroundColor: theme.colors.secondaryBackgroundColor[0],
     },
 
@@ -163,9 +203,17 @@ const useStyles = createStyles((theme) => {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
+      paddingTop: '1em',
 
       fontWeight: 'bold',
       fontSize: '20px',
+    },
+
+    display: {
+      display: 'grid',
+      gridTemplateRows: 'auto 1fr',
+
+      height: navbarHeight,
     },
   };
 });
