@@ -39,7 +39,7 @@ export function EditModal({
   };
 
   return (
-    <PrimaryModal opened={open} onClose={setOpen} title="Edit Game">
+    <PrimaryModal opened={open} onClose={setOpen} title={`Edit ${value.name}`}>
       <PrimaryTextInput {...form.getInputProps('name')} />
 
       <form

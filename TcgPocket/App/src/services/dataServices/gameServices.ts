@@ -39,7 +39,7 @@ export const GameServices = {
 
   getOptions: async () => {
     return await apiCall({
-      method: 'PUT',
+      method: 'GET',
       endpoint: `${apiRoutes.games}/options`,
     });
   },
@@ -78,9 +78,9 @@ export const editGame = createAsyncThunk<
 });
 
 export const getOptions = createAsyncThunk<
-  Response<OptionItemDto>,
+  Response<OptionItemDto[]>,
   void,
-  { rejectValue: Response<OptionItemDto> }
+  { rejectValue: Response<OptionItemDto[]> }
 >('getOptions', async () => {
   return await GameServices.getOptions();
 });

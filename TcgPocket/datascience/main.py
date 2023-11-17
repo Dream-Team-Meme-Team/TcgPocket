@@ -6,7 +6,7 @@ import cv2
 from io import BytesIO
 import torchvision.transforms as transform
 from .cnn.model_av.card_classifier_a import CardClassifier
-from .scraper.scraper_classifier import scraper_classifier
+from .reader.reader_classifier import reader_classifier
 
 def all_of_it(raw_img: bytes):
     # convert to PIL Image
@@ -33,9 +33,9 @@ def all_of_it(raw_img: bytes):
     classif = torch.argmax(card_classify(card)).item()
 
     # scrape
-    scraper = scraper_classifier(classif)
-    filt = scraper.apply_filter(raw_img)
-    read = scraper.read_card(filt)
+    reader = reader_classifier(classif)
+    filt = reader.apply_filter(raw_img)
+    read = reader.read_card(filt)
 
-    return scraper.gen_query(read), classif
+    return reader.gen_query(read), classif
 #
