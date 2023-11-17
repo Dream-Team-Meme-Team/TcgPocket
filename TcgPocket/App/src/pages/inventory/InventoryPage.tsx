@@ -17,6 +17,8 @@ import { PrimaryTextInput } from '../../components/inputs/PrimaryTextInput';
 import {
   resetFilters,
   resetInventorySlice,
+  setInventoryCurrentPage,
+  setInventorySearchText,
   toggleCardTypeFilters,
   toggleRarityFilters,
   toggleSetFilters,
@@ -63,8 +65,8 @@ export function InventoryPage(): React.ReactElement {
   }, [cardTypeFilters, rarityFilters, setFilters]);
 
   const handleSearchText = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setCurrentPage(1));
-    dispatch(setSearchTextInventory(e.target.value));
+    dispatch(setInventoryCurrentPage(1));
+    dispatch(setInventorySearchText(e.target.value));
   };
 
   const search = () => {
@@ -107,8 +109,8 @@ export function InventoryPage(): React.ReactElement {
 
   useEffect(() => {
     dispatch(resetFilters());
-    dispatch(setSearchTextInventory(''));
-    dispatch(setCurrentPage(1));
+    dispatch(setInventorySearchText(''));
+    dispatch(setInventoryCurrentPage(1));
   }, [selectedGame]);
 
   useEffect(() => {
@@ -180,7 +182,7 @@ export function InventoryPage(): React.ReactElement {
 
           <PaginationSelect
             currentPage={currentPage}
-            setCurrentPage={(arg) => dispatch(setCurrentPage(arg))}
+            setCurrentPage={(arg) => dispatch(setInventoryCurrentPage(arg))}
             total={cards ? cards.pageCount : 16}
             className={classes.paginationControls}
           />

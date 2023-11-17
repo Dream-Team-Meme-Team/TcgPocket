@@ -55,6 +55,18 @@ export const inventorySlice = createSlice({
     ) {
       state.selectedGame = payload;
     },
+    setInventoryCurrentPage(
+      state,
+      { payload }: PayloadAction<InventoryState['currentPage']>
+    ) {
+      state.currentPage = payload;
+    },
+    setInventorySearchText(
+      state,
+      { payload }: PayloadAction<InventoryState['searchText']>
+    ) {
+      state.searchText = payload;
+    },
     resetFilters(state) {
       state.cardTypeFilters = [];
       state.setFilters = [];
@@ -83,6 +95,8 @@ export const {
   toggleCardTypeFilters,
   toggleRarityFilters,
   toggleSetFilters,
+  setInventoryCurrentPage,
+  setInventorySearchText,
   resetFilters,
   resetInventorySlice,
 } = inventorySlice.actions;
