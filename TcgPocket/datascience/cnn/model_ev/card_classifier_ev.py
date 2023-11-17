@@ -20,7 +20,7 @@ class CardClassifier(nn.Module):
 
     def __init__(self):
         super(CardClassifier, self).__init__()
-
+        
         self.conv1 = nn.Sequential(
             nn.Conv2d(in_channels=3, out_channels=32, kernel_size=(3,3), stride = 3, padding=0),
             nn.ReLU(),
@@ -35,7 +35,7 @@ class CardClassifier(nn.Module):
 
         self.fc1 = nn.Sequential(
             nn.Flatten(),
-            nn.Linear(in_features=16*5*7, out_features=3),
+            nn.Linear(in_features=16*5*7, out_features=5),
             nn.Softmax(dim=1)
         )
     #

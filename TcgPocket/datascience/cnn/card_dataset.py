@@ -4,7 +4,6 @@ import torch
 import requests
 import numpy as np
 from PIL import Image
-import cv2 
 from io import BytesIO
 import torchvision.transforms as transform
 from apiKeys import IDK_API_KEY
@@ -18,7 +17,7 @@ class CardDataSet(Dataset):
         Args:
             csv_file (str): contains the cards with their labels
         """
-        self.df = pd.read_csv(csv_file)[:9000]
+        self.df = pd.read_csv(csv_file)
     #
 
     def __len__(self):
@@ -43,7 +42,11 @@ class CardDataSet(Dataset):
         img = Image.open(BytesIO(resp.content))
 
         # convert RGBA to RGB and resize to proper dimensions
-        img = img.convert('RGB').resize((421, 614))  
+        img = img.convert('RGB').resize((421, 614)) 
+
+        # add noise
+        noise = np.random.normal(0, np.random.randint(30), np.array(img).shape)
+        img = Image.fromarray((img + noise).astype(np.uint8))
 
         # convert to pytorch tensor (via PIL Image) and normalize
         tensor = from_PIL(img).to(torch.float32)
