@@ -10,15 +10,13 @@ import {
   Title,
 } from '@mantine/core';
 import { IconUpload, IconPhoto, IconX } from '@tabler/icons-react';
-import { Dropzone, FileWithPath } from '@mantine/dropzone';
+import { Dropzone, FileWithPath, MIME_TYPES } from '@mantine/dropzone';
 import { useAsyncFn } from 'react-use';
 import { CardReaderService } from '../../services/CardReaderService';
 import { error, success } from '../../services/helpers/Notification';
 import { useState } from 'react';
 import { CardDisplayDto } from '../../types/cards';
 import { CardDisplay } from '../../components/cardDisplay/CardDisplay';
-
-const IMAGE_MIME_TYPES = { 'image/*': ['.png', '.jpeg'] };
 
 export function CardUploadPage() {
   const theme = useMantineTheme();
@@ -57,7 +55,7 @@ export function CardUploadPage() {
       <Dropzone
         onDrop={uploadCard}
         onReject={rejectFile}
-        accept={IMAGE_MIME_TYPES}
+        accept={[MIME_TYPES.jpeg, MIME_TYPES.png]}
         loading={uploadCardState.loading}
       >
         <Group

@@ -74,7 +74,7 @@ public class MachineLearningModelService: IMachineLearningModelService
 
         if (!response.IsSuccessStatusCode)
         {
-            return Error.AsResponse<Card>($"Request failed with status code: {response.StatusCode}");
+            return Error.AsResponse<Card>("Error classifying card");
         }
 
         var responseString = await response.Content.ReadAsStringAsync();
@@ -84,7 +84,7 @@ public class MachineLearningModelService: IMachineLearningModelService
             0 => GetMagicCard(responseString),
             1 => GetYugiohCard(responseString),
             2 => GetPokemonCard(responseString),
-            _ => Error.AsResponse<ExternalCardFilterDto>("Could not classify card")
+            _ => Error.AsResponse<ExternalCardFilterDto>("Error classifying card")
         };
         
         if (cardResponse.HasErrors)
@@ -96,7 +96,7 @@ public class MachineLearningModelService: IMachineLearningModelService
 
         if (!HasRequiredFields(cardFilter))
         {
-            return Error.AsResponse<Card>("Error deserializing card data");
+            return Error.AsResponse<Card>("Error classifying card");
         }
         
         var card = await _dataContext.Set<Card>()
@@ -112,7 +112,7 @@ public class MachineLearningModelService: IMachineLearningModelService
                 && x.Set.Name.ToLower() == cardFilter.SetName.ToLower());
 
         return card is null 
-            ? Error.AsResponse<Card>("Could not find card")
+            ? Error.AsResponse<Card>("Error classifying card")
             : card.AsResponse();
     }
 
@@ -122,7 +122,7 @@ public class MachineLearningModelService: IMachineLearningModelService
         var magicCard = magicCardResponse!.Data.FirstOrDefault();
         
         return magicCard is null
-            ? Error.AsResponse<ExternalCardFilterDto>("Could not deserialize response")
+            ? Error.AsResponse<ExternalCardFilterDto>("Error classifying card")
             : _mapper.Map<ExternalCardFilterDto>(magicCard).AsResponse();
     }
     
@@ -131,7 +131,7 @@ public class MachineLearningModelService: IMachineLearningModelService
         var yugiohCard = JsonConvert.DeserializeObject<YugiohData>(responseString);
         
         return yugiohCard is null
-            ? Error.AsResponse<ExternalCardFilterDto>("Could not deserialize response")
+            ? Error.AsResponse<ExternalCardFilterDto>("Error classifying card")
             : _mapper.Map<ExternalCardFilterDto>(yugiohCard).AsResponse();
     }
     
@@ -141,11 +141,11 @@ public class MachineLearningModelService: IMachineLearningModelService
         var pokemonCard = pokemonCardResponse!.Data.FirstOrDefault();
         
         return pokemonCard is null
-            ? Error.AsResponse<ExternalCardFilterDto>("Could not deserialize response")
+            ? Error.AsResponse<ExternalCardFilterDto>("Error classifying card")
             : _mapper.Map<ExternalCardFilterDto>(pokemonCard).AsResponse();
     }
 
-    private bool HasRequiredFields(ExternalCardFilterDto cardFilterDto)
+    private static bool HasRequiredFields(ExternalCardFilterDto cardFilterDto)
     {
         return cardFilterDto is {
             Name: not null,
