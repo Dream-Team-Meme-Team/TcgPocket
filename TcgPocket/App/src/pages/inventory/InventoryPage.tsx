@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { InventoryDisplay } from './modules/InventoryDisplay';
 import { MantineTheme, createStyles, Text } from '@mantine/core';
-import { FilterMenu } from './modules/FilterMenu';
+import { FilterMenu } from '../../components/filterMenu/FilterMenu';
 import { useNavbarHeight } from '../../hooks/useNavbarHeight';
 import { dispatch, useAppSelector } from '../../store/configureStore';
 import { shallowEqual } from 'react-redux';
@@ -16,10 +16,16 @@ import { PaginationSelect } from '../../components/pagination/PaginationSelect';
 import { PrimaryTextInput } from '../../components/inputs/PrimaryTextInput';
 import {
   resetFilters,
-  setCurrentPage,
-  setSearchTextInventory,
+  resetInventorySlice,
+  setInventoryCurrentPage,
+  setInventorySearchText,
+  toggleCardTypeFilters,
+  toggleRarityFilters,
+  toggleSetFilters,
 } from '../../store/inventorySlice';
 import { PrimaryButton } from '../../components/buttons/PrimaryButton';
+import { AppliedFilters } from '../../types/applied-filters';
+import { FilterActions } from '../../types/filter-actions';
 
 const pageSizeOptions: string[] = ['15', '30', '45'];
 
@@ -50,9 +56,17 @@ export function InventoryPage(): React.ReactElement {
   const [pageSize, setPageSize] = useState<number>(15);
   const [selectedGame, setSelectedGame] = useState<GameGetDto | null>(null);
 
+  const appliedFilters: AppliedFilters = useMemo(() => {
+    return {
+      cardTypeFilters: cardTypeFilters,
+      rarityFilters: rarityFilters,
+      setFilters: setFilters,
+    };
+  }, [cardTypeFilters, rarityFilters, setFilters]);
+
   const handleSearchText = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setCurrentPage(1));
-    dispatch(setSearchTextInventory(e.target.value));
+    dispatch(setInventoryCurrentPage(1));
+    dispatch(setInventorySearchText(e.target.value));
   };
 
   const search = () => {
@@ -73,10 +87,30 @@ export function InventoryPage(): React.ReactElement {
     );
   };
 
+  const toggleCardTypes = (id: number) => {
+    dispatch(toggleCardTypeFilters(id));
+  };
+
+  const toggleSets = (id: number) => {
+    dispatch(toggleSetFilters(id));
+  };
+
+  const toggleRarities = (id: number) => {
+    dispatch(toggleRarityFilters(id));
+  };
+
+  const filterActions: FilterActions = useMemo(() => {
+    return {
+      toggleCardTypes: toggleCardTypes,
+      toggleRarities: toggleRarities,
+      toggleSets: toggleSets,
+    };
+  }, []);
+
   useEffect(() => {
     dispatch(resetFilters());
-    dispatch(setSearchTextInventory(''));
-    dispatch(setCurrentPage(1));
+    dispatch(setInventorySearchText(''));
+    dispatch(setInventoryCurrentPage(1));
   }, [selectedGame]);
 
   useEffect(() => {
@@ -103,11 +137,19 @@ export function InventoryPage(): React.ReactElement {
     pageSize,
   ]);
 
+  useEffect(() => {
+    return () => {
+      dispatch(resetInventorySlice());
+    };
+  }, []);
+
   return (
     <div className={classes.wrapper}>
       <FilterMenu
         selectedGame={selectedGame}
         setSelectedGame={setSelectedGame}
+        filters={appliedFilters}
+        actions={filterActions}
       />
 
       <div className={classes.display}>
@@ -140,7 +182,7 @@ export function InventoryPage(): React.ReactElement {
 
           <PaginationSelect
             currentPage={currentPage}
-            setCurrentPage={(arg) => dispatch(setCurrentPage(arg))}
+            setCurrentPage={(arg) => dispatch(setInventoryCurrentPage(arg))}
             total={cards ? cards.pageCount : 16}
             className={classes.paginationControls}
           />

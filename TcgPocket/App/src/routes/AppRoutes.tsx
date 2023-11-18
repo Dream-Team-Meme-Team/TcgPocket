@@ -8,6 +8,7 @@ import { useAppSelector } from '../store/configureStore';
 import { AdminPage } from '../pages/admin/AdminPage';
 import { useMemo } from 'react';
 import { InventoryPage } from '../pages/inventory/InventoryPage';
+import { DeckBuilderPage } from '../pages/deckBuilder/DeckBuilderPage';
 
 export function AppRoutes() {
   const user = useAppSelector((state) => state.user.user);
@@ -30,18 +31,23 @@ export function AppRoutes() {
         errorElement={<ErrorPage />}
       />
       {user && (
-        <Route
-          path={routes.inventory}
-          element={<InventoryPage />}
-          errorElement={<ErrorPage />}
-        />
-      )}
-      {user && (
-        <Route
-          path={routes.settings}
-          element={<SettingsPage />}
-          errorElement={<ErrorPage />}
-        />
+        <>
+          <Route
+            path={routes.inventory}
+            element={<InventoryPage />}
+            errorElement={<ErrorPage />}
+          />
+          <Route
+            path={routes.deckBuilder}
+            element={<DeckBuilderPage />}
+            errorElement={<ErrorPage />}
+          />
+          <Route
+            path={routes.settings}
+            element={<SettingsPage />}
+            errorElement={<ErrorPage />}
+          />
+        </>
       )}
       {isAdmin && (
         <Route

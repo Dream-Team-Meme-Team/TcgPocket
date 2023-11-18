@@ -21,7 +21,11 @@ function App() {
   const location = useLocation().pathname;
 
   const hideFooter: boolean = useMemo(() => {
-    return !(location === '/admin-portal' || location === '/inventory');
+    return !(
+      location === '/admin-portal' ||
+      location === '/inventory' ||
+      location === '/deck-builder'
+    );
   }, [location]);
 
   useAsync(async () => {

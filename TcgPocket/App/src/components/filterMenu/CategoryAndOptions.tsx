@@ -8,33 +8,27 @@ import {
   createStyles,
   Text,
 } from '@mantine/core';
-import { defaultGap, defaultPadding } from '../../../constants/theme';
+import { defaultGap, defaultPadding } from '../../constants/theme';
 import {
   IconArrowBadgeUp,
   IconArrowBadgeDown,
   IconSearch,
 } from '@tabler/icons-react';
-import { PrimaryBadge } from '../../../components/badges/PrimaryBadge';
+import { PrimaryBadge } from '../badges/PrimaryBadge';
 import { useDisclosure } from '@mantine/hooks';
 import { useEffect, useMemo, useState } from 'react';
-import { GameGetDto } from '../../../types/games';
-import { CardTypeGetDto } from '../../../types/card-types';
-import { dispatch } from '../../../store/configureStore';
-import {
-  setCurrentPage,
-  setSearchTextInventory,
-  toggleCardTypeFilters,
-  toggleRarityFilters,
-  toggleSetFilters,
-} from '../../../store/inventorySlice';
-import { CategoryLabel } from '../../../enums/categoryLabel';
-import { PrimaryTextInput } from '../../../components/inputs/PrimaryTextInput';
+import { GameGetDto } from '../../types/games';
+import { CardTypeGetDto } from '../../types/card-types';
+import { CategoryLabel } from '../../enums/categoryLabel';
+import { PrimaryTextInput } from '../inputs/PrimaryTextInput';
+import { FilterActions } from './FilterMenu';
 
 type CategoryAndOptionsProps = {
   selectedGame: GameGetDto | null;
   label: CategoryLabel;
   data: CardTypeGetDto[];
   appliedFilters: number[];
+  actions: FilterActions;
 };
 
 export function CategoryAndOptions({
@@ -42,6 +36,7 @@ export function CategoryAndOptions({
   label,
   data,
   appliedFilters,
+  actions,
 }: CategoryAndOptionsProps): React.ReactElement {
   const { classes } = useStyles();
 
@@ -71,13 +66,13 @@ export function CategoryAndOptions({
     dispatch(setCurrentPage(1));
     switch (label) {
       case CategoryLabel.CardTypes:
-        dispatch(toggleCardTypeFilters(option.id));
+        actions.toggleCardTypes(option.id);
         return;
       case CategoryLabel.Sets:
-        dispatch(toggleSetFilters(option.id));
+        actions.toggleSets(option.id);
         return;
       case CategoryLabel.Rarities:
-        dispatch(toggleRarityFilters(option.id));
+        actions.toggleRarities(option.id);
         return;
       default:
         return;
