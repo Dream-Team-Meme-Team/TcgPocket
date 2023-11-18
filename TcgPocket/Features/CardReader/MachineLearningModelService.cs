@@ -1,20 +1,34 @@
 using System.Diagnostics;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using TcgPocket.Data;
+using TcgPocket.Features.CardReader.Dtos;
+using TcgPocket.Features.Cards;
 using TcgPocket.Settings;
+using TcgPocket.Shared;
 
 namespace TcgPocket.Features.CardReader;
 
 public interface IMachineLearningModelService
 {
     public ProcessStartInfo GetProcessStartInfo(string blobName);
-    public Task<string> RunProcess(ProcessStartInfo startInfo);
+    public Task<Response<MachineLearningModelData>> RunProcess(ProcessStartInfo startInfo);
+    public Task<Response<Card>> GetCardFromData(MachineLearningModelData data);
 }
 
 public class MachineLearningModelService: IMachineLearningModelService
 {
+    private readonly DataContext _dataContext;
+    private readonly IMapper _mapper;
     private readonly ISettingsProvider _settingsProvider;
 
-    public MachineLearningModelService(ISettingsProvider settingsProvider)
+    public MachineLearningModelService(DataContext dataContext,
+        ISettingsProvider settingsProvider,
+        IMapper mapper)
     {
+        _dataContext = dataContext;
+        _mapper = mapper;
         _settingsProvider = settingsProvider;
     }
 
@@ -33,17 +47,125 @@ public class MachineLearningModelService: IMachineLearningModelService
         };
     }
 
-    public async Task<string> RunProcess(ProcessStartInfo startInfo)
+    public async Task<Response<MachineLearningModelData>> RunProcess(ProcessStartInfo startInfo)
     {
-        using var process = new Process
+        try
         {
-            StartInfo = startInfo
+            using var process = new Process();
+            process.StartInfo = startInfo;
+
+            process.Start();
+            process.StandardInput.Close();
+            await process.WaitForExitAsync();
+            var pythonResult = await process.StandardOutput.ReadToEndAsync();
+
+            return JsonConvert.DeserializeObject<Response<MachineLearningModelData>>(pythonResult)!;
+        }
+        catch (Exception e)
+        {
+            return Error.AsResponse<MachineLearningModelData>(e.Message);
+        }
+    }
+
+    public async Task<Response<Card>> GetCardFromData(MachineLearningModelData data)
+    {
+        using var client = new HttpClient();
+        var response = await client.GetAsync(data.CardUri);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            return Error.AsResponse<Card>("Error classifying card");
+        }
+
+        var responseString = await response.Content.ReadAsStringAsync();
+        
+        var cardResponse = data.CardType switch
+        {
+            0 => GetMagicCard(responseString),
+            1 => GetYugiohCard(responseString),
+            2 => GetPokemonCard(responseString),
+            _ => Error.AsResponse<ExternalCardFilterDto>("Error classifying card")
         };
         
-        process.Start();
-        process.StandardInput.Close();
-        await process.WaitForExitAsync();
+        if (cardResponse.HasErrors)
+        {
+            return new Response<Card> { Errors = cardResponse.Errors};
+        }
 
-        return await process.StandardOutput.ReadToEndAsync();
+        var cardFilter = cardResponse.Data;
+
+        if (!HasRequiredFields(cardFilter))
+        {
+            return Error.AsResponse<Card>("Error classifying card");
+        }
+        
+        var card = await _dataContext.Set<Card>()
+            .AsSplitQuery()
+            .Include(x => x.Game)
+            .Include(x => x.Set)
+            .Include(x => x.Rarity)
+            .Include(x => x.CardType)
+            .Include(x => x.CardAttributes)
+            .FirstOrDefaultAsync(x => x.Name.ToLower() == cardFilter.Name.ToLower()
+                && x.CardNumber.ToLower() == cardFilter.CardNumber.ToLower()
+                && x.Game.Name == cardFilter.GameName
+                && x.Set.Name.ToLower() == cardFilter.SetName.ToLower());
+
+        return card is null 
+            ? Error.AsResponse<Card>("Error classifying card")
+            : card.AsResponse();
     }
+
+    private Response<ExternalCardFilterDto> GetMagicCard(string responseString)
+    {
+        var magicCardResponse = JsonConvert.DeserializeObject<MagicResponse>(responseString);
+        var magicCard = magicCardResponse!.Data.FirstOrDefault();
+        
+        return magicCard is null
+            ? Error.AsResponse<ExternalCardFilterDto>("Error classifying card")
+            : _mapper.Map<ExternalCardFilterDto>(magicCard).AsResponse();
+    }
+    
+    private Response<ExternalCardFilterDto> GetYugiohCard(string responseString)
+    {
+        var yugiohCard = JsonConvert.DeserializeObject<YugiohData>(responseString);
+        
+        return yugiohCard is null
+            ? Error.AsResponse<ExternalCardFilterDto>("Error classifying card")
+            : _mapper.Map<ExternalCardFilterDto>(yugiohCard).AsResponse();
+    }
+    
+    private Response<ExternalCardFilterDto> GetPokemonCard(string responseString)
+    {
+        var pokemonCardResponse = JsonConvert.DeserializeObject<PokemonResponse>(responseString);
+        var pokemonCard = pokemonCardResponse!.Data.FirstOrDefault();
+        
+        return pokemonCard is null
+            ? Error.AsResponse<ExternalCardFilterDto>("Error classifying card")
+            : _mapper.Map<ExternalCardFilterDto>(pokemonCard).AsResponse();
+    }
+
+    private static bool HasRequiredFields(ExternalCardFilterDto cardFilterDto)
+    {
+        return cardFilterDto is {
+            Name: not null,
+            SetName: not null,
+            GameName: not null,
+            CardNumber: not null
+        };
+    }
+}
+
+public class MachineLearningModelData
+{
+    public int CardType { get; set; }
+    public string CardUri { get; set; }
+}
+
+public class ExternalCardFilterDto
+{
+    public string Name { get; set; }
+    public string GameName { get; set; }
+    public string SetName { get; set; }
+    public string CardNumber { get; set; }
 }

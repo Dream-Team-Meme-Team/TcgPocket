@@ -8,7 +8,7 @@ export type UserDto = {
 };
 
 export type UserGetDto = {
-  roles: List<RoleGetDto>;
+  roles: RoleGetDto[];
 } & Id &
   UserDto;
 

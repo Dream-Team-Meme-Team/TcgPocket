@@ -42,7 +42,11 @@ function App() {
           <AppRoutes />
         </Box>
         {hideFooter && (
-          <NavLink style={navLinkStyle} onClick={() => sphealingGood()} to={''}>
+          <NavLink
+            style={navLinkStyle}
+            onClick={() => sphealingGood()}
+            to={location}
+          >
             <Center sx={footerSx}>(≖ᴗ≖✿)</Center>
           </NavLink>
         )}
