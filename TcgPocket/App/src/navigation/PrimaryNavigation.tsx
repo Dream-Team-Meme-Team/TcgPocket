@@ -23,7 +23,7 @@ import { useNavbarHeight } from '../hooks/useNavbarHeight';
 import { useNavigate } from 'react-router-dom';
 import { signOutUser } from '../services/authServices';
 import { dispatch, useAppSelector } from '../store/configureStore';
-import { routes } from '../routes/Index';
+import { routes } from '../routes/index';
 
 export function PrimaryNavigation(): React.ReactElement {
   const navigate = useNavigate();
@@ -64,7 +64,7 @@ export function PrimaryNavigation(): React.ReactElement {
             <Flex gap={10}>
               <NavButton route={routes.inventory}>Inventory</NavButton>
               <NavButton route={routes.cardUpload}>Upload Cards</NavButton>
-              {/* <NavButton route={routes.deckBuilder}> Deck Builder</NavButton> */}
+              <NavButton route={routes.deckBuilder}> Deck Builder</NavButton>
               {isAdmin && (
                 <NavButton route={routes.adminPortal}>Admin Portal</NavButton>
               )}
