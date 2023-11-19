@@ -36,7 +36,8 @@ def read_card():
 
         return response, 200
 
-    except:
+    except Exception as e:
+        print(e)
         response = jsonify({
             'data': None,
             'errors': [{'message': 'Error classifying card', 'property': ''}],

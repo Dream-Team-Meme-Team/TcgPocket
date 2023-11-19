@@ -27,8 +27,55 @@ class Set(db.Model):
 
     Cards = db.relationship('Card', back_populates='Set', lazy=True)
 
+    def to_dict(self):
+        return {
+            'id': self.Id,
+            'name': self.Name,
+            'gameId': self.GameId,
+        }
+
     def __repr__(self):
         return f'<Card {self.Name}>'
+
+
+class CardType(db.Model):
+    __tablename__ = 'CardTypes'
+
+    Id = db.Column(db.Integer, primary_key=True)
+    GameId = db.Column(db.Integer)
+    Name = db.Column(db.String(255))
+
+    Cards = db.relationship('Card', back_populates='CardType', lazy=True)
+
+    def to_dict(self):
+        return {
+            'id': self.Id,
+            'name': self.Name,
+            'gameId': self.GameId,
+        }
+
+    def __repr__(self):
+        return f'<CardType {self.Name}>'
+
+
+class Rarity(db.Model):
+    __tablename__ = 'Rarities'
+
+    Id = db.Column(db.Integer, primary_key=True)
+    GameId = db.Column(db.Integer)
+    Name = db.Column(db.String(255))
+
+    Cards = db.relationship('Card', back_populates='Rarity', lazy=True)
+
+    def to_dict(self):
+        return {
+            'id': self.Id,
+            'name': self.Name,
+            'gameId': self.GameId,
+        }
+
+    def __repr__(self):
+        return f'<Rarity {self.Name}>'
 
 
 class Card(db.Model):
@@ -37,10 +84,14 @@ class Card(db.Model):
     Id = db.Column(db.Integer, primary_key=True)
     Name = db.Column(db.String(255))
     CardNumber = db.Column(db.String(255))
-    CardTypeId = db.Column(db.Integer)
-    RarityId = db.Column(db.Integer)
     ImageUrl = db.Column(db.String(255))
     Description = db.Column(db.String(255))
+
+    Rarity = db.relationship('Rarity', back_populates='Cards')
+    RarityId = db.Column(db.Integer, db.ForeignKey('Rarities.Id'))
+
+    CardType = db.relationship('CardType', back_populates='Cards')
+    CardTypeId = db.Column(db.Integer, db.ForeignKey('CardTypes.Id'))
 
     Set = db.relationship('Set', back_populates='Cards')
     SetId = db.Column(db.Integer, db.ForeignKey('Sets.Id'))
@@ -53,12 +104,13 @@ class Card(db.Model):
             'id': self.Id,
             'name': self.Name,
             'cardNumber': self.CardNumber,
-            'gameId': self.GameId,
-            'cardTypeId': self.CardTypeId,
-            'rarityId': self.RarityId,
-            'setId': self.SetId,
+            'game': self.Game.Name,
+            'cardType': self.CardType.Name,
+            'rarity': self.Rarity.Name,
+            'set': self.Set.Name,
             'imageUrl': self.ImageUrl,
-            'description': self.Description
+            'description': self.Description,
+            'attributes': []
         }
 
     def __repr__(self):
