@@ -96,11 +96,11 @@ for e in range(num_epochs):
     print(f'Epoch {e+1} ----------------------------------------------------------')
     train(train_dataloader, model, loss_fn, optimizer)
     test(test_dataloader, model, loss_fn)
-    torch.save(model.state_dict(), 'data-science/cnn/model_av/model_a_v2.pt')
+    torch.save(model.state_dict(), 'TcgPocket/datascience/cnn/model_ev/model_e_v2.pt')
     print("Saved Tenative PyTorch Model State")
 
 print('All Done, you can cry over the accuracy now 	。゜゜(´Ｏ`) ゜゜。')
 
 # SAVE MODEL
-torch.save(model.state_dict(), 'data-science/cnn/model_av/model_a_v2.pt')
+torch.save(model.state_dict(), 'TcgPocket/datascience/cnn/model_ev/model_e_v2.pt')
 print("Saved Final PyTorch Model State")
