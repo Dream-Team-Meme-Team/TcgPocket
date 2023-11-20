@@ -12,3 +12,5 @@ bs4
 flask
 flask_cors
 flask_sqlalchemy
+python-dotenv
+pyodbc
