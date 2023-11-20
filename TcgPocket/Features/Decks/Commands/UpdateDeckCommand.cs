@@ -4,7 +4,6 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography;
 using TcgPocket.Data;
 using TcgPocket.Features.DeckCards;
 using TcgPocket.Features.Users;
@@ -63,9 +62,17 @@ public class UpdateDeckCommandHandler : IRequestHandler<UpdateDeckCommand, Respo
             .FirstOrDefaultAsync(x => x.Id == command.Id, cancellationToken);
 
         if (deck is null) return Error.AsResponse<DeckDetailDto>("Deck not found", "id");
+       
+        if (user is not null && user.Id != deck.UserId) return Error.AsResponse<DeckDetailDto>("Deck not found for current user.", "userId");
 
-        if (user is not null && user.Id != deck.UserId) errors.Add(new Error { Message = "Deck not found for current user.", Property = "userId" });
+        var hasMultipleCardGames = command.Deck.Cards.GroupBy(x => x.GameId).ToList().Count > 1;
 
+        if (hasMultipleCardGames)
+        {
+            return Error.AsResponse<DeckDetailDto>("Decks may only contain cards from the designated game", "cards");
+        }
+
+        if (errors.Any()) return new Response<DeckDetailDto> { Errors = errors };
 
         if (command.Deck.Cards.Any())
         {
@@ -75,18 +82,9 @@ public class UpdateDeckCommandHandler : IRequestHandler<UpdateDeckCommand, Respo
                 new SqlParameter("@deckId", command.Id));
         }
 
-        foreach (var card in command.Deck.Cards)
-        {
-            if (card.GameId != command.Deck.GameId)
-            {
-                errors.Add(new Error { Message = $"Card with Id: '{card.Id}' does not match the Decks associated Game", Property = "cardId" });
-            }
-        }
-
-        if (errors.Any()) return new Response<DeckDetailDto> { Errors = errors };
-
         var deckCards = command.Deck.Cards.Select(x => new DeckCard
         {
+           
             CardId = x.Id,
             Deck = deck
         })
@@ -97,6 +95,11 @@ public class UpdateDeckCommandHandler : IRequestHandler<UpdateDeckCommand, Respo
         _mapper.Map(command.Deck, deck);
         await _dataContext.SaveChangesAsync(cancellationToken);
 
-        return _mapper.Map<DeckDetailDto>(deck).AsResponse();
+        var deckToReturn = await _dataContext.Set<Deck>()
+            .Include(x => x.DeckCards)
+            .ThenInclude(y => y.Card)
+            .FirstOrDefaultAsync(x => x.Id == deck.Id);
+
+        return _mapper.Map<DeckDetailDto>(deckToReturn).AsResponse();
     }
 }

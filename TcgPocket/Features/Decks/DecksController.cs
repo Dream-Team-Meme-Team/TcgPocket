@@ -17,7 +17,7 @@ public class DecksController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpGet("/user-decks/{id:int}")]
+    [HttpGet("user-decks")]
     public async Task<ActionResult<Response<List<DeckGetDto>>>> GetAllDecksByUserId()
     {
         var response = await _mediator.Send(new GetAllDecksByUserIdQuery { });

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using TcgPocket.Features.Decks;
 
 namespace TcgPocket.Features.DeckCards
 {
