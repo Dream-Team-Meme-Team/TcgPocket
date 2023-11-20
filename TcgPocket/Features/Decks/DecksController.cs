@@ -18,9 +18,9 @@ public class DecksController : ControllerBase
     }
 
     [HttpGet("/user-decks/{id:int}")]
-    public async Task<ActionResult<Response<List<DeckGetDto>>>> GetAllDecksByUserId([FromRoute] int id)
+    public async Task<ActionResult<Response<List<DeckGetDto>>>> GetAllDecksByUserId()
     {
-        var response = await _mediator.Send(new GetAllDecksByUserIdQuery { UserId = id });
+        var response = await _mediator.Send(new GetAllDecksByUserIdQuery { });
 
         return response.HasErrors ? BadRequest(response) : Ok(response);
     }
@@ -34,7 +34,7 @@ public class DecksController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Response<DeckGetDto>>> CreateDeck([FromBody] CreateUpdateDeckDto data)
+    public async Task<ActionResult<Response<DeckGetDto>>> CreateDeck([FromBody] DeckDto data)
     {
         var response = await _mediator.Send(new CreateDeckCommand { Deck = data });
 
@@ -45,7 +45,7 @@ public class DecksController : ControllerBase
 
     [HttpPut("{id:int}")]
     public async Task<ActionResult<Response<DeckGetDto>>> UpdateDeck([FromRoute] int id,
-        [FromBody] CreateUpdateDeckDto data)
+        [FromBody] UpdateDeckDto data)
     {
         var response = await _mediator.Send(new UpdateDeckCommand { Id = id, Deck = data });
 

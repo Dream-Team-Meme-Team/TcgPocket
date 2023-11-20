@@ -10,7 +10,7 @@ namespace TcgPocket.Features.Decks.Commands;
 
 public class CreateDeckCommand : IRequest<Response<DeckDetailDto>>
 {
-    public CreateUpdateDeckDto Deck { get; set; }
+    public DeckDto Deck { get; set; }
 }
 
 public class CreateDeckCommandHandler : IRequestHandler<CreateDeckCommand, Response<DeckDetailDto>>

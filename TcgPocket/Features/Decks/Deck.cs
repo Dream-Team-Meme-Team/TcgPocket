@@ -1,6 +1,4 @@
-﻿using Microsoft.Identity.Client;
-using System.Net;
-using TcgPocket.Features.Cards;
+﻿using TcgPocket.Features.Cards;
 using TcgPocket.Features.DeckCards;
 using TcgPocket.Features.Games;
 using TcgPocket.Features.Users;
@@ -27,12 +25,12 @@ public class DeckDto
     public string Name { get; set; }
 }
 
-public class CreateUpdateDeckDto : DeckDto
+public class UpdateDeckDto : DeckDto
 {
-    public List<CardGetDto>? Cards { get; set; }
+    public List<CardGetDto>? Cards { get; set; } = new();
 }
 
 public class DeckDetailDto : DeckGetDto
 {
-    public List<CardGetDto>? Cards { get; set; } 
+    public List<CardGetDto>? Cards { get; set; } = new(); 
 }
