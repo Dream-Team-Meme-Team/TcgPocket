@@ -5,13 +5,11 @@ import { dispatch, useAppSelector } from '../../../../store/configureStore';
 import { PrimaryModal } from '../../../../components/modals/PrimaryModal';
 import { useForm } from '@mantine/form';
 import { PrimaryTextInput } from '../../../../components/inputs/PrimaryTextInput';
-import {
-  createRarity,
-  getAllRarities,
-} from '../../../../services/dataServices/rarityServices';
+import { createRarity } from '../../../../services/dataServices/rarityServices';
 import { responseWrapper } from '../../../../services/helpers/responseWrapper';
 import { RarityDto } from '../../../../types/rarities';
 import { AdminButtons } from '../AdminButtons';
+import eventBus from '../../../../helpers/eventBus';
 
 const initialValues = {
   name: '',
@@ -32,16 +30,6 @@ export function AddRarityModal(): React.ReactElement {
     form.reset();
   };
 
-  const loadRarities = () => {
-    dispatch(getAllRarities()).then(({ payload }) => {
-      responseWrapper(payload);
-
-      if (payload && !payload.hasErrors) {
-        handleCancel();
-      }
-    });
-  };
-
   const handleAdd = (newRarity: RarityDto) => {
     const updatedRarity: RarityDto = {
       name: newRarity.name,
@@ -52,7 +40,8 @@ export function AddRarityModal(): React.ReactElement {
       responseWrapper(payload, 'Rarity Added');
 
       if (payload && !payload.hasErrors) {
-        loadRarities();
+        eventBus.publish('rarityAdded', payload);
+        handleCancel();
       }
     });
   };

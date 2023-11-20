@@ -21,7 +21,11 @@ function App() {
   const location = useLocation().pathname;
 
   const hideFooter: boolean = useMemo(() => {
-    return !(location === '/admin-portal' || location === '/inventory');
+    return !(
+      location === '/admin-portal' ||
+      location === '/inventory' ||
+      location === '/deck-builder'
+    );
   }, [location]);
 
   useAsync(async () => {
@@ -38,7 +42,11 @@ function App() {
           <AppRoutes />
         </Box>
         {hideFooter && (
-          <NavLink style={navLinkStyle} onClick={() => sphealingGood()} to={''}>
+          <NavLink
+            style={navLinkStyle}
+            onClick={() => sphealingGood()}
+            to={location}
+          >
             <Center sx={footerSx}>(≖ᴗ≖✿)</Center>
           </NavLink>
         )}

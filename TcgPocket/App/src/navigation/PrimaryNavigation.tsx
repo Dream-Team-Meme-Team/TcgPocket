@@ -16,14 +16,14 @@ import {
 } from '@tabler/icons-react';
 import React, { useMemo } from 'react';
 import { NavButton } from './NavButton';
-import { LoginModal } from '../components/modals/authModals/LoginModal';
-import { RegisterModal } from '../components/modals/authModals/RegisterModal';
+import { LoginModal } from '../components/modals/AuthModals/LoginModal';
+import { RegisterModal } from '../components/modals/AuthModals/RegisterModal';
 import { useDisclosure } from '@mantine/hooks';
 import { useNavbarHeight } from '../hooks/useNavbarHeight';
 import { useNavigate } from 'react-router-dom';
 import { signOutUser } from '../services/authServices';
 import { dispatch, useAppSelector } from '../store/configureStore';
-import { routes } from '../routes/Index';
+import { routes } from '../routes/index';
 
 export function PrimaryNavigation(): React.ReactElement {
   const navigate = useNavigate();
@@ -44,11 +44,11 @@ export function PrimaryNavigation(): React.ReactElement {
   }, [signedInUser]);
 
   const isAdmin: boolean | undefined = useMemo(() => {
-    if (!determineUserState) {
+    if (!determineUserState || !signedInUser) {
       return false;
     }
-    const isAdmin: number = signedInUser?.roles.findIndex(
-      (r: { name: string }) => r.name === 'Admin'
+    const isAdmin: number = signedInUser.roles.findIndex(
+      (r) => r.name === 'Admin'
     );
     return isAdmin !== -1;
   }, [determineUserState, signedInUser?.roles]);
@@ -64,7 +64,7 @@ export function PrimaryNavigation(): React.ReactElement {
             <Flex gap={10}>
               <NavButton route={routes.inventory}>Inventory</NavButton>
               <NavButton route={routes.cardUpload}>Upload Cards</NavButton>
-              {/* <NavButton route={routes.deckBuilder}> Deck Builder</NavButton> */}
+              <NavButton route={routes.deckBuilder}> Deck Builder</NavButton>
               {isAdmin && (
                 <NavButton route={routes.adminPortal}>Admin Portal</NavButton>
               )}

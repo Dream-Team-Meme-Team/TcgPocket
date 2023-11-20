@@ -1,40 +1,26 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { CardDisplayDto, CardFilterDto } from '../types/cards';
+import { CardDisplayDto } from '../types/cards';
 import { PagedResult } from '../types/shared';
 import { GameGetDto } from '../types/games';
 import { toggleFilters } from '../helpers/toggleFilters';
 import { getAllCards } from '../services/CardsService';
 
-const paged: CardFilterDto = {
-  currentPage: 1,
-  pageSize: 16,
-  cardNumber: undefined,
-  cardTypeIds: undefined,
-  description: undefined,
-  gameIds: undefined,
-  id: undefined,
-  imageUrl: undefined,
-  name: undefined,
-  orderBy: 'asc',
-  rarityIds: undefined,
-  setIds: undefined,
-  sortBy: 'gameId',
-};
-
 export interface InventoryState {
+  searchText: string;
+  currentPage: number;
   cardTypeFilters: number[];
   setFilters: number[];
   rarityFilters: number[];
   cards: PagedResult<CardDisplayDto> | null;
   loading: boolean;
-  pagedFilters: CardFilterDto;
   selectedGame: GameGetDto | null;
 }
 
 const INITIAL_STATE: InventoryState = {
+  searchText: '',
+  currentPage: 1,
   cards: null,
   loading: false,
-  pagedFilters: paged,
   selectedGame: null,
   cardTypeFilters: [],
   setFilters: [],
@@ -45,11 +31,6 @@ export const inventorySlice = createSlice({
   name: 'Inventory',
   initialState: INITIAL_STATE,
   reducers: {
-    resetFilters(state) {
-      state.cardTypeFilters = [];
-      state.setFilters = [];
-      state.rarityFilters = [];
-    },
     toggleCardTypeFilters(
       state,
       { payload }: PayloadAction<InventoryState['cardTypeFilters'][number]>
@@ -74,11 +55,25 @@ export const inventorySlice = createSlice({
     ) {
       state.selectedGame = payload;
     },
-    updatePagedFilters(
+    setInventoryCurrentPage(
       state,
-      { payload }: PayloadAction<InventoryState['pagedFilters']>
+      { payload }: PayloadAction<InventoryState['currentPage']>
     ) {
-      state.pagedFilters = payload;
+      state.currentPage = payload;
+    },
+    setInventorySearchText(
+      state,
+      { payload }: PayloadAction<InventoryState['searchText']>
+    ) {
+      state.searchText = payload;
+    },
+    resetFilters(state) {
+      state.cardTypeFilters = [];
+      state.setFilters = [];
+      state.rarityFilters = [];
+    },
+    resetInventorySlice() {
+      return INITIAL_STATE;
     },
   },
   extraReducers: (builder) => {
@@ -96,10 +91,12 @@ export const inventorySlice = createSlice({
 });
 
 export const {
-  updatePagedFilters,
   updateSelectedGame,
   toggleCardTypeFilters,
   toggleRarityFilters,
   toggleSetFilters,
+  setInventoryCurrentPage,
+  setInventorySearchText,
   resetFilters,
+  resetInventorySlice,
 } = inventorySlice.actions;
