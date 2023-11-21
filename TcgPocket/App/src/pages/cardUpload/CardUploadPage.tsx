@@ -63,12 +63,13 @@ type CardSelectType = {
   cardNumber: string;
   imageUrl: string;
   group: string;
+  cardDisplayDto: CardDisplayDto;
 };
 
 export function CardUploadPage() {
   const theme = useMantineTheme();
   const { classes } = useStyles();
-  const [uploadedCards, setUploadedCards] = useState<CardDisplayDto[]>([]);
+  const [pendingCards, setPendingCards] = useState<CardDisplayDto[]>([]);
 
   const [searchValue, setSearchValue] = useState('');
   const [cardValue, setCardValue] = useState<CardSelectType>();
@@ -93,7 +94,7 @@ export function CardUploadPage() {
       return;
     }
 
-    response.data.items.forEach((element) => {
+    response.data.items.forEach((element: CardDisplayDto) => {
       array.push({
         key: element.id,
         value: element.id.toString(),
@@ -103,6 +104,7 @@ export function CardUploadPage() {
         cardNumber: element.cardNumber,
         imageUrl: element.imageUrl,
         group: element.game.name,
+        cardDisplayDto: element,
       });
     });
 
@@ -124,7 +126,7 @@ export function CardUploadPage() {
         return;
       }
 
-      setUploadedCards((state) => [...state, response.data]);
+      setPendingCards((state) => [...state, response.data]);
 
       success('Card Uploaded to inventory');
 
@@ -192,7 +194,8 @@ export function CardUploadPage() {
         value={value}
         onChange={(value) => {
           setValue(value ?? '');
-          setCardValue(data.find((x) => x.value === value));
+          const card = data.find((x) => x.value === value)?.cardDisplayDto;
+          card && pendingCards.push(card);
           setValue('');
         }}
         icon={<IconSearch />}
@@ -220,7 +223,7 @@ export function CardUploadPage() {
           console.log(cardValue);
         }}
       />
-      {uploadedCards.length > 0 && (
+      {pendingCards.length > 0 && (
         <>
           <Divider
             pt={10}
@@ -233,7 +236,7 @@ export function CardUploadPage() {
           <div className={classes.inventoryDisplayContainer}>
             <ScrollArea>
               <div className={classes.inventoryDisplayGroup}>
-                {uploadedCards.map((cards, index) => (
+                {pendingCards.map((cards, index) => (
                   <CardDisplay key={index} isLoading={false} card={cards} />
                 ))}
               </div>
