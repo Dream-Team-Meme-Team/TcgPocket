@@ -226,6 +226,29 @@ namespace TcgPocket.Migrations
                     b.ToTable("Cards", "dbo");
                 });
 
+            modelBuilder.Entity("TcgPocket.Features.DeckCards.DeckCard", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CardId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DeckId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CardId");
+
+                    b.HasIndex("DeckId");
+
+                    b.ToTable("DeckCards", "dbo");
+                });
+
             modelBuilder.Entity("TcgPocket.Features.Decks.Deck", b =>
                 {
                     b.Property<int>("Id")
@@ -233,6 +256,9 @@ namespace TcgPocket.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("GameId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -242,6 +268,8 @@ namespace TcgPocket.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GameId");
 
                     b.HasIndex("UserId");
 
@@ -557,13 +585,40 @@ namespace TcgPocket.Migrations
                     b.Navigation("Set");
                 });
 
+            modelBuilder.Entity("TcgPocket.Features.DeckCards.DeckCard", b =>
+                {
+                    b.HasOne("TcgPocket.Features.Cards.Card", "Card")
+                        .WithMany("DeckCards")
+                        .HasForeignKey("CardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TcgPocket.Features.Decks.Deck", "Deck")
+                        .WithMany("DeckCards")
+                        .HasForeignKey("DeckId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Card");
+
+                    b.Navigation("Deck");
+                });
+
             modelBuilder.Entity("TcgPocket.Features.Decks.Deck", b =>
                 {
+                    b.HasOne("TcgPocket.Features.Games.Game", "Game")
+                        .WithMany()
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("TcgPocket.Features.Users.User", "User")
                         .WithMany("Decks")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Game");
 
                     b.Navigation("User");
                 });
@@ -642,7 +697,14 @@ namespace TcgPocket.Migrations
                 {
                     b.Navigation("CardAttributes");
 
+                    b.Navigation("DeckCards");
+
                     b.Navigation("UserCards");
+                });
+
+            modelBuilder.Entity("TcgPocket.Features.Decks.Deck", b =>
+                {
+                    b.Navigation("DeckCards");
                 });
 
             modelBuilder.Entity("TcgPocket.Features.Games.Game", b =>

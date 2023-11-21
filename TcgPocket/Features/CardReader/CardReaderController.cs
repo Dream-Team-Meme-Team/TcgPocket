@@ -1,6 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
+using TcgPocket.Features.Cards.Dtos;
 using TcgPocket.Shared;
 
 namespace TcgPocket.Features.CardReader;
@@ -18,10 +18,12 @@ public class CardReaderController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Response<JObject>>> GetAllAttributes(IFormFile data)
+    public async Task<ActionResult<Response<CardDisplayDto>>> ReadCard(IFormFile data)
     {
         var response = await _mediator.Send(new ReadCardRequest{ Image = data});
 
-        return response.HasErrors ? BadRequest(response) : Ok(response);
+        return response.HasErrors
+            ? BadRequest(response)
+            : Created(nameof(ReadCard), response);
     }
 }

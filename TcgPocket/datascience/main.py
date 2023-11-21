@@ -37,5 +37,5 @@ def all_of_it(raw_img: bytes):
     filt = reader.apply_filter(raw_img)
     read = reader.read_card(filt)
 
-    return reader.gen_query(read)
+    return reader.gen_query(read), classif
 #

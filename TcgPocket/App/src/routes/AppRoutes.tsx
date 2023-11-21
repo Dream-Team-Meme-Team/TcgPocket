@@ -8,6 +8,8 @@ import { useAppSelector } from '../store/configureStore';
 import { AdminPage } from '../pages/admin/AdminPage';
 import { useMemo } from 'react';
 import { InventoryPage } from '../pages/inventory/InventoryPage';
+import { DeckBuilderPage } from '../pages/deckBuilder/DeckBuilderPage';
+import { CardUploadPage } from '../pages/cardUpload/CardUploadPage';
 
 export function AppRoutes() {
   const user = useAppSelector((state) => state.user.user);
@@ -16,9 +18,7 @@ export function AppRoutes() {
     if (!user) {
       return false;
     }
-    const isAdmin: number = user?.roles.findIndex(
-      (r: { name: string }) => r.name === 'Admin'
-    );
+    const isAdmin: number = user.roles.findIndex((r) => r.name === 'Admin');
     return isAdmin !== -1;
   }, [user]);
 
@@ -30,18 +30,28 @@ export function AppRoutes() {
         errorElement={<ErrorPage />}
       />
       {user && (
-        <Route
-          path={routes.inventory}
-          element={<InventoryPage />}
-          errorElement={<ErrorPage />}
-        />
-      )}
-      {user && (
-        <Route
-          path={routes.settings}
-          element={<SettingsPage />}
-          errorElement={<ErrorPage />}
-        />
+        <>
+          <Route
+            path={routes.inventory}
+            element={<InventoryPage />}
+            errorElement={<ErrorPage />}
+          />
+          <Route
+            path={routes.deckBuilder}
+            element={<DeckBuilderPage />}
+            errorElement={<ErrorPage />}
+          />
+          <Route
+            path={routes.cardUpload}
+            element={<CardUploadPage />}
+            errorElement={<ErrorPage />}
+          />
+          <Route
+            path={routes.settings}
+            element={<SettingsPage />}
+            errorElement={<ErrorPage />}
+          />
+        </>
       )}
       {isAdmin && (
         <Route
