@@ -8,6 +8,8 @@ public class DeckMapper : Profile
     {
         CreateMap<Deck, DeckGetDto>();
         CreateMap<Deck, DeckDto>().ReverseMap();
+        CreateMap<CreateDeckDto, Deck>()
+            .ForMember(x => x.UserId, opts => opts.Ignore());
         CreateMap<Deck, UpdateDeckDto>()
             .ForMember(x => x.Cards, opts => opts.Ignore())
             .ReverseMap();

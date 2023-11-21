@@ -20,7 +20,7 @@ public class DecksController : ControllerBase
     [HttpGet("user-decks")]
     public async Task<ActionResult<Response<List<DeckGetDto>>>> GetAllDecksByUserId()
     {
-        var response = await _mediator.Send(new GetAllDecksByUserIdQuery { });
+        var response = await _mediator.Send(new GetAllDecksByUserIdQuery());
 
         return response.HasErrors ? BadRequest(response) : Ok(response);
     }
@@ -34,7 +34,7 @@ public class DecksController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Response<DeckGetDto>>> CreateDeck([FromBody] DeckDto data)
+    public async Task<ActionResult<Response<DeckGetDto>>> CreateDeck([FromBody] CreateDeckDto data)
     {
         var response = await _mediator.Send(new CreateDeckCommand { Deck = data });
 

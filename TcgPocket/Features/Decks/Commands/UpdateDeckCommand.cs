@@ -37,25 +37,23 @@ public class UpdateDeckCommandHandler : IRequestHandler<UpdateDeckCommand, Respo
     public async Task<Response<DeckDetailDto>> Handle(UpdateDeckCommand command, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(command, cancellationToken);
+
+        if (!validationResult.IsValid)
+        {
+            var errors = _mapper.Map<List<Error>>(validationResult.Errors);
+            return new Response<DeckDetailDto> { Errors = errors };
+        }
+
         var user = await _signInManager.GetSignedInUserAsync();
-        var errors = new List<Error>();
 
         var sqlCommand = @"
                 DELETE FROM DeckCards
                 WHERE CardId IN (SELECT value FROM STRING_SPLIT(@cardIds, ','))
                 AND DeckId = @deckId";
 
-        if (user is null) errors.Add(new Error { Message = "Please sign-in.", Property = "user" });
-
-        if (!validationResult.IsValid)
+        if (user is null)
         {
-            errors = _mapper.Map<List<Error>>(validationResult.Errors);
-            return new Response<DeckDetailDto> { Errors = errors };
-        }
-
-        if (!await _dataContext.Set<User>().AnyAsync(x => x.Id == command.Deck.UserId, cancellationToken))
-        {
-            return Error.AsResponse<DeckDetailDto>("User not found", "id");
+            return Error.AsResponse<DeckDetailDto>("Please log in to edit a deck.", "user");
         }
 
         var deck = await _dataContext.Set<Deck>()
@@ -65,14 +63,12 @@ public class UpdateDeckCommandHandler : IRequestHandler<UpdateDeckCommand, Respo
        
         if (user is not null && user.Id != deck.UserId) return Error.AsResponse<DeckDetailDto>("Deck not found for current user.", "userId");
 
-        var hasMultipleCardGames = command.Deck.Cards.GroupBy(x => x.GameId).ToList().Count > 1;
+        var hasMultipleCardGames = command.Deck.Cards.Any(x => x.GameId != command.Deck.GameId);
 
         if (hasMultipleCardGames)
         {
             return Error.AsResponse<DeckDetailDto>("Decks may only contain cards from the designated game", "cards");
         }
-
-        if (errors.Any()) return new Response<DeckDetailDto> { Errors = errors };
 
         if (command.Deck.Cards.Any())
         {

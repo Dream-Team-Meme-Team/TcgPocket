@@ -12,8 +12,8 @@ using TcgPocket.Data;
 namespace TcgPocket.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231116000024_AddingGameIdToDecks")]
-    partial class AddingGameIdToDecks
+    [Migration("20231121015253_AddingDeckCardsEntity")]
+    partial class AddingDeckCardsEntity
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

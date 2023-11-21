@@ -25,6 +25,12 @@ public class DeckDto
     public string Name { get; set; }
 }
 
+public class CreateDeckDto
+{
+    public int GameId { get; set; }
+    public string Name { get; set; }
+}
+
 public class UpdateDeckDto : DeckDto
 {
     public List<CardGetDto>? Cards { get; set; } = new();
