@@ -101,7 +101,8 @@ const modalProps: Styles<ModalBaseStylesNames> = {
     backgroundColor: 'rgba(225,225,225,0.65)',
     padding: 0,
     overflow: 'hidden',
-    height: '80%',
+    // why was height 80% before?
+    height: '100%',
     maxHeight: '700px !important',
   },
   header: {
