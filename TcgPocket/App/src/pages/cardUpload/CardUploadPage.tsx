@@ -8,20 +8,106 @@ import {
   Divider,
   ScrollArea,
   Title,
+  Select,
+  Button,
 } from '@mantine/core';
-import { IconUpload, IconPhoto, IconX } from '@tabler/icons-react';
+import { IconUpload, IconPhoto, IconX, IconSearch } from '@tabler/icons-react';
 import { Dropzone, FileWithPath, MIME_TYPES } from '@mantine/dropzone';
 import { useAsyncFn } from 'react-use';
 import { CardReaderService } from '../../services/CardReaderService';
 import { error, success } from '../../services/helpers/Notification';
-import { useState } from 'react';
+import { forwardRef, useState } from 'react';
 import { CardDisplayDto } from '../../types/cards';
 import { CardDisplay } from '../../components/cardDisplay/CardDisplay';
+import { CardsService } from '../../services/CardsService';
+import { CardImageDisplay } from '../../components/cardDisplay/modules/CardImageDisplay';
+
+interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
+  label: string;
+  imageUrl: string;
+  game: string;
+  set: string;
+  cardNumber: string;
+}
+
+const CardSelectItem = forwardRef<HTMLDivElement, ItemProps>(
+  ({ label, imageUrl, game, set, cardNumber, ...others }: ItemProps, ref) => (
+    <div ref={ref} {...others}>
+      <Group noWrap>
+        <CardImageDisplay
+          clickable={false}
+          height={100}
+          width={70}
+          imageUrl={imageUrl}
+        />
+        <div>
+          <Text size="lg">{label}</Text>
+          <Text size="md" opacity={0.65}>
+            {set} | {cardNumber}
+          </Text>
+          <Text size="sm" opacity={0.65}>
+            {game}
+          </Text>
+        </div>
+      </Group>
+    </div>
+  )
+);
+
+type CardSelectType = {
+  key: number;
+  value: string;
+  label: string;
+  game: string;
+  set: string;
+  cardNumber: string;
+  imageUrl: string;
+  group: string;
+};
 
 export function CardUploadPage() {
   const theme = useMantineTheme();
   const { classes } = useStyles();
   const [uploadedCards, setUploadedCards] = useState<CardDisplayDto[]>([]);
+
+  const [searchValue, setSearchValue] = useState('');
+  const [cardValue, setCardValue] = useState<CardSelectType>();
+  const [value, setValue] = useState('');
+  const [data, setData] = useState<CardSelectType[]>([]);
+
+  const [getCardsState, getCards] = useAsyncFn(async (value: string) => {
+    if (value.length === 0) {
+      setData([]);
+      return;
+    }
+
+    const array: CardSelectType[] = [];
+    const response = await CardsService.getAllCards({
+      name: value,
+      currentPage: 1,
+      pageSize: 15,
+    });
+
+    if (response.hasErrors) {
+      response.errors.forEach((err) => error(err.message));
+      return;
+    }
+
+    response.data.items.forEach((element) => {
+      array.push({
+        key: element.id,
+        value: element.id.toString(),
+        label: element.name,
+        game: element.game.name,
+        set: element.set.name,
+        cardNumber: element.cardNumber,
+        imageUrl: element.imageUrl,
+        group: element.game.name,
+      });
+    });
+
+    setData(array);
+  });
 
   const [uploadCardState, uploadCard] = useAsyncFn(
     async (files: FileWithPath[]) => {
@@ -96,6 +182,44 @@ export function CardUploadPage() {
           </div>
         </Group>
       </Dropzone>
+      <Divider pt={10} pb={10} mt={50} variant="dashed" />
+      <Text>Enter your card name:</Text>
+      <Select
+        searchable
+        size="md"
+        itemComponent={CardSelectItem}
+        data={data}
+        value={value}
+        onChange={(value) => {
+          setValue(value ?? '');
+          setCardValue(data.find((x) => x.value === value));
+          setValue('');
+        }}
+        icon={<IconSearch />}
+        placeholder="Search"
+        searchValue={searchValue}
+        onSearchChange={(data) => {
+          setSearchValue(data);
+          getCards(data);
+        }}
+        onDropdownClose={() => {
+          setSearchValue('');
+        }}
+        maxDropdownHeight={400}
+        // filter={(value, item) =>
+        //   (item.label &&
+        //     item.label.toLowerCase().includes(value.toLowerCase().trim())) ||
+        //   (item.cardNumber &&
+        //     item.cardNumber.toLowerCase().includes(value.toLowerCase().trim()))
+        // }
+      />
+      <Divider pt={10} pb={10} mt={50} variant="dashed" />
+
+      <Button
+        onClick={() => {
+          console.log(cardValue);
+        }}
+      />
       {uploadedCards.length > 0 && (
         <>
           <Divider
