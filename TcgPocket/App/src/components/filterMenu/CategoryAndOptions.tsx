@@ -21,7 +21,7 @@ import { GameGetDto } from '../../types/games';
 import { CardTypeGetDto } from '../../types/card-types';
 import { CategoryLabel } from '../../enums/categoryLabel';
 import { PrimaryTextInput } from '../inputs/PrimaryTextInput';
-import { FilterActions } from './FilterMenu';
+import { FilterActions } from '../../types/filter-actions';
 
 type CategoryAndOptionsProps = {
   selectedGame: GameGetDto | null;
@@ -62,8 +62,6 @@ export function CategoryAndOptions({
   }, [appliedFilters, filteredOptions]);
 
   const handleFilters = (option: CardTypeGetDto) => {
-    dispatch(setSearchTextInventory(''));
-    dispatch(setCurrentPage(1));
     switch (label) {
       case CategoryLabel.CardTypes:
         actions.toggleCardTypes(option.id);
