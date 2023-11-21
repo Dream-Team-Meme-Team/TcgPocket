@@ -5,7 +5,7 @@ namespace TcgPocket.Features.Decks.Validators;
 
 public class UpdateDeckCommandValidator : AbstractValidator<UpdateDeckCommand>
 {
-    public UpdateDeckCommandValidator(IValidator<DeckDto> baseValidator)
+    public UpdateDeckCommandValidator(IValidator<CreateDeckDto> baseValidator)
     {
         RuleFor(x => x.Id)
             .GreaterThan(0);

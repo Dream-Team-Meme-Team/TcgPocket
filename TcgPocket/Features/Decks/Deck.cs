@@ -31,9 +31,9 @@ public class CreateDeckDto
     public string Name { get; set; }
 }
 
-public class UpdateDeckDto : DeckDto
+public class UpdateDeckDto : CreateDeckDto
 {
-    public List<CardGetDto>? Cards { get; set; } = new();
+    public List<MiniCardDto>? Cards { get; set; } = new();
 }
 
 public class DeckDetailDto : DeckGetDto

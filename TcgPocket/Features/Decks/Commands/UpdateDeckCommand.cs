@@ -48,8 +48,7 @@ public class UpdateDeckCommandHandler : IRequestHandler<UpdateDeckCommand, Respo
 
         var sqlCommand = @"
                 DELETE FROM DeckCards
-                WHERE CardId IN (SELECT value FROM STRING_SPLIT(@cardIds, ','))
-                AND DeckId = @deckId";
+                WHERE DeckId = @deckId";
 
         if (user is null)
         {
@@ -72,15 +71,11 @@ public class UpdateDeckCommandHandler : IRequestHandler<UpdateDeckCommand, Respo
 
         if (command.Deck.Cards.Any())
         {
-            var cardIds = command.Deck.Cards?.Select(x => x.Id).ToList();
-
-            await _dataContext.Database.ExecuteSqlRawAsync(sqlCommand, new SqlParameter("@cardIds", string.Join(",", cardIds)),
-                new SqlParameter("@deckId", command.Id));
+            await _dataContext.Database.ExecuteSqlRawAsync(sqlCommand, new SqlParameter("@deckId", command.Id));
         }
 
         var deckCards = command.Deck.Cards.Select(x => new DeckCard
         {
-           
             CardId = x.Id,
             Deck = deck
         })

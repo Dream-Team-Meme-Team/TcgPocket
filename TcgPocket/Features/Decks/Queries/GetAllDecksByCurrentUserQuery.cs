@@ -8,11 +8,11 @@ using TcgPocket.Shared;
 
 namespace TcgPocket.Features.Decks.Queries;
 
-public class GetAllDecksByUserIdQuery : IRequest<Response<List<DeckDetailDto>>>
+public class GetAllDecksByCurrentUserQuery : IRequest<Response<List<DeckDetailDto>>>
 {
 }
 
-public class GetAllDecksQueryHandler : IRequestHandler<GetAllDecksByUserIdQuery, Response<List<DeckDetailDto>>>
+public class GetAllDecksQueryHandler : IRequestHandler<GetAllDecksByCurrentUserQuery, Response<List<DeckDetailDto>>>
 {
     private readonly SignInManager<User> _signInManager;
     private readonly DataContext _dataContext;
@@ -26,7 +26,7 @@ public class GetAllDecksQueryHandler : IRequestHandler<GetAllDecksByUserIdQuery,
         _signInManager = signInManager;
     }
 
-    public async Task<Response<List<DeckDetailDto>>> Handle(GetAllDecksByUserIdQuery query, CancellationToken cancellationToken)
+    public async Task<Response<List<DeckDetailDto>>> Handle(GetAllDecksByCurrentUserQuery query, CancellationToken cancellationToken)
     {
         var user = await _signInManager.GetSignedInUserAsync();
 

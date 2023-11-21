@@ -46,4 +46,10 @@ namespace TcgPocket.Features.Cards
     {
         public List<CardAttributeDto> Attributes { get; set; }
     }
+
+    public class MiniCardDto
+    {
+        public int Id { get; set; }
+        public int GameId { get; set; }
+    }
 }
