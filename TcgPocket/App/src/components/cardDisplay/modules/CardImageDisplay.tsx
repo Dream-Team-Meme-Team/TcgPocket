@@ -68,24 +68,26 @@ export function CardImageDisplay({ imageUrl }: CardImageDisplayProps) {
           </Skeleton>
         </AspectRatio>
       </Tooltip>
+
       <Modal.Root
-        padding={10}
-        radius={10}
+        // padding={10}
+        // radius={10}
         centered
         opened={open}
         onClose={() => setOpen(false)}
         styles={modalProps}
       >
         <Modal.Overlay />
-        <Modal.Content p={10}>
-          <Flex h="3.5%" align={'flex-end'}>
+        <Modal.Content>
+          <Flex>
             <Modal.CloseButton />
           </Flex>
-          <Modal.Body h="92%">
-            <Grid m="auto" h="100%" align="center" justify="center">
-              <Grid.Col span={10}>
+
+          <Modal.Body>
+            <Grid>
+              <Grid.Col>
                 <AspectRatio ratio={63 / 88}>
-                  <img className={classes.modalImageStyling} src={imageUrl} />
+                  <Image radius={17} src={imageUrl} />
                 </AspectRatio>
               </Grid.Col>
             </Grid>
@@ -99,11 +101,11 @@ export function CardImageDisplay({ imageUrl }: CardImageDisplayProps) {
 const modalProps: Styles<ModalBaseStylesNames> = {
   content: {
     backgroundColor: 'rgba(225,225,225,0.65)',
-    padding: 0,
-    overflow: 'hidden',
+    // padding: 0,
+    // overflow: 'hidden',
     // why was height 80% before?
-    height: '100%',
-    maxHeight: '700px !important',
+    // height: '100%',
+    // maxHeight: '700px !important',
   },
   header: {
     display: 'flex',
@@ -120,10 +122,10 @@ const modalProps: Styles<ModalBaseStylesNames> = {
       transform: 'translateY(0.1em) translateX(-0.2em)',
     },
   },
-  body: {
-    padding: '0px 30px',
-    objectFit: 'scale-down',
-  },
+  // body: {
+  //   // padding: '0px 30px',
+  //   objectFit: 'scale-down',
+  // },
 };
 
 const useStyles = createStyles(() => ({
