@@ -10,17 +10,21 @@ import {
   Title,
   Select,
   Button,
+  Flex,
+  SelectItem,
 } from '@mantine/core';
 import { IconUpload, IconPhoto, IconX, IconSearch } from '@tabler/icons-react';
 import { Dropzone, FileWithPath, MIME_TYPES } from '@mantine/dropzone';
-import { useAsyncFn } from 'react-use';
+import { useAsync, useAsyncFn } from 'react-use';
 import { CardReaderService } from '../../services/CardReaderService';
 import { error, success } from '../../services/helpers/Notification';
-import { forwardRef, useState } from 'react';
+import { forwardRef, useMemo, useState } from 'react';
 import { CardDisplayDto } from '../../types/cards';
 import { CardDisplay } from '../../components/cardDisplay/CardDisplay';
 import { CardsService } from '../../services/CardsService';
 import { CardImageDisplay } from '../../components/cardDisplay/modules/CardImageDisplay';
+import { dispatch } from '../../store/configureStore';
+import { getOptions } from '../../services/dataServices/gameServices';
 
 interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
   label: string;
@@ -72,44 +76,67 @@ export function CardUploadPage() {
   const [pendingCards, setPendingCards] = useState<CardDisplayDto[]>([]);
 
   const [searchValue, setSearchValue] = useState('');
-  const [cardValue, setCardValue] = useState<CardSelectType>();
+  const [gameId, setGameId] = useState<string | undefined>(undefined);
   const [value, setValue] = useState('');
   const [data, setData] = useState<CardSelectType[]>([]);
 
-  const [getCardsState, getCards] = useAsyncFn(async (value: string) => {
+  const [fetchCardOptionsState, fetchCardOptions] = useAsyncFn(
+    async (value: string) => {
+      const response = await CardsService.getAllCards({
+        name: value,
+        gameIds: gameId ? [Number(gameId)] : [],
+        currentPage: 1,
+        pageSize: 15,
+      });
+
+      if (response.hasErrors) {
+        response.errors.forEach((err) => error(err.message));
+        return;
+      }
+
+      return response.data;
+    },
+    []
+  );
+
+  const cardOptions = useMemo(() => {
+    const array: CardSelectType[] = [];
+
     if (value.length === 0) {
       setData([]);
-      return;
+      return array;
     }
 
-    const array: CardSelectType[] = [];
-    const response = await CardsService.getAllCards({
-      name: value,
-      currentPage: 1,
-      pageSize: 15,
-    });
-
-    if (response.hasErrors) {
-      response.errors.forEach((err) => error(err.message));
-      return;
-    }
-
-    response.data.items.forEach((element: CardDisplayDto) => {
-      array.push({
-        key: element.id,
-        value: element.id.toString(),
-        label: element.name,
-        game: element.game.name,
-        set: element.set.name,
-        cardNumber: element.cardNumber,
-        imageUrl: element.imageUrl,
-        group: element.game.name,
-        cardDisplayDto: element,
+    const response = fetchCardOptionsState.value?.items;
+    response &&
+      response.forEach((element: CardDisplayDto) => {
+        array.push({
+          key: element.id,
+          value: element.id.toString(),
+          label: element.name,
+          game: element.game.name,
+          set: element.set.name,
+          cardNumber: element.cardNumber,
+          imageUrl: element.imageUrl,
+          group: element.game.name,
+          cardDisplayDto: element,
+        });
       });
-    });
 
     setData(array);
+    return array;
+  }, [fetchCardOptionsState.value?.items, value.length]);
+
+  const fetchGameOptions = useAsync(async () => {
+    const { payload } = await dispatch(getOptions());
+    return payload?.data;
   });
+
+  const gameOptions = useMemo(() => {
+    const response = fetchGameOptions;
+
+    return response.value as SelectItem[];
+  }, [fetchGameOptions]);
 
   const [uploadCardState, uploadCard] = useAsyncFn(
     async (files: FileWithPath[]) => {
@@ -139,90 +166,129 @@ export function CardUploadPage() {
   };
 
   return (
-    <Container className={classes.uploadContainer}>
-      <Dropzone
-        onDrop={uploadCard}
-        onReject={rejectFile}
-        accept={[MIME_TYPES.jpeg, MIME_TYPES.png]}
-        loading={uploadCardState.loading}
-      >
-        <Group
-          className={classes.internalUploadContainer}
-          position="center"
-          spacing="xl"
-        >
-          <Dropzone.Accept>
-            <IconUpload
-              size="3.2rem"
-              stroke={1.5}
-              color={
-                theme.colors[theme.primaryColor][
-                  theme.colorScheme === 'dark' ? 4 : 6
-                ]
-              }
-            />
-          </Dropzone.Accept>
-          <Dropzone.Reject>
-            <IconX
-              size="3.2rem"
-              stroke={1.5}
-              color={theme.colors.red[theme.colorScheme === 'dark' ? 4 : 6]}
-            />
-          </Dropzone.Reject>
-          <Dropzone.Idle>
-            <IconPhoto size="3.2rem" stroke={1.5} />
-          </Dropzone.Idle>
+    <div>
+      {gameOptions && (
+        <Container fluid className={classes.uploadContainer}>
+          <Text>
+            To upload cards, enter the name of your card in the search bar or
+            upload your picture to the dropzone below.
+          </Text>
+          <Dropzone
+            onDrop={uploadCard}
+            onReject={rejectFile}
+            accept={[MIME_TYPES.jpeg, MIME_TYPES.png]}
+            loading={uploadCardState.loading}
+          >
+            <Group
+              className={classes.internalUploadContainer}
+              position="center"
+              spacing="xl"
+            >
+              <Dropzone.Accept>
+                <IconUpload
+                  size="3.2rem"
+                  stroke={1.5}
+                  color={
+                    theme.colors[theme.primaryColor][
+                      theme.colorScheme === 'dark' ? 4 : 6
+                    ]
+                  }
+                />
+              </Dropzone.Accept>
+              <Dropzone.Reject>
+                <IconX
+                  size="3.2rem"
+                  stroke={1.5}
+                  color={theme.colors.red[theme.colorScheme === 'dark' ? 4 : 6]}
+                />
+              </Dropzone.Reject>
+              <Dropzone.Idle>
+                <IconPhoto size="3.2rem" stroke={1.5} />
+              </Dropzone.Idle>
 
-          <div>
-            <Text size="xl" inline>
-              Drag image here or click to select file
-            </Text>
-            <Text size="sm" color="dimmed" inline mt={7}>
-              Attach one file ONLY one, any more and you are not invited to the
-              mojo dojo casa house. Must be a .png or .jpeg.
-            </Text>
-          </div>
-        </Group>
-      </Dropzone>
-      <Divider pt={10} pb={10} mt={50} variant="dashed" />
-      <Text>Enter your card name:</Text>
-      <Select
-        searchable
-        size="md"
-        itemComponent={CardSelectItem}
-        data={data}
-        value={value}
-        onChange={(value) => {
-          setValue(value ?? '');
-          const card = data.find((x) => x.value === value)?.cardDisplayDto;
-          card && pendingCards.push(card);
-          setValue('');
-        }}
-        icon={<IconSearch />}
-        placeholder="Search"
-        searchValue={searchValue}
-        onSearchChange={(data) => {
-          setSearchValue(data);
-          getCards(data);
-        }}
-        onDropdownClose={() => {
-          setSearchValue('');
-        }}
-        maxDropdownHeight={400}
-        // filter={(value, item) =>
-        //   (item.label &&
-        //     item.label.toLowerCase().includes(value.toLowerCase().trim())) ||
-        //   (item.cardNumber &&
-        //     item.cardNumber.toLowerCase().includes(value.toLowerCase().trim()))
-        // }
-      />
+              <div>
+                <Text size="xl" inline>
+                  Drag image here or click to select file
+                </Text>
+                <Text size="sm" color="dimmed" inline mt={7}>
+                  Attach one file ONLY one, any more and you are not invited to
+                  the mojo dojo casa house. Must be a .png or .jpeg.
+                </Text>
+              </div>
+            </Group>
+          </Dropzone>
+          <Divider
+            label="OR"
+            labelPosition="center"
+            pt={10}
+            pb={10}
+            mt={50}
+            mb={50}
+            variant="dashed"
+          />
+          <Flex w="100%">
+            <Select
+              searchable
+              clearable
+              size="lg"
+              w="40%"
+              data={gameOptions}
+              value={gameId}
+              onChange={(value) => setGameId(value as string)}
+              placeholder="Select Game (Optional)"
+              styles={{
+                input: { borderTopRightRadius: 0, borderBottomRightRadius: 0 },
+              }}
+
+              // filter={(value, item) =>
+              //   (item.label &&
+              //     item.label.toLowerCase().includes(value.toLowerCase().trim())) ||
+              //   (item.cardNumber &&
+              //     item.cardNumber.toLowerCase().includes(value.toLowerCase().trim()))
+              // }
+            />
+            <Select
+              w="100%"
+              searchable
+              size="lg"
+              itemComponent={CardSelectItem}
+              data={cardOptions}
+              value={value}
+              onChange={(value) => {
+                setValue(value ?? '');
+                const card = cardOptions.find((x) => x.value === value)
+                  ?.cardDisplayDto;
+                card && pendingCards.push(card);
+                setValue('');
+              }}
+              icon={<IconSearch />}
+              placeholder="Search"
+              searchValue={searchValue}
+              onSearchChange={(data) => {
+                setSearchValue(data);
+                fetchCardOptions(data);
+              }}
+              onDropdownClose={() => {
+                setSearchValue('');
+              }}
+              maxDropdownHeight={400}
+              rightSection={<></>}
+              styles={{
+                input: { borderTopLeftRadius: 0, borderBottomLeftRadius: 0 },
+              }}
+
+              // filter={(value, item) =>
+              //   (item.label &&
+              //     item.label.toLowerCase().includes(value.toLowerCase().trim())) ||
+              //   (item.cardNumber &&
+              //     item.cardNumber.toLowerCase().includes(value.toLowerCase().trim()))
+              // }
+            />
+          </Flex>
+        </Container>
+      )}
       <Divider pt={10} pb={10} mt={50} variant="dashed" />
 
-      <Button
-        onClick={() => {
-          console.log(cardValue);
-        }}
-      />
       {pendingCards.length > 0 && (
         <>
           <Divider
@@ -244,15 +310,18 @@ export function CardUploadPage() {
           </div>
         </>
       )}
-    </Container>
+    </div>
   );
 }
 
 const useStyles = createStyles((theme) => ({
   uploadContainer: {
-    paddingTop: '50px',
+    padding: '25px',
+    width: '100%',
+
+    borderBottom: `2px solid${theme.colors.primaryPurpleColor[0]}`,
   },
-  internalUploadContainer: { minHeight: rem(220), pointerEvents: 'none' },
+  internalUploadContainer: { minHeight: rem(120), pointerEvents: 'none' },
   inventoryDisplayContainer: {
     display: 'grid',
 
