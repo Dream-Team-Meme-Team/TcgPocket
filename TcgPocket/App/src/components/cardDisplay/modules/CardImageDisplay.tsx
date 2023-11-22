@@ -8,7 +8,6 @@ import {
   Tooltip,
   Skeleton,
   Modal,
-  Grid,
 } from '@mantine/core';
 import { IconAlertTriangleFilled } from '@tabler/icons-react';
 import { useState } from 'react';
@@ -70,8 +69,6 @@ export function CardImageDisplay({ imageUrl }: CardImageDisplayProps) {
       </Tooltip>
 
       <Modal.Root
-        // padding={10}
-        // radius={10}
         centered
         opened={open}
         onClose={() => setOpen(false)}
@@ -79,18 +76,12 @@ export function CardImageDisplay({ imageUrl }: CardImageDisplayProps) {
       >
         <Modal.Overlay />
         <Modal.Content>
-          <Flex>
-            <Modal.CloseButton />
-          </Flex>
+          <Modal.CloseButton iconSize={25} size={25} />
 
           <Modal.Body>
-            <Grid>
-              <Grid.Col>
-                <AspectRatio ratio={63 / 88}>
-                  <Image radius={17} src={imageUrl} />
-                </AspectRatio>
-              </Grid.Col>
-            </Grid>
+            <AspectRatio ratio={11 / 16}>
+              <Image radius={17} src={imageUrl} security="yamomma" />
+            </AspectRatio>
           </Modal.Body>
         </Modal.Content>
       </Modal.Root>
@@ -101,31 +92,7 @@ export function CardImageDisplay({ imageUrl }: CardImageDisplayProps) {
 const modalProps: Styles<ModalBaseStylesNames> = {
   content: {
     backgroundColor: 'rgba(225,225,225,0.65)',
-    // padding: 0,
-    // overflow: 'hidden',
-    // why was height 80% before?
-    // height: '100%',
-    // maxHeight: '700px !important',
   },
-  header: {
-    display: 'flex',
-    justifyContent: 'right',
-    textAlign: 'right',
-  },
-  close: {
-    color: 'white',
-    zIndex: 5,
-    scale: '1.5',
-    borderRadius: '5px',
-    transform: 'translateY(0.1em) translateX(-0.2em)',
-    ':focus': {
-      transform: 'translateY(0.1em) translateX(-0.2em)',
-    },
-  },
-  // body: {
-  //   // padding: '0px 30px',
-  //   objectFit: 'scale-down',
-  // },
 };
 
 const useStyles = createStyles(() => ({
@@ -156,14 +123,5 @@ const useStyles = createStyles(() => ({
     '&:hover': {
       cursor: 'pointer',
     },
-  },
-
-  modalImageStyling: {
-    scale: '1.4',
-    display: 'flex',
-    margin: 'auto',
-    objectFit: 'scale-down',
-    borderRadius: '1.5rem',
-    boxShadow: '0rem .2rem 0.5rem 0 rgba(0, 0, 0, .5)',
   },
 }));
