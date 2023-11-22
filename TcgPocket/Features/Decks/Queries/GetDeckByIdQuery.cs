@@ -7,12 +7,12 @@ using TcgPocket.Shared;
 
 namespace TcgPocket.Features.Decks.Queries;
 
-public class GetDeckByIdQuery : IRequest<Response<DeckGetDto>>
+public class GetDeckByIdQuery : IRequest<Response<DeckDetailDto>>
 {
     public int Id { get; set; }
 }
 
-public class GetDeckByIdQueryHandler : IRequestHandler<GetDeckByIdQuery, Response<DeckGetDto>>
+public class GetDeckByIdQueryHandler : IRequestHandler<GetDeckByIdQuery, Response<DeckDetailDto>>
 {
     private readonly DataContext _dataContext;
     private readonly IValidator<GetDeckByIdQuery> _validator;
@@ -27,21 +27,23 @@ public class GetDeckByIdQueryHandler : IRequestHandler<GetDeckByIdQuery, Respons
         _mapper = mapper;
     }
 
-    public async Task<Response<DeckGetDto>> Handle(GetDeckByIdQuery query, CancellationToken cancellationToken)
+    public async Task<Response<DeckDetailDto>> Handle(GetDeckByIdQuery query, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(query, cancellationToken);
 
         if (!validationResult.IsValid)
         {
             var errors = _mapper.Map<List<Error>>(validationResult.Errors);
-            return new Response<DeckGetDto> { Errors = errors };
+            return new Response<DeckDetailDto> { Errors = errors };
         }
 
         var deck = await _dataContext.Set<Deck>()
+            .Include(x => x.DeckCards)
+            .ThenInclude(y => y.Card)
             .FirstOrDefaultAsync(x => x.Id == query.Id, cancellationToken);
 
-        if (deck is null) return Error.AsResponse<DeckGetDto>("Deck not found", "id");
+        if (deck is null) return Error.AsResponse<DeckDetailDto>("Deck not found", "id");
 
-        return _mapper.Map<DeckGetDto>(deck).AsResponse();
+        return _mapper.Map<DeckDetailDto>(deck).AsResponse();
     }
 }
