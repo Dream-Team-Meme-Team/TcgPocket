@@ -18,6 +18,10 @@ export type CardDto = {
     description: string;
 };
 
+export type AddToInventoryDto = {
+    cardIds: number[];
+  };
+
 export type CardGetDto = Id & CardDto;
 
 export type CardDetailDto = CardGetDto & {

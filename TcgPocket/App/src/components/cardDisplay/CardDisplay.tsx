@@ -1,16 +1,17 @@
 import {
-    Flex,
-    Paper,
-    Container,
-    Text,
-    Space,
-    Title,
-    Badge,
-    CSSObject,
-    createStyles,
-    Box,
-    Tooltip,
-    Skeleton,
+  Flex,
+  Paper,
+  Container,
+  Text,
+  Space,
+  Title,
+  Badge,
+  CSSObject,
+  createStyles,
+  Box,
+  Tooltip,
+  Skeleton,
+  CloseButton,
 } from '@mantine/core';
 import { CardDisplayDto } from '../../types/cards';
 import { CardImageDisplay } from './modules/CardImageDisplay';
@@ -18,10 +19,20 @@ import { CardImageDisplay } from './modules/CardImageDisplay';
 type CardContainerProps = {
   card: CardDisplayDto;
   isLoading: boolean;
+  clearable?: boolean;
+  onClear?: () => void;
 };
 
-export function CardDisplay({ card, isLoading }: CardContainerProps) {
+export function CardDisplay({
+  card,
+  isLoading,
+  clearable,
+  onClear,
+}: CardContainerProps) {
   const { classes } = useStyles();
+  const handleOnClick = () => {
+    onClear && onClear();
+  };
   return (
     <Paper p={10} pl={11} sx={containerSx}>
       <Flex columnGap={2}>
@@ -30,7 +41,13 @@ export function CardDisplay({ card, isLoading }: CardContainerProps) {
         </Skeleton>
 
         <div className={classes.cardInfoDivider} />
+
         <Container className={classes.cardInfo} pr={0} pl={4}>
+          {clearable && (
+            <div className={classes.closeButton}>
+              <CloseButton onClick={handleOnClick} />
+            </div>
+          )}
           <Skeleton width={90} height={20} visible={isLoading}>
             <Text size={'15px'} color="black" ff={'Georgia'} fw={'bold'}>
               {card.game.name}
@@ -178,5 +195,9 @@ const useStyles = createStyles(() => ({
 
   badgeBackground: {
     backgroundColor: 'rgba(45, 30, 66, 1)',
+  },
+
+  closeButton: {
+    float: 'right',
   },
 }));
