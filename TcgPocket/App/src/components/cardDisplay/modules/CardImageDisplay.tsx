@@ -79,9 +79,7 @@ export function CardImageDisplay({ imageUrl }: CardImageDisplayProps) {
           <Modal.CloseButton iconSize={25} size={25} />
 
           <Modal.Body>
-            <AspectRatio ratio={11 / 16}>
-              <Image radius={17} src={imageUrl} security="yamomma" />
-            </AspectRatio>
+            <Image radius={17} src={imageUrl} security="yamomma" />
           </Modal.Body>
         </Modal.Content>
       </Modal.Root>
