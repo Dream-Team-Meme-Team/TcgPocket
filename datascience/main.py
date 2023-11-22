@@ -5,8 +5,8 @@ import numpy as np
 import cv2
 from io import BytesIO
 import torchvision.transforms as transform
-from .cnn.model_av.card_classifier_a import CardClassifier
-from .reader.reader_classifier import reader_classifier
+from cnn.model_av.card_classifier_a import CardClassifier
+from reader.reader_classifier import reader_classifier
 
 def all_of_it(raw_img: bytes):
     # convert to PIL Image

@@ -123,7 +123,9 @@ export function CardUploadPage() {
         return;
       }
 
-      setPendingCards((state) => [...state, response.data]);
+      setUploadedCards((state) => [...state, response.data]);
+
+      success('Card Uploaded');
 
       return response.data;
     }

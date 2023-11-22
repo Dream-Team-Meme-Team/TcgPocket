@@ -9,7 +9,7 @@ export const CardReaderService = {
     return await apiCall<CardDisplayDto>({
       method: 'POST',
       endpoint: apiRoutes.readCard,
-      data: { data: file },
+      data: file,
       options: {
         headers: { 'Content-Type': 'multipart/form-data' },
       },
