@@ -18,7 +18,7 @@ export const apiRoutes = {
   attributes: `${Env.viteApiBaseUrl}/api/attributes`,
   decks: `${Env.viteApiBaseUrl}/api/decks`,
   userCards: `${Env.viteApiBaseUrl}/api/user-cards`,
-  readCard: `${Env.viteApiBaseUrl}/api/card-reader`,
+  readCard: `${Env.vitePythonApiBaseUrl}/api/read-card`,
   roles: {
     base: `${Env.viteApiBaseUrl}/api/roles`,
     users: `${Env.viteApiBaseUrl}/api/roles/users`,
