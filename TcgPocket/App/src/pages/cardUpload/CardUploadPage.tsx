@@ -60,7 +60,9 @@ export function CardUploadPage() {
     });
 
     if (response.hasErrors) {
-      response.errors.forEach((err: { message: string | undefined; }) => error(err.message));
+      response.errors.forEach((err: { message: string | undefined }) =>
+        error(err.message)
+      );
       return;
     }
 
@@ -115,7 +117,9 @@ export function CardUploadPage() {
       );
 
       if (response.hasErrors) {
-        response.errors.forEach((err: { message: string | undefined; }) => error(err.message));
+        response.errors.forEach((err: { message: string | undefined }) =>
+          error(err.message)
+        );
         return;
       }
 
@@ -145,7 +149,9 @@ export function CardUploadPage() {
     });
 
     if (response.hasErrors) {
-      response.errors.forEach((err: { message: string | undefined; }) => error(err.message));
+      response.errors.forEach((err: { message: string | undefined }) =>
+        error(err.message)
+      );
       return;
     }
 
@@ -337,6 +343,12 @@ const useStyles = createStyles((theme) => {
     dropzone: {
       backgroundColor: theme.black,
       borderColor: theme.colors.primaryPurpleColor[0],
+      ':hover': {
+        backgroundColor: theme.fn.darken(
+          theme.colors.primaryPurpleColor[0],
+          0.9
+        ),
+      },
     },
 
     internalUploadContainer: { minHeight: rem(120), pointerEvents: 'none' },
