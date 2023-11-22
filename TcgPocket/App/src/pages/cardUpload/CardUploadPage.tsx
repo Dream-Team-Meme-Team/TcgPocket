@@ -132,6 +132,7 @@ export function CardUploadPage() {
   const removeCard = (card: CardDisplayDto) => {
     const index = pendingCards.indexOf(card);
     pendingCards.splice(index, 1);
+    setPendingCards([...pendingCards]);
   };
 
   const handleAddCards = async () => {
