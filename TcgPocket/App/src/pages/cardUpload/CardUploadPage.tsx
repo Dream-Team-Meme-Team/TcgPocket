@@ -38,7 +38,7 @@ type CardSelectType = {
   cardNumber: string;
   imageUrl: string;
   group: string;
-  cardDisplayDto: CardDisplayDto;
+  carddisplaydto: CardDisplayDto;
 };
 
 export function CardUploadPage() {
@@ -88,7 +88,7 @@ export function CardUploadPage() {
           cardNumber: element.cardNumber,
           imageUrl: element.imageUrl,
           group: element.game.name,
-          cardDisplayDto: element,
+          carddisplaydto: element,
         });
       });
 
@@ -124,7 +124,6 @@ export function CardUploadPage() {
       }
 
       setPendingCards((state) => [...state, response.data]);
-
       success('Card Uploaded');
 
       return response.data;
@@ -222,7 +221,7 @@ export function CardUploadPage() {
                 onChange={(value) => {
                   setValue(value ?? '');
                   const card = cardOptions.find((x) => x.value === value)
-                    ?.cardDisplayDto;
+                    ?.carddisplaydto;
                   card && pendingCards.push(card);
                   setValue('');
                 }}
