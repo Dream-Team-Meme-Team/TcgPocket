@@ -123,7 +123,7 @@ export function CardUploadPage() {
         return;
       }
 
-      setUploadedCards((state) => [...state, response.data]);
+      setPendingCards((state) => [...state, response.data]);
 
       success('Card Uploaded');
 
@@ -164,42 +164,42 @@ export function CardUploadPage() {
   return (
     <div>
       <ScrollArea className={classes.contain}>
-        {gameOptions && (
-          <Container fluid className={classes.uploadContainer}>
-            <Dropzone
-              onDrop={uploadCard}
-              onReject={rejectFile}
-              accept={[MIME_TYPES.jpeg, MIME_TYPES.png]}
-              loading={uploadCardState.loading}
-              className={classes.dropzone}
+        <Container fluid className={classes.uploadContainer}>
+          <Dropzone
+            onDrop={uploadCard}
+            onReject={rejectFile}
+            accept={[MIME_TYPES.jpeg, MIME_TYPES.png]}
+            loading={uploadCardState.loading}
+            className={classes.dropzone}
+          >
+            <Group
+              className={classes.internalUploadContainer}
+              position="center"
+              spacing="xl"
             >
-              <Group
-                className={classes.internalUploadContainer}
-                position="center"
-                spacing="xl"
-              >
-                <Dropzone.Accept>
-                  <IconUpload size="3.2rem" stroke={1.5} />
-                </Dropzone.Accept>
-                <Dropzone.Reject>
-                  <IconX size="3.2rem" stroke={1.5} />
-                </Dropzone.Reject>
-                <Dropzone.Idle>
-                  <IconPhoto size="3.2rem" stroke={1.5} />
-                </Dropzone.Idle>
+              <Dropzone.Accept>
+                <IconUpload size="3.2rem" stroke={1.5} />
+              </Dropzone.Accept>
+              <Dropzone.Reject>
+                <IconX size="3.2rem" stroke={1.5} />
+              </Dropzone.Reject>
+              <Dropzone.Idle>
+                <IconPhoto size="3.2rem" stroke={1.5} />
+              </Dropzone.Idle>
 
-                <div>
-                  <Text size="xl" inline>
-                    Drag image here or click to select file
-                  </Text>
-                  <Text size="sm" color="dimmed" inline mt={7}>
-                    Attach one file ONLY one, any more and you are not invited
-                    to the mojo dojo casa house. Must be a .png or .jpeg.
-                  </Text>
-                </div>
-              </Group>
-            </Dropzone>
-            <Divider label="OR" labelPosition="center" p="lg" />
+              <div>
+                <Text size="xl" inline>
+                  Drag image here or click to select file
+                </Text>
+                <Text size="sm" color="dimmed" inline mt={7}>
+                  Attach one file ONLY one, any more and you are not invited to
+                  the mojo dojo casa house. Must be a .png or .jpeg.
+                </Text>
+              </div>
+            </Group>
+          </Dropzone>
+          <Divider label="OR" labelPosition="center" p="lg" />
+          {gameOptions && (
             <Flex w="100%">
               <Select
                 searchable
@@ -243,8 +243,9 @@ export function CardUploadPage() {
                 sx={selectStylingCard}
               />
             </Flex>
-          </Container>
-        )}
+          )}
+        </Container>
+
         <div className={classes.cardDisplayContainer}>
           <Divider
             pt={10}
