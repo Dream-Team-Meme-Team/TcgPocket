@@ -20,13 +20,13 @@ class CardClassifier(nn.Module):
 
     def __init__(self):
         super(CardClassifier, self).__init__()
-        
+
         self.conv1 = nn.Sequential(
             nn.Conv2d(in_channels=3, out_channels=32, kernel_size=(3,3), stride = 3, padding=0),
             nn.ReLU(),
             nn.MaxPool2d((3,3), stride = 3)
         )
-        
+
         self.conv2 = nn.Sequential(
             nn.Conv2d(in_channels=32, out_channels=16, kernel_size=(3,3), stride = 3, padding=0),
             nn.ReLU(),
