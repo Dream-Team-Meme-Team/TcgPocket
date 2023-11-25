@@ -57,7 +57,7 @@ def update_prices(game:str) -> dict:
                 data[game][parsed_set][card.text.strip('\n')] = None
             #
         #
-        return(data)
+        return(data) # TODO: remove when done testing
     #
 
     return data
