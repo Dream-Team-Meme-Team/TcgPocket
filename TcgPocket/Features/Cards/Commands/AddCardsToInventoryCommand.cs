@@ -40,8 +40,7 @@ public class AddCardsToInventoryCommandHandler : IRequestHandler<AddCardsToInven
 
         if (user is null)
         {
-            errors.Add(new Error { Message = "Please sign-in.", Property = "user" });
-            return new Response<List<UserCardDto>> { Errors = errors };
+            return Error.AsResponse<List<UserCardDto>>("Must be signed-in to upload cards to inventory.", "user");
         }
 
         if (!result.IsValid)
@@ -55,20 +54,18 @@ public class AddCardsToInventoryCommandHandler : IRequestHandler<AddCardsToInven
             var cardExists = _dataContext.Set<Card>().AnyAsync(x => x.Id == cardId).Result;
             if (!cardExists)
             {
-                errors.Add(new Error { Message = "Card not found", Property = "CardId" });
+                errors.Add(new Error { Message = "Card not found", Property = "cardId" });
             }
         });
 
         if (errors.Any()) return new Response<List<UserCardDto>> { Errors = errors };
 
-        var userCards = new List<UserCardDto>();
-
-        command.AddToInventoryDto.CardIds.ForEach(cardId => userCards.Add(new UserCardDto
+        var userCards = command.AddToInventoryDto.CardIds.Select(cardId => new UserCardDto
         {
             UserId = user.Id,
             CardId = cardId
 
-        }));
+        }).ToList();
 
         await _dataContext.Set<UserCard>().AddRangeAsync(_mapper.Map<List<UserCard>>(userCards), cancellationToken);
         await _dataContext.SaveChangesAsync();

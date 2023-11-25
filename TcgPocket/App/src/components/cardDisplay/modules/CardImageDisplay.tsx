@@ -8,7 +8,6 @@ import {
   Tooltip,
   Skeleton,
   Modal,
-  Grid,
   Text,
 } from '@mantine/core';
 import { IconAlertTriangleFilled } from '@tabler/icons-react';
