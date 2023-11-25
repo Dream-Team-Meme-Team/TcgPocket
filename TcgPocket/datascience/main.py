@@ -1,8 +1,6 @@
 import os
 import torch
 from PIL import Image
-# import numpy as np
-# import cv2
 from io import BytesIO
 import torchvision.transforms as transform
 from cnn.model_ev.card_classifier_ev import CardClassifier

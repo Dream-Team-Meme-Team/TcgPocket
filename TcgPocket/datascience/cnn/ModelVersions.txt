@@ -10,3 +10,5 @@ Model av1: 97.9% accuracy, trained on 6000 cards (1 epoch)
 Model av2: 99.7% accuracy, trained on 9000 cards (5 epochs)
 
 Model ev is a deep CNN with 3 Conv Lyrs (ReLU + mx pool) and 1 FC Lyr (sftmx) with Adam opitmizer
+Model ev1: 98.5% Accuracy, trained on 7500 noisey cards (6 epochs)
+Model ev2: 98.9% Accuracy, trained on 7500 noisey cards (10 epochs)
