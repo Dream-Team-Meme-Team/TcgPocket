@@ -1,6 +1,7 @@
-from .magic_reader import MagicReader
+from .modern_magic_reader import ModernMagicReader
 from .yugioh_reader import YugiohReader
-from .pokemon_reader import PokemonReader
+from .left_pokemon_reader import LeftPokemonReader
+from .right_pokemon_reader import RightPokemonReader
 
 def reader_classifier(classifier):
     """ Classifies the scraper to use based off the card classif
@@ -11,12 +12,19 @@ def reader_classifier(classifier):
     Returns:
         scraper: type of scraper to use
     """
-    if classifier == 0: 
-        reader_obj = MagicReader()
+    if classifier == 0: # TODO: find key attrbs of retro magic cards
+        return "This card cannot be read at this time. Please locate your card using our database."
     elif classifier == 1:
+        reader_obj = ModernMagicReader()
+    elif classifier == 2:
         reader_obj = YugiohReader()
+    elif classifier == 3:
+        reader_obj = LeftPokemonReader()
+    elif classifier == 4:
+        reader_obj = RightPokemonReader()
     else:
-        reader_obj = PokemonReader()
+        return "This card cannot be read at this time. Please locate your card using our database."
+    #
 
     return reader_obj
 #
