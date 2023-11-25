@@ -4,11 +4,11 @@ import { defaultGap, defaultPadding } from '../../../constants/theme';
 import { IconCards, IconSearch } from '@tabler/icons-react';
 import { PrimarySelect } from '../../../components/inputs/PrimarySelect';
 import { useEffect, useMemo, useState } from 'react';
-import { GridView } from './GridView';
+import { GridInventoryView } from './GridInventoryView';
 import { ViewStyle } from '../../../enums/viewStyle';
 import { Drawer, ScrollArea } from '@mantine/core';
 import { dispatch, useAppSelector } from '../../../store/configureStore';
-import { ListView } from './ListView';
+import { ListInventoryView } from './ListInventoryView';
 import { shallowEqual } from 'react-redux';
 import { useDisclosure } from '@mantine/hooks';
 import { FilterMenu } from '../../../components/filterMenu/FilterMenu';
@@ -200,9 +200,9 @@ export function DeckBuilderInventory(): React.ReactElement {
 
       <ScrollArea className={classes.body}>
         {view === ViewStyle.Grid ? (
-          <GridView cards={filteredCards} />
+          <GridInventoryView cards={filteredCards} />
         ) : (
-          <ListView cards={filteredCards} />
+          <ListInventoryView cards={filteredCards} />
         )}
       </ScrollArea>
     </div>
