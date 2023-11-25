@@ -6,8 +6,11 @@ import {
   MantineTheme,
   Menu,
   Navbar,
+  Text,
 } from '@mantine/core';
 import {
+  IconArrowDown,
+  IconChevronDown,
   IconLogin,
   IconLogout,
   IconRegistered,
@@ -23,7 +26,7 @@ import { useNavbarHeight } from '../hooks/useNavbarHeight';
 import { useNavigate } from 'react-router-dom';
 import { signOutUser } from '../services/authServices';
 import { dispatch, useAppSelector } from '../store/configureStore';
-import { routes } from '../routes/index';
+import { routes } from '../routes/Index';
 
 export function PrimaryNavigation(): React.ReactElement {
   const navigate = useNavigate();
@@ -51,7 +54,7 @@ export function PrimaryNavigation(): React.ReactElement {
       (r) => r.name === 'Admin'
     );
     return isAdmin !== -1;
-  }, [determineUserState, signedInUser?.roles]);
+  }, [determineUserState, signedInUser]);
 
   return (
     <>
@@ -64,7 +67,25 @@ export function PrimaryNavigation(): React.ReactElement {
             <Flex gap={10}>
               <NavButton route={routes.inventory}>Inventory</NavButton>
               <NavButton route={routes.cardUpload}>Upload Cards</NavButton>
-              <NavButton route={routes.deckBuilder}> Deck Builder</NavButton>
+
+              <Menu>
+                <Menu.Target>
+                  <Text>
+                    Decks <IconChevronDown />
+                  </Text>
+                </Menu.Target>
+
+                <Menu.Dropdown>
+                  <Menu.Item onClick={() => navigate(routes.decks)}>
+                    Decks
+                  </Menu.Item>
+
+                  <Menu.Item onClick={() => navigate(routes.deckBuilder)}>
+                    Deck Builder
+                  </Menu.Item>
+                </Menu.Dropdown>
+              </Menu>
+
               {isAdmin && (
                 <NavButton route={routes.adminPortal}>Admin Portal</NavButton>
               )}
