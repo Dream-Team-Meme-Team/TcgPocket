@@ -130,6 +130,12 @@ export function CardUploadPage() {
     }
   );
 
+  const nothingFoundMessage: string | undefined = useMemo(() => {
+    if (fetchCardOptions.loading) return undefined;
+
+    return !searchValueDebounced ? undefined : 'No cards found.';
+  }, [fetchCardOptions.loading, searchValueDebounced]);
+
   const rejectFile = () => {
     error('File must be a png or jpg');
   };
@@ -227,9 +233,7 @@ export function CardUploadPage() {
                 }}
                 icon={<IconSearch />}
                 placeholder="Search by Card Name"
-                nothingFound={
-                  !searchValueDebounced ? undefined : 'No cards found.'
-                }
+                nothingFound={nothingFoundMessage}
                 searchValue={searchValue}
                 onSearchChange={(data) => {
                   setSearchValue(data);
