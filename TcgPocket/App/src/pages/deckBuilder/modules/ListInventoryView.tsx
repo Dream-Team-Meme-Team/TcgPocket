@@ -1,17 +1,17 @@
 import { createStyles } from '@mantine/core';
-import { CardImageDisplay } from '../../../components/cardDisplay/modules/CardImageDisplay';
 import { defaultGap, defaultPadding } from '../../../constants/theme';
 import { Text } from '@mantine/core';
-import { ViewProps } from './GridView';
+import { ViewProps } from './GridInventoryView';
+import { HoverInventoryCard } from './HoverInventoryCard';
 
-export function ListView({ cards }: ViewProps): React.ReactElement {
+export function ListInventoryView({ cards }: ViewProps): React.ReactElement {
   const { classes } = useStyles();
 
   return (
     <div className={classes.container}>
       {cards.map((card, index) => (
         <div key={index} className={classes.list}>
-          <CardImageDisplay imageUrl={card.imageUrl} />
+          <HoverInventoryCard key={index} card={card} />
 
           <div className={classes.information}>
             <div>
@@ -46,7 +46,7 @@ const useStyles = createStyles(() => {
 
     information: {
       display: 'grid',
-      gridTemplateRows: '1fr 1fr',
+      gridTemplateRows: 'auto auto',
       justifyContent: 'center',
       alignItems: 'center',
       textAlign: 'center',
@@ -64,6 +64,13 @@ const useStyles = createStyles(() => {
       justifyContent: 'center',
 
       gap: defaultGap,
+    },
+
+    description: {
+      display: 'flex',
+      justifyContent: 'center',
+
+      width: '30vw',
     },
   };
 });
