@@ -1,9 +1,9 @@
 import { HoverCard, Text, createStyles } from '@mantine/core';
 import { CardImageDisplay } from '../../../components/cardDisplay/modules/CardImageDisplay';
 import { CardAttributeDisplayDto, CardDisplayDto } from '../../../types/cards';
-import { useState, useEffect } from 'react';
-import { CardTypeGetDto } from '../../../types/card-types';
+import { useMemo } from 'react';
 import { defaultGap } from '../../../constants/theme';
+import { CardTypeGetDto } from '../../../types/card-types';
 
 type HoverInventoryCardProps = {
   card: CardDisplayDto;
@@ -35,8 +35,8 @@ export function HoverInventoryCard({
             <Text className={classes.name}> {card.name} </Text>
 
             <DisplayCardTypeAttributes
-              cardType={card.cardType}
               attributes={card.attributes}
+              cardType={card.cardType}
             />
           </div>
 
@@ -64,20 +64,12 @@ function DisplayCardTypeAttributes({
 }: DisplayCardTypeAttributesProps) {
   const { classes } = useStyles();
 
-  const [properties, setProperties] = useState<string[]>([]);
+  const properties = useMemo(() => {
+    if (attributes.length === 0) return cardType.name;
 
-  useEffect(() => {
-    if (attributes[0].attributeName.includes(cardType.name)) {
-      setProperties([cardType.name]);
-    } else {
-      const temp: string[] = [];
+    const tempAttributes = attributes.map((x) => x.attributeName + ' ');
 
-      attributes.forEach((attribute) => {
-        temp.push(attribute.attributeName, ' ');
-      });
-
-      setProperties(temp);
-    }
+    return tempAttributes;
   }, [attributes, cardType]);
 
   return (
