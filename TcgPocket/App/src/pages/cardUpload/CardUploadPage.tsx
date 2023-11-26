@@ -40,7 +40,7 @@ export function CardUploadPage() {
 
       setUploadedCards((state) => [...state, response.data]);
 
-      success('Card Uploaded to inventory');
+      success('Card Uploaded');
 
       return response.data;
     }

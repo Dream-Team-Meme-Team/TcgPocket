@@ -34,10 +34,10 @@ def all_of_it(raw_img: bytes):
 
   # cast to mgc(0), ygo(1), or pkm(2) for devs
   if classif == 0 or classif == 1:
-    return reader.gen_query(read), 0, classif
+    return reader.gen_query(read), 0
   elif classif == 2:
-    return reader.gen_query(read), 1, classif
+    return reader.gen_query(read), 1
   elif classif == 3 or classif == 4:
-    return reader.gen_query(read), 2, classif
+    return reader.gen_query(read), 2
   #
 #
