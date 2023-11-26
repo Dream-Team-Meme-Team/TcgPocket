@@ -21,7 +21,7 @@ name: Build and deploy Python app to Azure Web App
 
 env:
   AZURE_WEBAPP_NAME: tcg-pocket-python # set this to the name of your Azure Web App
-  PYTHON_VERSION: "3.15" # set this to the Python version to use
+  PYTHON_VERSION: "3.10" # set this to the Python version to use
 
 on:
   push:
