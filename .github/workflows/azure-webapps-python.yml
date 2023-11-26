@@ -59,7 +59,7 @@ jobs:
         with:
           name: python-app
           path: |
-            .
+            ./datascience
             !venv/
 
   deploy:
