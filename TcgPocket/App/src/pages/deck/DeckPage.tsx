@@ -1,16 +1,22 @@
 import { createStyles, MantineTheme, Text } from '@mantine/core';
 import { PrimaryButton } from '../../components/buttons/PrimaryButton';
 import { defaultGap, defaultPadding } from '../../constants/theme';
-import { IconPlus } from '@tabler/icons-react';
-import { useNavbarHeight } from '../../hooks/useNavbarHeight';
+import { IconPlus, IconSearch } from '@tabler/icons-react';
 import { DecksService } from '../../services/DecksService';
-import { useAsync } from 'react-use';
+import { useAsync, useEffectOnce } from 'react-use';
 import { responseWrapper } from '../../services/helpers/responseWrapper';
 import { DeckView } from './modules/DeckView';
 import { useMemo } from 'react';
 import { DeckDetailDto } from '../../types/decks';
-import { useAppSelector } from '../../store/configureStore';
+import { dispatch, useAppSelector } from '../../store/configureStore';
 import { GameGetDto } from '../../types/games';
+import { getAllGames } from '../../services/dataServices/gameServices';
+import { getAllCardTypes } from '../../services/dataServices/cardTypeServices';
+import { getAllRarities } from '../../services/dataServices/rarityServices';
+import { getAllSets } from '../../services/dataServices/setServices';
+import { shallowEqual } from 'react-redux';
+import { getAllAttributes } from '../../services/dataServices/attributeServices';
+import { PrimaryTextInput } from '../../components/inputs/PrimaryTextInput';
 
 type GameAndDecks = {
   game: GameGetDto;
@@ -20,7 +26,16 @@ type GameAndDecks = {
 export function DeckPage(): React.ReactElement {
   const { classes } = useStyles();
 
-  const games = useAppSelector((state) => state.data.games);
+  const [games, cardTypes, attributes, sets, rarities] = useAppSelector(
+    (state) => [
+      state.data.games,
+      state.data.cardTypes,
+      state.data.attributes,
+      state.data.sets,
+      state.data.rarities,
+    ],
+    shallowEqual
+  );
 
   const decks = useAsync(async () => {
     const promise = await DecksService.getAllDecks();
@@ -43,6 +58,34 @@ export function DeckPage(): React.ReactElement {
     return tempDecks;
   }, [decks, games]);
 
+  useEffectOnce(() => {
+    if (games.length === 0) {
+      dispatch(getAllGames()).then(({ payload }) => responseWrapper(payload));
+    }
+
+    if (cardTypes.length === 0) {
+      dispatch(getAllCardTypes()).then(({ payload }) =>
+        responseWrapper(payload)
+      );
+    }
+
+    if (rarities.length === 0) {
+      dispatch(getAllRarities()).then(({ payload }) =>
+        responseWrapper(payload)
+      );
+    }
+
+    if (sets.length === 0) {
+      dispatch(getAllSets()).then(({ payload }) => responseWrapper(payload));
+    }
+
+    if (attributes.length === 0) {
+      dispatch(getAllAttributes()).then(({ payload }) =>
+        responseWrapper(payload)
+      );
+    }
+  });
+
   return (
     <div className={classes.container}>
       <div className={classes.header}>
@@ -55,7 +98,11 @@ export function DeckPage(): React.ReactElement {
       <div className={classes.body}>
         {organizedDecks.map((deck, index) => (
           <div key={index} className={classes.gameDeckContainer}>
-            <Text className={classes.gameName}>{deck.game.name}</Text>
+            <div className={classes.gameDeckHeader}>
+              <Text className={classes.gameName}>{deck.game.name}</Text>
+
+              <PrimaryTextInput placeholder="Search" icon={<IconSearch />} />
+            </div>
 
             <div className={classes.decks}>
               {deck.decks.map((x, index) => (
@@ -70,21 +117,18 @@ export function DeckPage(): React.ReactElement {
 }
 
 const useStyles = createStyles((theme: MantineTheme) => {
-  const { remainingHeight } = useNavbarHeight();
-
   return {
     container: {
       display: 'grid',
       gridTemplateRows: 'auto 1fr',
 
-      height: remainingHeight,
+      height: '100%',
       padding: defaultPadding,
     },
 
     header: {
       display: 'grid',
-      gridTemplateColumns: '1fr auto',
-      justifyItems: 'center',
+      gridTemplateRows: 'auto auto',
 
       fontSize: 32,
       fontWeight: 'bolder',
@@ -93,10 +137,9 @@ const useStyles = createStyles((theme: MantineTheme) => {
     body: {
       display: 'grid',
       gridTemplateColumns: 'repeat(auto-fit, 30vw)',
-      justifyContent: 'center',
+      justifyContent: 'space-evenly',
 
       paddingTop: defaultPadding,
-      gap: defaultGap,
     },
 
     gameDeckContainer: {
@@ -106,6 +149,13 @@ const useStyles = createStyles((theme: MantineTheme) => {
       borderWidth: 2,
       borderStyle: 'solid',
       borderColor: theme.colors.primaryPurpleColor,
+    },
+
+    gameDeckHeader: {
+      display: 'grid',
+
+      padding: defaultPadding,
+      gap: defaultGap,
     },
 
     gameName: {

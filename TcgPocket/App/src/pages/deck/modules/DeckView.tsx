@@ -46,7 +46,7 @@ const useStyles = createStyles(() => {
       display: 'flex',
       flexDirection: 'row',
 
-      overflow: 'scroll',
+      overflow: 'auto',
     },
   };
 });
