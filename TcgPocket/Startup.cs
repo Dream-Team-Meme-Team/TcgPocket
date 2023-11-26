@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Identity;
 using TcgPocket.Data;
 using TcgPocket.Features.Users;
 using TcgPocket.Features.Roles;
-using TcgPocket.Features.StorageProvider;
 using TcgPocket.Settings;
 
 namespace TcgPocket;
