@@ -32,12 +32,12 @@ def all_of_it(raw_img: bytes):
   filt = reader.apply_filter(raw_img)
   read = reader.read_card(filt)
 
-  return reader.gen_query(read), classif
-#
-
-# TODO: to be removed
-with open('TcgPocket/datascience/data/collected/card7.jpg', "rb") as image:
-  f = image.read()
-  b = bytearray(f)
-  print(all_of_it(b))
+  # cast to mgc(0), ygo(1), or pkm(2) for devs
+  if classif == 0 or classif == 1:
+    return reader.gen_query(read), 0, classif
+  elif classif == 2:
+    return reader.gen_query(read), 1, classif
+  elif classif == 3 or classif == 4:
+    return reader.gen_query(read), 2, classif
+  #
 #
