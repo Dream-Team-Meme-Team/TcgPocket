@@ -9,7 +9,7 @@ import {
 import { PagedResult } from '../types/shared';
 import { apiCall } from './helpers/apiCall';
 import { Response } from '../types/shared';
-import { apiRoutes } from '../routes/Index';
+import { apiRoutes } from '../routes/index';
 
 type UpdateCardParams = {
   id: number;

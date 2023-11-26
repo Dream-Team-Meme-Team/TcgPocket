@@ -43,7 +43,7 @@ export function PrimaryNavigation(): React.ReactElement {
     return signedInUser === undefined || signedInUser === null ? false : true;
   }, [signedInUser]);
 
-  const isAdmin: boolean | undefined = useMemo(() => {
+  const isAdmin = useMemo(() => {
     if (!determineUserState || !signedInUser) {
       return false;
     }
@@ -51,7 +51,7 @@ export function PrimaryNavigation(): React.ReactElement {
       (r) => r.name === 'Admin'
     );
     return isAdmin !== -1;
-  }, [determineUserState, signedInUser?.roles]);
+  }, [determineUserState, signedInUser]);
 
   return (
     <>

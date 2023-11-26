@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { apiCall } from '../helpers/apiCall';
 import { RarityDto, RarityFilterDto, RarityGetDto } from '../../types/rarities';
-import { apiRoutes } from '../../routes/Index';
+import { apiRoutes } from '../../routes/index';
 import { OptionItemDto, PagedResult, Response } from '../../types/shared';
 
 export type RarityServices = typeof RarityServices;

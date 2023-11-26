@@ -6,7 +6,7 @@ import {
   CardTypeGetDto,
 } from '../../types/card-types';
 import { apiCall } from '../helpers/apiCall';
-import { apiRoutes } from '../../routes/Index';
+import { apiRoutes } from '../../routes/index';
 
 export type CardTypeServices = typeof CardTypeServices;
 
