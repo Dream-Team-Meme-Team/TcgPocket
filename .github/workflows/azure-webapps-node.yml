@@ -39,9 +39,9 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
+          working-directory: "./TcgPocket/App"
           node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
-          working-directory: "./TcgPocket/App"
 
       - name: npm install, build, and test
         run: |
