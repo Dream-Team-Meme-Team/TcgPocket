@@ -1,6 +1,6 @@
 from azure.storage.blob import BlobServiceClient, ContentSettings, ContainerClient
 import json
-import datascience.price_scraper as scraper
+import price_scraper as scraper
 
 def create_blob_container_if_not_exists(container_name, connection_string):
     blob_service_client = BlobServiceClient.from_connection_string(connection_string)
@@ -25,12 +25,3 @@ def upload_json_to_blob(json_data, container_name, blob_name, connection_string)
     # Upload the JSON data to the blob
     blob_client.upload_blob(json_bytes, content_settings=ContentSettings(content_type='application/json'), overwrite=True)
 #
-
-
-# TODO: remove when done testing
-json_data_to_upload = scraper.update_prices('magic')
-container_name = 'price-data'
-blob_name = 'magic-prices.json'
-connection_string = 'AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;'
-
-upload_json_to_blob(json_data_to_upload, container_name, blob_name, connection_string)

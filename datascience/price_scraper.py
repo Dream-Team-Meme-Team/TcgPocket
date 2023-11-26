@@ -11,11 +11,10 @@ def update_prices(game:str) -> dict:
     """
     Updates the price info for all cards in a given game
     """
-    game = game.lower()
-    set_link = 'https://www.pricecharting.com/category/' + game + '-cards'
+    set_link = 'https://www.pricecharting.com/category/' + game.lower() + '-cards'
     set_resp = bs(requests.get(set_link).content, 'html.parser')
+    data = {}
     
-    data = {game: {}}
     for set in set_resp.find('div', class_='home-box all').ul.find_all('li'):
     
         ''' Set Name Handling '''
@@ -38,7 +37,7 @@ def update_prices(game:str) -> dict:
             parsed_set = set.text.strip('\n').removeprefix('YuGiOh ')
         #
         
-        data[game][parsed_set] = {}
+        data[parsed_set] = {}
         card_resp = bs(requests.get(base + set.a.get('href')).content, 'html.parser')
         for card in card_resp.find('table', id='games_table').tbody.find_all('td', class_='title'):
 
@@ -52,9 +51,9 @@ def update_prices(game:str) -> dict:
                 card_dates = prices.find('table', class_='hoverable-rows sortable').tbody.find_all('td', class_='date')
                 card_prices = prices.find('table', class_='hoverable-rows sortable').tbody.find_all('td', class_='numeric')
 
-                data[game][parsed_set][card.text.strip('\n')] = dict([(date.text, float(price.span.text.strip('$'))) for (date, price) in zip(card_dates, card_prices)])
+                data[parsed_set][card.text.strip('\n')] = dict([(date.text, float(price.span.text.strip('$'))) for (date, price) in zip(card_dates, card_prices)])
             except:
-                data[game][parsed_set][card.text.strip('\n')] = None
+                data[parsed_set][card.text.strip('\n')] = None
             #
         #
         return(data) # TODO: remove when done testing
@@ -67,5 +66,3 @@ def get_prices(game:str, set: str, card: str) -> list:
 
     pass
 #
-
-update_prices('magic')
