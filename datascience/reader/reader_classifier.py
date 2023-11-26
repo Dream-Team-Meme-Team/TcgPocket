@@ -13,7 +13,7 @@ def reader_classifier(classifier):
         scraper: type of scraper to use
     """
     if classifier == 0: # TODO: find key attrbs of retro magic cards
-        return "This card cannot be read at this time. Please locate your card using our database."
+        raise Exception("Retro magic cards cannot be read at this time.")
     elif classifier == 1:
         reader_obj = ModernMagicReader()
     elif classifier == 2:
@@ -23,7 +23,7 @@ def reader_classifier(classifier):
     elif classifier == 4:
         reader_obj = RightPokemonReader()
     else:
-        return "This card cannot be read at this time. Please locate your card using our database."
+        raise Exception("This card cannot be read at this time.")
     #
 
     return reader_obj

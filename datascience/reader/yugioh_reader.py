@@ -54,3 +54,5 @@ class YugiohReader:
         q = self.query_base + mod[0]
         
         return q
+    #
+#

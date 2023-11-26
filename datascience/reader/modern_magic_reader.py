@@ -43,7 +43,7 @@ class ModernMagicReader:
         """ Generates query from key attributes on card
 
         Args:
-            params (list): list fo str containing attrbs to gen query from
+            params (list): list of str containing attrbs to gen query from
 
         Returns:
             str: query
