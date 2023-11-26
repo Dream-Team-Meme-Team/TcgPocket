@@ -41,6 +41,7 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
+          working-directory: "./TcgPocket/App"
 
       - name: npm install, build, and test
         run: |
