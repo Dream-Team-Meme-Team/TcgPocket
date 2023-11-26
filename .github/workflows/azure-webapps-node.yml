@@ -41,15 +41,13 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
+          path: ./TcgPocket/App
 
       - name: npm install, build, and test
         run: |
-          cd TcgPocket/App
           npm install
           npm run build --if-present
           npm run test --if-present
-          cd ..
-          cd ..
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
