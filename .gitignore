@@ -1,5 +1,6 @@
 # for the abby's protecc
 apiKeys.py
+venv
 
 # Logs
 logs
@@ -576,3 +577,6 @@ packages/react-devtools-timeline/dist
 # Azure
 __blobstorage__
 __azurite*
+
+#env
+.env
