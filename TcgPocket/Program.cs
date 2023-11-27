@@ -6,7 +6,7 @@ using TcgPocket.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 var environment = builder.Environment;
-builder.Configuration.AddJsonFile("appsettings.json").AddJsonFile($"appsettings.{environment.EnvironmentName}.json");
+builder.Configuration.AddJsonFile("appsettings.json").AddJsonFile($"appsettings.{environment.EnvironmentName}.json", optional: true);
 var startup = new Startup(builder);
 startup.ConfigureServices(builder.Services);
 
