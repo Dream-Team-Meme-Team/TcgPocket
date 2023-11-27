@@ -6,13 +6,14 @@ using TcgPocket.Data;
 using TcgPocket.Features.Users;
 using TcgPocket.Features.Roles;
 using TcgPocket.Settings;
+using TcgPocket.Shared;
 
 namespace TcgPocket;
 
 public class Startup
 {
     private ConfigurationManager _configuration { get; }
-
+    
     public Startup(WebApplicationBuilder builder)
     {
         _configuration = builder.Configuration;
@@ -30,7 +31,7 @@ public class Startup
         services.AddSwaggerGen();
         services.AddCors();
         services.AddDbContext<DataContext>(options =>
-            options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
+            options.UseSqlServer(_configuration.GetConnectionString(AppSettings.DefaultConnection)));
 
         ConfigureIdentity(services);
     }
