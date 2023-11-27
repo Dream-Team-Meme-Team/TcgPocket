@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using TcgPocket.Features.Cards.Commands;
 using TcgPocket.Features.Cards.Dtos;
 using TcgPocket.Features.Cards.Queries;
+using TcgPocket.Features.UserCards;
 using TcgPocket.Shared;
 using TcgPocket.Shared.PagedResult;
 
@@ -27,6 +28,14 @@ namespace TcgPocket.Features.Cards
             return response.HasErrors
                 ? BadRequest(response)
                 : CreatedAtRoute(nameof(GetCardById), new { response.Data.Id }, response.Data);
+        }
+
+        [HttpPost("inventory")]
+        public async Task<ActionResult<Response<List<UserCardDto>>>> AddCardsToInventory([FromBody] AddToInventoryDto dto)
+        {
+            var response = await _mediator.Send(new AddCardsToInventoryCommand { AddToInventoryDto = dto });
+
+            return response.HasErrors ? BadRequest(response) : Ok(response);
         }
 
         [HttpPut("{id}")]
