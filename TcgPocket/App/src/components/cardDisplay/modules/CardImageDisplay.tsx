@@ -36,7 +36,7 @@ export function CardImageDisplay({
   } catch (_) {
     return (
       <>
-        {clickable !== false ? (
+        {clickable || clickable === undefined ? (
           <Tooltip
             label={'No image available'}
             offset={-100}
@@ -81,7 +81,7 @@ export function CardImageDisplay({
 
   return (
     <>
-      {clickable !== false ? (
+      {clickable || clickable === undefined ? (
         <Tooltip
           label={'View image'}
           position="top-end"
