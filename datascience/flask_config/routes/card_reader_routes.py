@@ -8,7 +8,7 @@ import requests
 card_reader_bp = Blueprint('card_reader', __name__)
 
 
-@card_reader_bp.post('/api/read-card')
+@card_reader_bp.route('/api/read-card', methods = ['GET', 'POST'])
 def read_card():
     try:
         query, classification = all_of_it(request.data)
