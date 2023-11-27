@@ -20,7 +20,7 @@
 name: Python
 
 env:
-  AZURE_WEBAPP_NAME: tcg-pocket-python # set this to the name of your Azure Web App
+  AZURE_WEBAPP_NAME: TcgPocketPython # set this to the name of your Azure Web App
   PYTHON_VERSION: "3.10" # set this to the Python version to use
 
 on:
