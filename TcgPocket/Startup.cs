@@ -31,7 +31,7 @@ public class Startup
         services.AddSwaggerGen();
         services.AddCors();
         services.AddDbContext<DataContext>(options =>
-            options.UseSqlServer(_configuration[AppSettings.DefaultConnection]));
+            options.UseSqlServer(_configuration.GetConnectionString(AppSettings.DefaultConnection)));
 
         ConfigureIdentity(services);
     }
