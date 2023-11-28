@@ -48,16 +48,16 @@ jobs:
 
       - name: npm install, build, and test
         run: |
-          cd ./TcgPocket/App
           npm install
           npm run build --if-present
           npm run test --if-present
+        working-directory: ./TcgPocket/App
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
           name: node-app
-          path: ./TcgPocket/App
+          path: .
 
   deploy:
     permissions:
