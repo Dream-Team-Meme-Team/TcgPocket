@@ -53,13 +53,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget-
 
-      - name: Modify appsettings.json
-        run: jq '.DefaultConnection |= ${{ secrets.DEFAULT_CONNECTION}}' TcgPocket/appsettings.json > TcgPocket/appsettings.json.tmp && mv TcgPocket/appsettings.json.tmp TcgPocket/appsettings.json
-
       - name: Build with dotnet
         run: |
           cd TcgPocket
           dotnet build --configuration Release
+
+      - name: Substitute variables in appsettings.json
+        run: |
+          sed -i 's|${{ secrets.DEFAULT_CONNECTION }}|$(ConnectionString.DefaultConnection)|' TcgPocket/appsettings.json
 
       - name: dotnet publish
         run: |
