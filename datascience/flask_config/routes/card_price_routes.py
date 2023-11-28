@@ -4,6 +4,10 @@ from flask_config.utilities.price_blob import upload_json_to_blob, download_json
 from dotenv import load_dotenv
 import os
 
+import plotly
+import plotly.express as px
+import pandas as pd
+
 
 # Load variables from the .env file
 load_dotenv()
@@ -19,13 +23,18 @@ def update_prices(game:str) -> str:
 
     upload_json_to_blob(json_data_to_upload, container_name, blob_name, connection_string)
 
-    return f"{game} prices stored in blob successfully!"
+    return f"{game} prices stored in blob successfully!\n", json_data_to_upload
 #
 
 @card_pricer_bp.route('/api/get-prices/<game>/<set>/<card>', methods = ['GET'])
 def get_prices(game:str, set:str, card:str) -> dict:
     blob_name = f'{game}-prices.json'
     data = download_json_from_blob(container_name, blob_name, connection_string)
+    df = pd.DataFrame.from_dict(data[set][card], orient='index', columns=['Price (USD)'])
+
+    fig = px.line(df, x=df.index, y='Price (USD)')
+    fig.update_layout({"title": f'{card} Prices Over Time', "xaxis": {"title":"Date"}})
+    fig.show()
 
     return data[set][card]
 #

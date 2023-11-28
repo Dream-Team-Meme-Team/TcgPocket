@@ -56,14 +56,13 @@ def scrape_prices(game:str) -> dict:
                 data[parsed_set][card.text.strip('\n')] = None
             #
         #
-        return(data) # TODO: remove when done testing
+        # return(data) # TODO: remove when done testing
     #
-
     return data
 #
 
 def get_prices(game:str, set: str, card: str) -> list:
-    
+
 
     pass
 #
