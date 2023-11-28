@@ -60,7 +60,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: node-app
-          path: .
+          path: release.zip
 
   deploy:
     permissions:
@@ -72,13 +72,13 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
-      - name: unzip artifact for deployment
-        run: unzip release.zip
-
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
           name: node-app
+
+      - name: unzip artifact for deployment
+        run: unzip release.zip
 
       - name: "Deploy to Azure WebApp"
         id: deploy-to-webapp
