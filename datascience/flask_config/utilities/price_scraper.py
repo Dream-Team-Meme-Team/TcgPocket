@@ -60,9 +60,3 @@ def scrape_prices(game:str) -> dict:
     #
     return data
 #
-
-def get_prices(game:str, set: str, card: str) -> list:
-
-
-    pass
-#
