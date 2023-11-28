@@ -32,8 +32,6 @@ app.UseCors(policyBuilder =>
         .AllowCredentials();
 });
 
-Console.WriteLine($"DEBUG CONNECTION: {builder.Configuration.GetConnectionString(AppSettings.DefaultConnection)}");
-
 SeedData(app);
 
 void SeedData(IApplicationBuilder app)
