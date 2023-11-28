@@ -3,6 +3,7 @@ using TcgPocket;
 using TcgPocket.Features.Roles;
 using TcgPocket.Features.Users;
 using TcgPocket.Data;
+using TcgPocket.Shared;
 
 var builder = WebApplication.CreateBuilder(args);
 var environment = builder.Environment;
@@ -24,7 +25,7 @@ app.UseAuthorization();
 app.MapControllers();
 app.UseCors(policyBuilder =>
 {
-    policyBuilder.WithOrigins(builder.Configuration["CorsOrigins"].Split(","))
+    policyBuilder.WithOrigins(builder.Configuration[AppSettings.CorsOrigins].Split(","))
         .AllowAnyMethod()
         .AllowAnyHeader()
         .AllowCredentials();
