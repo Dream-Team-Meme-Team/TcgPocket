@@ -26,17 +26,17 @@ export const AllDecksTab: React.FC = () => {
 
   const magicGame: GameGetDto = useMemo(() => {
     const game = games.find((game) => game.name === 'Magic');
-    return game ?? { id: 0, name: '' };
+    return game ?? { id: 1, name: 'Magic' };
   }, [games]);
 
   const yugiohGame: GameGetDto = useMemo(() => {
     const game = games.find((game) => game.name === 'Yu-Gi-Oh');
-    return game ?? { id: 0, name: '' };
+    return game ?? { id: 2, name: 'Yu-Gi-Oh' };
   }, [games]);
 
   const pokemonGame: GameGetDto = useMemo(() => {
     const game = games.find((game) => game.name === 'Pokémon');
-    return game ?? { id: 0, name: '' };
+    return game ?? { id: 3, name: 'Pokémon' };
   }, [games]);
 
   const [magicDecks, fetchMagicDecks] = useAsyncFn(async () => {
