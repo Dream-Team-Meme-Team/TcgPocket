@@ -53,13 +53,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget-
 
-      - name: App Settings Variable Substitution
-        uses: microsoft/variable-substitution@v2
-        with:
-          files: "./TcgPocket/appsettings.json"
-        env:
-          ConnectionStrings.Default: ${{ secrets.DEFAULT_CONNECTION }}
-
       - name: Build with dotnet
         run: |
           cd TcgPocket
@@ -90,6 +83,13 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: .net-app
+
+      - name: App Settings Variable Substitution
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: "./TcgPocket/myapp/appsettings.json"
+        env:
+          ConnectionStrings.Default: ${{ secrets.DEFAULT_CONNECTION }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
