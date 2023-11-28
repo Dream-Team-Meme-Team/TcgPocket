@@ -15,9 +15,9 @@ export function DeckBuilderHeader(): React.ReactElement {
 
   const deckName = useAppSelector((state) => state.deckBuilder.name);
 
-  const [name, setName] = useState('');
-  const [editMode, setEditMode] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [name, setName] = useState<string>('');
+  const [editMode, setEditMode] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(false);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -25,6 +25,7 @@ export function DeckBuilderHeader(): React.ReactElement {
 
   const handleSave = () => {
     setEditMode(false);
+    setName('');
     dispatch(setDeckName(name));
   };
 
@@ -38,11 +39,16 @@ export function DeckBuilderHeader(): React.ReactElement {
 
   const handleConfirm = () => {
     dispatch(resetDeckBuilder());
+    setName('');
   };
 
   return editMode ? (
     <div className={classes.editName}>
-      <PrimaryTextInput value={name} onChange={handleNameChange} />
+      <PrimaryTextInput
+        placeholder={deckName}
+        value={name}
+        onChange={handleNameChange}
+      />
 
       <PrimaryButton disabled={!name} onClick={handleSave}>
         Save

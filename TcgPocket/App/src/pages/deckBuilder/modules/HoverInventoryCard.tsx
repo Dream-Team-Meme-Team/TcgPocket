@@ -4,6 +4,8 @@ import { CardAttributeDisplayDto, CardDisplayDto } from '../../../types/cards';
 import { useMemo } from 'react';
 import { defaultGap } from '../../../constants/theme';
 import { CardTypeGetDto } from '../../../types/card-types';
+import { dispatch } from '../../../store/configureStore';
+import { setDraggedCard } from '../../../store/deckBuilderSlice';
 
 type HoverInventoryCardProps = {
   card: CardDisplayDto;
@@ -24,7 +26,7 @@ export function HoverInventoryCard({
       openDelay={0}
     >
       <HoverCard.Target>
-        <div>
+        <div draggable onDrag={() => dispatch(setDraggedCard(card))}>
           <CardImageDisplay imageUrl={card.imageUrl} />
         </div>
       </HoverCard.Target>

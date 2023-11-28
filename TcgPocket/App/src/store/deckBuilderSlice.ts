@@ -9,6 +9,7 @@ export const untitledName: string = 'Untitled';
 
 export interface DeckBuilderState {
   deck: CardDisplayDto[];
+  draggedCard: CardDisplayDto | null;
   /** deck dto things */
   name: string;
   cards: PagedResult<CardDisplayDto> | null;
@@ -32,6 +33,7 @@ const INITIAL_STATE: DeckBuilderState = {
   cards: null,
   loading: false,
   deck: [],
+  draggedCard: null,
   cardTypeFilters: [],
   setFilters: [],
   rarityFilters: [],
@@ -43,6 +45,12 @@ export const deckBuilderSlice = createSlice({
   name: 'Inventory',
   initialState: INITIAL_STATE,
   reducers: {
+    setDraggedCard(
+      state,
+      { payload }: PayloadAction<DeckBuilderState['draggedCard']>
+    ) {
+      state.draggedCard = payload;
+    },
     setDeckName(state, { payload }: PayloadAction<DeckBuilderState['name']>) {
       state.name = payload;
     },
@@ -127,4 +135,5 @@ export const {
   toggleDeckBuilderRarityFilters,
   setDeckBuilderCurrentPage,
   setDeckBuilderPageSize,
+  setDraggedCard,
 } = deckBuilderSlice.actions;
