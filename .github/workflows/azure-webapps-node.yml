@@ -53,14 +53,14 @@ jobs:
           npm run build --if-present
           npm run test --if-present
 
-      - name: Zip artifact for deployment
-        run: zip ./TcgPocket/App/dist/release.zip ./TcgPocket/App/dist/* -r
+      # - name: Zip artifact for deployment
+      #   run: zip ./TcgPocket/App/dist/release.zip ./TcgPocket/App/dist/* -r
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
           name: node-app
-          path: ./TcgPocket/App/dist/release.zip
+          path: ./TcgPocket/App/dist
 
   deploy:
     permissions:
@@ -77,8 +77,8 @@ jobs:
         with:
           name: node-app
 
-      - name: unzip artifact for deployment
-        run: unzip release.zip
+      # - name: unzip artifact for deployment
+      #   run: unzip release.zip
 
       - name: "Deploy to Azure WebApp"
         id: deploy-to-webapp
