@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using TcgPocket;
 using TcgPocket.Features.Roles;
 using TcgPocket.Features.Users;
@@ -42,6 +43,7 @@ void SeedData(IApplicationBuilder app)
 
 
     var dataContext = scoped.ServiceProvider.GetService<DataContext>();
+    dataContext.Database.Migrate();
     dataContext.Seed(userManager, roleManager);
 }
 
