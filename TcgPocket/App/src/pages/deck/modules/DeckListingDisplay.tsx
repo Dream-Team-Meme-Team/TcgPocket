@@ -264,11 +264,12 @@ const useStyles = createStyles(
       },
 
       tableHeaderContainer: {
-        padding: '5px',
         display: 'flex',
-        justifyContent: 'space-between', // Use space-between to separate the text and expander
+        justifyContent: 'space-between',
         alignItems: 'center',
         margin: 0,
+        padding: '5px',
+
         border: `solid 1px ${theme.colors.primaryPurpleColor[0]}`,
         backgroundColor: `${theme.fn.darken(
           theme.colors.secondaryPurpleColors[0],
@@ -312,6 +313,11 @@ const useStyles = createStyles(
       noData: {
         padding: 15,
         fontSize: 22,
+
+        backgroundColor: `${theme.fn.rgba(
+          theme.fn.darken(theme.colors.primaryPurpleColor[0], 0.93),
+          1
+        )}`,
       },
 
       tableColumnFirstItem: {
