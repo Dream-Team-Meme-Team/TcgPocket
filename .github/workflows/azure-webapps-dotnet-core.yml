@@ -54,7 +54,7 @@ jobs:
             ${{ runner.os }}-nuget-
 
       - name: App Settings Variable Substitution
-        uses: microsoft/variable-substitution@v1
+        uses: microsoft/variable-substitution@v2
         with:
           files: "./TcgPocket/appsettings.json"
         env:
