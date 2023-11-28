@@ -1,7 +1,7 @@
 import numpy as np
 import easyocr
 
-class PokemonReader:
+class LeftPokemonReader:
 
     reader = easyocr.Reader(['en'])
     query_base = 'https://api.pokemontcg.io/v2/cards?q='
@@ -15,8 +15,8 @@ class PokemonReader:
         Returns:
             list : cropped attributes to be read
         """
-        name = np.array(raw_card.resize([421,614]))[20:60, 100:275, :]
-        set_num = np.array(raw_card.resize([421,614]))[577:592, 330:363, :]
+        name = np.array(raw_card.resize([421,614]))[20:60, 75:275, :]
+        set_num = np.array(raw_card.resize([421,614]))[570:587, 50:90, :]
 
         return [set_num, name]
     
