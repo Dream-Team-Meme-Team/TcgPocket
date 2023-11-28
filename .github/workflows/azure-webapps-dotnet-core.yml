@@ -20,7 +20,7 @@
 name: .NET
 
 env:
-  AZURE_WEBAPP_NAME: tcgpocketdotnet # set this to the name of your Azure Web App
+  AZURE_WEBAPP_NAME: TcgPocket # set this to the name of your Azure Web App
   AZURE_WEBAPP_PACKAGE_PATH: "." # set this to the path to your web app project, defaults to the repository root
   DOTNET_VERSION: "7.0" # set this to the .NET Core version to use
   DOTNET_ROOT: ./TcgPocket
@@ -52,6 +52,11 @@ jobs:
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
+
+      - name: Modify appsettings.json
+        run: |
+          cd TcgPocket
+          jq '.DefaultConnection = ${{ secrets.DEFAULT_CONNECTION}}' appsettings.json > appsettings.json.tmp && mv appsettings.json.tmp appsettings.json
 
       - name: Build with dotnet
         run: |
