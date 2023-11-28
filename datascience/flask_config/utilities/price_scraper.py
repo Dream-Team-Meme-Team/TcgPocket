@@ -7,7 +7,7 @@ mgc_editions = {'1st': 'First', '2nd': 'Second', '3rd': 'Third',
                 '7th': 'Seventh', '8th': 'Eighth', '9th': 'Ninth', 
                 '10th': 'Tenth'}
 
-def update_prices(game:str) -> dict:
+def scrape_prices(game:str) -> dict:
     """
     Updates the price info for all cards in a given game
     """
@@ -63,6 +63,7 @@ def update_prices(game:str) -> dict:
 #
 
 def get_prices(game:str, set: str, card: str) -> list:
+    
 
     pass
 #

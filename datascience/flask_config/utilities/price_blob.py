@@ -1,6 +1,5 @@
 from azure.storage.blob import BlobServiceClient, ContentSettings, ContainerClient
 import json
-import price_scraper as scraper
 
 def create_blob_container_if_not_exists(container_name, connection_string):
     blob_service_client = BlobServiceClient.from_connection_string(connection_string)
@@ -24,4 +23,16 @@ def upload_json_to_blob(json_data, container_name, blob_name, connection_string)
 
     # Upload the JSON data to the blob
     blob_client.upload_blob(json_bytes, content_settings=ContentSettings(content_type='application/json'), overwrite=True)
+#
+
+def download_json_from_blob(container_name, blob_name, connection_string):
+    blob_service_client = BlobServiceClient.from_connection_string(connection_string)
+    blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
+    create_blob_container_if_not_exists(container_name, connection_string)
+
+    # Download the JSON data from the blob
+    json_bytes = blob_client.download_blob().readall()
+
+    # Convert bytes to JSON data
+    return json.loads(json_bytes.decode('utf-8'))
 #
