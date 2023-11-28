@@ -44,21 +44,21 @@ export const AllDecksTab: React.FC = () => {
     responseWrapper(promise);
 
     return promise.data;
-  }, [games, selectedTab]);
+  }, [games, magicGame, selectedTab]);
 
   const [yugiohDecks, fetchYugiohDecks] = useAsyncFn(async () => {
     const promise = await DecksService.getAllDecksByGameId(yugiohGame.id);
     responseWrapper(promise);
 
     return promise.data;
-  }, [games, selectedTab]);
+  }, [games, yugiohGame, selectedTab]);
 
   const [pokemonDecks, fetchPokemonDecks] = useAsyncFn(async () => {
     const promise = await DecksService.getAllDecksByGameId(pokemonGame.id);
     responseWrapper(promise);
 
     return promise.data;
-  }, [games, selectedTab]);
+  }, [games, pokemonGame, selectedTab]);
 
   const filteredYugiohDecks: DeckDisplayDto[] = useMemo(() => {
     return (
@@ -70,7 +70,7 @@ export const AllDecksTab: React.FC = () => {
           )
       ) ?? []
     );
-  }, [yugiohDecks?.value, searchTerm]);
+  }, [yugiohDecks, searchTerm]);
 
   const filteredMagicDecks: DeckDisplayDto[] = useMemo(() => {
     return (
@@ -82,7 +82,7 @@ export const AllDecksTab: React.FC = () => {
           )
       ) ?? []
     );
-  }, [magicDecks?.value, searchTerm]);
+  }, [magicDecks, searchTerm]);
 
   const filteredPokemonDecks: DeckDisplayDto[] = useMemo(() => {
     return (
@@ -94,7 +94,7 @@ export const AllDecksTab: React.FC = () => {
           )
       ) ?? []
     );
-  }, [pokemonDecks?.value, searchTerm]);
+  }, [pokemonDecks, searchTerm]);
 
   const deleteSelectedDeck = async () => {
     const promise = await DecksService.deleteDeck(selectedDeckId);
