@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TcgPocket.Data;
+using TcgPocket.Features.Cards.Dtos;
 using TcgPocket.Features.Users;
 using TcgPocket.Shared;
 
@@ -49,7 +50,34 @@ public class GetAllUserDecksByGameIdQueryHandler : IRequestHandler<GetAllUserDec
             .ThenInclude(y => y.Set)
             .ToListAsync(cancellationToken);
 
-        return _mapper.Map<List<DeckDisplayDto>>(decks).AsResponse();
+        var groupedCards = new List<DeckCardDisplayDto>();
+
+        decks.ForEach(deck => {
+            var groupedDeckCards = deck.DeckCards.GroupBy(x => x.Card).ToList();
+            groupedDeckCards.ForEach(cards =>
+            {
+                var card = _mapper.Map<CardDisplayDto>(cards.Key);
+                if (card is not null)
+                {
+                    groupedCards.Add(new DeckCardDisplayDto
+                    {
+                        CardDisplay = card,
+                        DeckId = cards.FirstOrDefault()?.DeckId ?? 0,
+                        Count = cards.Count(),
+                    });
+
+                }
+            });
+        });
+
+        var mappedDecks = _mapper.Map<List<DeckDisplayDto>>(decks);
+
+        mappedDecks.ForEach(deck => {
+            var cards = groupedCards.Where(x => x.DeckId == deck.Id).ToList();
+             if(cards is not null) deck?.Cards?.AddRange(cards);
+        });
+
+        return mappedDecks.AsResponse();
     }
 }
 

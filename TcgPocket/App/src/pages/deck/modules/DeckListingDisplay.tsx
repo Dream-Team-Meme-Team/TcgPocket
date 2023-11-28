@@ -2,21 +2,32 @@ import {
   ActionIcon,
   Container,
   Flex,
+  Text,
+  Indicator,
   Loader,
   MantineTheme,
   createStyles,
+  Tooltip,
 } from '@mantine/core';
-import { IconEdit, IconTrash } from '@tabler/icons-react';
+import {
+  IconArrowsMaximize,
+  IconArrowsMinimize,
+  IconCaretDown,
+  IconCaretUp,
+  IconEdit,
+  IconTrash,
+} from '@tabler/icons-react';
 import { shallowEqual, useDisclosure } from '@mantine/hooks';
 import { dispatch, useAppSelector } from '../../../store/configureStore';
 import { DeleteModal } from '../../../components/modals/DeleteModal';
 import { DeckDisplayDto } from '../../../types/decks';
-import { CardDisplay } from '../../../components/cardDisplay/CardDisplay';
 import { useNavigate } from 'react-router-dom';
 import { routes } from '../../../routes/Index';
 import { setSelectedDeckId } from '../../../store/deckSlice';
+import { CardImageDisplay } from '../../../components/cardDisplay/modules/CardImageDisplay';
+import { useMemo, useState } from 'react';
 
-type DeckListingDisplayProps = {
+export type DeckListingDisplayProps = {
   data: DeckDisplayDto[] | undefined;
   loading: boolean;
   deleteFn: () => Promise<void>;
@@ -32,23 +43,47 @@ export const DeckListingDisplay = ({
   tableWidth,
 }: DeckListingDisplayProps) => {
   const { classes } = useStyles(tableWidth);
+  const [allCollapsed, setAllCollapsed] = useState(true);
+
+  const toggleCollapse = () => {
+    allCollapsed ? setAllCollapsed(false) : setAllCollapsed(true);
+  };
 
   return (
     <>
-      <Container pt={'0.5%'} pb={'1%'} fluid className={classes.tableContainer}>
+      <Container pt="0.5%" pb="1%" fluid className={classes.tableContainer}>
         <div className={classes.table}>
-          <header>
-            <Flex dir="row" gap={'lg'} className={classes.tableHeader}>
-              <div className={classes.tableColumnItem}>{label}</div>
-            </Flex>
-          </header>
+          <div className={classes.tableHeaderContainer}>
+            <Text p="0.15em 1em" fz="22px" fw="bold" align="center">
+              {label}
+            </Text>
+            {data?.length !== 0 && (
+              <Tooltip
+                label={allCollapsed ? 'Expand all decks' : 'Collapse all decks'}
+              >
+                <ActionIcon
+                  aria-label={
+                    allCollapsed ? 'Expand all decks' : 'Collapse all decks'
+                  }
+                  onClick={toggleCollapse}
+                  className={classes.expander}
+                >
+                  {allCollapsed ? (
+                    <IconArrowsMaximize />
+                  ) : (
+                    <IconArrowsMinimize />
+                  )}
+                </ActionIcon>
+              </Tooltip>
+            )}
+          </div>
           {data && !loading ? (
             data.map((value, index) => (
               <TableRow
                 value={value}
                 deleteFn={deleteFn}
+                allCollapsed={allCollapsed}
                 key={index}
-                label={label}
               />
             ))
           ) : (
@@ -63,7 +98,7 @@ export const DeckListingDisplay = ({
               justify="space-around"
               className={classes.noData}
             >
-              <i> No data to display </i>
+              <i> No decks to display </i>
             </Flex>
           )}
         </div>
@@ -74,19 +109,28 @@ export const DeckListingDisplay = ({
 
 type TableRowProps = {
   value: DeckDisplayDto;
-  label: string;
+  allCollapsed: boolean;
   deleteFn: () => Promise<void>;
 };
 
-export const TableRow = ({ value, label, deleteFn }: TableRowProps) => {
+export const TableRow = ({ value, allCollapsed, deleteFn }: TableRowProps) => {
   const { classes } = useStyles(undefined);
   const navigate = useNavigate();
+  const [isCollapsed, setIsCollapsed] = useState(true);
+
+  useMemo(() => {
+    setIsCollapsed(allCollapsed);
+  }, [allCollapsed]);
 
   const [openDelete, { toggle: toggleDelete }] = useDisclosure();
 
   const selectAndOpenDelete = (value: any) => {
     toggleDelete();
     dispatch(setSelectedDeckId(value.id));
+  };
+
+  const toggleCollapse = () => {
+    isCollapsed ? setIsCollapsed(false) : setIsCollapsed(true);
   };
 
   return (
@@ -96,25 +140,39 @@ export const TableRow = ({ value, label, deleteFn }: TableRowProps) => {
         dir="row"
         gap={'lg'}
         justify="space-around"
-        key={value.id}
       >
         <div className={classes.tableColumnFirstItem}>
-          <ActionIcon
-            aria-label={`Edit ${label}`}
-            onClick={() => navigate(routes.deckBuilder)}
-          >
-            <IconEdit />
-          </ActionIcon>
+          <Tooltip label="Edit deck">
+            <ActionIcon
+              aria-label={`Edit deck`}
+              onClick={() => navigate(routes.deckBuilder)}
+            >
+              <IconEdit />
+            </ActionIcon>
+          </Tooltip>
         </div>
         <div className={classes.tableColumnItem}>{value.name}</div>
         <div className={classes.tableColumnLastItem}>
-          <ActionIcon
-            aria-label={`Delete ${label}`}
-            onClick={() => selectAndOpenDelete(value)}
-          >
-            <IconTrash />
-          </ActionIcon>
+          <Tooltip label="Delete deck">
+            <ActionIcon
+              aria-label={`Delete deck`}
+              mr={25}
+              tabIndex={10}
+              onClick={() => selectAndOpenDelete(value)}
+            >
+              <IconTrash />
+            </ActionIcon>
+          </Tooltip>
+          <Tooltip label={isCollapsed ? 'Expand deck' : 'Collapse deck'}>
+            <ActionIcon
+              aria-label={isCollapsed ? 'Expand deck' : 'Collapse deck'}
+              onClick={toggleCollapse}
+            >
+              {isCollapsed ? <IconCaretUp /> : <IconCaretDown />}
+            </ActionIcon>
+          </Tooltip>
         </div>
+
         <DeleteModal
           open={openDelete}
           setOpen={toggleDelete}
@@ -122,18 +180,44 @@ export const TableRow = ({ value, label, deleteFn }: TableRowProps) => {
           valueName={value.name}
         />
       </Flex>
-      <div className={classes.cardDisplayContainer}>
-        {value.cards.length !== 0 ? (
-          <div className={classes.cardDisplayGroup}>
-            {value.cards.map((card, index) => (
-              <CardDisplay key={index} card={card} isLoading={false} />
-            ))}
-          </div>
-        ) : (
-          <Flex p="1em" justify="center" className={classes.noCards}>
-            Deck Does Not Contain Any Cards
-          </Flex>
-        )}
+      <div className={isCollapsed ? classes.hidden : classes.notHidden}>
+        <div className={classes.cardDisplayContainer}>
+          {value.cards.length !== 0 ? (
+            <div
+              className={classes.cardDisplayGroup}
+              key={`${value.id}${value.name}`}
+            >
+              {value.cards.map((card, index) => (
+                <Flex direction="column" align="center" key={index}>
+                  <Indicator
+                    size={18}
+                    offset={7}
+                    inline
+                    position="top-end"
+                    color="violet"
+                    radius={5}
+                    label={card.count}
+                  >
+                    <CardImageDisplay
+                      key={index}
+                      height={175}
+                      width={125}
+                      imageUrl={card.cardDisplay.imageUrl}
+                    />
+                  </Indicator>
+
+                  <Text span lineClamp={1}>
+                    {card.cardDisplay.name}
+                  </Text>
+                </Flex>
+              ))}
+            </div>
+          ) : (
+            <Flex p="1em" justify="center" className={classes.noCards}>
+              Deck Does Not Contain Any Cards
+            </Flex>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -146,6 +230,21 @@ const useStyles = createStyles(
       shallowEqual
     );
     return {
+      hidden: {
+        overflow: 'hidden',
+
+        maxHeight: 0,
+        transition: 'max-height 0.25s ease-in-out',
+      },
+
+      notHidden: {
+        visibility: 'visible',
+        borderCollapse: 'collapse',
+        overflow: 'hidden',
+        transition: 'max-height 0.3s ease-out',
+        maxHeight: '300px',
+      },
+
       tableContainer: {
         display: 'flex',
         justifyContent: 'center',
@@ -164,16 +263,27 @@ const useStyles = createStyles(
         border: `solid 1px ${theme.colors.primaryPurpleColor[0]}`,
       },
 
-      tableHeader: {
-        fontWeight: 'bold',
-        fontSize: '20px',
-        padding: '7px',
-
+      tableHeaderContainer: {
+        padding: '5px',
+        display: 'flex',
+        justifyContent: 'space-between', // Use space-between to separate the text and expander
+        alignItems: 'center',
+        margin: 0,
         border: `solid 1px ${theme.colors.primaryPurpleColor[0]}`,
         backgroundColor: `${theme.fn.darken(
           theme.colors.secondaryPurpleColors[0],
           0.55
         )}`,
+      },
+
+      expander: {
+        padding: 0,
+        display: 'flex',
+        justifyContent: 'flex-end',
+        top: '50%',
+        right: '10px',
+        marginRight: '0.5em',
+        alignSelf: 'center',
       },
 
       tableRowHeader: {
@@ -205,7 +315,7 @@ const useStyles = createStyles(
       },
 
       tableColumnFirstItem: {
-        width: '30%',
+        width: '100%',
         padding: '0.1% 1.25%',
         display: 'flex',
         justifyContent: 'flex-start',
@@ -224,7 +334,7 @@ const useStyles = createStyles(
 
       tableColumnLastItem: {
         width: '100%',
-        padding: '0.1% 1.5%',
+        padding: '0.1% 1%',
         display: 'flex',
         justifyContent: 'flex-end',
         textAlign: 'end',
@@ -233,7 +343,7 @@ const useStyles = createStyles(
 
       loaderContainer: {
         backgroundColor: `${theme.fn.rgba(theme.colors.dark[9], 0.6)}`,
-        height: `${pageSize * 44}px`,
+        height: `${pageSize * 10}px`,
         width: '100%',
         display: 'flex',
         justifyContent: 'center',
@@ -252,11 +362,11 @@ const useStyles = createStyles(
 
       cardDisplayGroup: {
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, 368px)',
+        gridTemplateColumns: 'repeat(auto-fit, 150px)',
         justifyContent: 'center',
 
-        columnGap: '20px',
-        rowGap: '20px',
+        columnGap: '10px',
+        rowGap: '10px',
         paddingTop: '10px',
         paddingBottom: '15px',
       },

@@ -6,10 +6,10 @@ import { shallowEqual } from 'react-redux';
 import { DecksService } from '../../../services/DecksService';
 import { responseWrapper } from '../../../services/helpers/responseWrapper';
 import { GameGetDto } from '../../../types/games';
-import { DeckDetailDto } from '../../../types/decks';
+import { DeckDisplayDto } from '../../../types/decks';
 
 export const DeckTab: React.FC = () => {
-  const [games, selectedTab, searchTerm, selectedId] = useAppSelector(
+  const [games, selectedTab, searchTerm, selectedDeckId] = useAppSelector(
     (state) => [
       state.data.games,
       state.deck.selectedTab,
@@ -34,16 +34,20 @@ export const DeckTab: React.FC = () => {
     return promise.data;
   }, [games, selectedTab]);
 
-  const filteredDecks: DeckDetailDto[] = useMemo(() => {
+  const filteredDecks: DeckDisplayDto[] = useMemo(() => {
     return (
-      decks?.value?.filter((decks) =>
-        decks.name.toLowerCase().includes(searchTerm)
+      decks?.value?.filter(
+        (decks) =>
+          decks.name.toLowerCase().includes(searchTerm) ||
+          decks.cards.find((card) =>
+            card.cardDisplay.name.toLowerCase().includes(searchTerm)
+          )
       ) ?? []
     );
   }, [decks?.value, searchTerm]);
 
   const deleteSelectedDeck = async () => {
-    const promise = await DecksService.deleteDeck(selectedId);
+    const promise = await DecksService.deleteDeck(selectedDeckId);
     responseWrapper(promise, 'Deck deleted');
 
     if (!promise.hasErrors) fetchDecks();

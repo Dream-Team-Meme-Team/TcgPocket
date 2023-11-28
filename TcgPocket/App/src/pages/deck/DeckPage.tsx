@@ -21,6 +21,7 @@ import {
 import { DeckTabHeader } from './modules/DeckTabHeader';
 import { DeckTab } from './modules/DeckTab';
 import { IconPlayCard } from '@tabler/icons-react';
+import { AllDecksTab } from './modules/AllDecksTab';
 
 export function DeckPage(): React.ReactElement {
   const { classes } = useStyles();
@@ -34,6 +35,12 @@ export function DeckPage(): React.ReactElement {
 
   const gameTabs: Tab[] = useMemo(() => {
     const tabs: Tab[] = [];
+
+    tabs.push({
+      label: 'All Games',
+      content: AllDecksTab,
+      icon: <IconPlayCard />,
+    });
 
     games.forEach((game) =>
       tabs.push({

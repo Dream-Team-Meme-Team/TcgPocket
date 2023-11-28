@@ -70,7 +70,7 @@ const useStyles = createStyles((theme: MantineTheme) => {
       left: 0,
       right: 0,
       top: 0,
-      marginLeft: 142.09,
+      marginLeft: 146.17,
       borderBottomWidth: 1,
       borderBottomStyle: 'solid',
       borderBottomColor: theme.colors.primaryPurpleColor[0],
@@ -80,7 +80,6 @@ const useStyles = createStyles((theme: MantineTheme) => {
       height: '100%',
       width: '2px',
       margin: 0,
-      marginRight: '0.5em',
 
       backgroundColor: theme.colors.secondaryPurpleColors[0],
     },

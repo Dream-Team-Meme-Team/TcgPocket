@@ -44,5 +44,5 @@ public class DeckDetailDto : DeckGetDto
 
 public class DeckDisplayDto : DeckGetDto
 {
-    public List<CardDisplayDto>? Cards { get; set; } = new();
+    public List<DeckCardDisplayDto>? Cards { get; set; } = new();
 }

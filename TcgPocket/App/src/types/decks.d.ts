@@ -1,4 +1,4 @@
-import { CardGetDto } from './cards';
+import { CardGetDto, DeckCardDisplayDto } from './cards';
 import { Id } from './shared';
 
 export type DeckDto = {
@@ -14,5 +14,5 @@ export type DeckDetailDto = DeckGetDto & {
 };
 
 export type DeckDisplayDto = DeckGetDto & {
-  cards: CardDisplayDto[];
+  cards: DeckCardDisplayDto[];
 };
