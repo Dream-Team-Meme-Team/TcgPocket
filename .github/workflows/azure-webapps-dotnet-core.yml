@@ -54,9 +54,7 @@ jobs:
             ${{ runner.os }}-nuget-
 
       - name: Modify appsettings.json
-        run: |
-          cd TcgPocket
-          jq '.DefaultConnection = ${{ secrets.DEFAULT_CONNECTION}}' appsettings.json > appsettings.json.tmp && mv appsettings.json.tmp appsettings.json
+        run: jq '.DefaultConnection |= ${{ secrets.DEFAULT_CONNECTION}}' TcgPocket/appsettings.json > TcgPocket/appsettings.json.tmp && mv TcgPocket/appsettings.json.tmp TcgPocket/appsettings.json
 
       - name: Build with dotnet
         run: |
