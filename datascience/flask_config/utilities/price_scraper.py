@@ -14,7 +14,8 @@ def scrape_prices(game:str) -> dict:
     set_link = 'https://www.pricecharting.com/category/' + game.lower() + '-cards'
     set_resp = bs(requests.get(set_link).content, 'html.parser')
     data = {}
-    
+
+    print('Beginning Scraping...')    # TODO: remove eventually
     for set in set_resp.find('div', class_='home-box all').ul.find_all('li'):
     
         ''' Set Name Handling '''
@@ -56,7 +57,8 @@ def scrape_prices(game:str) -> dict:
                 data[parsed_set][card.text.strip('\n')] = None
             #
         #
-        # return(data) # TODO: remove when done testing
+        print(f'>>> {parsed_set} has been successfully scraped...')      # TODO: remove eventually
     #
+    print(f'All {game} data scraped.') # TODO: remove eventually
     return data
 #

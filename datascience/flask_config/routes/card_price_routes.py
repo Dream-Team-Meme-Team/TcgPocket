@@ -23,7 +23,7 @@ def update_prices(game:str) -> str:
 
     upload_json_to_blob(json_data_to_upload, container_name, blob_name, connection_string)
 
-    return f"{game} prices stored in blob successfully!\n", json_data_to_upload
+    return f"{game} prices stored in blob successfully!\n"
 #
 
 @card_pricer_bp.route('/api/get-prices/<game>/<set>/<card>', methods = ['GET'])
