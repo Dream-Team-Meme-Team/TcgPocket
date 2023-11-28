@@ -56,7 +56,7 @@ jobs:
       - name: App Settings Variable Substitution
         uses: microsoft/variable-substitution@v1
         with:
-          files: "${{env.DOTNET_ROOT}}/appsettings.json"
+          files: "./TcgPocket/appsettings.json"
         env:
           ConnectionStrings.Default: ${{ secrets.DEFAULT_CONNECTION }}
 
