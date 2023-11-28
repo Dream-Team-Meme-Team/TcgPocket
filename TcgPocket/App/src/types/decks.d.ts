@@ -12,3 +12,7 @@ export type DeckGetDto = Id & DeckDto;
 export type DeckDetailDto = DeckGetDto & {
   cards: CardGetDto[];
 };
+
+export type DeckDisplayDto = DeckGetDto & {
+  cards: CardDisplayDto[];
+};

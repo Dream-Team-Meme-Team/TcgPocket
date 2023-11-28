@@ -25,6 +25,7 @@ function App() {
       location === '/admin-portal' ||
       location === '/inventory' ||
       location === '/card-upload' ||
+      location === '/decks' ||
       location === '/deck-builder'
     );
   }, [location]);

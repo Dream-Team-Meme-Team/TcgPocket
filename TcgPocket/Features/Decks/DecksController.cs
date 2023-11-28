@@ -18,9 +18,17 @@ public class DecksController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<Response<List<DeckGetDto>>>> GetAllDecksByUserId()
+    public async Task<ActionResult<Response<List<DeckDetailDto>>>> GetAllDecksByUserId()
     {
         var response = await _mediator.Send(new GetAllDecksByCurrentUserQuery());
+
+        return response.HasErrors ? BadRequest(response) : Ok(response);
+    }
+
+    [HttpGet("game/{id:int}")]
+    public async Task<ActionResult<Response<List<DeckDisplayDto>>>> GetAllUserDecksByGameId([FromRoute] int id)
+    {
+        var response = await _mediator.Send(new GetAllUserDecksByGameIdQuery { GameId = id });
 
         return response.HasErrors ? BadRequest(response) : Ok(response);
     }

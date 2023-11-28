@@ -16,5 +16,8 @@ public class DeckMapper : Profile
         CreateMap<Deck, DeckDetailDto>()
             .ForMember(x => x.Cards, opts => opts.MapFrom(x => x.DeckCards.Select(x => x.Card).ToList()))
             .ReverseMap();
+        CreateMap<Deck, DeckDisplayDto>()
+            .ForMember(x => x.Cards, opts => opts.MapFrom(x => x.DeckCards.Select(x => x.Card).ToList()))
+            .ReverseMap();
     }
 }

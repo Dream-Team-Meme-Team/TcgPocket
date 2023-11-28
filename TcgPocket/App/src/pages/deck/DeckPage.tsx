@@ -1,173 +1,212 @@
-import { createStyles, MantineTheme, Text } from '@mantine/core';
-import { PrimaryButton } from '../../components/buttons/PrimaryButton';
-import { defaultGap, defaultPadding } from '../../constants/theme';
-import { IconPlus, IconSearch } from '@tabler/icons-react';
-import { DecksService } from '../../services/DecksService';
-import { useAsync, useEffectOnce } from 'react-use';
+import {
+  createStyles,
+  MantineTheme,
+  ScrollArea,
+  Tabs,
+  TabsValue,
+} from '@mantine/core';
+import { useEffectOnce } from 'react-use';
 import { responseWrapper } from '../../services/helpers/responseWrapper';
-import { DeckView } from './modules/DeckView';
-import { useMemo } from 'react';
-import { DeckDetailDto } from '../../types/decks';
+import { useEffect, useMemo } from 'react';
 import { dispatch, useAppSelector } from '../../store/configureStore';
-import { GameGetDto } from '../../types/games';
 import { getAllGames } from '../../services/dataServices/gameServices';
-import { getAllCardTypes } from '../../services/dataServices/cardTypeServices';
-import { getAllRarities } from '../../services/dataServices/rarityServices';
-import { getAllSets } from '../../services/dataServices/setServices';
 import { shallowEqual } from 'react-redux';
-import { getAllAttributes } from '../../services/dataServices/attributeServices';
-import { PrimaryTextInput } from '../../components/inputs/PrimaryTextInput';
-
-type GameAndDecks = {
-  game: GameGetDto;
-  decks: DeckDetailDto[];
-};
+import { Tab } from '../../types/tabs';
+import { useNavbarHeight } from '../../hooks/useNavbarHeight';
+import {
+  setDeckSearchTerm,
+  setSelectedDeckTab,
+  setSelectedDeckId,
+} from '../../store/deckSlice';
+import { DeckTabHeader } from './modules/DeckTabHeader';
+import { DeckTab } from './modules/DeckTab';
+import { IconPlayCard } from '@tabler/icons-react';
 
 export function DeckPage(): React.ReactElement {
   const { classes } = useStyles();
 
-  const [games, cardTypes, attributes, sets, rarities] = useAppSelector(
-    (state) => [
-      state.data.games,
-      state.data.cardTypes,
-      state.data.attributes,
-      state.data.sets,
-      state.data.rarities,
-    ],
+  const [games] = useAppSelector((state) => [state.data.games], shallowEqual);
+
+  const [selectedTab] = useAppSelector(
+    (state) => [state.deck.selectedTab],
     shallowEqual
   );
 
-  const decks = useAsync(async () => {
-    const promise = await DecksService.getAllDecks();
-    responseWrapper(promise);
+  const gameTabs: Tab[] = useMemo(() => {
+    const tabs: Tab[] = [];
 
-    return promise.data;
-  });
-
-  const organizedDecks = useMemo(() => {
-    const tempDecks: GameAndDecks[] = [];
-
-    games.forEach((game) => {
-      tempDecks.push({ game: game, decks: [] });
-    });
-
-    decks.value?.forEach((deck) => {
-      tempDecks.find((x) => x.game.id === deck.gameId)?.decks.push(deck);
-    });
-
-    return tempDecks;
-  }, [decks, games]);
+    games.forEach((game) =>
+      tabs.push({
+        label: game.name,
+        content: DeckTab,
+        icon: <IconPlayCard />,
+      })
+    );
+    return tabs;
+  }, [games]);
 
   useEffectOnce(() => {
     if (games.length === 0) {
       dispatch(getAllGames()).then(({ payload }) => responseWrapper(payload));
     }
-
-    if (cardTypes.length === 0) {
-      dispatch(getAllCardTypes()).then(({ payload }) =>
-        responseWrapper(payload)
-      );
-    }
-
-    if (rarities.length === 0) {
-      dispatch(getAllRarities()).then(({ payload }) =>
-        responseWrapper(payload)
-      );
-    }
-
-    if (sets.length === 0) {
-      dispatch(getAllSets()).then(({ payload }) => responseWrapper(payload));
-    }
-
-    if (attributes.length === 0) {
-      dispatch(getAllAttributes()).then(({ payload }) =>
-        responseWrapper(payload)
-      );
-    }
   });
 
+  const handleTabChange = (value: TabsValue) => {
+    dispatch(setSelectedDeckTab(value));
+    dispatch(setDeckSearchTerm(''));
+    dispatch(setSelectedDeckId(0));
+  };
+
+  useEffect(() => {
+    dispatch(setSelectedDeckTab(gameTabs[0]?.label ?? 'Magic'));
+  }, [gameTabs]);
+
   return (
-    <div className={classes.container}>
-      <div className={classes.header}>
-        <Text> Manage Decks </Text>
+    <Tabs
+      value={selectedTab}
+      onTabChange={handleTabChange}
+      orientation="vertical"
+      className={classes.tab}
+    >
+      <Tabs.List tabIndex={0}>
+        {gameTabs.map((tab, index) => {
+          const className =
+            tab.label === selectedTab
+              ? classes.tabStyleHighlighted
+              : classes.tabStyle;
+          return (
+            <Tabs.Tab
+              key={index}
+              value={tab.label}
+              icon={tab.icon}
+              className={className}
+            >
+              {tab.label}
+            </Tabs.Tab>
+          );
+        })}
+      </Tabs.List>
+      <ScrollArea className={classes.contain}>
+        {gameTabs.map((tab, index) => {
+          const TabContent = tab.content;
 
-        {/* justify center */}
-        <PrimaryButton leftIcon={<IconPlus />}> Create New Deck </PrimaryButton>
-      </div>
-
-      <div className={classes.body}>
-        {organizedDecks.map((deck, index) => (
-          <div key={index} className={classes.gameDeckContainer}>
-            <div className={classes.gameDeckHeader}>
-              <Text className={classes.gameName}>{deck.game.name}</Text>
-
-              <PrimaryTextInput placeholder="Search" icon={<IconSearch />} />
-            </div>
-
-            <div className={classes.decks}>
-              {deck.decks.map((x, index) => (
-                <DeckView key={index} deck={x} />
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+          return (
+            <Tabs.Panel
+              key={index}
+              value={tab.label}
+              className={classes.panelContainer}
+            >
+              <TabContent />
+            </Tabs.Panel>
+          );
+        })}
+      </ScrollArea>
+      <DeckTabHeader />
+    </Tabs>
   );
 }
 
 const useStyles = createStyles((theme: MantineTheme) => {
+  const { remainingHeight, navbarHeight } = useNavbarHeight();
+
   return {
-    container: {
+    tab: {
+      height: `${remainingHeight}px`,
+    },
+
+    tabStyle: {
+      fontSize: '17px',
+      padding: '1em',
+      paddingRight: '1.25em',
+      borderColor: `${theme.fn.lighten(
+        theme.colors.secondaryPurpleColors[0],
+        0.25
+      )} !important`,
+
+      '&:hover': {
+        backgroundColor: theme.fn.rgba(
+          theme.colors.secondaryPurpleColors[0],
+          0.25
+        ),
+      },
+    },
+
+    tabStyleHighlighted: {
+      fontSize: '17px',
+      padding: '1em',
+      paddingRight: '1.25em',
+      borderColor: `${theme.fn.lighten(
+        theme.colors.secondaryPurpleColors[0],
+        0.25
+      )} !important`,
+
+      backgroundColor: theme.fn.rgba(
+        theme.colors.secondaryPurpleColors[0],
+        0.45
+      ),
+
+      '&:hover': {
+        backgroundColor: theme.fn.rgba(
+          theme.colors.secondaryPurpleColors[0],
+          0.25
+        ),
+      },
+    },
+
+    addButton: {
+      justifyContent: 'flex-end',
+    },
+
+    tabHeader: {
+      paddingLeft: '1em',
+      paddingRight: '1em',
+      paddingTop: '1em',
+      paddingBottom: 0,
+      margin: 0,
+    },
+
+    tabHeaderFont: {
+      fontSize: '26px',
+      padding: 0,
+      margin: 0,
+    },
+
+    panelContainer: {
       display: 'grid',
       gridTemplateRows: 'auto 1fr',
+      backgroundColor: theme.colors.secondaryBackgroundColor[0],
 
-      height: '100%',
-      padding: defaultPadding,
+      padding: '8px',
     },
 
-    header: {
-      display: 'grid',
-      gridTemplateRows: 'auto auto',
-
-      fontSize: 32,
-      fontWeight: 'bolder',
-    },
-
-    body: {
-      display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fit, 30vw)',
-      justifyContent: 'space-evenly',
-
-      paddingTop: defaultPadding,
-    },
-
-    gameDeckContainer: {
-      display: 'grid',
-      gridTemplateRows: 'auto 1fr',
-
-      borderWidth: 2,
-      borderStyle: 'solid',
-      borderColor: theme.colors.primaryPurpleColor,
-    },
-
-    gameDeckHeader: {
-      display: 'grid',
-
-      padding: defaultPadding,
-      gap: defaultGap,
-    },
-
-    gameName: {
+    panelHeader: {
       display: 'flex',
       justifyContent: 'center',
-
-      fontSize: 24,
-      fontWeight: 'bold',
     },
 
-    decks: {
+    contain: {
+      width: '100%',
+      paddingLeft: '0.5em',
+      top: navbarHeight,
+      height: remainingHeight - navbarHeight,
+      backgroundColor: theme.colors.secondaryBackgroundColor[0],
+    },
+
+    noSelectedGame: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      paddingTop: '1em',
+
+      fontWeight: 'bold',
+      fontSize: '20px',
+    },
+
+    display: {
       display: 'grid',
+      gridTemplateRows: 'auto 1fr',
+
+      height: navbarHeight,
     },
   };
 });

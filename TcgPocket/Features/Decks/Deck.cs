@@ -1,4 +1,5 @@
 ﻿using TcgPocket.Features.Cards;
+using TcgPocket.Features.Cards.Dtos;
 using TcgPocket.Features.DeckCards;
 using TcgPocket.Features.Games;
 using TcgPocket.Features.Users;
@@ -39,4 +40,9 @@ public class UpdateDeckDto : CreateDeckDto
 public class DeckDetailDto : DeckGetDto
 {
     public List<CardGetDto>? Cards { get; set; } = new(); 
+}
+
+public class DeckDisplayDto : DeckGetDto
+{
+    public List<CardDisplayDto>? Cards { get; set; } = new();
 }

@@ -131,7 +131,7 @@ export function CardImageDisplay({
       >
         <Modal.Overlay />
         <Modal.Content>
-          <Modal.CloseButton iconSize={25} size={25} />
+          <Modal.CloseButton m="5px" ml="auto" iconSize={25} size={25} />
 
           <Modal.Body>
             <Image radius={17} src={imageUrl} security="yamomma" />
