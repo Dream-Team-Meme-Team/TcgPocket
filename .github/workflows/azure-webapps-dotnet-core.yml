@@ -60,7 +60,7 @@ jobs:
 
       - name: Substitute variables in appsettings.json
         run: |
-          sed -i 's|${{ secrets.DEFAULT_CONNECTION }}|$(ConnectionString.DefaultConnection)|' TcgPocket/appsettings.json
+          sed -i 's|"DefaultConnection": ".*"|"DefaultConnection": "$(${{ secrets.DEFAULT_CONNECTION }})"|' TcgPocket/appsettings.json
 
       - name: dotnet publish
         run: |
