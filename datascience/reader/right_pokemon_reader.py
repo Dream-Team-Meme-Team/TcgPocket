@@ -1,10 +1,10 @@
 import numpy as np
 import easyocr
 
-class MagicReader:
-    
+class RightPokemonReader:
+
     reader = easyocr.Reader(['en'])
-    query_base = 'https://api.scryfall.com/cards/search?q='
+    query_base = 'https://api.pokemontcg.io/v2/cards?q='
 
     def apply_filter(self, raw_card):
         """ Crops the key attributes from the card
@@ -15,10 +15,10 @@ class MagicReader:
         Returns:
             list : cropped attributes to be read
         """
-        set_num = np.array(raw_card.resize([421,614]))[570:586, 20:79, :]
-        set_abbrv = np.array(raw_card.resize([421,614]))[585:596, 20:51, :]
-        
-        return [set_num, set_abbrv]
+        name = np.array(raw_card.resize([421,614]))[20:60, 100:275, :]
+        set_num = np.array(raw_card.resize([421,614]))[577:592, 330:363, :]
+
+        return [set_num, name]
     
     def read_card(self, filt_attrbs: list):
         """ Reads the card's key attributes
@@ -32,8 +32,7 @@ class MagicReader:
         params = []
         for attrb in filt_attrbs:
             params.append(self.reader.readtext(attrb)[0][1].strip('\n'))
-        #
-        
+
         return params
 
     def gen_query(self, params):
@@ -45,4 +44,4 @@ class MagicReader:
         Returns:
             str: query
         """
-        return self.query_base + 'number:' + params[0].split('/')[0] + ' s:' + params[1]
+        return self.query_base + 'number:' + params[0].split('/')[0] + ' name:"' + params[1] + '"'
