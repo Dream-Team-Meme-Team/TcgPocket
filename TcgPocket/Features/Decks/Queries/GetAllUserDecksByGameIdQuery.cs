@@ -75,6 +75,7 @@ public class GetAllUserDecksByGameIdQueryHandler : IRequestHandler<GetAllUserDec
         mappedDecks.ForEach(deck => {
             var cards = groupedCards.Where(x => x.DeckId == deck.Id).ToList();
              if(cards is not null) deck?.Cards?.AddRange(cards);
+            deck.Cards = deck?.Cards?.OrderBy(y => y.CardDisplay.Name).ToList();
         });
 
         return mappedDecks.AsResponse();

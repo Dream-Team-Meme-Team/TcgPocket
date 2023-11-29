@@ -52,17 +52,17 @@ export function DeckPage(): React.ReactElement {
     return tabs;
   }, [games]);
 
-  useEffectOnce(() => {
-    if (games.length === 0) {
-      dispatch(getAllGames()).then(({ payload }) => responseWrapper(payload));
-    }
-  });
-
   const handleTabChange = (value: TabsValue) => {
     dispatch(setSelectedDeckTab(value));
     dispatch(setDeckSearchTerm(''));
     dispatch(setSelectedDeckId(0));
   };
+
+  useEffectOnce(() => {
+    if (games.length === 0) {
+      dispatch(getAllGames()).then(({ payload }) => responseWrapper(payload));
+    }
+  });
 
   useEffect(() => {
     dispatch(setSelectedDeckTab(gameTabs[0]?.label ?? 'Magic'));
@@ -118,11 +118,10 @@ const useStyles = createStyles((theme: MantineTheme) => {
 
   return {
     tab: {
-      height: `${remainingHeight}px`,
+      height: remainingHeight,
     },
 
     tabStyle: {
-      fontSize: '17px',
       padding: '1em',
       paddingRight: '1.25em',
       borderColor: `${theme.fn.lighten(
@@ -139,7 +138,6 @@ const useStyles = createStyles((theme: MantineTheme) => {
     },
 
     tabStyleHighlighted: {
-      fontSize: '17px',
       padding: '1em',
       paddingRight: '1.25em',
       borderColor: `${theme.fn.lighten(
@@ -160,35 +158,8 @@ const useStyles = createStyles((theme: MantineTheme) => {
       },
     },
 
-    addButton: {
-      justifyContent: 'flex-end',
-    },
-
-    tabHeader: {
-      paddingLeft: '1em',
-      paddingRight: '1em',
-      paddingTop: '1em',
-      paddingBottom: 0,
-      margin: 0,
-    },
-
-    tabHeaderFont: {
-      fontSize: '26px',
-      padding: 0,
-      margin: 0,
-    },
-
     panelContainer: {
-      display: 'grid',
-      gridTemplateRows: 'auto 1fr',
-      backgroundColor: theme.colors.secondaryBackgroundColor[0],
-
       padding: '8px',
-    },
-
-    panelHeader: {
-      display: 'flex',
-      justifyContent: 'center',
     },
 
     contain: {
@@ -197,23 +168,6 @@ const useStyles = createStyles((theme: MantineTheme) => {
       top: navbarHeight,
       height: remainingHeight - navbarHeight,
       backgroundColor: theme.colors.secondaryBackgroundColor[0],
-    },
-
-    noSelectedGame: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      paddingTop: '1em',
-
-      fontWeight: 'bold',
-      fontSize: '20px',
-    },
-
-    display: {
-      display: 'grid',
-      gridTemplateRows: 'auto 1fr',
-
-      height: navbarHeight,
     },
   };
 });

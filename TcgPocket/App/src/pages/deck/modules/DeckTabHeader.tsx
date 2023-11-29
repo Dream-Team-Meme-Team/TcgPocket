@@ -59,8 +59,7 @@ export function DeckTabHeader(): React.ReactElement {
           leftIcon={<IconPlus />}
           onClick={() => navigate(routes.deckBuilder)}
         >
-          {' '}
-          New Deck{' '}
+          New Deck
         </PrimaryButton>
       </Flex>
     </div>
@@ -80,7 +79,7 @@ const useStyles = createStyles((theme: MantineTheme) => {
       left: 0,
       right: 0,
       top: 0,
-      marginLeft: 146.17,
+      marginLeft: 126.2,
       borderBottomWidth: 1,
       borderBottomStyle: 'solid',
       borderBottomColor: theme.colors.primaryPurpleColor[0],

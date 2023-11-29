@@ -25,10 +25,10 @@ import { useNavigate } from 'react-router-dom';
 import { routes } from '../../../routes/Index';
 import { setSelectedDeckId } from '../../../store/deckSlice';
 import { CardImageDisplay } from '../../../components/cardDisplay/modules/CardImageDisplay';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 export type DeckListingDisplayProps = {
-  data: DeckDisplayDto[] | undefined;
+  data?: DeckDisplayDto[];
   loading: boolean;
   deleteFn: () => Promise<void>;
   label: string;
@@ -43,10 +43,10 @@ export const DeckListingDisplay = ({
   tableWidth,
 }: DeckListingDisplayProps) => {
   const { classes } = useStyles(tableWidth);
-  const [allCollapsed, setAllCollapsed] = useState(true);
+  const [allExpanded, { open, close }] = useDisclosure(false);
 
   const toggleCollapse = () => {
-    allCollapsed ? setAllCollapsed(false) : setAllCollapsed(true);
+    allExpanded ? close() : open();
   };
 
   return (
@@ -59,19 +59,19 @@ export const DeckListingDisplay = ({
             </Text>
             {data?.length !== 0 && (
               <Tooltip
-                label={allCollapsed ? 'Expand all decks' : 'Collapse all decks'}
+                label={allExpanded ? 'Collapse all decks' : 'Expand all decks'}
               >
                 <ActionIcon
                   aria-label={
-                    allCollapsed ? 'Expand all decks' : 'Collapse all decks'
+                    allExpanded ? 'Collapse all decks' : 'Expand all decks'
                   }
                   onClick={toggleCollapse}
                   className={classes.expander}
                 >
-                  {allCollapsed ? (
-                    <IconArrowsMaximize />
-                  ) : (
+                  {allExpanded ? (
                     <IconArrowsMinimize />
+                  ) : (
+                    <IconArrowsMaximize />
                   )}
                 </ActionIcon>
               </Tooltip>
@@ -82,7 +82,7 @@ export const DeckListingDisplay = ({
               <TableRow
                 value={value}
                 deleteFn={deleteFn}
-                allCollapsed={allCollapsed}
+                allExpanded={allExpanded}
                 key={index}
               />
             ))
@@ -109,19 +109,14 @@ export const DeckListingDisplay = ({
 
 type TableRowProps = {
   value: DeckDisplayDto;
-  allCollapsed: boolean;
+  allExpanded: boolean;
   deleteFn: () => Promise<void>;
 };
 
-export const TableRow = ({ value, allCollapsed, deleteFn }: TableRowProps) => {
-  const { classes } = useStyles(undefined);
+export const TableRow = ({ value, allExpanded, deleteFn }: TableRowProps) => {
   const navigate = useNavigate();
-  const [isCollapsed, setIsCollapsed] = useState(true);
-
-  useMemo(() => {
-    setIsCollapsed(allCollapsed);
-  }, [allCollapsed]);
-
+  const { classes } = useStyles(undefined);
+  const [expanded, { open, close }] = useDisclosure(false);
   const [openDelete, { toggle: toggleDelete }] = useDisclosure();
 
   const selectAndOpenDelete = (value: any) => {
@@ -129,8 +124,12 @@ export const TableRow = ({ value, allCollapsed, deleteFn }: TableRowProps) => {
     dispatch(setSelectedDeckId(value.id));
   };
 
+  useMemo(() => {
+    allExpanded ? close() : open();
+  }, [allExpanded, close, open]);
+
   const toggleCollapse = () => {
-    isCollapsed ? setIsCollapsed(false) : setIsCollapsed(true);
+    expanded ? close() : open();
   };
 
   return (
@@ -163,12 +162,12 @@ export const TableRow = ({ value, allCollapsed, deleteFn }: TableRowProps) => {
               <IconTrash />
             </ActionIcon>
           </Tooltip>
-          <Tooltip label={isCollapsed ? 'Expand deck' : 'Collapse deck'}>
+          <Tooltip label={expanded ? 'Expand deck' : 'Collapse deck'}>
             <ActionIcon
-              aria-label={isCollapsed ? 'Expand deck' : 'Collapse deck'}
+              aria-label={expanded ? 'Expand deck' : 'Collapse deck'}
               onClick={toggleCollapse}
             >
-              {isCollapsed ? <IconCaretDown /> : <IconCaretUp />}
+              {expanded ? <IconCaretDown /> : <IconCaretUp />}
             </ActionIcon>
           </Tooltip>
         </div>
@@ -180,7 +179,7 @@ export const TableRow = ({ value, allCollapsed, deleteFn }: TableRowProps) => {
           valueName={value.name}
         />
       </Flex>
-      <div className={isCollapsed ? classes.hidden : classes.notHidden}>
+      <div className={expanded ? classes.hidden : classes.notHidden}>
         <div className={classes.cardDisplayContainer}>
           {value.cards.length !== 0 ? (
             <div
@@ -242,7 +241,6 @@ const useStyles = createStyles(
         borderCollapse: 'collapse',
         overflow: 'hidden',
         transition: 'max-height 0.3s ease-out',
-        maxHeight: '300px',
       },
 
       tableContainer: {
@@ -371,8 +369,8 @@ const useStyles = createStyles(
         gridTemplateColumns: 'repeat(auto-fit, 150px)',
         justifyContent: 'center',
 
-        columnGap: '10px',
-        rowGap: '10px',
+        columnGap: '12px',
+        rowGap: '12px',
         paddingTop: '10px',
         paddingBottom: '15px',
       },

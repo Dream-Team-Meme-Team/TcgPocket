@@ -149,7 +149,7 @@ export const AllDecksTab: React.FC = () => {
     fetchYugiohDecks();
     fetchMagicDecks();
     fetchPokemonDecks();
-  }, [selectedTab]);
+  }, [fetchMagicDecks, fetchPokemonDecks, fetchYugiohDecks]);
 
   return (
     <div>
@@ -159,7 +159,7 @@ export const AllDecksTab: React.FC = () => {
           loading={decks.loading}
           label={decks.label}
           deleteFn={deleteSelectedDeck}
-          tableWidth="97%"
+          tableWidth="99%"
           key={index}
         />
       ))}

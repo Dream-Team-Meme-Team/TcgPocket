@@ -57,7 +57,7 @@ export const DeckTab: React.FC = () => {
 
   useEffect(() => {
     fetchDecks();
-  }, [selectedTab]);
+  }, [fetchDecks]);
 
   return (
     <div>
@@ -66,7 +66,7 @@ export const DeckTab: React.FC = () => {
         loading={decks?.loading}
         deleteFn={deleteSelectedDeck}
         label={selectedTab ?? ''}
-        tableWidth="97%"
+        tableWidth="99%"
       />
     </div>
   );
