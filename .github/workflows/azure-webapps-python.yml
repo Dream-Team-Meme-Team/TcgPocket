@@ -51,6 +51,15 @@ jobs:
       - name: Install dependencies
         run: pip install -r datascience/requirements.txt
 
+      - name: Setup env
+        working-directory: ./datascience
+        run: |
+          touch .env
+          echo DATABASE_URI=${{ secrets.PYTHON_DATABASE_CONNECTION_STRING }} >> .env
+          echo SQLALCHEMY_TRACK_MODIFICATIONS=false >> .env
+          echo POKEMON_API_KEY=${{ secrets.PYTHON_POKEMON_API_KEY }} >> .env
+          echo ORIGINS=${{ secrets.PYTHON_ALLOWED_ORIGINS }} >> .env
+
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v3
         with:
