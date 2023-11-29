@@ -52,7 +52,7 @@ jobs:
         run: |
           touch .env
           echo VITE_BASE_API_URL=${{ secrets.DOTNET_BASE_API_URL }} >> .env
-          echo VITE_PYTHON_ BASE_API_URL=${{ secrets.PYTHON_BASE_API_URL }} >> .env
+          echo VITE_PYTHON_BASE_API_URL=${{ secrets.PYTHON_BASE_API_URL }} >> .env
 
       - name: npm install, build, and test
         working-directory: ./TcgPocket/App
