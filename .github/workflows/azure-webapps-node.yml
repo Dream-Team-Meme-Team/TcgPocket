@@ -24,9 +24,9 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_WEBAPP_NAME: TcgPocketWeb # set this to your application's name
-  AZURE_WEBAPP_PACKAGE_PATH: "." # set this to the path to your web app project, defaults to the repository root
-  NODE_VERSION: "18.x" # set this to the node version to use
+  AZURE_WEBAPP_NAME: TcgPocketWeb
+  AZURE_WEBAPP_PACKAGE_PATH: "."
+  NODE_VERSION: "18.x"
   WORKING_DIRECTORY: ./TcgPocket/App
 
 permissions:
@@ -81,9 +81,6 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: node-app
-
-      # - name: unzip artifact for deployment
-      #   run: unzip release.zip
 
       - name: "Deploy to Azure WebApp"
         id: deploy-to-webapp
