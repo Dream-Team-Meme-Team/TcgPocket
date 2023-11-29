@@ -1,4 +1,4 @@
-import { apiRoutes } from '../routes/Index';
+import { apiRoutes } from '../routes/index';
 import { DeckDto, DeckGetDto } from '../types/decks';
 import { apiCall } from './helpers/apiCall';
 

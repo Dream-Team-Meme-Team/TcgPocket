@@ -20,7 +20,7 @@
 name: Python
 
 env:
-  AZURE_WEBAPP_NAME: tcg-pocket-python # set this to the name of your Azure Web App
+  AZURE_WEBAPP_NAME: TcgPocketPython # set this to the name of your Azure Web App
   PYTHON_VERSION: "3.10" # set this to the Python version to use
 
 on:
@@ -42,7 +42,6 @@ jobs:
         uses: actions/setup-python@v3.0.0
         with:
           python-version: ${{ env.PYTHON_VERSION }}
-          cache: "pip"
 
       - name: Create and start virtual environment
         run: |
@@ -52,7 +51,14 @@ jobs:
       - name: Install dependencies
         run: pip install -r datascience/requirements.txt
 
-      # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
+      - name: Setup env
+        working-directory: ./datascience
+        run: |
+          touch .env
+          echo DATABASE_URI=${{ secrets.PYTHON_DATABASE_CONNECTION_STRING }} >> .env
+          echo SQLALCHEMY_TRACK_MODIFICATIONS=false >> .env
+          echo POKEMON_API_KEY=${{ secrets.PYTHON_POKEMON_API_KEY }} >> .env
+          echo ORIGINS=${{ secrets.PYTHON_ALLOWED_ORIGINS }} >> .env
 
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v3
@@ -83,4 +89,4 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_PYTHON }}

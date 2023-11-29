@@ -20,9 +20,10 @@
 name: .NET
 
 env:
-  AZURE_WEBAPP_NAME: tcg-pocket- # set this to the name of your Azure Web App
-  AZURE_WEBAPP_PACKAGE_PATH: "./TcgPocket" # set this to the path to your web app project, defaults to the repository root
-  DOTNET_VERSION: "7.0" # set this to the .NET Core version to use
+  AZURE_WEBAPP_NAME: TcgPocket
+  AZURE_WEBAPP_PACKAGE_PATH: "."
+  DOTNET_VERSION: "7.0"
+  DOTNET_ROOT: ./TcgPocket
 
 on:
   push:
@@ -56,6 +57,12 @@ jobs:
         run: |
           cd TcgPocket
           dotnet build --configuration Release
+
+      - name: Substitute variables in appsettings.json
+        run: |
+          sed -i 's|"DefaultConnection": ".*"|"DefaultConnection": "${{ secrets.DEFAULT_CONNECTION }}"|' TcgPocket/appsettings.json
+          sed -i 's|"AllowedHosts": ".*"|"AllowedHosts": "${{ secrets.ALLOWED_HOSTS }}"|' TcgPocket/appsettings.json
+          sed -i 's|"CorsOrigins": ".*"|"CorsOrigins": "${{ secrets.CORS_ORIGINS }}"|' TcgPocket/appsettings.json
 
       - name: dotnet publish
         run: |

@@ -2,6 +2,9 @@
 apiKeys.py
 venv
 
+# for the development protecc
+appsettings.Development.json
+
 # Logs
 logs
 *.log

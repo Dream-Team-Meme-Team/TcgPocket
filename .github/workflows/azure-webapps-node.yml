@@ -24,15 +24,18 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_WEBAPP_NAME: tcg-pocket-web # set this to your application's name
-  AZURE_WEBAPP_PACKAGE_PATH: "./TcgPocket/App" # set this to the path to your web app project, defaults to the repository root
-  NODE_VERSION: "18.x" # set this to the node version to use
+  AZURE_WEBAPP_NAME: TcgPocketWeb
+  AZURE_WEBAPP_PACKAGE_PATH: "."
+  NODE_VERSION: "18.x"
+  WORKING_DIRECTORY: ./TcgPocket/App
 
 permissions:
   contents: read
 
 jobs:
   build:
+    env:
+      working-directory: ./TcgPocket/App
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -40,13 +43,20 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          working-directory: "./TcgPocket/App"
           node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
+          cache-dependency-path: "**/package-lock.json"
+
+      - name: Setup env
+        working-directory: ./TcgPocket/App
+        run: |
+          touch .env
+          echo VITE_BASE_API_URL=${{ secrets.DOTNET_BASE_API_URL }} >> .env
+          echo VITE_PYTHON_BASE_API_URL=${{ secrets.PYTHON_BASE_API_URL }} >> .env
 
       - name: npm install, build, and test
+        working-directory: ./TcgPocket/App
         run: |
-          cd ./TcgPocket/App
           npm install
           npm run build --if-present
           npm run test --if-present
@@ -55,7 +65,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: node-app
-          path: ./TcgPocket/App
+          path: ./TcgPocket/App/dist
 
   deploy:
     permissions:
@@ -77,5 +87,5 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_WEB }}
           package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}

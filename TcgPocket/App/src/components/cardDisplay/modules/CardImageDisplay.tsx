@@ -10,7 +10,7 @@ import {
   Modal,
 } from '@mantine/core';
 import { IconAlertTriangleFilled } from '@tabler/icons-react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 type CardImageDisplayProps = {
   imageUrl: string;
@@ -20,69 +20,75 @@ export function CardImageDisplay({ imageUrl }: CardImageDisplayProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const { classes } = useStyles();
-  let url: URL;
 
-  try {
-    url = new URL(imageUrl);
-  } catch (_) {
-    return (
-      <Tooltip
-        label={'No image available'}
-        offset={-100}
-        color="rgba(0,0,0,0.7)"
-      >
-        <Flex className={classes.invalidUrl}>
-          <IconAlertTriangleFilled
-            size={'70px'}
-            className={classes.invalidUrlIcon}
-          />
-          <Flex className={classes.invalidUrlText}>
-            <br />
-            Image Not Found
-          </Flex>
-        </Flex>
-      </Tooltip>
-    );
-  }
+  const isValidUrl = useMemo(() => {
+    try {
+      new URL(imageUrl);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }, [imageUrl]);
 
   return (
     <>
-      <Tooltip
-        label={'View image'}
-        position="top-end"
-        offset={-40}
-        color="rgba(0,0,0,0.7)"
-      >
-        <AspectRatio ratio={16 / 9} h={220} miw={'9.3rem'}>
-          <Skeleton radius={7} width={152} height={220} visible={isLoading}>
-            <Image
-              onClick={() => setOpen(true)}
-              src={imageUrl}
-              fit="scale-down"
-              radius={7}
-              width={'152px'}
-              onLoad={() => setIsLoading(false)}
-              className={classes.imageHover}
+      {isValidUrl ? (
+        <>
+          <Tooltip
+            label={'View image'}
+            position="top-end"
+            offset={-40}
+            color="rgba(0,0,0,0.7)"
+          >
+            <AspectRatio ratio={16 / 9} h={220} miw={'9.3rem'}>
+              <Skeleton radius={7} width={152} height={220} visible={isLoading}>
+                <Image
+                  onClick={() => setOpen(true)}
+                  src={imageUrl}
+                  fit="scale-down"
+                  radius={7}
+                  width={'152px'}
+                  onLoad={() => setIsLoading(false)}
+                  className={classes.imageHover}
+                />
+              </Skeleton>
+            </AspectRatio>
+          </Tooltip>
+
+          <Modal.Root
+            centered
+            opened={open}
+            onClose={() => setOpen(false)}
+            styles={modalProps}
+          >
+            <Modal.Overlay />
+            <Modal.Content>
+              <Modal.CloseButton iconSize={25} size={25} />
+
+              <Modal.Body>
+                <Image radius={17} src={imageUrl} security="yamomma" />
+              </Modal.Body>
+            </Modal.Content>
+          </Modal.Root>
+        </>
+      ) : (
+        <Tooltip
+          label={'No image available'}
+          offset={-100}
+          color="rgba(0,0,0,0.7)"
+        >
+          <Flex className={classes.invalidUrl}>
+            <IconAlertTriangleFilled
+              size={'70px'}
+              className={classes.invalidUrlIcon}
             />
-          </Skeleton>
-        </AspectRatio>
-      </Tooltip>
-
-      <Modal.Root
-        centered
-        opened={open}
-        onClose={() => setOpen(false)}
-        styles={modalProps}
-      >
-        <Modal.Overlay />
-        <Modal.Content>
-          <Modal.CloseButton iconSize={25} size={25} />
-
-          <Modal.Body>
-            <Image radius={17} src={imageUrl} security="yamomma" />
-          </Modal.Body>
-        </Modal.Content>
-      </Modal.Root>
+            <Flex className={classes.invalidUrlText}>
+              <br />
+              Image Not Found
+            </Flex>
+          </Flex>
+        </Tooltip>
+      )}
     </>
   );
 }

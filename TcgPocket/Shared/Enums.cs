@@ -3,18 +3,7 @@
 public abstract class AppSettings
 {
     public const string DefaultConnection = nameof(DefaultConnection);
-
-    public abstract class PythonSettings
-    {
-        public const string Executable = "PythonSettings:Executable";
-        public const string MachineLearningModel = "PythonSettings:MachineLearningModel";
-    }
-
-    public abstract class BlobSettings
-    {
-        public const string ConnectionString = "BlobSettings:ConnectionString";
-        public const string ContainerName = "BlobSettings:ContainerName";
-    }
+    public const string CorsOrigins = nameof(CorsOrigins);
 }
 
 public abstract class OrderBy
