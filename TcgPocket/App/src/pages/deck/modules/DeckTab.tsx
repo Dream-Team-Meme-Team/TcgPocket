@@ -7,6 +7,7 @@ import { DecksService } from '../../../services/DecksService';
 import { responseWrapper } from '../../../services/helpers/responseWrapper';
 import { GameGetDto } from '../../../types/games';
 import { DeckDisplayDto } from '../../../types/decks';
+import { filterDecks } from '../../../helpers/filterDecks';
 
 export const DeckTab: React.FC = () => {
   const [games, selectedTab, searchTerm, selectedDeckId] = useAppSelector(
@@ -32,18 +33,10 @@ export const DeckTab: React.FC = () => {
     responseWrapper(promise);
 
     return promise.data;
-  }, [games, selectedTab]);
+  }, [gameId]);
 
   const filteredDecks: DeckDisplayDto[] = useMemo(() => {
-    return (
-      decks?.value?.filter(
-        (decks) =>
-          decks.name.toLowerCase().includes(searchTerm) ||
-          decks.cards.find((card) =>
-            card.cardDisplay.name.toLowerCase().includes(searchTerm)
-          )
-      ) ?? []
-    );
+    return filterDecks(searchTerm, decks?.value ?? []);
   }, [decks?.value, searchTerm]);
 
   const deleteSelectedDeck = async () => {

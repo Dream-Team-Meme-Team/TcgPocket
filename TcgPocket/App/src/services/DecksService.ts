@@ -22,6 +22,13 @@ export const DecksService = {
     });
   },
 
+  getAllDecksForAllGames: async () => {
+    return await apiCall<DeckDisplayDto[]>({
+      method: 'GET',
+      endpoint: `${apiRoutes.decks}/game`,
+    });
+  },
+
   getAllDecksByGameId: async (id: number) => {
     return await apiCall<DeckDisplayDto[]>({
       method: 'GET',

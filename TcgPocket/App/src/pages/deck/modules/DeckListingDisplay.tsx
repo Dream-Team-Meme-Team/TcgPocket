@@ -28,7 +28,7 @@ import { CardImageDisplay } from '../../../components/cardDisplay/modules/CardIm
 import { useMemo } from 'react';
 
 export type DeckListingDisplayProps = {
-  data?: DeckDisplayDto[];
+  data: DeckDisplayDto[];
   loading: boolean;
   deleteFn: () => Promise<void>;
   label: string;

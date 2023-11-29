@@ -1,8 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import {
-  DeckListingDisplay,
-  DeckListingDisplayProps,
-} from './DeckListingDisplay';
+import { DeckListingDisplay } from './DeckListingDisplay';
 import { useAsyncFn } from 'react-use';
 import { useAppSelector } from '../../../store/configureStore';
 import { shallowEqual } from 'react-redux';
@@ -10,154 +7,78 @@ import { DecksService } from '../../../services/DecksService';
 import { responseWrapper } from '../../../services/helpers/responseWrapper';
 import { DeckDisplayDto } from '../../../types/decks';
 import { GameGetDto } from '../../../types/games';
+import { filterDecks } from '../../../helpers/filterDecks';
 
-type DeckListData = Omit<DeckListingDisplayProps, 'deleteFn'>;
+type GameAndDecks = {
+  game: GameGetDto;
+  decks: DeckDisplayDto[];
+};
 
 export const AllDecksTab: React.FC = () => {
-  const [games, selectedTab, searchTerm, selectedDeckId] = useAppSelector(
+  const [games, searchTerm, selectedDeckId] = useAppSelector(
     (state) => [
       state.data.games,
-      state.deck.selectedTab,
       state.deck.searchTerm,
       state.deck.selectedDeckId,
     ],
     shallowEqual
   );
 
-  const magicGame: GameGetDto = useMemo(() => {
-    const game = games.find((game) => game.name === 'Magic');
-    return game ?? { id: 1, name: 'Magic' };
-  }, [games]);
-
-  const yugiohGame: GameGetDto = useMemo(() => {
-    const game = games.find((game) => game.name === 'Yu-Gi-Oh');
-    return game ?? { id: 2, name: 'Yu-Gi-Oh' };
-  }, [games]);
-
-  const pokemonGame: GameGetDto = useMemo(() => {
-    const game = games.find((game) => game.name === 'Pokémon');
-    return game ?? { id: 3, name: 'Pokémon' };
-  }, [games]);
-
-  const [magicDecks, fetchMagicDecks] = useAsyncFn(async () => {
-    const promise = await DecksService.getAllDecksByGameId(magicGame.id);
+  const [decks, fetchDecks] = useAsyncFn(async () => {
+    const promise = await DecksService.getAllDecksForAllGames();
     responseWrapper(promise);
 
     return promise.data;
-  }, [games, magicGame, selectedTab]);
+  }, []);
 
-  const [yugiohDecks, fetchYugiohDecks] = useAsyncFn(async () => {
-    const promise = await DecksService.getAllDecksByGameId(yugiohGame.id);
-    responseWrapper(promise);
+  const filteredDecks: DeckDisplayDto[] = useMemo(() => {
+    return filterDecks(searchTerm, decks?.value ?? []);
+  }, [decks?.value, searchTerm]);
 
-    return promise.data;
-  }, [games, yugiohGame, selectedTab]);
+  const organizedDecks = useMemo(() => {
+    const tempDecks: GameAndDecks[] = [];
 
-  const [pokemonDecks, fetchPokemonDecks] = useAsyncFn(async () => {
-    const promise = await DecksService.getAllDecksByGameId(pokemonGame.id);
-    responseWrapper(promise);
+    games.forEach((game) => {
+      tempDecks.push({ game: game, decks: [] });
+    });
 
-    return promise.data;
-  }, [games, pokemonGame, selectedTab]);
+    filteredDecks.forEach((deck) => {
+      tempDecks.find((x) => x.game.id === deck.gameId)?.decks.push(deck);
+    });
 
-  const filteredYugiohDecks: DeckDisplayDto[] = useMemo(() => {
-    return (
-      yugiohDecks?.value?.filter(
-        (decks) =>
-          decks.name.toLowerCase().includes(searchTerm) ||
-          decks.cards.find((card) =>
-            card.cardDisplay.name.toLowerCase().includes(searchTerm)
-          )
-      ) ?? []
-    );
-  }, [yugiohDecks, searchTerm]);
-
-  const filteredMagicDecks: DeckDisplayDto[] = useMemo(() => {
-    return (
-      magicDecks?.value?.filter(
-        (decks) =>
-          decks.name.toLowerCase().includes(searchTerm) ||
-          decks.cards.find((card) =>
-            card.cardDisplay.name.toLowerCase().includes(searchTerm)
-          )
-      ) ?? []
-    );
-  }, [magicDecks, searchTerm]);
-
-  const filteredPokemonDecks: DeckDisplayDto[] = useMemo(() => {
-    return (
-      pokemonDecks?.value?.filter(
-        (decks) =>
-          decks.name.toLowerCase().includes(searchTerm) ||
-          decks.cards.find((card) =>
-            card.cardDisplay.name.toLowerCase().includes(searchTerm)
-          )
-      ) ?? []
-    );
-  }, [pokemonDecks, searchTerm]);
+    return tempDecks;
+  }, [filteredDecks, games]);
 
   const deleteSelectedDeck = async () => {
     const promise = await DecksService.deleteDeck(selectedDeckId);
     responseWrapper(promise, 'Deck deleted');
 
     if (!promise.hasErrors) {
-      fetchYugiohDecks();
-      fetchMagicDecks();
-      fetchPokemonDecks();
+      fetchDecks();
     }
 
     return promise.data;
   };
 
-  const deckDisplayOrder: DeckListData[] = useMemo(() => {
-    const magic: DeckListData = {
-      data: filteredMagicDecks,
-      loading: magicDecks?.loading,
-      label: magicGame.name,
-    };
-    const yugioh: DeckListData = {
-      data: filteredYugiohDecks,
-      loading: yugiohDecks?.loading,
-      label: yugiohGame.name,
-    };
-    const pokemon: DeckListData = {
-      data: filteredPokemonDecks,
-      loading: pokemonDecks?.loading,
-      label: pokemonGame.name,
-    };
-
-    const deckData: DeckListData[] = [magic, yugioh, pokemon];
-
-    deckData.sort(function (a, b) {
-      return (b.data?.length ?? 99) - (a.data?.length ?? 99);
+  const deckDisplayOrder: GameAndDecks[] = useMemo(() => {
+    organizedDecks.sort(function (a, b) {
+      return (b.decks.length ?? 99) - (a.decks.length ?? 99);
     });
 
-    return deckData;
-  }, [
-    filteredMagicDecks,
-    filteredPokemonDecks,
-    filteredYugiohDecks,
-    magicDecks?.loading,
-    magicGame.name,
-    pokemonDecks?.loading,
-    pokemonGame.name,
-    yugiohDecks?.loading,
-    yugiohGame.name,
-  ]);
+    return organizedDecks;
+  }, [organizedDecks]);
 
   useEffect(() => {
-    fetchYugiohDecks();
-    fetchMagicDecks();
-    fetchPokemonDecks();
-  }, [fetchMagicDecks, fetchPokemonDecks, fetchYugiohDecks]);
+    fetchDecks();
+  }, [fetchDecks]);
 
   return (
     <div>
-      {deckDisplayOrder.map((decks, index) => (
+      {deckDisplayOrder.map((gameAndDecks, index) => (
         <DeckListingDisplay
-          data={decks.data}
+          data={gameAndDecks.decks}
           loading={decks.loading}
-          label={decks.label}
+          label={gameAndDecks.game.name}
           deleteFn={deleteSelectedDeck}
           tableWidth="99%"
           key={index}
