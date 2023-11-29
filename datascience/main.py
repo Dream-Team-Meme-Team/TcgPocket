@@ -26,11 +26,15 @@ def all_of_it(raw_img: bytes):
 
   # classify
   classif = torch.argmax(card_classify(card)).item()
+  print(classif)
 
   # scrape
-  reader = reader_classifier(classif)
-  filt = reader.apply_filter(raw_img)
-  read = reader.read_card(filt)
+  try: 
+    reader = reader_classifier(classif)
+    filt = reader.apply_filter(raw_img)
+    read = reader.read_card(filt)
+  except:
+    raise Exception("This card cannot be read at this time.")
 
   # cast to mgc(0), ygo(1), or pkm(2) for devs
   if classif == 0 or classif == 1:
@@ -40,4 +44,11 @@ def all_of_it(raw_img: bytes):
   elif classif == 3 or classif == 4:
     return reader.gen_query(read), 2
   #
+#
+
+# TODO: to be removed
+with open('datascience/data/collected/card2.jpg', "rb") as image:
+  f = image.read()
+  b = bytearray(f)
+  print(all_of_it(b))
 #
