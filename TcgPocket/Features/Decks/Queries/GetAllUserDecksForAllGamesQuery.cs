@@ -11,7 +11,7 @@ namespace TcgPocket.Features.Decks.Queries;
 
 public class GetAllUserDecksForAllGamesQuery : IRequest<Response<List<DeckDisplayDto>>>
 {
-    public int GameId { get; set; }
+
 }
 
 public class GetAllUserDecksForAllGamesHandler : IRequestHandler<GetAllUserDecksForAllGamesQuery, Response<List<DeckDisplayDto>>>
@@ -35,6 +35,7 @@ public class GetAllUserDecksForAllGamesHandler : IRequestHandler<GetAllUserDecks
         if (user is null) return Error.AsResponse<List<DeckDisplayDto>>("No user logged in", "user");
 
         var decks = await _dataContext.Set<Deck>()
+            .AsNoTracking()
             .Where(x => x.UserId == user.Id)
             .Include(x => x.DeckCards)
             .ThenInclude(y => y.Card)

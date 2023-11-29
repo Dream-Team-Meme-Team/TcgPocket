@@ -60,12 +60,15 @@ export const AllDecksTab: React.FC<DeckTabProps> = ({ decks, loading }) => {
     return organizedDecks;
   }, [organizedDecks]);
 
+  const displayIsVisible = (gameId: number) => {
+    return loading || decks.filter((deck) => deck.gameId === gameId).length > 0;
+  };
+
   return (
     <div>
       {deckDisplayOrder.map((gameAndDecks, index) => (
         <>
-          {decks.filter((deck) => deck.gameId === gameAndDecks.game.id).length >
-            0 && (
+          {displayIsVisible(gameAndDecks.game.id) && (
             <DeckListingDisplay
               data={gameAndDecks.decks}
               loading={loading}
