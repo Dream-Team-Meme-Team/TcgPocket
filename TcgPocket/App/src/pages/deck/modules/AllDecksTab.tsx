@@ -1,6 +1,5 @@
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { DeckListingDisplay } from './DeckListingDisplay';
-import { useAsyncFn } from 'react-use';
 import { useAppSelector } from '../../../store/configureStore';
 import { shallowEqual } from 'react-redux';
 import { DecksService } from '../../../services/DecksService';
@@ -8,13 +7,14 @@ import { responseWrapper } from '../../../services/helpers/responseWrapper';
 import { DeckDisplayDto } from '../../../types/decks';
 import { GameGetDto } from '../../../types/games';
 import { filterDecks } from '../../../helpers/filterDecks';
+import { DeckTabProps } from '../DeckPage';
 
 type GameAndDecks = {
   game: GameGetDto;
   decks: DeckDisplayDto[];
 };
 
-export const AllDecksTab: React.FC = () => {
+export const AllDecksTab: React.FC<DeckTabProps> = ({ decks, loading }) => {
   const [games, searchTerm, selectedDeckId] = useAppSelector(
     (state) => [
       state.data.games,
@@ -24,16 +24,9 @@ export const AllDecksTab: React.FC = () => {
     shallowEqual
   );
 
-  const [decks, fetchDecks] = useAsyncFn(async () => {
-    const promise = await DecksService.getAllDecksForAllGames();
-    responseWrapper(promise);
-
-    return promise.data;
-  }, []);
-
   const filteredDecks: DeckDisplayDto[] = useMemo(() => {
-    return filterDecks(searchTerm, decks?.value ?? []);
-  }, [decks?.value, searchTerm]);
+    return filterDecks(searchTerm, decks ?? []);
+  }, [decks, searchTerm]);
 
   const organizedDecks = useMemo(() => {
     const tempDecks: GameAndDecks[] = [];
@@ -54,7 +47,7 @@ export const AllDecksTab: React.FC = () => {
     responseWrapper(promise, 'Deck deleted');
 
     if (!promise.hasErrors) {
-      fetchDecks();
+      // fetchDecks();
     }
 
     return promise.data;
@@ -68,16 +61,12 @@ export const AllDecksTab: React.FC = () => {
     return organizedDecks;
   }, [organizedDecks]);
 
-  useEffect(() => {
-    fetchDecks();
-  }, [fetchDecks]);
-
   return (
     <div>
       {deckDisplayOrder.map((gameAndDecks, index) => (
         <DeckListingDisplay
           data={gameAndDecks.decks}
-          loading={decks.loading}
+          loading={loading}
           label={gameAndDecks.game.name}
           deleteFn={deleteSelectedDeck}
           tableWidth="99%"

@@ -1,6 +1,6 @@
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { DeckListingDisplay } from './DeckListingDisplay';
-import { useAsyncFn } from 'react-use';
+import { useAsyncFn, useEffectOnce } from 'react-use';
 import { useAppSelector } from '../../../store/configureStore';
 import { shallowEqual } from 'react-redux';
 import { DecksService } from '../../../services/DecksService';
@@ -48,9 +48,9 @@ export const DeckTab: React.FC = () => {
     return promise.data;
   };
 
-  useEffect(() => {
+  useEffectOnce(() => {
     fetchDecks();
-  }, [fetchDecks]);
+  });
 
   return (
     <div>

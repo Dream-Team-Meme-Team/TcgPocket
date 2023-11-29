@@ -5,7 +5,7 @@ import {
   Tabs,
   TabsValue,
 } from '@mantine/core';
-import { useEffectOnce } from 'react-use';
+import { useAsyncFn, useEffectOnce } from 'react-use';
 import { responseWrapper } from '../../services/helpers/responseWrapper';
 import { useEffect, useMemo } from 'react';
 import { dispatch, useAppSelector } from '../../store/configureStore';
@@ -22,6 +22,13 @@ import { DeckTabHeader } from './modules/DeckTabHeader';
 import { DeckTab } from './modules/DeckTab';
 import { IconPlayCard } from '@tabler/icons-react';
 import { AllDecksTab } from './modules/AllDecksTab';
+import { DeckDisplayDto } from '../../types/decks';
+import { DecksService } from '../../services/DecksService';
+
+export type DeckTabProps = {
+  decks: DeckDisplayDto[];
+  loading: boolean;
+};
 
 export function DeckPage(): React.ReactElement {
   const { classes } = useStyles();
@@ -33,8 +40,8 @@ export function DeckPage(): React.ReactElement {
     shallowEqual
   );
 
-  const gameTabs: Tab[] = useMemo(() => {
-    const tabs: Tab[] = [];
+  const gameTabs: Tab<DeckTabProps>[] = useMemo(() => {
+    const tabs: Tab<DeckTabProps>[] = [];
 
     tabs.push({
       label: 'All Games',
@@ -58,10 +65,21 @@ export function DeckPage(): React.ReactElement {
     dispatch(setSelectedDeckId(0));
   };
 
+  const [decks, fetchDecks] = useAsyncFn(async () => {
+    const promise = await DecksService.getAllDecksForAllGames();
+    responseWrapper(promise);
+
+    return promise.data;
+  }, []);
+
   useEffectOnce(() => {
     if (games.length === 0) {
       dispatch(getAllGames()).then(({ payload }) => responseWrapper(payload));
     }
+  });
+
+  useEffectOnce(() => {
+    fetchDecks();
   });
 
   useEffect(() => {
@@ -103,7 +121,7 @@ export function DeckPage(): React.ReactElement {
               value={tab.label}
               className={classes.panelContainer}
             >
-              <TabContent />
+              <TabContent decks={decks.value ?? []} loading={decks.loading} />
             </Tabs.Panel>
           );
         })}
