@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { DeckListingDisplay } from './DeckListingDisplay';
 import { useAppSelector } from '../../../store/configureStore';
 import { shallowEqual } from 'react-redux';
@@ -67,7 +67,7 @@ export const AllDecksTab: React.FC<DeckTabProps> = ({ decks, loading }) => {
   return (
     <div>
       {deckDisplayOrder.map((gameAndDecks, index) => (
-        <div key={gameAndDecks.game.id}>
+        <React.Fragment key={gameAndDecks.game.id}>
           {displayIsVisible(gameAndDecks.game.id) && (
             <DeckListingDisplay
               data={gameAndDecks.decks}
@@ -78,7 +78,7 @@ export const AllDecksTab: React.FC<DeckTabProps> = ({ decks, loading }) => {
               key={index}
             />
           )}
-        </div>
+        </React.Fragment>
       ))}
     </div>
   );
