@@ -24,6 +24,7 @@ import { IconPlayCard } from '@tabler/icons-react';
 import { AllDecksTab } from './modules/AllDecksTab';
 import { DeckDisplayDto } from '../../types/decks';
 import { DecksService } from '../../services/DecksService';
+import eventBus from '../../helpers/eventBus';
 
 export type DeckTabProps = {
   decks: DeckDisplayDto[];
@@ -76,15 +77,21 @@ export function DeckPage(): React.ReactElement {
     if (games.length === 0) {
       dispatch(getAllGames()).then(({ payload }) => responseWrapper(payload));
     }
-  });
 
-  useEffectOnce(() => {
     fetchDecks();
   });
 
   useEffect(() => {
-    dispatch(setSelectedDeckTab(gameTabs[0]?.label ?? 'Magic'));
-  }, [gameTabs]);
+    dispatch(setSelectedDeckTab(gameTabs[0]?.label ?? 'All Games'));
+
+    const subscription = eventBus.subscribe('fetchDecks', () => {
+      fetchDecks();
+    });
+
+    return () => {
+      eventBus.unsubscribe('fetchDecks', subscription);
+    };
+  }, [fetchDecks, gameTabs]);
 
   return (
     <Tabs

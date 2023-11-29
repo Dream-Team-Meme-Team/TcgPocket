@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 import { DeckListingDisplay } from './DeckListingDisplay';
-import { useAsyncFn, useEffectOnce } from 'react-use';
 import { useAppSelector } from '../../../store/configureStore';
 import { shallowEqual } from 'react-redux';
 import { DecksService } from '../../../services/DecksService';
@@ -8,8 +7,10 @@ import { responseWrapper } from '../../../services/helpers/responseWrapper';
 import { GameGetDto } from '../../../types/games';
 import { DeckDisplayDto } from '../../../types/decks';
 import { filterDecks } from '../../../helpers/filterDecks';
+import { DeckTabProps } from '../DeckPage';
+import eventBus from '../../../helpers/eventBus';
 
-export const DeckTab: React.FC = () => {
+export const DeckTab: React.FC<DeckTabProps> = ({ decks, loading }) => {
   const [games, selectedTab, searchTerm, selectedDeckId] = useAppSelector(
     (state) => [
       state.data.games,
@@ -20,43 +21,36 @@ export const DeckTab: React.FC = () => {
     shallowEqual
   );
 
-  const gameId: number = useMemo(() => {
-    const game: GameGetDto | undefined = games.find(
+  const game: GameGetDto = useMemo(() => {
+    const game: GameGetDto = games.find(
       (game) => game.name === selectedTab
-    );
+    ) ?? { id: 0, name: '' };
 
-    return game?.id ?? 0;
+    return game;
   }, [games, selectedTab]);
 
-  const [decks, fetchDecks] = useAsyncFn(async () => {
-    const promise = await DecksService.getAllDecksByGameId(gameId);
-    responseWrapper(promise);
-
-    return promise.data;
-  }, [gameId]);
+  const gameDeck = useMemo(() => {
+    return decks.filter((deck) => deck.gameId === game.id);
+  }, [decks, game.id]);
 
   const filteredDecks: DeckDisplayDto[] = useMemo(() => {
-    return filterDecks(searchTerm, decks?.value ?? []);
-  }, [decks?.value, searchTerm]);
+    return filterDecks(searchTerm, gameDeck ?? []);
+  }, [gameDeck, searchTerm]);
 
   const deleteSelectedDeck = async () => {
     const promise = await DecksService.deleteDeck(selectedDeckId);
     responseWrapper(promise, 'Deck deleted');
 
-    if (!promise.hasErrors) fetchDecks();
+    if (!promise.hasErrors) eventBus.publish('fetchDecks', promise);
 
     return promise.data;
   };
-
-  useEffectOnce(() => {
-    fetchDecks();
-  });
 
   return (
     <div>
       <DeckListingDisplay
         data={filteredDecks}
-        loading={decks?.loading}
+        loading={loading}
         deleteFn={deleteSelectedDeck}
         label={selectedTab ?? ''}
         tableWidth="99%"

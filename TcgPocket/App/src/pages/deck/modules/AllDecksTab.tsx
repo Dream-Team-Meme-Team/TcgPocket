@@ -8,6 +8,7 @@ import { DeckDisplayDto } from '../../../types/decks';
 import { GameGetDto } from '../../../types/games';
 import { filterDecks } from '../../../helpers/filterDecks';
 import { DeckTabProps } from '../DeckPage';
+import eventBus from '../../../helpers/eventBus';
 
 type GameAndDecks = {
   game: GameGetDto;
@@ -46,9 +47,7 @@ export const AllDecksTab: React.FC<DeckTabProps> = ({ decks, loading }) => {
     const promise = await DecksService.deleteDeck(selectedDeckId);
     responseWrapper(promise, 'Deck deleted');
 
-    if (!promise.hasErrors) {
-      // fetchDecks();
-    }
+    if (!promise.hasErrors) eventBus.publish('fetchDecks', promise);
 
     return promise.data;
   };
@@ -64,14 +63,19 @@ export const AllDecksTab: React.FC<DeckTabProps> = ({ decks, loading }) => {
   return (
     <div>
       {deckDisplayOrder.map((gameAndDecks, index) => (
-        <DeckListingDisplay
-          data={gameAndDecks.decks}
-          loading={loading}
-          label={gameAndDecks.game.name}
-          deleteFn={deleteSelectedDeck}
-          tableWidth="99%"
-          key={index}
-        />
+        <>
+          {decks.filter((deck) => deck.gameId === gameAndDecks.game.id).length >
+            0 && (
+            <DeckListingDisplay
+              data={gameAndDecks.decks}
+              loading={loading}
+              label={gameAndDecks.game.name}
+              deleteFn={deleteSelectedDeck}
+              tableWidth="99%"
+              key={index}
+            />
+          )}
+        </>
       ))}
     </div>
   );

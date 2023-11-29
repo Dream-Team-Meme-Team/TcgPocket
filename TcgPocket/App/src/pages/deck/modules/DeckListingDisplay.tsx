@@ -241,6 +241,7 @@ const useStyles = createStyles(
         borderCollapse: 'collapse',
         overflow: 'hidden',
         transition: 'max-height 0.3s ease-out',
+        maxHeight: '1000px',
       },
 
       tableContainer: {

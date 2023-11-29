@@ -44,7 +44,7 @@ export function DeckTabHeader(): React.ReactElement {
         h="100%"
         className={classes.headerRow}
       >
-        <Text> Manage Decks </Text>
+        <Text className={classes.manageDecks}>Manage Decks</Text>
         <div className={classes.headerDivider} />
 
         <PrimaryTextInput
@@ -52,7 +52,7 @@ export function DeckTabHeader(): React.ReactElement {
           placeholder="Search Decks"
           value={searchTerm}
           onChange={handleInputChange}
-          w="75%"
+          p="2em"
         />
 
         <PrimaryButton
@@ -96,7 +96,14 @@ const useStyles = createStyles((theme: MantineTheme) => {
     headerRow: {
       padding: '0.5em',
       paddingRight: '1.25em',
-      fontSize: 32,
+    },
+
+    manageDecks: {
+      display: 'inline-block',
+      whiteSpace: 'nowrap',
+      paddingRight: '1.25em',
+
+      fontSize: 'x-large',
       fontWeight: 'bolder',
     },
   };
