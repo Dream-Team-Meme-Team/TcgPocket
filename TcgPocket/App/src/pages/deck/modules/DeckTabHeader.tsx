@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { dispatch } from '../../../store/configureStore';
+import { useEffect, useMemo, useState } from 'react';
+import { dispatch, useAppSelector } from '../../../store/configureStore';
 import { setDeckSearchTerm } from '../../../store/deckSlice';
 import useDebounce from '../../../hooks/useDebounce';
 import { PrimaryTextInput } from '../../../components/inputs/PrimaryTextInput';
@@ -10,6 +10,7 @@ import { defaultGap } from '../../../constants/theme';
 import { PrimaryButton } from '../../../components/buttons/PrimaryButton';
 import { routes } from '../../../routes/Index';
 import { useNavigate } from 'react-router-dom';
+import { shallowEqual } from 'react-redux';
 
 export function DeckTabHeader(): React.ReactElement {
   const { classes } = useStyles();
@@ -18,9 +19,18 @@ export function DeckTabHeader(): React.ReactElement {
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
+  const [deckSearchTerm] = useAppSelector(
+    (state) => [state.deck.searchTerm],
+    shallowEqual
+  );
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
+
+  useMemo(() => {
+    setSearchTerm(deckSearchTerm);
+  }, [deckSearchTerm]);
 
   useEffect(() => {
     dispatch(setDeckSearchTerm(debouncedSearchTerm));

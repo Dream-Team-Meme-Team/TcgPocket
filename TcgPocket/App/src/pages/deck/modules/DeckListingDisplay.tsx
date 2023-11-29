@@ -168,7 +168,7 @@ export const TableRow = ({ value, allCollapsed, deleteFn }: TableRowProps) => {
               aria-label={isCollapsed ? 'Expand deck' : 'Collapse deck'}
               onClick={toggleCollapse}
             >
-              {isCollapsed ? <IconCaretUp /> : <IconCaretDown />}
+              {isCollapsed ? <IconCaretDown /> : <IconCaretUp />}
             </ActionIcon>
           </Tooltip>
         </div>
