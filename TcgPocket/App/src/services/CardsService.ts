@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
+  AddToInventoryDto,
   CardDetailDto,
   CardDisplayDto,
   CardDto,
@@ -10,6 +11,7 @@ import { PagedResult } from '../types/shared';
 import { apiCall } from './helpers/apiCall';
 import { Response } from '../types/shared';
 import { apiRoutes } from '../routes/index';
+import { UserCardDto } from '../types/user-cards';
 
 type UpdateCardParams = {
   id: number;
@@ -50,6 +52,14 @@ export const CardsService = {
     });
   },
 
+  addCardsToInventory: async (body: AddToInventoryDto) => {
+    return await apiCall<UserCardDto[]>({
+      method: 'POST',
+      endpoint: `${apiRoutes.cards}/inventory`,
+      data: body,
+    });
+  },
+
   updateCard: async ({ id, body }: UpdateCardParams) => {
     return await apiCall<CardGetDto>({
       method: 'PUT',
@@ -80,4 +90,12 @@ export const getAllCards = createAsyncThunk<
   { rejectValue: Response<PagedResult<CardDisplayDto>> }
 >('getAllCards', async (values) => {
   return await CardsService.getAllCards(values);
+});
+
+export const addCardsToInventory = createAsyncThunk<
+  Response<UserCardDto[]>,
+  AddToInventoryDto,
+  { rejectValue: Response<UserCardDto[]> }
+>('addCardsToInventory', async (values) => {
+  return await CardsService.addCardsToInventory(values);
 });

@@ -1,0 +1,93 @@
+Using cpu device
+Epoch 1 ----------------------------------------------------------
+loss: 1.609456  [   20/ 7500]
+loss: 1.350964  [ 2020/ 7500]
+loss: 1.132549  [ 4020/ 7500]
+loss: 0.959684  [ 6020/ 7500]
+Test Error: 
+ Accuracy: 93.1%, Avg loss: 0.990525 
+
+Saved Tenative PyTorch Model State
+Epoch 2 ----------------------------------------------------------
+loss: 1.037873  [   20/ 7500]
+loss: 0.951021  [ 2020/ 7500]
+loss: 0.981741  [ 4020/ 7500]
+loss: 0.913603  [ 6020/ 7500]
+Test Error: 
+ Accuracy: 96.3%, Avg loss: 0.948593 
+
+Saved Tenative PyTorch Model State
+Epoch 3 ----------------------------------------------------------
+loss: 0.998733  [   20/ 7500]
+loss: 0.918610  [ 2020/ 7500]
+loss: 0.964717  [ 4020/ 7500]
+loss: 0.908895  [ 6020/ 7500]
+Test Error: 
+ Accuracy: 97.8%, Avg loss: 0.931463 
+
+Saved Tenative PyTorch Model State
+Epoch 4 ----------------------------------------------------------
+loss: 1.005416  [   20/ 7500]
+loss: 0.907973  [ 2020/ 7500]
+loss: 0.920886  [ 4020/ 7500]
+loss: 0.909076  [ 6020/ 7500]
+Test Error: 
+ Accuracy: 98.3%, Avg loss: 0.924888
+
+Saved Tenative PyTorch Model State
+Epoch 5 ----------------------------------------------------------
+loss: 1.003250  [   20/ 7500]
+loss: 0.905233  [ 2020/ 7500]
+loss: 0.905535  [ 4020/ 7500]
+loss: 0.915333  [ 6020/ 7500]
+Test Error: 
+ Accuracy: 98.6%, Avg loss: 0.921758
+
+Saved Tenative PyTorch Model State
+Epoch 6 ----------------------------------------------------------
+loss: 1.002853  [   20/ 7500]
+loss: 0.926759  [ 2020/ 7500]
+loss: 0.911583  [ 4020/ 7500]
+loss: 0.909334  [ 6020/ 7500]
+Test Error: 
+ Accuracy: 98.7%, Avg loss: 0.920031
+
+Saved Tenative PyTorch Model State
+Epoch 7 ----------------------------------------------------------
+loss: 1.000849  [   20/ 7500]
+loss: 0.923356  [ 2020/ 7500]
+loss: 0.908728  [ 4020/ 7500]
+loss: 0.911544  [ 6020/ 7500]
+Test Error: 
+ Accuracy: 98.8%, Avg loss: 0.918787
+
+Saved Tenative PyTorch Model State
+Epoch 8 ----------------------------------------------------------
+loss: 1.004012  [   20/ 7500]
+loss: 0.905054  [ 2020/ 7500]
+loss: 0.908928  [ 4020/ 7500]
+loss: 0.905638  [ 6020/ 7500]
+Test Error: 
+ Accuracy: 98.8%, Avg loss: 0.917938
+
+Saved Tenative PyTorch Model State
+Epoch 9 ----------------------------------------------------------
+loss: 1.002269  [   20/ 7500]
+loss: 0.905874  [ 2020/ 7500]
+loss: 0.922835  [ 4020/ 7500]
+loss: 0.907982  [ 6020/ 7500]
+Test Error: 
+ Accuracy: 98.8%, Avg loss: 0.918175
+
+Saved Tenative PyTorch Model State
+Epoch 10 ----------------------------------------------------------
+loss: 1.003433  [   20/ 7500]
+loss: 0.906045  [ 2020/ 7500]
+loss: 0.905375  [ 4020/ 7500]
+loss: 0.905156  [ 6020/ 7500]
+Test Error: 
+ Accuracy: 98.9%, Avg loss: 0.916453
+
+Saved Tenative PyTorch Model State
+All Done, you can cry over the accuracy now     。゜゜(´Ｏ`) ゜゜。
+Saved Final PyTorch Model State
