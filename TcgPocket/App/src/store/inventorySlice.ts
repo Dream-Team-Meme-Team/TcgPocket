@@ -1,9 +1,18 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { CardDisplayDto } from '../types/cards';
-import { PagedResult } from '../types/shared';
+import { AsyncThunkAction, PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { CardDisplayDto, CardFilterDto } from '../types/cards';
+import { PagedResult, Response } from '../types/shared';
 import { GameGetDto } from '../types/games';
 import { toggleFilters } from '../helpers/toggleFilters';
-import { getAllCards } from '../services/CardsService';
+import { getAllCards, getUserInventory } from '../services/CardsService';
+
+type CardDispatchAction = (arg: CardFilterDto) => AsyncThunkAction<
+  Response<PagedResult<CardDisplayDto>>,
+  CardFilterDto,
+  {
+    rejectValue: Response<PagedResult<CardDisplayDto>>;
+    rejectedMeta: unknown;
+  }
+>;
 
 export interface InventoryState {
   searchText: string;
@@ -14,6 +23,7 @@ export interface InventoryState {
   cards: PagedResult<CardDisplayDto> | null;
   loading: boolean;
   selectedGame: GameGetDto | null;
+  cardDispatchAction: CardDispatchAction;
 }
 
 const INITIAL_STATE: InventoryState = {
@@ -25,12 +35,19 @@ const INITIAL_STATE: InventoryState = {
   cardTypeFilters: [],
   setFilters: [],
   rarityFilters: [],
+  cardDispatchAction: getUserInventory,
 };
 
 export const inventorySlice = createSlice({
   name: 'Inventory',
   initialState: INITIAL_STATE,
   reducers: {
+    setCardDispatchAction(
+      state,
+      { payload }: PayloadAction<InventoryState['cardDispatchAction']>
+    ) {
+      state.cardDispatchAction = payload;
+    },
     toggleCardTypeFilters(
       state,
       { payload }: PayloadAction<InventoryState['cardTypeFilters'][number]>
@@ -87,10 +104,21 @@ export const inventorySlice = createSlice({
     builder.addCase(getAllCards.rejected, (state) => {
       state.loading = false;
     });
+    builder.addCase(getUserInventory.fulfilled, (state, { payload }) => {
+      state.cards = payload.data;
+      state.loading = false;
+    });
+    builder.addCase(getUserInventory.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getUserInventory.rejected, (state) => {
+      state.loading = false;
+    });
   },
 });
 
 export const {
+  setCardDispatchAction,
   updateSelectedGame,
   toggleCardTypeFilters,
   toggleRarityFilters,

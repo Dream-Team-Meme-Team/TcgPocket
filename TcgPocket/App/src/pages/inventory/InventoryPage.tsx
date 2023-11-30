@@ -5,7 +5,6 @@ import { FilterMenu } from '../../components/filterMenu/FilterMenu';
 import { useNavbarHeight } from '../../hooks/useNavbarHeight';
 import { dispatch, useAppSelector } from '../../store/configureStore';
 import { shallowEqual } from 'react-redux';
-import { getAllCards } from '../../services/CardsService';
 import { responseWrapper } from '../../services/helpers/responseWrapper';
 import { CardFilterDto } from '../../types/cards';
 import { GameGetDto } from '../../types/games';
@@ -27,7 +26,7 @@ import { PrimaryButton } from '../../components/buttons/PrimaryButton';
 import { AppliedFilters } from '../../types/applied-filters';
 import { FilterActions } from '../../types/filter-actions';
 
-const pageSizeOptions: string[] = ['15', '30', '45'];
+const pageSizeOptions: string[] = ['15', '30', '45'] as const;
 
 export function InventoryPage(): React.ReactElement {
   const { classes } = useStyles();
@@ -40,6 +39,7 @@ export function InventoryPage(): React.ReactElement {
     rarityFilters,
     searchText,
     currentPage,
+    cardDispatchAction,
   ] = useAppSelector(
     (state) => [
       state.inventory.cards,
@@ -49,6 +49,7 @@ export function InventoryPage(): React.ReactElement {
       state.inventory.rarityFilters,
       state.inventory.searchText,
       state.inventory.currentPage,
+      state.inventory.cardDispatchAction,
     ],
     shallowEqual
   );
@@ -82,7 +83,7 @@ export function InventoryPage(): React.ReactElement {
       pageSize: pageSize,
     };
 
-    dispatch(getAllCards(filtered)).then(({ payload }) =>
+    dispatch(cardDispatchAction(filtered)).then(({ payload }) =>
       responseWrapper(payload)
     );
   };
@@ -125,7 +126,7 @@ export function InventoryPage(): React.ReactElement {
       pageSize: pageSize,
     };
 
-    dispatch(getAllCards(filtered)).then(({ payload }) =>
+    dispatch(cardDispatchAction(filtered)).then(({ payload }) =>
       responseWrapper(payload)
     );
   }, [
@@ -135,6 +136,7 @@ export function InventoryPage(): React.ReactElement {
     selectedGame,
     currentPage,
     pageSize,
+    cardDispatchAction,
   ]);
 
   useEffect(() => {

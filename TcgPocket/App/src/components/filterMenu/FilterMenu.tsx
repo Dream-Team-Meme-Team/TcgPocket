@@ -1,4 +1,10 @@
-import { MantineTheme, ScrollArea, createStyles } from '@mantine/core';
+import {
+  MantineTheme,
+  ScrollArea,
+  SegmentedControl,
+  SegmentedControlItem,
+  createStyles,
+} from '@mantine/core';
 import { PrimarySelect } from '../inputs/PrimarySelect';
 import { dispatch, useAppSelector } from '../../store/configureStore';
 import { useEffectOnce } from 'react-use';
@@ -17,6 +23,13 @@ import { getAllSets } from '../../services/dataServices/setServices';
 import { Category } from '../../types/category';
 import { AppliedFilters } from '../../types/applied-filters';
 import { FilterActions } from '../../types/filter-actions';
+import { getAllCards, getUserInventory } from '../../services/CardsService';
+import {
+  setCardDispatchAction,
+  setInventoryCurrentPage,
+  setInventorySearchText,
+} from '../../store/inventorySlice';
+import { defaultGap, defaultPadding } from '../../constants/theme';
 
 type FilterMenuProps = {
   selectedGame: GameGetDto | null;
@@ -33,12 +46,13 @@ export function FilterMenu({
 }: FilterMenuProps): React.ReactElement {
   const { classes } = useStyles();
 
-  const [games, cardTypes, sets, rarities] = useAppSelector(
+  const [games, cardTypes, sets, rarities, inventoryLoading] = useAppSelector(
     (state) => [
       state.data.games,
       state.data.cardTypes,
       state.data.sets,
       state.data.rarities,
+      state.inventory.loading,
     ],
     shallowEqual
   );
@@ -61,7 +75,25 @@ export function FilterMenu({
     },
   ];
 
-  const handleSelectChange = (
+  const inventoryOptions: SegmentedControlItem[] = [
+    {
+      label: 'Inventory',
+      value: 'inventory',
+    },
+    {
+      label: 'All',
+      value: 'all',
+    },
+  ];
+
+  const handleInventoryChange = async (value: string) => {
+    const dispatchAction = value === 'all' ? getAllCards : getUserInventory;
+    dispatch(setCardDispatchAction(dispatchAction));
+    dispatch(setInventoryCurrentPage(1));
+    dispatch(setInventorySearchText(''));
+  };
+
+  const handleGameChange = (
     value: string | React.ChangeEvent<HTMLInputElement> | null
   ) => {
     if (!setSelectedGame) return;
@@ -100,6 +132,14 @@ export function FilterMenu({
   return (
     <div className={classes.menu}>
       <div className={classes.select}>
+        <SegmentedControl
+          disabled={inventoryLoading}
+          data={inventoryOptions}
+          onChange={handleInventoryChange}
+        />
+      </div>
+
+      <div className={classes.select}>
         <PrimarySelect
           clearable
           searchable
@@ -108,7 +148,7 @@ export function FilterMenu({
           label="Select Game:"
           value={selectedGame ? selectedGame.name : ''}
           data={games.map((game) => game.name)}
-          onChange={handleSelectChange}
+          onChange={handleGameChange}
         />
       </div>
 
@@ -142,6 +182,10 @@ const useStyles = createStyles((theme: MantineTheme) => {
       borderRightWidth: 2,
       borderRightStyle: 'solid',
       borderRightColor: theme.colors.primaryPurpleColor[0],
+
+      paddingTop: defaultPadding,
+
+      gap: defaultGap,
     },
 
     select: {
