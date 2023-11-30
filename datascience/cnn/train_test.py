@@ -2,13 +2,13 @@
 import torch
 from torch.utils.data import DataLoader
 from card_dataset import CardDataSet
-from model_av.card_classifier_a import CardClassifier
+from model_ev.card_classifier_ev import CardClassifier
 import torch.nn as nn
 
 # IMPORTANT VARS FOR TRAINING
 batch_size = 20
 learning_rate = 0.001
-num_epochs = 5      # 5 for model_av vs 10 for model 0
+num_epochs = 10      # 5 for model_av vs 10 for model 0
 
 device = (
     "cuda"
@@ -20,10 +20,10 @@ device = (
 print(f'Using {device} device')
 
 # LOAD IN DATA SETS
-train_dataset = CardDataSet(csv_file='data-science/data/train/data.txt')
+train_dataset = CardDataSet(csv_file='TcgPocket/datascience/data/ev-sets/train/data.txt')
 train_dataloader = DataLoader(train_dataset, shuffle=False, batch_size=batch_size)
 
-test_dataset = CardDataSet(csv_file='data-science/data/test/data.txt')
+test_dataset = CardDataSet(csv_file='TcgPocket/datascience/data/ev-sets/test/data.txt')
 test_dataloader = DataLoader(test_dataset, shuffle=False, batch_size=batch_size)
 
 # HYPER PARAMS
@@ -96,11 +96,11 @@ for e in range(num_epochs):
     print(f'Epoch {e+1} ----------------------------------------------------------')
     train(train_dataloader, model, loss_fn, optimizer)
     test(test_dataloader, model, loss_fn)
-    torch.save(model.state_dict(), 'data-science/cnn/model_av/model_a_v2.pt')
+    torch.save(model.state_dict(), 'TcgPocket/datascience/cnn/model_ev/model_e_v3.pt')
     print("Saved Tenative PyTorch Model State")
 
 print('All Done, you can cry over the accuracy now 	。゜゜(´Ｏ`) ゜゜。')
 
 # SAVE MODEL
-torch.save(model.state_dict(), 'data-science/cnn/model_av/model_a_v2.pt')
+torch.save(model.state_dict(), 'TcgPocket/datascience/cnn/model_ev/model_e_v3.pt')
 print("Saved Final PyTorch Model State")

@@ -18,10 +18,20 @@ export type CardDto = {
   description: string;
 };
 
+export type AddToInventoryDto = {
+  cardIds: number[];
+};
+
 export type CardGetDto = Id & CardDto;
 
 export type CardDetailDto = CardGetDto & {
   attributes: CardAttributeDto[];
+};
+
+export type DeckCardDisplayDto = {
+  cardDisplay: CardDisplayDto;
+  deckId: number;
+  count: number;
 };
 
 export type CardFilterDto = {

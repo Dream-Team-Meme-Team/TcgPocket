@@ -5,7 +5,7 @@ import {
   AttributeFilterDto,
   AttributeGetDto,
 } from '../../types/attributes';
-import { apiRoutes } from '../../routes/index';
+import { apiRoutes } from '../../routes/Index';
 import { PagedResult, Response } from '../../types/shared';
 
 export type AttributeServices = typeof AttributeServices;

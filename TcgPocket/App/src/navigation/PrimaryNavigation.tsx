@@ -8,8 +8,12 @@ import {
   Navbar,
 } from '@mantine/core';
 import {
+  IconCameraPlus,
+  IconCards,
+  IconLayoutCards,
   IconLogin,
   IconLogout,
+  IconPlaylistAdd,
   IconRegistered,
   IconSettings,
   IconUser,
@@ -24,6 +28,7 @@ import { useNavigate } from 'react-router-dom';
 import { signOutUser } from '../services/authServices';
 import { dispatch, useAppSelector } from '../store/configureStore';
 import { routes } from '../routes/index';
+import { NavMenuButton } from './NavMenuButton';
 
 export function PrimaryNavigation(): React.ReactElement {
   const navigate = useNavigate();
@@ -62,12 +67,58 @@ export function PrimaryNavigation(): React.ReactElement {
         <Flex align={'center'} gap={25}>
           {determineUserState && (
             <Flex gap={10}>
-              <NavButton route={routes.inventory}>Inventory</NavButton>
-              <NavButton route={routes.cardUpload}>Upload Cards</NavButton>
-              <NavButton route={routes.deckBuilder}> Deck Builder</NavButton>
               {isAdmin && (
                 <NavButton route={routes.adminPortal}>Admin Portal</NavButton>
               )}
+
+              <Menu>
+                <Menu.Target>
+                  <NavMenuButton
+                    name="Inventory"
+                    itemRoutes={[routes.inventory, routes.cardUpload]}
+                  />
+                </Menu.Target>
+
+                <Menu.Dropdown>
+                  <Menu.Item
+                    onClick={() => navigate(routes.inventory)}
+                    icon={<IconCards size="1.25em" />}
+                  >
+                    Inventory
+                  </Menu.Item>
+
+                  <Menu.Item
+                    onClick={() => navigate(routes.cardUpload)}
+                    icon={<IconCameraPlus size="1.25em" />}
+                  >
+                    Upload Cards
+                  </Menu.Item>
+                </Menu.Dropdown>
+              </Menu>
+              <Menu>
+                <Menu.Target>
+                  <NavMenuButton
+                    name="Deck"
+                    itemRoutes={[routes.decks, routes.deckBuilder]}
+                  />
+                </Menu.Target>
+
+                <Menu.Dropdown>
+                  <Menu.Item
+                    onClick={() => navigate(routes.decks)}
+                    icon={<IconLayoutCards size="1.25em" />}
+                  >
+                    View Decks
+                  </Menu.Item>
+
+                  <Menu.Item
+                    onClick={() => navigate(routes.deckBuilder)}
+                    icon={<IconPlaylistAdd size="1.25em" />}
+                  >
+                    Deck Builder
+                  </Menu.Item>
+                </Menu.Dropdown>
+              </Menu>
             </Flex>
           )}
 

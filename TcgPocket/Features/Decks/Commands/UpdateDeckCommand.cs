@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using TcgPocket.Data;
+using TcgPocket.Features.Cards;
 using TcgPocket.Features.DeckCards;
 using TcgPocket.Features.Users;
 using TcgPocket.Shared;
@@ -62,7 +63,9 @@ public class UpdateDeckCommandHandler : IRequestHandler<UpdateDeckCommand, Respo
        
         if (user is not null && user.Id != deck.UserId) return Error.AsResponse<DeckDetailDto>("Deck not found for current user.", "userId");
 
-        var hasMultipleCardGames = command.Deck.Cards.Any(x => x.GameId != command.Deck.GameId);
+        var cardIds = command.Deck.Cards.Select(x => x.Id).ToList();
+
+        var hasMultipleCardGames = _dataContext.Set<Card>().Any(x => cardIds.Contains(x.Id) && x.GameId != command.Deck.GameId);
 
         if (hasMultipleCardGames)
         {
