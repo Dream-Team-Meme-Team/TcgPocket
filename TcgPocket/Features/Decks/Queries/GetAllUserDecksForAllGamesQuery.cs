@@ -52,10 +52,10 @@ public class GetAllUserDecksForAllGamesHandler : IRequestHandler<GetAllUserDecks
         var groupedCards = new List<DeckCardDisplayDto>();
 
         decks.ForEach(deck => {
-            var groupedDeckCards = deck.DeckCards.GroupBy(x => x.Card).ToList();
+            var groupedDeckCards = deck.DeckCards.GroupBy(x => x.Card.Id).ToList();
             groupedDeckCards.ForEach(cards =>
             {
-                var card = _mapper.Map<CardDisplayDto>(cards.Key);
+                var card = _mapper.Map<CardDisplayDto>(cards.FirstOrDefault()?.Card);
                 if (card is not null)
                 {
                     groupedCards.Add(new DeckCardDisplayDto
