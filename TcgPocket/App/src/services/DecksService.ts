@@ -1,10 +1,10 @@
-import { apiRoutes } from '../routes/Index';
 import {
   DeckDetailDto,
   DeckDisplayDto,
   DeckDto,
   DeckGetDto,
 } from '../types/decks';
+import { apiRoutes } from '../routes/index';
 import { apiCall } from './helpers/apiCall';
 
 type UpdateDeckParams = {

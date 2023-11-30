@@ -17,12 +17,13 @@
 # For more information on the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # For more samples to get started with GitHub Action workflows to deploy to Azure: https://github.com/Azure/actions-workflow-samples
 
-name: Build and deploy ASP.Net Core app to an Azure Web App
+name: .NET
 
 env:
-  AZURE_WEBAPP_NAME: tcg-pocket- # set this to the name of your Azure Web App
-  AZURE_WEBAPP_PACKAGE_PATH: "./TcgPocket" # set this to the path to your web app project, defaults to the repository root
-  DOTNET_VERSION: "7" # set this to the .NET Core version to use
+  AZURE_WEBAPP_NAME: TcgPocket
+  AZURE_WEBAPP_PACKAGE_PATH: "."
+  DOTNET_VERSION: "7.0"
+  DOTNET_ROOT: ./TcgPocket
 
 on:
   push:
@@ -53,10 +54,20 @@ jobs:
             ${{ runner.os }}-nuget-
 
       - name: Build with dotnet
-        run: dotnet build --configuration Release
+        run: |
+          cd TcgPocket
+          dotnet build --configuration Release
+
+      - name: Substitute variables in appsettings.json
+        run: |
+          sed -i 's|"DefaultConnection": ".*"|"DefaultConnection": "${{ secrets.DEFAULT_CONNECTION }}"|' TcgPocket/appsettings.json
+          sed -i 's|"AllowedHosts": ".*"|"AllowedHosts": "${{ secrets.ALLOWED_HOSTS }}"|' TcgPocket/appsettings.json
+          sed -i 's|"CorsOrigins": ".*"|"CorsOrigins": "${{ secrets.CORS_ORIGINS }}"|' TcgPocket/appsettings.json
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: |
+          cd TcgPocket
+          dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3

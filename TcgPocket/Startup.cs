@@ -3,18 +3,17 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using TcgPocket.Data;
-using TcgPocket.Features.CardReader;
 using TcgPocket.Features.Users;
 using TcgPocket.Features.Roles;
-using TcgPocket.Features.StorageProvider;
 using TcgPocket.Settings;
+using TcgPocket.Shared;
 
 namespace TcgPocket;
 
 public class Startup
 {
     private ConfigurationManager _configuration { get; }
-
+    
     public Startup(WebApplicationBuilder builder)
     {
         _configuration = builder.Configuration;
@@ -32,11 +31,8 @@ public class Startup
         services.AddSwaggerGen();
         services.AddCors();
         services.AddDbContext<DataContext>(options =>
-            options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
+            options.UseSqlServer(_configuration.GetConnectionString(AppSettings.DefaultConnection)));
 
-        services.AddScoped<IBlobStorageProvider, BlobStorageProvider>();
-        services.AddScoped<IMachineLearningModelService, MachineLearningModelService>();
-        
         ConfigureIdentity(services);
     }
 
@@ -72,7 +68,7 @@ public class Startup
         {
             options.Cookie.HttpOnly = true;
             options.Cookie.SameSite = SameSiteMode.None;
-            options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+            options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
 
             options.LoginPath = "/Identity/Account/Login";
             options.AccessDeniedPath = "/Identity/Account/AccessDenied";

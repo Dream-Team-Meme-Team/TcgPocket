@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Response } from '../../types/shared';
-import { error, success } from './Notification';
+import { error, success } from './notification';
 
 export function responseWrapper(
   response: Response<any> | undefined,

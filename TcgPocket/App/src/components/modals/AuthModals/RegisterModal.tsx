@@ -1,5 +1,5 @@
 import { PrimaryModal } from '../PrimaryModal';
-import { useLoginOrRegisterStyles } from './LoginOrRegisterStyling';
+import { useLoginOrRegisterStyles } from './loginOrRegisterStyling';
 import { PrimaryButton } from '../../buttons/PrimaryButton';
 import { SecondaryButton } from '../../buttons/SecondaryButton';
 import { useForm } from '@mantine/form';
@@ -9,7 +9,7 @@ import { CSSProperties, useMemo, useState } from 'react';
 import { dispatch, useAppSelector } from '../../../store/configureStore';
 import { registerUser } from '../../../services/authServices';
 import { useFormValidation } from '../../../helpers/useFormValidation';
-import { error, success } from '../../../services/helpers/Notification';
+import { error, success } from '../../../services/helpers/notification';
 import { PrimaryPasswordInput } from '../../inputs/PrimaryPasswordInput';
 import { Popover } from '@mantine/core';
 import {
