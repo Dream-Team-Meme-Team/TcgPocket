@@ -1,52 +1,61 @@
-import { Carousel } from '@mantine/carousel';
-import { createStyles, Image } from '@mantine/core';
+import { Carousel, CarouselStylesNames } from '@mantine/carousel';
+import { CarouselStylesParams } from '@mantine/carousel/lib/Carousel.styles';
+import { createStyles, Image, rem, Styles } from '@mantine/core';
 
 export function Home2() {
   const { classes } = useStyles();
 
   return (
     <div className={classes.container}>
-      <Carousel withIndicators loop className={classes.carousel}>
-        <Carousel.Slide>
-          <Image src="src\assets\abbycard.png" width={250} security="god" />
+      <Carousel
+        pb={30}
+        slideSize="50%"
+        slideGap="md"
+        loop
+        slidesToScroll={1}
+        withIndicators
+        controlSize={45}
+        controlsOffset="xl"
+        styles={styles}
+        breakpoints={[
+          { maxWidth: 'xs', slideSize: '40%' },
+          { maxWidth: 'md', slideSize: '100%', slideGap: 0 },
+        ]}
+      >
+        <Carousel.Slide size={500}>
+          <Image src="src\assets\gabecard.png" security="yomomma" />
         </Carousel.Slide>
-        <Carousel.Slide>
-          <Image
-            src="src\assets\brandoncard.png"
-            width={250}
-            security="kenough"
-          />
+        <Carousel.Slide size={500}>
+          <Image src="src\assets\brandoncard.png" security="kenough" />
         </Carousel.Slide>
-        <Carousel.Slide>
-          <Image
-            src="src\assets\deecard.png"
-            width={250}
-            security="secretary god"
-          />
+        <Carousel.Slide size={500}>
+          <Image src="src\assets\zoecard.png" security="vice god" />
         </Carousel.Slide>
-        <Carousel.Slide>
-          <Image src="src\assets\zoecard.png" width={250} security="vice god" />
+        <Carousel.Slide size={500}>
+          <Image src="src\assets\deecard.png" security="secretary god" />
         </Carousel.Slide>
-        <Carousel.Slide>
-          <Image src="src\assets\gabecard.png" width={250} security="yomomma" />
+        <Carousel.Slide size={500}>
+          <Image src="src\assets\abbycard.png" security="god" />
         </Carousel.Slide>
       </Carousel>
     </div>
   );
 }
 
+const styles: Styles<CarouselStylesNames, CarouselStylesParams> = {
+  indicator: {
+    width: rem(12),
+    height: rem(4),
+    transition: 'width 250ms ease',
+
+    '&[data-active]': {
+      width: rem(40),
+    },
+  },
+};
+
 const useStyles = createStyles(() => ({
   container: {
-    display: 'flex',
-    justifyContent: 'center',
-  },
-
-  carousel: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-
-    height: '100%',
-    width: '50%',
+    paddingBottom: 30,
   },
 }));
