@@ -86,7 +86,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: python-app
-          # path: .
+          path: .
 
       - name: "Deploy to Azure Web App"
         id: deploy-to-webapp
