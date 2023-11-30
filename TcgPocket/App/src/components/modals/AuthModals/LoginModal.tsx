@@ -1,5 +1,5 @@
 import { PrimaryModal } from '../PrimaryModal';
-import { useLoginOrRegisterStyles } from './LoginOrRegisterStyling';
+import { useLoginOrRegisterStyles } from './loginOrRegisterStyling';
 import { PrimaryButton } from '../../buttons/PrimaryButton';
 import { useForm } from '@mantine/form';
 import { PrimaryTextInput } from '../../inputs/PrimaryTextInput';
@@ -7,9 +7,9 @@ import { SecondaryButton } from '../../buttons/SecondaryButton';
 import { SignInUserDto } from '../../../types/users';
 import { useMemo } from 'react';
 import { dispatch, useAppSelector } from '../../../store/configureStore';
-import { error, success } from '../../../services/helpers/Notification';
 import { PrimaryPasswordInput } from '../../inputs/PrimaryPasswordInput';
 import { signInUser } from '../../../services/authServices';
+import { responseWrapper } from '../../../services/helpers/responseWrapper';
 
 type LoginModalProps = {
   open: boolean;
@@ -38,18 +38,12 @@ export function LoginModal({
     form.reset();
   };
 
-  const handleSignIn = async (values: SignInUserDto) => {
-    const { payload } = await dispatch(signInUser(values));
-
-    if (!payload) {
-      return;
-    } else if (payload.hasErrors) {
-      payload.errors.forEach((err) => error(err.message));
-      return;
-    } else {
-      success('Signed In!');
+  const handleSignIn = (values: SignInUserDto) => {
+    dispatch(signInUser(values)).then(({ payload }) => {
+      responseWrapper(payload, 'Signed in!');
+      if (!payload || payload.hasErrors) return;
       handleClose();
-    }
+    });
   };
 
   const disableLogin = useMemo(
