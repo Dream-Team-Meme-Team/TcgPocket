@@ -1,5 +1,5 @@
-export type Tab = {
+export type Tab<T = any> = {
   label: string;
   icon?: JSX.Element;
-  content: React.FC;
+  content: React.FC<T>;
 };

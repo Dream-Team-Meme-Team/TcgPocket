@@ -10,6 +10,7 @@ import { useMemo } from 'react';
 import { InventoryPage } from '../pages/inventory/InventoryPage';
 import { DeckBuilderPage } from '../pages/deckBuilder/DeckBuilderPage';
 import { CardUploadPage } from '../pages/cardUpload/CardUploadPage';
+import { DeckPage } from '../pages/deck/DeckPage';
 
 export function AppRoutes() {
   const user = useAppSelector((state) => state.user.user);
@@ -34,6 +35,11 @@ export function AppRoutes() {
           <Route
             path={routes.inventory}
             element={<InventoryPage />}
+            errorElement={<ErrorPage />}
+          />
+          <Route
+            path={routes.decks}
+            element={<DeckPage />}
             errorElement={<ErrorPage />}
           />
           <Route
