@@ -16,13 +16,13 @@ public class GetAllUserDecksQuery : IRequest<Response<List<DeckDisplayDto>>>
 
 }
 
-public class GetAllUserDecksForAllGamesHandler : IRequestHandler<GetAllUserDecksQuery, Response<List<DeckDisplayDto>>>
+public class GetAllUserDecksQueryHandler : IRequestHandler<GetAllUserDecksQuery, Response<List<DeckDisplayDto>>>
 {
     private readonly SignInManager<User> _signInManager;
     private readonly DataContext _dataContext;
     private readonly IMapper _mapper;
 
-    public GetAllUserDecksForAllGamesHandler(DataContext dataContext,
+    public GetAllUserDecksQueryHandler(DataContext dataContext,
         IMapper mapper, SignInManager<User> signInManager)
     {
         _dataContext = dataContext;

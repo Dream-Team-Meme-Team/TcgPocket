@@ -8,7 +8,7 @@ import { Flex, MantineTheme, createStyles, Text } from '@mantine/core';
 import { useNavbarHeight } from '../../../hooks/useNavbarHeight';
 import { defaultGap } from '../../../constants/theme';
 import { PrimaryButton } from '../../../components/buttons/PrimaryButton';
-import { routes } from '../../../routes/Index';
+import { routes } from '../../../routes/index';
 import { useNavigate } from 'react-router-dom';
 import { shallowEqual } from 'react-redux';
 import { resetDeckBuilder } from '../../../store/deckBuilderSlice';

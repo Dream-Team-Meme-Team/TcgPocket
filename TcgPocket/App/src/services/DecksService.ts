@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { apiRoutes } from '../routes/Index';
+import { apiRoutes } from '../routes/index';
 import {
   DeckCreateDto,
   DeckDetailDto,
