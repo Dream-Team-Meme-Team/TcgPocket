@@ -51,8 +51,8 @@ jobs:
           echo SQLALCHEMY_TRACK_MODIFICATIONS=false >> .env
           echo POKEMON_API_KEY=${{ secrets.PYTHON_POKEMON_API_KEY }} >> .env
           echo ORIGINS=${{ secrets.PYTHON_ALLOWED_ORIGINS }} >> .env
-          echo BLOB_CONNECTION_STRING=${{ secrets.PYTHON_BLOB_CONNECTION_STRING }}
-          echo BLOB_CONTAINER_NAME=${{ secrets.PYTHON_BLOB_CONTAINER_NAME }}
+          echo BLOB_CONNECTION_STRING=${{ secrets.BLOB_CONNECTION_STRING }}
+          echo BLOB_CONTAINER_NAME=${{ secrets.BLOB_CONTAINER_NAME }}
 
       - name: Create and start virtual environment
         working-directory: ./datascience
@@ -61,7 +61,7 @@ jobs:
           source venv/bin/activate
 
       - name: Install dependencies
-        # working-directory: ./datascience
+        working-directory: ./datascience
         run: pip install -r requirements.txt
 
       - name: Upload artifact for deployment jobs
