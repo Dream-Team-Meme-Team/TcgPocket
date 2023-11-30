@@ -55,19 +55,21 @@ jobs:
           echo BLOB_CONTAINER_NAME=${{ secrets.PYTHON_BLOB_CONTAINER_NAME }}
 
       - name: Create and start virtual environment
+        working-directory: ./datascience
         run: |
-          python -m venv datascience/venv
-          source datascience/venv/bin/activate
+          python -m venv venv
+          source venv/bin/activate
 
       - name: Install dependencies
-        run: pip install -r datascience/requirements.txt
+        # working-directory: ./datascience
+        run: pip install -r requirements.txt
 
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v3
         with:
           name: python-app
           path: |
-            ./datascience
+            # ./datascience
             !venv/
 
   deploy:
@@ -84,7 +86,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: python-app
-          path: ./datascience
+          # path: .
 
       - name: "Deploy to Azure Web App"
         id: deploy-to-webapp
