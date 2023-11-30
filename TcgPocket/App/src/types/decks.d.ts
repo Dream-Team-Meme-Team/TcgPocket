@@ -9,7 +9,8 @@ import { Id } from './shared';
 
 export type DeckDto = {
   name: string;
-  game: GameGetDto | null;
+  game: GameGetDto;
+  userId: number;
 };
 
 export type DeckGetDto = Id & DeckDto;

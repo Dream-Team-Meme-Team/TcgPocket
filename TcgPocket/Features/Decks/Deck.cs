@@ -22,7 +22,7 @@ public class DeckGetDto : DeckDto
 public class DeckDto
 {
     public int UserId { get; set; }
-    public int GameId { get; set; }
+    public GameGetDto Game { get; set; }
     public string Name { get; set; }
 }
 

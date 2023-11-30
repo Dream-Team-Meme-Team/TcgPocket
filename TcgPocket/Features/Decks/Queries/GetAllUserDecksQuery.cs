@@ -9,12 +9,12 @@ using TcgPocket.Shared;
 
 namespace TcgPocket.Features.Decks.Queries;
 
-public class GetAllUserDecksForAllGamesQuery : IRequest<Response<List<DeckDisplayDto>>>
+public class GetAllUserDecksQuery : IRequest<Response<List<DeckDisplayDto>>>
 {
 
 }
 
-public class GetAllUserDecksForAllGamesHandler : IRequestHandler<GetAllUserDecksForAllGamesQuery, Response<List<DeckDisplayDto>>>
+public class GetAllUserDecksForAllGamesHandler : IRequestHandler<GetAllUserDecksQuery, Response<List<DeckDisplayDto>>>
 {
     private readonly SignInManager<User> _signInManager;
     private readonly DataContext _dataContext;
@@ -28,7 +28,7 @@ public class GetAllUserDecksForAllGamesHandler : IRequestHandler<GetAllUserDecks
         _signInManager = signInManager;
     }
 
-    public async Task<Response<List<DeckDisplayDto>>> Handle(GetAllUserDecksForAllGamesQuery query, CancellationToken cancellationToken)
+    public async Task<Response<List<DeckDisplayDto>>> Handle(GetAllUserDecksQuery query, CancellationToken cancellationToken)
     {
         var user = await _signInManager.GetSignedInUserAsync();
 
@@ -37,6 +37,7 @@ public class GetAllUserDecksForAllGamesHandler : IRequestHandler<GetAllUserDecks
         var decks = await _dataContext.Set<Deck>()
             .AsNoTracking()
             .Where(x => x.UserId == user.Id)
+            .Include(x => x.Game)
             .Include(x => x.DeckCards)
             .ThenInclude(y => y.Card)
             .ThenInclude(y => y.Game)

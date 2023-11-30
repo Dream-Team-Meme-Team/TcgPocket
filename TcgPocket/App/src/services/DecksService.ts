@@ -15,21 +15,14 @@ export type DecksService = typeof DecksService;
 
 export const DecksService = {
   getAllDecks: async () => {
-    return await apiCall<DeckDetailDto[]>({
+    return await apiCall<DeckDisplayDto[]>({
       method: 'GET',
       endpoint: apiRoutes.decks,
     });
   },
 
-  getAllDecksForAllGames: async () => {
-    return await apiCall<DeckDisplayDto[]>({
-      method: 'GET',
-      endpoint: `${apiRoutes.decks}/game`,
-    });
-  },
-
   getDeckById: async (id: number) => {
-    return await apiCall<DeckDetailDto>({
+    return await apiCall<DeckDisplayDto>({
       method: 'GET',
       endpoint: `${apiRoutes.decks}/${id}`,
     });
