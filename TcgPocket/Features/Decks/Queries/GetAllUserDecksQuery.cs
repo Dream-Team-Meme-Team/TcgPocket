@@ -38,7 +38,6 @@ public class GetAllUserDecksForAllGamesHandler : IRequestHandler<GetAllUserDecks
 
         var decks = await _dataContext.Set<Deck>()
              .AsNoTracking()
-             .AsSplitQuery()
              .Where(x => x.UserId == user.Id)
              .ProjectTo<DeckGetDto>(_mapper.ConfigurationProvider)
              .ToListAsync(cancellationToken);
@@ -47,7 +46,6 @@ public class GetAllUserDecksForAllGamesHandler : IRequestHandler<GetAllUserDecks
 
         var deckCards = await _dataContext.Set<DeckCard>()
             .AsNoTracking()
-            .AsSplitQuery()
             .Where(x => deckIds.Contains(x.DeckId))
             .Include(y => y.Card)
             .ThenInclude(y => y.Game)
