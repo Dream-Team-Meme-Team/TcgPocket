@@ -4,6 +4,7 @@ export const routes = {
   home: '/',
   inventory: '/inventory',
   cardUpload: '/card-upload',
+  decks: '/decks',
   deckBuilder: '/deck-builder',
   adminPortal: '/admin-portal',
   settings: 'settings',
@@ -16,7 +17,7 @@ export const apiRoutes = {
   rarities: `${Env.viteApiBaseUrl}/api/rarities`,
   cardTypes: `${Env.viteApiBaseUrl}/api/card-types`,
   attributes: `${Env.viteApiBaseUrl}/api/attributes`,
-  decks: `${Env.viteApiBaseUrl}/api/decks`,
+  decks: `${Env.viteApiBaseUrl}/api/user-decks`,
   userCards: `${Env.viteApiBaseUrl}/api/user-cards`,
   readCard: `${Env.vitePythonApiBaseUrl}/api/read-card`,
   roles: {

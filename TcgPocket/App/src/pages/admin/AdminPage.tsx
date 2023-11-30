@@ -85,16 +85,22 @@ export function AdminPage(): React.ReactElement {
       className={classes.tab}
     >
       <Tabs.List tabIndex={0}>
-        {adminTabs.map((tab, index) => (
-          <Tabs.Tab
-            key={index}
-            value={tab.label}
-            icon={tab.icon}
-            className={classes.tabStyle}
-          >
-            {tab.label}
-          </Tabs.Tab>
-        ))}
+        {adminTabs.map((tab, index) => {
+          const className =
+            tab.label === selectedTab
+              ? classes.tabStyleHighlighted
+              : classes.tabStyle;
+          return (
+            <Tabs.Tab
+              key={index}
+              value={tab.label}
+              icon={tab.icon}
+              className={className}
+            >
+              {tab.label}
+            </Tabs.Tab>
+          );
+        })}
       </Tabs.List>
       <ScrollArea className={classes.contain}>
         {adminTabs.map((tab, index) => {
@@ -151,6 +157,25 @@ const useStyles = createStyles((theme) => {
         theme.colors.secondaryPurpleColors[0],
         0.25
       )} !important`,
+
+      '&:hover': {
+        backgroundColor: theme.fn.rgba(
+          theme.colors.secondaryPurpleColors[0],
+          0.25
+        ),
+      },
+    },
+
+    tabStyleHighlighted: {
+      borderColor: `${theme.fn.lighten(
+        theme.colors.secondaryPurpleColors[0],
+        0.25
+      )} !important`,
+
+      backgroundColor: theme.fn.rgba(
+        theme.colors.secondaryPurpleColors[0],
+        0.45
+      ),
 
       '&:hover': {
         backgroundColor: theme.fn.rgba(
