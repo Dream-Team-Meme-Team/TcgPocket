@@ -41,7 +41,6 @@ void SeedData(IApplicationBuilder app)
     var userManager = scoped.ServiceProvider.GetService<UserManager<User>>();
     var roleManager = scoped.ServiceProvider.GetService<RoleManager<Role>>();
 
-
     var dataContext = scoped.ServiceProvider.GetService<DataContext>();
     dataContext.Database.Migrate();
     dataContext.Seed(userManager, roleManager);

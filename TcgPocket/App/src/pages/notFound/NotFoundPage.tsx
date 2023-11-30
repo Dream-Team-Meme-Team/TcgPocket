@@ -1,5 +1,5 @@
 import { createStyles, Title, Text, rem, Image, Center } from '@mantine/core';
-import { routes } from '../../routes/Index';
+import { routes } from '../../routes/index';
 import { useNavigate } from 'react-router-dom';
 import { PrimaryButton } from '../../components/buttons/PrimaryButton';
 import { IconHome } from '@tabler/icons-react';

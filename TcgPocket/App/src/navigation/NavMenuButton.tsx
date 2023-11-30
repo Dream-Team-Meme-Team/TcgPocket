@@ -1,7 +1,7 @@
 import { CSSObject, Group, MantineTheme, UnstyledButton } from '@mantine/core';
 import { forwardRef, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
-import { routes } from '../routes/Index';
+import { routes } from '../routes/index';
 import { IconChevronDown } from '@tabler/icons-react';
 
 export type NavMenuButtonProps = {
