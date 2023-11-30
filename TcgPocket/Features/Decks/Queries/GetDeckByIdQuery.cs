@@ -44,13 +44,15 @@ public class GetDeckByIdQueryHandler : IRequestHandler<GetDeckByIdQuery, Respons
             .Include(x => x.DeckCards)
             .ThenInclude(y => y.Card)
             .ThenInclude(y => y.Game)
-            .ThenInclude(y => y.CardTypes)
             .Include(x => x.DeckCards)
             .ThenInclude(y => y.Card)
             .ThenInclude(y => y.Rarity)
             .Include(x => x.DeckCards)
             .ThenInclude(y => y.Card)
             .ThenInclude(y => y.Set)
+            .Include(x => x.DeckCards)
+            .ThenInclude(y => y.Card)
+            .ThenInclude(y => y.CardType)
             .FirstOrDefaultAsync(x => x.Id == query.Id, cancellationToken);
 
         if (deck is null) return Error.AsResponse<DeckDisplayDto>("Deck not found", "id");

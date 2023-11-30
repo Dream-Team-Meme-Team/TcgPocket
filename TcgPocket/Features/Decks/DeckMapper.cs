@@ -20,5 +20,7 @@ public class DeckMapper : Profile
             .ForMember(x => x.Game, opts => opts.MapFrom(x => x.Game))
             .ForMember(x => x.Cards, opts => opts.Ignore())
             .ReverseMap();
+        CreateMap<DeckGetDto, DeckDisplayDto>()
+            .ReverseMap();
     }
 }

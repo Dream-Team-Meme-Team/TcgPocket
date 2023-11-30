@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TcgPocket.Data;
 using TcgPocket.Features.Cards.Dtos;
+using TcgPocket.Features.DeckCards;
 using TcgPocket.Features.Users;
 using TcgPocket.Shared;
 
@@ -35,25 +37,35 @@ public class GetAllUserDecksForAllGamesHandler : IRequestHandler<GetAllUserDecks
         if (user is null) return Error.AsResponse<List<DeckDisplayDto>>("No user logged in", "user");
 
         var decks = await _dataContext.Set<Deck>()
+             .AsNoTracking()
+             .AsSplitQuery()
+             .Where(x => x.UserId == user.Id)
+             .ProjectTo<DeckGetDto>(_mapper.ConfigurationProvider)
+             .ToListAsync(cancellationToken);
+
+        var deckIds = decks.Select(x => x.Id).ToList();
+
+        var deckCards = await _dataContext.Set<DeckCard>()
             .AsNoTracking()
-            .Where(x => x.UserId == user.Id)
-            .Include(x => x.Game)
-            .Include(x => x.DeckCards)
-            .ThenInclude(y => y.Card)
+            .AsSplitQuery()
+            .Where(x => deckIds.Contains(x.DeckId))
+            .Include(y => y.Card)
             .ThenInclude(y => y.Game)
-            .ThenInclude(y => y.CardTypes)
-            .Include(x => x.DeckCards)
-            .ThenInclude(y => y.Card)
+            .Include(y => y.Card)
             .ThenInclude(y => y.Rarity)
-            .Include(x => x.DeckCards)
-            .ThenInclude(y => y.Card)
+            .Include(y => y.Card)
             .ThenInclude(y => y.Set)
+            .Include(y => y.Card)
+            .ThenInclude(y => y.CardType)
             .ToListAsync(cancellationToken);
 
         var groupedCards = new List<DeckCardDisplayDto>();
 
-        decks.ForEach(deck => {
-            var groupedDeckCards = deck.DeckCards.GroupBy(x => x.Card.Id).ToList();
+        var groupedDeck = deckCards.GroupBy(x => x.Deck).ToList();
+
+        groupedDeck.ForEach(deckCard => {
+            var groupedDeckCards = deckCards.GroupBy(x => x.Card.Id).ToList();
+
             groupedDeckCards.ForEach(cards =>
             {
                 var card = _mapper.Map<CardDisplayDto>(cards.FirstOrDefault()?.Card);
