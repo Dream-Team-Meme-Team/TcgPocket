@@ -9,6 +9,7 @@ import { dispatch, useAppSelector } from '../../../store/configureStore';
 import { resetDeckBuilder, setDeckName } from '../../../store/deckBuilderSlice';
 import { defaultGap } from '../../../constants/theme';
 import { ConfirmDeletionModal } from './ConfirmDeletionModal';
+import { DeleteButton } from '../../../components/buttons/DeleteButton';
 
 export function DeckBuilderHeader(): React.ReactElement {
   const { classes } = useStyles();
@@ -16,6 +17,7 @@ export function DeckBuilderHeader(): React.ReactElement {
   const deckName = useAppSelector((state) => state.deckBuilder.name);
 
   const [name, setName] = useState<string>('');
+
   const [editMode, setEditMode] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
 
@@ -65,7 +67,9 @@ export function DeckBuilderHeader(): React.ReactElement {
       </div>
 
       <div className={classes.restart}>
-        <PrimaryButton onClick={handleReset}>Restart</PrimaryButton>
+        <DeleteButton onClick={handleReset}>Restart</DeleteButton>
+
+        <PrimaryButton> Update </PrimaryButton>
 
         <ConfirmDeletionModal
           open={open}
@@ -101,6 +105,8 @@ const useStyles = createStyles(() => {
 
     restart: {
       display: 'flex',
+
+      gap: defaultGap,
 
       paddingRight: '24px',
     },

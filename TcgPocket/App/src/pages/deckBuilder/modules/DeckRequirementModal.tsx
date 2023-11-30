@@ -150,7 +150,7 @@ export function DeckRequirementModal({
 
             <div className={classes.bottomButtons}>
               <PrimaryButton type="submit" disabled={!form.isValid()}>
-                Continue
+                Create
               </PrimaryButton>
             </div>
           </div>

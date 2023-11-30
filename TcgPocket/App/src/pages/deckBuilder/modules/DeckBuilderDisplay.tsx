@@ -19,6 +19,13 @@ import {
   IconGridDots,
   IconList,
 } from '@tabler/icons-react';
+import { GameGetDto } from '../../../types/games';
+
+enum DisplayRender {
+  SelectGame = 'Select Game',
+  AddCards = 'Drag Cards to Add',
+  DisplayDeck = 'Display Deck',
+}
 
 type CategorizedDeck = {
   category: string;
@@ -42,7 +49,7 @@ export function BuilderDisplay(): React.ReactElement {
 
   const form = useForm({
     initialValues: {
-      gameName: '',
+      gameName: selectedGame?.name,
       ruleSet: 'No Rules',
       view: ViewStyle.List,
     },
@@ -131,12 +138,52 @@ export function BuilderDisplay(): React.ReactElement {
       <ScrollArea
         onDragOver={(e) => e.preventDefault()}
         onDragLeave={(e) => e.preventDefault()}
-        onDrop={() => addCardToDeck()}
+        onDrop={addCardToDeck}
       >
+        <DeckBuilderBodyDisplay
+          selectedGame={selectedGame}
+          deck={categorizedDeck}
+        />
+      </ScrollArea>
+    </div>
+  );
+}
+
+type DeckBuilderBodyDisplayProps = {
+  deck: CategorizedDeck[];
+  selectedGame: GameGetDto | null;
+};
+
+function DeckBuilderBodyDisplay({
+  deck,
+  selectedGame,
+}: DeckBuilderBodyDisplayProps): React.ReactElement {
+  const { classes } = useStyles();
+
+  const displayRendered = useMemo(() => {
+    return !selectedGame
+      ? DisplayRender.SelectGame
+      : deck.length === 0
+      ? DisplayRender.AddCards
+      : DisplayRender.DisplayDeck;
+  }, [selectedGame, deck]);
+
+  switch (displayRendered) {
+    case DisplayRender.SelectGame:
+      return (
+        <div className={classes.emptyBody}> {DisplayRender.SelectGame} </div>
+      );
+    case DisplayRender.AddCards:
+      return (
+        <div className={classes.emptyBody}> {DisplayRender.AddCards} </div>
+      );
+    default:
+      return (
         <div className={classes.body}>
           {/* this is what allows us to drop the cards */}
           <input className={classes.input} />
-          {categorizedDeck.map((deck, index) => (
+
+          {deck.map((deck, index) => (
             <div key={index}>
               <Text className={classes.cardTypeHeader}>
                 {deck.category} ({deck.numberOfCards})
@@ -148,9 +195,8 @@ export function BuilderDisplay(): React.ReactElement {
             </div>
           ))}
         </div>
-      </ScrollArea>
-    </div>
-  );
+      );
+  }
 }
 
 const useStyles = createStyles((theme: MantineTheme) => {
@@ -170,6 +216,18 @@ const useStyles = createStyles((theme: MantineTheme) => {
 
       padding: defaultPadding,
       gap: defaultGap,
+    },
+
+    emptyBody: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+
+      height: '65vh',
+
+      fontSize: 26,
+      fontWeight: 'bold',
+      fontStyle: 'italic',
     },
 
     body: {
