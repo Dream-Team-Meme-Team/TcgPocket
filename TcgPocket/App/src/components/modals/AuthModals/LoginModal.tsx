@@ -10,6 +10,8 @@ import { dispatch, useAppSelector } from '../../../store/configureStore';
 import { PrimaryPasswordInput } from '../../inputs/PrimaryPasswordInput';
 import { signInUser } from '../../../services/authServices';
 import { responseWrapper } from '../../../services/helpers/responseWrapper';
+import { useNavigate } from 'react-router-dom';
+import { routes } from '../../../routes';
 
 type LoginModalProps = {
   open: boolean;
@@ -26,6 +28,7 @@ export function LoginModal({
   setOpen,
 }: LoginModalProps): React.ReactElement {
   const { classes } = useLoginOrRegisterStyles();
+  const navigate = useNavigate();
 
   const isLoading = useAppSelector((state) => state.user.isLoading);
 
@@ -43,6 +46,7 @@ export function LoginModal({
       responseWrapper(payload, 'Signed in!');
       if (!payload || payload.hasErrors) return;
       handleClose();
+      navigate(routes.inventory);
     });
   };
 

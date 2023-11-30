@@ -22,7 +22,7 @@ import { dispatch, useAppSelector } from '../../../store/configureStore';
 import { DeleteModal } from '../../../components/modals/DeleteModal';
 import { DeckDisplayDto } from '../../../types/decks';
 import { useNavigate } from 'react-router-dom';
-import { routes } from '../../../routes/Index';
+import { routes } from '../../../routes/index';
 import { setSelectedDeckId } from '../../../store/deckSlice';
 import { CardImageDisplay } from '../../../components/cardDisplay/modules/CardImageDisplay';
 import { useMemo } from 'react';
