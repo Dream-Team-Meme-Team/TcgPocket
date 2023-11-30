@@ -1,6 +1,6 @@
-import { AsyncThunkAction, PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { CardDisplayDto, CardFilterDto } from '../types/cards';
-import { PagedResult, Response } from '../types/shared';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { CardDisplayDto } from '../types/cards';
+import { PagedResult } from '../types/shared';
 import { GameGetDto } from '../types/games';
 import { toggleFilters } from '../helpers/toggleFilters';
 import { getAllCards, getUserInventory } from '../services/CardsService';
