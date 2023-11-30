@@ -1,5 +1,10 @@
 import { apiRoutes } from '../routes/Index';
-import { DeckDto, DeckGetDto } from '../types/decks';
+import {
+  DeckDetailDto,
+  DeckDisplayDto,
+  DeckDto,
+  DeckGetDto,
+} from '../types/decks';
 import { apiCall } from './helpers/apiCall';
 
 type UpdateDeckParams = {
@@ -11,9 +16,16 @@ export type DecksService = typeof DecksService;
 
 export const DecksService = {
   getAllDecks: async () => {
-    return await apiCall<DeckDto[]>({
+    return await apiCall<DeckDetailDto[]>({
       method: 'GET',
       endpoint: apiRoutes.decks,
+    });
+  },
+
+  getAllDecksForAllGames: async () => {
+    return await apiCall<DeckDisplayDto[]>({
+      method: 'GET',
+      endpoint: `${apiRoutes.decks}/game`,
     });
   },
 

@@ -7,7 +7,7 @@ using TcgPocket.Shared;
 namespace TcgPocket.Features.Decks;
 
 [ApiController]
-[Route("/api/decks")]
+[Route("/api/user-decks")]
 public class DecksController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -17,10 +17,18 @@ public class DecksController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpGet("user-decks")]
-    public async Task<ActionResult<Response<List<DeckGetDto>>>> GetAllDecksByUserId()
+    [HttpGet]
+    public async Task<ActionResult<Response<List<DeckDetailDto>>>> GetAllDecksByUserId()
     {
         var response = await _mediator.Send(new GetAllDecksByCurrentUserQuery());
+
+        return response.HasErrors ? BadRequest(response) : Ok(response);
+    }
+
+    [HttpGet("game")]
+    public async Task<ActionResult<Response<List<DeckDisplayDto>>>> GetAllUserDecksForAllGames()
+    {
+        var response = await _mediator.Send(new GetAllUserDecksForAllGamesQuery ());
 
         return response.HasErrors ? BadRequest(response) : Ok(response);
     }
