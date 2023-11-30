@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { DeckListingDisplay } from './DeckListingDisplay';
-import { useAppSelector } from '../../../store/configureStore';
+import { dispatch, useAppSelector } from '../../../store/configureStore';
 import { shallowEqual } from 'react-redux';
 import { DecksService } from '../../../services/DecksService';
 import { responseWrapper } from '../../../services/helpers/responseWrapper';
@@ -9,6 +9,7 @@ import { GameGetDto } from '../../../types/games';
 import { filterDecks } from '../../../helpers/filterDecks';
 import { DeckTabProps } from '../DeckPage';
 import eventBus from '../../../helpers/eventBus';
+import { resetDeckBuilder } from '../../../store/deckBuilderSlice';
 
 type GameAndDecks = {
   game: GameGetDto;
@@ -37,7 +38,7 @@ export const AllDecksTab: React.FC<DeckTabProps> = ({ decks, loading }) => {
     });
 
     filteredDecks.forEach((deck) => {
-      tempDecks.find((x) => x.game.id === deck.gameId)?.decks.push(deck);
+      tempDecks.find((x) => x.game.id === deck.game?.id)?.decks.push(deck);
     });
 
     return tempDecks;
@@ -46,6 +47,7 @@ export const AllDecksTab: React.FC<DeckTabProps> = ({ decks, loading }) => {
   const deleteSelectedDeck = async () => {
     const promise = await DecksService.deleteDeck(selectedDeckId);
     responseWrapper(promise, 'Deck deleted');
+    dispatch(resetDeckBuilder());
 
     if (!promise.hasErrors) eventBus.publish('fetchDecks', promise);
 
@@ -61,7 +63,9 @@ export const AllDecksTab: React.FC<DeckTabProps> = ({ decks, loading }) => {
   }, [organizedDecks]);
 
   const displayIsVisible = (gameId: number) => {
-    return loading || decks.filter((deck) => deck.gameId === gameId).length > 0;
+    return (
+      loading || decks.filter((deck) => deck.game?.id === gameId).length > 0
+    );
   };
 
   return (

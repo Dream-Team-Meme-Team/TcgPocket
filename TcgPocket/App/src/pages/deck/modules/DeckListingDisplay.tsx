@@ -26,6 +26,8 @@ import { routes } from '../../../routes/index';
 import { setSelectedDeckId } from '../../../store/deckSlice';
 import { CardImageDisplay } from '../../../components/cardDisplay/modules/CardImageDisplay';
 import { useMemo } from 'react';
+import { getDeckById } from '../../../services/DecksService';
+import { responseWrapper } from '../../../services/helpers/responseWrapper';
 
 export type DeckListingDisplayProps = {
   data: DeckDisplayDto[];
@@ -124,6 +126,13 @@ export const TableRow = ({ value, allExpanded, deleteFn }: TableRowProps) => {
     dispatch(setSelectedDeckId(value.id));
   };
 
+  const handleEditDeck = () => {
+    navigate(routes.deckBuilder);
+    dispatch(getDeckById(value.id)).then(({ payload }) => {
+      responseWrapper(payload);
+    });
+  };
+
   useMemo(() => {
     allExpanded ? close() : open();
   }, [allExpanded, close, open]);
@@ -142,10 +151,7 @@ export const TableRow = ({ value, allExpanded, deleteFn }: TableRowProps) => {
       >
         <div className={classes.tableColumnFirstItem}>
           <Tooltip label="Edit deck">
-            <ActionIcon
-              aria-label={`Edit deck`}
-              onClick={() => navigate(routes.deckBuilder)}
-            >
+            <ActionIcon aria-label={`Edit deck`} onClick={handleEditDeck}>
               <IconEdit />
             </ActionIcon>
           </Tooltip>

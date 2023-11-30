@@ -30,7 +30,7 @@ export const DeckTab: React.FC<DeckTabProps> = ({ decks, loading }) => {
   }, [games, selectedTab]);
 
   const gameDeck = useMemo(() => {
-    return decks.filter((deck) => deck.gameId === game.id);
+    return decks.filter((deck) => deck.game?.id === game.id);
   }, [decks, game.id]);
 
   const filteredDecks: DeckDisplayDto[] = useMemo(() => {

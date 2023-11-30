@@ -11,6 +11,7 @@ import { PrimaryButton } from '../../../components/buttons/PrimaryButton';
 import { routes } from '../../../routes/index';
 import { useNavigate } from 'react-router-dom';
 import { shallowEqual } from 'react-redux';
+import { resetDeckBuilder } from '../../../store/deckBuilderSlice';
 
 export function DeckTabHeader(): React.ReactElement {
   const { classes } = useStyles();
@@ -26,6 +27,11 @@ export function DeckTabHeader(): React.ReactElement {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
+  };
+
+  const handleNewDeck = () => {
+    navigate(routes.deckBuilder);
+    dispatch(resetDeckBuilder());
   };
 
   useMemo(() => {
@@ -55,10 +61,7 @@ export function DeckTabHeader(): React.ReactElement {
           p="2em"
         />
 
-        <PrimaryButton
-          leftIcon={<IconPlus />}
-          onClick={() => navigate(routes.deckBuilder)}
-        >
+        <PrimaryButton leftIcon={<IconPlus />} onClick={handleNewDeck}>
           New Deck
         </PrimaryButton>
       </Flex>

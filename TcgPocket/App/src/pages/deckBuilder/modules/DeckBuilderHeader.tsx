@@ -9,15 +9,30 @@ import { dispatch, useAppSelector } from '../../../store/configureStore';
 import { resetDeckBuilder, setDeckName } from '../../../store/deckBuilderSlice';
 import { defaultGap } from '../../../constants/theme';
 import { ConfirmDeletionModal } from './ConfirmDeletionModal';
+import { DeleteButton } from '../../../components/buttons/DeleteButton';
+import { updateDeck } from '../../../services/DecksService';
+import { shallowEqual } from 'react-redux';
+import { DeckUpdateDto } from '../../../types/decks';
+import { responseWrapper } from '../../../services/helpers/responseWrapper';
+import { MiniCardDto } from '../../../types/cards';
 
 export function DeckBuilderHeader(): React.ReactElement {
   const { classes } = useStyles();
 
-  const deckName = useAppSelector((state) => state.deckBuilder.name);
+  const [deckName, deckId, selectedGame, deck] = useAppSelector(
+    (state) => [
+      state.deckBuilder.name,
+      state.deckBuilder.id,
+      state.deckBuilder.selectedGame,
+      state.deckBuilder.deck,
+    ],
+    shallowEqual
+  );
 
-  const [name, setName] = useState('');
-  const [editMode, setEditMode] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [name, setName] = useState<string>('');
+
+  const [editMode, setEditMode] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(false);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -25,6 +40,7 @@ export function DeckBuilderHeader(): React.ReactElement {
 
   const handleSave = () => {
     setEditMode(false);
+    setName('');
     dispatch(setDeckName(name));
   };
 
@@ -38,11 +54,39 @@ export function DeckBuilderHeader(): React.ReactElement {
 
   const handleConfirm = () => {
     dispatch(resetDeckBuilder());
+    setName('');
+  };
+
+  const handleUpdate = () => {
+    const tempCards: MiniCardDto[] = [];
+
+    deck.forEach((card) => {
+      tempCards.push({
+        id: card.cardDisplay.id,
+        gameId: selectedGame?.id ?? 0,
+      });
+    });
+
+    const updatedDeck: DeckUpdateDto = {
+      name: deckName,
+      gameId: selectedGame?.id ?? 0,
+      cards: tempCards,
+    };
+
+    dispatch(updateDeck({ id: deckId, body: updatedDeck })).then(
+      ({ payload }) => {
+        responseWrapper(payload, 'Deck Updated');
+      }
+    );
   };
 
   return editMode ? (
     <div className={classes.editName}>
-      <PrimaryTextInput value={name} onChange={handleNameChange} />
+      <PrimaryTextInput
+        placeholder={deckName}
+        value={name}
+        onChange={handleNameChange}
+      />
 
       <PrimaryButton disabled={!name} onClick={handleSave}>
         Save
@@ -59,7 +103,9 @@ export function DeckBuilderHeader(): React.ReactElement {
       </div>
 
       <div className={classes.restart}>
-        <PrimaryButton onClick={handleReset}>Restart</PrimaryButton>
+        <DeleteButton onClick={handleReset}>Restart</DeleteButton>
+
+        <PrimaryButton onClick={handleUpdate}> Update </PrimaryButton>
 
         <ConfirmDeletionModal
           open={open}
@@ -95,6 +141,8 @@ const useStyles = createStyles(() => {
 
     restart: {
       display: 'flex',
+
+      gap: defaultGap,
 
       paddingRight: '24px',
     },

@@ -67,7 +67,7 @@ export function DeckPage(): React.ReactElement {
   };
 
   const [decks, fetchDecks] = useAsyncFn(async () => {
-    const promise = await DecksService.getAllDecksForAllGames();
+    const promise = await DecksService.getAllDecks();
     responseWrapper(promise);
 
     return promise.data;

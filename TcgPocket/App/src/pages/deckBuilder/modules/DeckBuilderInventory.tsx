@@ -1,7 +1,12 @@
 import { MantineTheme, createStyles } from '@mantine/styles';
 import { PrimaryTextInput } from '../../../components/inputs/PrimaryTextInput';
 import { defaultGap, defaultPadding } from '../../../constants/theme';
-import { IconCards, IconSearch } from '@tabler/icons-react';
+import {
+  IconCards,
+  IconGridDots,
+  IconList,
+  IconSearch,
+} from '@tabler/icons-react';
 import { PrimarySelect } from '../../../components/inputs/PrimarySelect';
 import { useEffect, useMemo, useState } from 'react';
 import { GridInventoryView } from './GridInventoryView';
@@ -24,12 +29,12 @@ import {
   toggleDeckBuilderCardTypeFilters,
   toggleDeckBuilderRarityFilters,
   toggleDeckBuilderSetFilters,
-  untitledName,
 } from '../../../store/deckBuilderSlice';
 import { AppliedFilterBadges } from './AppliedFilterBadges';
 import { AppliedFilters } from '../../../types/applied-filters';
 import { FilterActions } from '../../../types/filter-actions';
-import { pageSizeOptions } from '../../../enums/shared';
+
+const pageSizeOptions: string[] = ['15', '30', '45'];
 
 export function DeckBuilderInventory(): React.ReactElement {
   const { classes } = useStyles();
@@ -119,7 +124,7 @@ export function DeckBuilderInventory(): React.ReactElement {
   }, []);
 
   useEffect(() => {
-    if (deckName === untitledName || !selectedGame) return;
+    if (!deckName || !selectedGame) return;
 
     const gameId = selectedGame ? [selectedGame.id] : undefined;
 
@@ -157,6 +162,7 @@ export function DeckBuilderInventory(): React.ReactElement {
           />
 
           <PrimarySelect
+            icon={view === ViewStyle.Grid ? <IconGridDots /> : <IconList />}
             value={view}
             data={viewStyle}
             onChange={handleViewChange}

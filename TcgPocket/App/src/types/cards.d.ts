@@ -61,3 +61,8 @@ export type CardDisplayDto = Id & {
   description: string;
   attributes: CardAttributeDisplayDto[];
 };
+
+export type MiniCardDto = {
+  id: number;
+  gameId: number;
+};

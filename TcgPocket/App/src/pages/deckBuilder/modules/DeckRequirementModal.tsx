@@ -8,17 +8,15 @@ import { defaultGap, defaultPadding } from '../../../constants/theme';
 import { PrimaryTextInput } from '../../../components/inputs/PrimaryTextInput';
 import { IconArrowBack } from '@tabler/icons-react';
 import { useForm } from '@mantine/form';
-import {
-  setDeckName,
-  setSelectedDeckBuilderGame,
-  setSelectedRuleSet,
-} from '../../../store/deckBuilderSlice';
+import { setSelectedRuleSet } from '../../../store/deckBuilderSlice';
 import { useFormValidation } from '../../../helpers/useFormValidation';
 import { getAllGames } from '../../../services/dataServices/gameServices';
 import { responseWrapper } from '../../../services/helpers/responseWrapper';
 import { useEffectOnce } from 'react-use';
 import { getAllCards } from '../../../services/CardsService';
 import { CardFilterDto } from '../../../types/cards';
+import { createDeck } from '../../../services/DecksService';
+import { DeckCreateDto } from '../../../types/decks';
 
 export type BuildDeckRequirements = {
   deckName: string;
@@ -69,8 +67,17 @@ export function DeckRequirementModal({
       pageSize: 15,
     };
 
-    dispatch(setDeckName(values.deckName));
-    dispatch(setSelectedDeckBuilderGame(foundGame ? foundGame : null));
+    if (!foundGame) return;
+
+    const newDeck: DeckCreateDto = {
+      name: values.deckName,
+      gameId: foundGame?.id,
+    };
+
+    dispatch(createDeck(newDeck)).then(({ payload }) => {
+      responseWrapper(payload, 'Deck Created');
+    });
+
     dispatch(setSelectedRuleSet(values.ruleSet));
     dispatch(getAllCards(filtered)).then(({ payload }) => {
       responseWrapper(payload);
@@ -150,7 +157,7 @@ export function DeckRequirementModal({
 
             <div className={classes.bottomButtons}>
               <PrimaryButton type="submit" disabled={!form.isValid()}>
-                Continue
+                Create
               </PrimaryButton>
             </div>
           </div>

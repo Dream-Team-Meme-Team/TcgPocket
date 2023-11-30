@@ -22,6 +22,7 @@ public class DeckGetDto : DeckDto
 public class DeckDto
 {
     public int UserId { get; set; }
+    public GameGetDto Game { get; set; }
     public int GameId { get; set; }
     public string Name { get; set; }
 }
@@ -39,10 +40,10 @@ public class UpdateDeckDto : CreateDeckDto
 
 public class DeckDetailDto : DeckGetDto
 {
-    public List<CardGetDto>? Cards { get; set; } = new(); 
+    public List<CardGetDto> Cards { get; set; } = new(); 
 }
 
 public class DeckDisplayDto : DeckGetDto
 {
-    public List<DeckCardDisplayDto>? Cards { get; set; } = new();
+    public List<DeckCardDisplayDto> Cards { get; set; } = new();
 }

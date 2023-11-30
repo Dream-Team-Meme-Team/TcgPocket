@@ -1,14 +1,17 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { GameGetDto } from '../types/games';
-import { CardDisplayDto } from '../types/cards';
+import { CardDisplayDto, DeckCardDisplayDto } from '../types/cards';
 import { toggleFilters } from '../helpers/toggleFilters';
 import { PagedResult } from '../types/shared';
 import { getAllCards } from '../services/CardsService';
+import { createDeck, getDeckById } from '../services/DecksService';
 
 export const untitledName: string = 'Untitled';
 
 export interface DeckBuilderState {
-  deck: CardDisplayDto[];
+  id: number;
+  deck: DeckCardDisplayDto[];
+  draggedCard: CardDisplayDto | null;
   /** deck dto things */
   name: string;
   cards: PagedResult<CardDisplayDto> | null;
@@ -25,6 +28,7 @@ export interface DeckBuilderState {
 }
 
 const INITIAL_STATE: DeckBuilderState = {
+  id: 0,
   name: untitledName,
   selectedGame: null,
   selectedRuleSet: '',
@@ -32,6 +36,7 @@ const INITIAL_STATE: DeckBuilderState = {
   cards: null,
   loading: false,
   deck: [],
+  draggedCard: null,
   cardTypeFilters: [],
   setFilters: [],
   rarityFilters: [],
@@ -43,6 +48,12 @@ export const deckBuilderSlice = createSlice({
   name: 'Inventory',
   initialState: INITIAL_STATE,
   reducers: {
+    setDraggedCard(
+      state,
+      { payload }: PayloadAction<DeckBuilderState['draggedCard']>
+    ) {
+      state.draggedCard = payload;
+    },
     setDeckName(state, { payload }: PayloadAction<DeckBuilderState['name']>) {
       state.name = payload;
     },
@@ -112,6 +123,17 @@ export const deckBuilderSlice = createSlice({
     builder.addCase(getAllCards.rejected, (state) => {
       state.loading = false;
     });
+    builder.addCase(createDeck.fulfilled, (state, { payload }) => {
+      state.id = payload.data.id;
+      state.name = payload.data.name;
+      state.selectedGame = payload.data.game;
+    });
+    builder.addCase(getDeckById.fulfilled, (state, { payload }) => {
+      state.id = payload.data.id;
+      state.name = payload.data.name;
+      state.selectedGame = payload.data.game;
+      state.deck = payload.data.cards;
+    });
   },
 });
 
@@ -127,4 +149,5 @@ export const {
   toggleDeckBuilderRarityFilters,
   setDeckBuilderCurrentPage,
   setDeckBuilderPageSize,
+  setDraggedCard,
 } = deckBuilderSlice.actions;
