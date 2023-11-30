@@ -23,8 +23,9 @@ import { getAllSets } from '../../services/dataServices/setServices';
 import { Category } from '../../types/category';
 import { AppliedFilters } from '../../types/applied-filters';
 import { FilterActions } from '../../types/filter-actions';
-import { getAllCards, getUserInventory } from '../../services/CardsService';
+
 import {
+  CardDispatchMode,
   setCardDispatchAction,
   setInventoryCurrentPage,
   setInventorySearchText,
@@ -78,17 +79,16 @@ export function FilterMenu({
   const inventoryOptions: SegmentedControlItem[] = [
     {
       label: 'Inventory',
-      value: 'inventory',
+      value: CardDispatchMode.inventory,
     },
     {
       label: 'All',
-      value: 'all',
+      value: CardDispatchMode.all,
     },
   ];
 
-  const handleInventoryChange = async (value: string) => {
-    const dispatchAction = value === 'all' ? getAllCards : getUserInventory;
-    dispatch(setCardDispatchAction(dispatchAction));
+  const handleInventoryChange = async (value: CardDispatchMode) => {
+    dispatch(setCardDispatchAction(value));
     dispatch(setInventoryCurrentPage(1));
     dispatch(setInventorySearchText(''));
   };

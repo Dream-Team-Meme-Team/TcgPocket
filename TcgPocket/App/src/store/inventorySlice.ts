@@ -5,14 +5,10 @@ import { GameGetDto } from '../types/games';
 import { toggleFilters } from '../helpers/toggleFilters';
 import { getAllCards, getUserInventory } from '../services/CardsService';
 
-type CardDispatchAction = (arg: CardFilterDto) => AsyncThunkAction<
-  Response<PagedResult<CardDisplayDto>>,
-  CardFilterDto,
-  {
-    rejectValue: Response<PagedResult<CardDisplayDto>>;
-    rejectedMeta: unknown;
-  }
->;
+export enum CardDispatchMode {
+  inventory = 'inventory',
+  all = 'all',
+}
 
 export interface InventoryState {
   searchText: string;
@@ -23,7 +19,7 @@ export interface InventoryState {
   cards: PagedResult<CardDisplayDto> | null;
   loading: boolean;
   selectedGame: GameGetDto | null;
-  cardDispatchAction: CardDispatchAction;
+  cardDispatchMode: CardDispatchMode;
 }
 
 const INITIAL_STATE: InventoryState = {
@@ -35,7 +31,7 @@ const INITIAL_STATE: InventoryState = {
   cardTypeFilters: [],
   setFilters: [],
   rarityFilters: [],
-  cardDispatchAction: getUserInventory,
+  cardDispatchMode: CardDispatchMode.inventory,
 };
 
 export const inventorySlice = createSlice({
@@ -44,9 +40,9 @@ export const inventorySlice = createSlice({
   reducers: {
     setCardDispatchAction(
       state,
-      { payload }: PayloadAction<InventoryState['cardDispatchAction']>
+      { payload }: PayloadAction<InventoryState['cardDispatchMode']>
     ) {
-      state.cardDispatchAction = payload;
+      state.cardDispatchMode = payload;
     },
     toggleCardTypeFilters(
       state,

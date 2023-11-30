@@ -14,6 +14,7 @@ import { IconCards, IconSearch } from '@tabler/icons-react';
 import { PaginationSelect } from '../../components/pagination/PaginationSelect';
 import { PrimaryTextInput } from '../../components/inputs/PrimaryTextInput';
 import {
+  CardDispatchMode,
   resetFilters,
   resetInventorySlice,
   setInventoryCurrentPage,
@@ -26,6 +27,7 @@ import { PrimaryButton } from '../../components/buttons/PrimaryButton';
 import { AppliedFilters } from '../../types/applied-filters';
 import { FilterActions } from '../../types/filter-actions';
 import { pageSizeOptions } from '../../enums/shared';
+import { getAllCards, getUserInventory } from '../../services/CardsService';
 
 export function InventoryPage(): React.ReactElement {
   const { classes } = useStyles();
@@ -38,7 +40,7 @@ export function InventoryPage(): React.ReactElement {
     rarityFilters,
     searchText,
     currentPage,
-    cardDispatchAction,
+    cardDispatchMode,
   ] = useAppSelector(
     (state) => [
       state.inventory.cards,
@@ -48,13 +50,26 @@ export function InventoryPage(): React.ReactElement {
       state.inventory.rarityFilters,
       state.inventory.searchText,
       state.inventory.currentPage,
-      state.inventory.cardDispatchAction,
+      state.inventory.cardDispatchMode,
     ],
     shallowEqual
   );
 
   const [pageSize, setPageSize] = useState<number>(15);
   const [selectedGame, setSelectedGame] = useState<GameGetDto | null>(null);
+
+  const cardDispatchAction = useMemo(() => {
+    switch (cardDispatchMode) {
+      case CardDispatchMode.inventory:
+        return getUserInventory;
+
+      case CardDispatchMode.all:
+        return getAllCards;
+
+      default:
+        return getUserInventory;
+    }
+  }, [cardDispatchMode]);
 
   const appliedFilters: AppliedFilters = useMemo(() => {
     return {
