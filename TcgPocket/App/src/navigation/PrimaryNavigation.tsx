@@ -98,7 +98,7 @@ export function PrimaryNavigation(): React.ReactElement {
               <Menu>
                 <Menu.Target>
                   <NavMenuButton
-                    name="Deck"
+                    name="Decks"
                     itemRoutes={[routes.decks, routes.deckBuilder]}
                   />
                 </Menu.Target>
