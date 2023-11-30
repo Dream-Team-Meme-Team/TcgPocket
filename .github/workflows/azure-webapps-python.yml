@@ -53,10 +53,10 @@ jobs:
           echo BLOB_CONNECTION_STRING=${{ secrets.BLOB_CONNECTION_STRING }} >> ./datascience/.env
           echo BLOB_CONTAINER_NAME=${{ secrets.BLOB_CONTAINER_NAME }} >> ./datascience/.env
 
-      # - name: Create and start virtual environment
-      #   run: |
-      #     python -m venv ./datascience/venv
-      #     source ./datascience/venv/bin/activate
+      - name: Create and start virtual environment
+        run: |
+          python -m venv ./datascience/venv
+          source ./datascience/venv/bin/activate
 
       - name: Install dependencies
         run: pip install -r ./datascience/requirements.txt

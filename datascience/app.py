@@ -16,4 +16,4 @@ app.register_blueprint(card_reader_bp)
 app.register_blueprint(card_pricer_bp)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=8080, debug=True)
