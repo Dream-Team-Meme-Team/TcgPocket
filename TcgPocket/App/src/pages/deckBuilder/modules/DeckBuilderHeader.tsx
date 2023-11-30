@@ -62,8 +62,8 @@ export function DeckBuilderHeader(): React.ReactElement {
 
     deck.forEach((card) => {
       tempCards.push({
-        id: card.id,
-        gameId: card.game.id,
+        id: card.cardDisplay.id,
+        gameId: selectedGame?.id ?? 0,
       });
     });
 

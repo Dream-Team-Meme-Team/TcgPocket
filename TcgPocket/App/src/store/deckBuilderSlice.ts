@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { GameGetDto } from '../types/games';
-import { CardDisplayDto } from '../types/cards';
+import { CardDisplayDto, DeckCardDisplayDto } from '../types/cards';
 import { toggleFilters } from '../helpers/toggleFilters';
 import { PagedResult } from '../types/shared';
 import { getAllCards } from '../services/CardsService';
@@ -10,7 +10,7 @@ export const untitledName: string = 'Untitled';
 
 export interface DeckBuilderState {
   id: number;
-  deck: CardDisplayDto[];
+  deck: DeckCardDisplayDto[];
   draggedCard: CardDisplayDto | null;
   /** deck dto things */
   name: string;
@@ -132,6 +132,7 @@ export const deckBuilderSlice = createSlice({
       state.id = payload.data.id;
       state.name = payload.data.name;
       state.selectedGame = payload.data.game;
+      state.deck = payload.data.cards;
     });
   },
 });

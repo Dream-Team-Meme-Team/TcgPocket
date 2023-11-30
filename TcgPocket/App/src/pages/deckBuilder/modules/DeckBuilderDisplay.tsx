@@ -12,7 +12,7 @@ import {
   setSelectedDeckBuilderGame,
 } from '../../../store/deckBuilderSlice';
 import { shallowEqual } from 'react-redux';
-import { CardDisplayDto } from '../../../types/cards';
+import { DeckCardDisplayDto } from '../../../types/cards';
 import {
   IconCards,
   IconChecklist,
@@ -20,6 +20,7 @@ import {
   IconList,
 } from '@tabler/icons-react';
 import { GameGetDto } from '../../../types/games';
+import { CardImageDisplay } from '../../../components/cardDisplay/modules/CardImageDisplay';
 
 enum DisplayRender {
   SelectGame = 'Select Game',
@@ -29,7 +30,7 @@ enum DisplayRender {
 
 type CategorizedDeck = {
   category: string;
-  cards: CardDisplayDto[];
+  cards: DeckCardDisplayDto[];
   numberOfCards: number;
 };
 
@@ -38,11 +39,12 @@ export function BuilderDisplay(): React.ReactElement {
 
   const games = useAppSelector((state) => state.data.games);
 
-  const [selectedGame, draggedCard, deck] = useAppSelector(
+  const [selectedGame, draggedCard, deck, id] = useAppSelector(
     (state) => [
       state.deckBuilder.selectedGame,
       state.deckBuilder.draggedCard,
       state.deckBuilder.deck,
+      state.deckBuilder.id,
     ],
     shallowEqual
   );
@@ -62,7 +64,8 @@ export function BuilderDisplay(): React.ReactElement {
 
     deck.forEach((cards) => {
       const foundCategory = temp.find(
-        (category) => category.category.trim() === cards.cardType.name.trim()
+        (category) =>
+          category.category.trim() === cards.cardDisplay.cardType.name.trim()
       );
 
       if (foundCategory) {
@@ -70,7 +73,7 @@ export function BuilderDisplay(): React.ReactElement {
         foundCategory.numberOfCards = foundCategory.cards.length;
       } else
         temp.push({
-          category: cards.cardType.name,
+          category: cards.cardDisplay.cardType.name,
           cards: [cards],
           numberOfCards: 1,
         });
@@ -83,7 +86,7 @@ export function BuilderDisplay(): React.ReactElement {
     const tempDeck = [...deck];
 
     if (draggedCard) {
-      tempDeck.push(draggedCard);
+      tempDeck.push({ deckId: id, cardDisplay: draggedCard, count: 0 });
     }
 
     dispatch(setDeck(tempDeck));
@@ -189,9 +192,16 @@ function DeckBuilderBodyDisplay({
                 {deck.category} ({deck.numberOfCards})
               </Text>
 
-              {deck.cards.map((card, index) => (
-                <Box key={index}>{card.name}</Box>
-              ))}
+              <div className={classes.cards}>
+                {deck.cards.map((card, index) => (
+                  <Box key={index}>
+                    <CardImageDisplay
+                      width={100}
+                      imageUrl={card.cardDisplay.imageUrl}
+                    />
+                  </Box>
+                ))}
+              </div>
             </div>
           ))}
         </div>
@@ -234,11 +244,17 @@ const useStyles = createStyles((theme: MantineTheme) => {
       display: 'grid',
       gridTemplateColumns: 'repeat(auto-fit, 250px)',
       alignContent: 'flex-start',
+      justifyContent: 'center',
 
       height: '65vh',
 
       padding: defaultPadding,
       gap: defaultGap,
+    },
+
+    cards: {
+      display: 'grid',
+      gridTemplateColumns: 'auto auto',
     },
 
     input: {
