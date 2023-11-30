@@ -1,4 +1,4 @@
-import { apiRoutes } from '../routes/Index';
+import { apiRoutes } from '../routes/index';
 import { UserCardDto, UserCardGetDto } from '../types/user-cards';
 import { apiCall } from './helpers/apiCall';
 

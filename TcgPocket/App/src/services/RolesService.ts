@@ -1,4 +1,4 @@
-import { apiRoutes } from '../routes/Index';
+import { apiRoutes } from '../routes/index';
 import { RoleDto, RoleGetDto } from '../types/roles';
 import { apiCall } from './helpers/apiCall';
 

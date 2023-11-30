@@ -3,7 +3,12 @@ import { CardDisplayDto } from '../types/cards';
 import { PagedResult } from '../types/shared';
 import { GameGetDto } from '../types/games';
 import { toggleFilters } from '../helpers/toggleFilters';
-import { getAllCards } from '../services/CardsService';
+import { getAllCards, getUserInventory } from '../services/CardsService';
+
+export enum CardDispatchMode {
+  inventory = 'inventory',
+  all = 'all',
+}
 
 export interface InventoryState {
   searchText: string;
@@ -14,6 +19,7 @@ export interface InventoryState {
   cards: PagedResult<CardDisplayDto> | null;
   loading: boolean;
   selectedGame: GameGetDto | null;
+  cardDispatchMode: CardDispatchMode;
 }
 
 const INITIAL_STATE: InventoryState = {
@@ -25,12 +31,19 @@ const INITIAL_STATE: InventoryState = {
   cardTypeFilters: [],
   setFilters: [],
   rarityFilters: [],
+  cardDispatchMode: CardDispatchMode.inventory,
 };
 
 export const inventorySlice = createSlice({
   name: 'Inventory',
   initialState: INITIAL_STATE,
   reducers: {
+    setCardDispatchAction(
+      state,
+      { payload }: PayloadAction<InventoryState['cardDispatchMode']>
+    ) {
+      state.cardDispatchMode = payload;
+    },
     toggleCardTypeFilters(
       state,
       { payload }: PayloadAction<InventoryState['cardTypeFilters'][number]>
@@ -87,10 +100,21 @@ export const inventorySlice = createSlice({
     builder.addCase(getAllCards.rejected, (state) => {
       state.loading = false;
     });
+    builder.addCase(getUserInventory.fulfilled, (state, { payload }) => {
+      state.cards = payload.data;
+      state.loading = false;
+    });
+    builder.addCase(getUserInventory.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getUserInventory.rejected, (state) => {
+      state.loading = false;
+    });
   },
 });
 
 export const {
+  setCardDispatchAction,
   updateSelectedGame,
   toggleCardTypeFilters,
   toggleRarityFilters,

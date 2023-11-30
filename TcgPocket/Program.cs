@@ -1,11 +1,14 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using TcgPocket;
 using TcgPocket.Features.Roles;
 using TcgPocket.Features.Users;
 using TcgPocket.Data;
+using TcgPocket.Shared;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Configuration.AddJsonFile("appsettings.json");
+var environment = builder.Environment;
+builder.Configuration.AddJsonFile("appsettings.json").AddJsonFile($"appsettings.{environment.EnvironmentName}.json", optional: true);
 var startup = new Startup(builder);
 startup.ConfigureServices(builder.Services);
 
@@ -23,7 +26,7 @@ app.UseAuthorization();
 app.MapControllers();
 app.UseCors(policyBuilder =>
 {
-    policyBuilder.WithOrigins(builder.Configuration["CorsOrigins"].Split(","))
+    policyBuilder.WithOrigins(builder.Configuration[AppSettings.CorsOrigins].Split(","))
         .AllowAnyMethod()
         .AllowAnyHeader()
         .AllowCredentials();
@@ -38,8 +41,8 @@ void SeedData(IApplicationBuilder app)
     var userManager = scoped.ServiceProvider.GetService<UserManager<User>>();
     var roleManager = scoped.ServiceProvider.GetService<RoleManager<Role>>();
 
-
     var dataContext = scoped.ServiceProvider.GetService<DataContext>();
+    dataContext.Database.Migrate();
     dataContext.Seed(userManager, roleManager);
 }
 

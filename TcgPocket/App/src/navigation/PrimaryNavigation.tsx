@@ -27,7 +27,7 @@ import { useNavbarHeight } from '../hooks/useNavbarHeight';
 import { useNavigate } from 'react-router-dom';
 import { signOutUser } from '../services/authServices';
 import { dispatch, useAppSelector } from '../store/configureStore';
-import { routes } from '../routes/Index';
+import { routes } from '../routes/index';
 import { NavMenuButton } from './NavMenuButton';
 
 export function PrimaryNavigation(): React.ReactElement {
@@ -48,7 +48,7 @@ export function PrimaryNavigation(): React.ReactElement {
     return signedInUser === undefined || signedInUser === null ? false : true;
   }, [signedInUser]);
 
-  const isAdmin: boolean | undefined = useMemo(() => {
+  const isAdmin = useMemo(() => {
     if (!determineUserState || !signedInUser) {
       return false;
     }
@@ -74,7 +74,7 @@ export function PrimaryNavigation(): React.ReactElement {
               <Menu>
                 <Menu.Target>
                   <NavMenuButton
-                    name="Inventory"
+                    name="Cards"
                     itemRoutes={[routes.inventory, routes.cardUpload]}
                   />
                 </Menu.Target>
@@ -84,7 +84,7 @@ export function PrimaryNavigation(): React.ReactElement {
                     onClick={() => navigate(routes.inventory)}
                     icon={<IconCards size="1.25em" />}
                   >
-                    Inventory
+                    View Cards
                   </Menu.Item>
 
                   <Menu.Item
@@ -98,7 +98,7 @@ export function PrimaryNavigation(): React.ReactElement {
               <Menu>
                 <Menu.Target>
                   <NavMenuButton
-                    name="Deck"
+                    name="Decks"
                     itemRoutes={[routes.decks, routes.deckBuilder]}
                   />
                 </Menu.Target>

@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { OptionItemDto, Response } from '../../types/shared';
 import { GameDto, GameGetDto } from '../../types/games';
 import { apiCall } from '../helpers/apiCall';
-import { apiRoutes } from '../../routes/Index';
+import { apiRoutes } from '../../routes/index';
 
 export type GameServices = typeof GameServices;
 

@@ -1,4 +1,4 @@
-import { Popover, createStyles, Text, Sx } from '@mantine/core';
+import { Popover, createStyles, Text } from '@mantine/core';
 import { IconFilter, IconX } from '@tabler/icons-react';
 import { PrimaryBadge } from '../../../components/badges/PrimaryBadge';
 import { defaultGap } from '../../../constants/theme';
@@ -64,14 +64,7 @@ export function AppliedFilterBadges(): React.ReactElement {
       <Popover withArrow disabled={renderCardTypeFilters.length === 0}>
         <Popover.Target>
           <div>
-            <PrimaryBadge
-              sx={
-                renderCardTypeFilters.length === 0 ? disabledBadge : undefined
-              }
-              leftSection={<IconFilter />}
-            >
-              Card Types
-            </PrimaryBadge>
+            <PrimaryBadge leftSection={<IconFilter />}>Card Types</PrimaryBadge>
           </div>
         </Popover.Target>
 
@@ -96,12 +89,7 @@ export function AppliedFilterBadges(): React.ReactElement {
       <Popover withArrow disabled={renderSetFilters.length === 0}>
         <Popover.Target>
           <div>
-            <PrimaryBadge
-              sx={renderSetFilters.length === 0 ? disabledBadge : undefined}
-              leftSection={<IconFilter />}
-            >
-              Sets
-            </PrimaryBadge>
+            <PrimaryBadge leftSection={<IconFilter />}> Sets </PrimaryBadge>
           </div>
         </Popover.Target>
 
@@ -123,12 +111,7 @@ export function AppliedFilterBadges(): React.ReactElement {
       <Popover withArrow disabled={renderRarityFilters.length === 0}>
         <Popover.Target>
           <div>
-            <PrimaryBadge
-              sx={renderRarityFilters.length === 0 ? disabledBadge : undefined}
-              leftSection={<IconFilter />}
-            >
-              Rarities
-            </PrimaryBadge>
+            <PrimaryBadge leftSection={<IconFilter />}>Rarities</PrimaryBadge>
           </div>
         </Popover.Target>
 
@@ -149,11 +132,6 @@ export function AppliedFilterBadges(): React.ReactElement {
     </div>
   );
 }
-
-const disabledBadge: Sx = (theme) => ({
-  color: theme.colors.gray[1],
-  backgroundColor: theme.colors.gray[7],
-});
 
 const useStyles = createStyles(() => {
   return {

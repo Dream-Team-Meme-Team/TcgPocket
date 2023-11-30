@@ -17,7 +17,7 @@ import { IconUpload, IconPhoto, IconX, IconSearch } from '@tabler/icons-react';
 import { Dropzone, FileWithPath, MIME_TYPES } from '@mantine/dropzone';
 import { useAsync, useAsyncFn } from 'react-use';
 import { CardReaderService } from '../../services/CardReaderService';
-import { error, success } from '../../services/helpers/Notification';
+import { error, success } from '../../services/helpers/notification';
 import { useMemo, useState } from 'react';
 import { CardDisplayDto } from '../../types/cards';
 import { CardDisplay } from '../../components/cardDisplay/CardDisplay';

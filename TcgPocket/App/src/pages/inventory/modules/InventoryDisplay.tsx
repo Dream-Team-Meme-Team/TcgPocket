@@ -51,8 +51,8 @@ const useStyles = createStyles((theme: MantineTheme) => {
       gridTemplateColumns: 'repeat(auto-fit, 368px)',
       justifyContent: 'center',
 
-      columnGap: '8px',
-      rowGap: '20px',
+      columnGap: '15px',
+      rowGap: '15px',
       paddingTop: '10px',
       paddingBottom: '10px',
 

@@ -18,6 +18,7 @@ import { defaultGap, defaultPadding } from '../../../../constants/theme';
 import { PrimarySelect } from '../../../../components/inputs/PrimarySelect';
 import { useNavbarHeight } from '../../../../hooks/useNavbarHeight';
 import useDebounce from '../../../../hooks/useDebounce';
+import { pageSizeOptions } from '../../../../enums/shared';
 
 type AdminTabHeaderProps = {
   label: string;
@@ -124,8 +125,6 @@ export function AdminTabHeader({
     </div>
   );
 }
-
-const pageSizeOptions: string[] = ['15', '30', '45'];
 
 const useStyles = createStyles((theme: MantineTheme) => {
   const { navbarHeight } = useNavbarHeight();
