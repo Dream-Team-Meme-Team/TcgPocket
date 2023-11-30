@@ -29,8 +29,7 @@ import {
 import { AppliedFilterBadges } from './AppliedFilterBadges';
 import { AppliedFilters } from '../../../types/applied-filters';
 import { FilterActions } from '../../../types/filter-actions';
-
-const pageSizeOptions: string[] = ['15', '30', '45'];
+import { pageSizeOptions } from '../../../enums/shared';
 
 export function DeckBuilderInventory(): React.ReactElement {
   const { classes } = useStyles();

@@ -25,8 +25,7 @@ import {
 import { PrimaryButton } from '../../components/buttons/PrimaryButton';
 import { AppliedFilters } from '../../types/applied-filters';
 import { FilterActions } from '../../types/filter-actions';
-
-const pageSizeOptions: string[] = ['15', '30', '45'] as const;
+import { pageSizeOptions } from '../../enums/shared';
 
 export function InventoryPage(): React.ReactElement {
   const { classes } = useStyles();
