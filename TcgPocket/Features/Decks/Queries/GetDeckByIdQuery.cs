@@ -38,6 +38,7 @@ public class GetDeckByIdQueryHandler : IRequestHandler<GetDeckByIdQuery, Respons
         }
 
         var deck = await _dataContext.Set<Deck>()
+            .Include(x => x.Game)
             .Include(x => x.DeckCards)
             .ThenInclude(y => y.Card)
             .FirstOrDefaultAsync(x => x.Id == query.Id, cancellationToken);

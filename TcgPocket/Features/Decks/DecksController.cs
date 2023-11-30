@@ -34,7 +34,7 @@ public class DecksController : ControllerBase
     }
 
     [HttpGet("{id:int}", Name = nameof(GetDeckById))]
-    public async Task<ActionResult<Response<DeckGetDto>>> GetDeckById([FromRoute] int id)
+    public async Task<ActionResult<Response<DeckDetailDto>>> GetDeckById([FromRoute] int id)
     {
         var response = await _mediator.Send(new GetDeckByIdQuery { Id = id });
 
@@ -52,7 +52,7 @@ public class DecksController : ControllerBase
     }
 
     [HttpPut("{id:int}")]
-    public async Task<ActionResult<Response<DeckGetDto>>> UpdateDeck([FromRoute] int id,
+    public async Task<ActionResult<Response<DeckDetailDto>>> UpdateDeck([FromRoute] int id,
         [FromBody] UpdateDeckDto data)
     {
         var response = await _mediator.Send(new UpdateDeckCommand { Id = id, Deck = data });

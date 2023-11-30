@@ -4,10 +4,12 @@ import { CardDisplayDto } from '../types/cards';
 import { toggleFilters } from '../helpers/toggleFilters';
 import { PagedResult } from '../types/shared';
 import { getAllCards } from '../services/CardsService';
+import { createDeck, getDeckById } from '../services/DecksService';
 
 export const untitledName: string = 'Untitled';
 
 export interface DeckBuilderState {
+  id: number;
   deck: CardDisplayDto[];
   draggedCard: CardDisplayDto | null;
   /** deck dto things */
@@ -26,6 +28,7 @@ export interface DeckBuilderState {
 }
 
 const INITIAL_STATE: DeckBuilderState = {
+  id: 0,
   name: untitledName,
   selectedGame: null,
   selectedRuleSet: '',
@@ -119,6 +122,16 @@ export const deckBuilderSlice = createSlice({
     });
     builder.addCase(getAllCards.rejected, (state) => {
       state.loading = false;
+    });
+    builder.addCase(createDeck.fulfilled, (state, { payload }) => {
+      state.id = payload.data.id;
+      state.name = payload.data.name;
+      state.selectedGame = payload.data.game;
+    });
+    builder.addCase(getDeckById.fulfilled, (state, { payload }) => {
+      state.id = payload.data.id;
+      state.name = payload.data.name;
+      state.selectedGame = payload.data.game;
     });
   },
 });

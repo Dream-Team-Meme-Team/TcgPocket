@@ -10,11 +10,24 @@ import { resetDeckBuilder, setDeckName } from '../../../store/deckBuilderSlice';
 import { defaultGap } from '../../../constants/theme';
 import { ConfirmDeletionModal } from './ConfirmDeletionModal';
 import { DeleteButton } from '../../../components/buttons/DeleteButton';
+import { updateDeck } from '../../../services/DecksService';
+import { shallowEqual } from 'react-redux';
+import { DeckUpdateDto } from '../../../types/decks';
+import { responseWrapper } from '../../../services/helpers/responseWrapper';
+import { MiniCardDto } from '../../../types/cards';
 
 export function DeckBuilderHeader(): React.ReactElement {
   const { classes } = useStyles();
 
-  const deckName = useAppSelector((state) => state.deckBuilder.name);
+  const [deckName, deckId, selectedGame, deck] = useAppSelector(
+    (state) => [
+      state.deckBuilder.name,
+      state.deckBuilder.id,
+      state.deckBuilder.selectedGame,
+      state.deckBuilder.deck,
+    ],
+    shallowEqual
+  );
 
   const [name, setName] = useState<string>('');
 
@@ -44,6 +57,29 @@ export function DeckBuilderHeader(): React.ReactElement {
     setName('');
   };
 
+  const handleUpdate = () => {
+    const tempCards: MiniCardDto[] = [];
+
+    deck.forEach((card) => {
+      tempCards.push({
+        id: card.id,
+        gameId: card.game.id,
+      });
+    });
+
+    const updatedDeck: DeckUpdateDto = {
+      name: deckName,
+      gameId: selectedGame?.id ?? 0,
+      cards: tempCards,
+    };
+
+    dispatch(updateDeck({ id: deckId, body: updatedDeck })).then(
+      ({ payload }) => {
+        responseWrapper(payload, 'Deck Updated');
+      }
+    );
+  };
+
   return editMode ? (
     <div className={classes.editName}>
       <PrimaryTextInput
@@ -69,7 +105,7 @@ export function DeckBuilderHeader(): React.ReactElement {
       <div className={classes.restart}>
         <DeleteButton onClick={handleReset}>Restart</DeleteButton>
 
-        <PrimaryButton> Update </PrimaryButton>
+        <PrimaryButton onClick={handleUpdate}> Update </PrimaryButton>
 
         <ConfirmDeletionModal
           open={open}
