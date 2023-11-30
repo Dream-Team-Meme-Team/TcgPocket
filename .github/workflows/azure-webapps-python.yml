@@ -86,7 +86,9 @@ jobs:
           path: ./datascience
 
       - name: Get dir
-        run: ls -la
+        run: |
+          cd datascience
+          ls -la
 
       - name: "Deploy to Azure Web App"
         id: deploy-to-webapp
