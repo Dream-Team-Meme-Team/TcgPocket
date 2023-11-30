@@ -3,6 +3,8 @@ import {
   Box,
   CSSObject,
   Center,
+  Container,
+  Loader,
   MantineTheme,
   ScrollArea,
 } from '@mantine/core';
@@ -28,7 +30,7 @@ function App() {
     );
   }, [location]);
 
-  useAsync(async () => {
+  const userState = useAsync(async () => {
     await dispatch(getSignedInUser());
   }, []);
 
@@ -37,20 +39,26 @@ function App() {
   };
   return (
     <AppShell layout="alt" padding={0} header={<PrimaryNavigation />}>
-      <ScrollArea h={remainingHeight} sx={scrollAreaSx}>
-        <Box sx={useContainerSx}>
-          <AppRoutes />
-        </Box>
-        {hideFooter && (
-          <NavLink
-            style={navLinkStyle}
-            onClick={() => sphealingGood()}
-            to={location}
-          >
-            <Center sx={footerSx}>(≖ᴗ≖✿)</Center>
-          </NavLink>
-        )}
-      </ScrollArea>
+      {!userState.loading ? (
+        <ScrollArea h={remainingHeight} sx={scrollAreaSx}>
+          <Box sx={useContainerSx}>
+            <AppRoutes />
+          </Box>
+          {hideFooter && (
+            <NavLink
+              style={navLinkStyle}
+              onClick={() => sphealingGood()}
+              to={location}
+            >
+              <Center sx={footerSx}>(≖ᴗ≖✿)</Center>
+            </NavLink>
+          )}
+        </ScrollArea>
+      ): (
+        <Container h={remainingHeight}>
+          <Loader sx={loaderStyle} size="150px" color="#9d65db" />
+        </Container>
+      )}
     </AppShell>
   );
 }
@@ -90,3 +98,14 @@ const navLinkStyle: CSSProperties = {
   color: 'white',
   textDecoration: 'none',
 };
+
+function loaderStyle(): CSSObject {
+  return {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignContent: 'center',
+    margin: 'auto',
+  };
+}
