@@ -37,7 +37,7 @@ export const AllDecksTab: React.FC<DeckTabProps> = ({ decks, loading }) => {
     });
 
     filteredDecks.forEach((deck) => {
-      tempDecks.find((x) => x.game.id === deck.gameId)?.decks.push(deck);
+      tempDecks.find((x) => x.game.id === deck.game?.id)?.decks.push(deck);
     });
 
     return tempDecks;
@@ -61,7 +61,9 @@ export const AllDecksTab: React.FC<DeckTabProps> = ({ decks, loading }) => {
   }, [organizedDecks]);
 
   const displayIsVisible = (gameId: number) => {
-    return loading || decks.filter((deck) => deck.gameId === gameId).length > 0;
+    return (
+      loading || decks.filter((deck) => deck.game?.id === gameId).length > 0
+    );
   };
 
   return (

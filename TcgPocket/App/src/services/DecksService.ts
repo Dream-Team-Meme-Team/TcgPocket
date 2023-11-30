@@ -53,9 +53,9 @@ export const DecksService = {
 };
 
 export const getDeckById = createAsyncThunk<
-  Response<DeckDetailDto>,
+  Response<DeckDisplayDto>,
   number,
-  { rejectValue: Response<DeckDetailDto> }
+  { rejectValue: Response<DeckDisplayDto> }
 >('getDeckById', async (id) => {
   return await DecksService.getDeckById(id);
 });
