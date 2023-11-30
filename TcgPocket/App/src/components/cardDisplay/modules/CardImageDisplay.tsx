@@ -44,7 +44,7 @@ export function CardImageDisplay({
           >
             <Flex
               w={width ?? 155}
-              h={height ?? 216}
+              h={(height ?? 216) - 2}
               className={classes.invalidUrl}
             >
               <IconAlertTriangleFilled
@@ -88,7 +88,12 @@ export function CardImageDisplay({
           offset={-40}
           color="rgba(0,0,0,0.7)"
         >
-          <AspectRatio ratio={16 / 9} h={height ?? 220} miw={width ?? '9.3rem'}>
+          <AspectRatio
+            ratio={16 / 9}
+            h={height ?? 220}
+            miw={width ?? '9.3rem'}
+            w={width ?? undefined}
+          >
             <Skeleton
               radius={7}
               width={width ?? 152}
@@ -107,7 +112,12 @@ export function CardImageDisplay({
           </AspectRatio>
         </Tooltip>
       ) : (
-        <AspectRatio ratio={16 / 9} h={height ?? 220} miw={width ?? '9.3rem'}>
+        <AspectRatio
+          ratio={16 / 9}
+          h={height ?? 220}
+          miw={width ?? '9.3rem'}
+          w={width ?? undefined}
+        >
           <Skeleton
             radius={7}
             width={width ?? 152}
@@ -131,7 +141,7 @@ export function CardImageDisplay({
       >
         <Modal.Overlay />
         <Modal.Content>
-          <Modal.CloseButton iconSize={25} size={25} />
+          <Modal.CloseButton m="5px" ml="auto" iconSize={25} size={25} />
 
           <Modal.Body>
             <Image radius={17} src={imageUrl} security="yamomma" />
@@ -151,8 +161,9 @@ const modalProps: Styles<ModalBaseStylesNames> = {
 const useStyles = createStyles(() => ({
   invalidUrl: {
     backgroundColor: '#C3C3C6',
-    border: 'solid 6px rgba(46, 46, 46, 0.9)',
+    border: 'solid 5px rgba(36, 36, 36, 0.9)',
     paddingRight: 0,
+    margin: 1.5,
     borderRadius: 7,
     display: 'flex',
     justifyContent: 'center',
